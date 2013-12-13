@@ -9,7 +9,6 @@
 		<object type="geniaNormalizer" ref="TokenizingUnparsedGeniaNormalizer"/>
 	</paths>
 	
-	
 	<subConfigs>
 	   <path type="includeConfigs">dickensConfigs.d</path>
 	   <path type="includeConfigs">configXPaths.xml</path>
@@ -196,8 +195,8 @@
 		</paths>
 		<options>
 			<setting type="eidXpath">//s|//p|//qs|//qe|//sls|//sle|//sss|//sse</setting>
-			<setting type="recStartTag">qe</setting>
-			<setting type="recEndTag">qs</setting>
+<!-- 			<setting type="recStartTag">qe</setting> -->
+<!-- 			<setting type="recEndTag">qs</setting> -->
 		</options>
 	</subConfig>
 	
