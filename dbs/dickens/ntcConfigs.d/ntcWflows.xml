@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<subConfigs>
+					
+		<subConfig type="workflow" id="ngramWorkflow-ntc">
+			<objectType>cheshire3.workflow.CachingWorkflow</objectType>
+			<workflow>
+				<object type="normalizer" ref="WordNamedNormalizer"/>
+				<object type="normalizer" ref="CaseNormalizer"/>
+				<!-- <fork>
+					<split>
+						<object type="tokenMerger" ref="2GramTokenMerger"/>
+						<object type="index" ref="2gram-ntc-idx"/>
+					</split>
+					<split>
+						<object type="tokenMerger" ref="3GramTokenMerger"/>
+						<object type="index" ref="3gram-ntc-idx"/>
+					</split>
+					<split>
+						<object type="tokenMerger" ref="4GramTokenMerger"/>
+						<object type="index" ref="4gram-ntc-idx"/>
+					</split>
+					<split>-->
+						<object type="tokenMerger" ref="5GramTokenMerger"/>
+						<object type="index" ref="5gram-ntc-idx"/>
+				<!--	</split>
+				</fork> -->
+			</workflow>
+		</subConfig>
+
+		
+		<!--<subConfig type="workflow" id="bookWorkflow-ntc">
+			<objectType>cheshire3.workflow.CachingWorkflow</objectType>
+			<workflow>
+				<object type="xpathProcessor" ref="bookXPath"/>
+				<object type="extractor" ref="SimpleExtractor"/>
+					<object type="tokenizer" ref="SimpleTokenizer"/>
+					<object type="tokenMerger" ref="SimpleTokenMerger"/>
+					<object type="index" ref="book-idx"/>
+			</workflow>
+		</subConfig>-->
+		
+		<subConfig type="workflow" id="quoteWorkflow-ntc">
+			<objectType>cheshire3.workflow.CachingWorkflow</objectType>
+			<workflow>
+				<object type="xpathProcessor" ref="quoteXPath"/>
+				<object type="extractor" ref="TaggedTermExtractor"/>
+					<object type="tokenizer" ref="SuppliedOffsetTokenizer"/>
+					<object type="tokenMerger" ref="OffsetProxTokenMerger"/>
+					
+					<object type="normalizer" ref="CaseNormalizer"/>
+					<object type="normalizer" ref="PossessiveNormalizer"/>
+					<object type="index" ref="quote-ntc-idx"/>
+			</workflow>
+		</subConfig>
+		
+		
+		<subConfig type="workflow" id="nonQuoteWorkflow-ntc">
+			<objectType>cheshire3.workflow.CachingWorkflow</objectType>
+			<workflow>
+				<object type="xpathProcessor" ref="nonQuoteXPath"/>
+				<object type="extractor" ref="TaggedTermExtractor"/>
+					<object type="tokenizer" ref="SuppliedOffsetTokenizer"/>
+					<object type="tokenMerger" ref="OffsetProxTokenMerger"/>
+					
+					<object type="normalizer" ref="CaseNormalizer"/>
+					<object type="normalizer" ref="PossessiveNormalizer"/>
+					<object type="index" ref="non-quote-ntc-idx"/>
+			</workflow>
+		</subConfig>
+		
+		<subConfig type="workflow" id="susWorkflow-ntc">
+			<objectType>cheshire3.workflow.CachingWorkflow</objectType>
+			<workflow>
+				<object type="xpathProcessor" ref="susXPath"/>
+				<object type="extractor" ref="TaggedTermExtractor"/>
+					<object type="tokenizer" ref="SuppliedOffsetTokenizer"/>
+					<object type="tokenMerger" ref="OffsetProxTokenMerger"/>
+					
+					<object type="normalizer" ref="CaseNormalizer"/>
+					<object type="normalizer" ref="PossessiveNormalizer"/>
+					<object type="index" ref="sus-ntc-idx"/>
+			</workflow>
+		</subConfig>
+	
+	
+	
+		<subConfig type="workflow" id="chapterWorkflow-ntc">
+			<objectType>cheshire3.workflow.CachingWorkflow</objectType>
+			<workflow>
+				<object type="xpathProcessor" ref="chapterXPath"/>
+				<object type="extractor" ref="TaggedTermExtractor"/>
+				<object type="tokenizer" ref="SuppliedOffsetTokenizer"/>
+				<object type="tokenMerger" ref="OffsetProxTokenMerger"/>
+				<fork>
+					<split id="word">
+						<object type="normalizer" ref="WordNamedNormalizer"/>
+						<object type="normalizer" ref="CaseNormalizer"/>
+						<object type="normalizer" ref="PossessiveNormalizer"/>
+						<object type="index" ref="chapter-ntc-idx"/>
+					</split>
+					<split id="caseSensitive">
+						<object type="normalizer" ref="WordNamedNormalizer"/>
+						<object type="normalizer" ref="PossessiveNormalizer"/>
+						<object type="index" ref="chapter-ntc-idx-case"/>
+					</split>					
+					<!-- 
+					<split id="stem">
+						<object type="normalizer" ref="StemNamedNormalizer"/>
+						<object type="normalizer" ref="CaseNormalizer"/>
+						<object type="index" ref="article-idx-stem"/>
+					</split>
+					<split id="pos">
+						<object type="normalizer" ref="PosNamedNormalizer"/>
+						<object type="normalizer" ref="CaseNormalizer"/>
+						<fork>
+							<split>
+								<object type="index" ref="article-idx-pos"/>
+							</split>
+						</fork>
+						<object type="tokenizer" ref="PlusTokenizer"/>
+						<object type="tokenMerger" ref="ProxTokenMerger"/>
+						<object type="index" ref="article-idx-pos-single"/>
+					</split>
+					<split id="wordpos">
+						<object type="normalizer" ref="WordPosNamedNormalizer"/>
+						<object type="normalizer" ref="CaseNormalizer"/>
+						<object type="index" ref="article-idx-wordpos"/>
+					</split>
+					<split id="stempos">
+						<object type="normalizer" ref="StemPosNamedNormalizer"/>
+						<object type="normalizer" ref="CaseNormalizer"/>
+						<object type="index" ref="article-idx-stempos"/>
+					</split>
+					-->
+				</fork>
+			</workflow>
+		</subConfig>
+
+	
+
+		<subConfig type="workflow" id="paragraphWorkflow-ntc">
+			<objectType>cheshire3.workflow.CachingWorkflow</objectType>
+			<workflow>
+				<object type="xpathProcessor" ref="paragraphXPath"/>
+				<object type="extractor" ref="TaggedTermExtractor"/>
+				<object type="tokenizer" ref="SuppliedOffsetTokenizer"/>
+				<object type="tokenMerger" ref="OffsetProxTokenMerger"/>
+				<fork>
+					<split id="word">
+						<object type="normalizer" ref="WordNamedNormalizer"/>
+						<object type="normalizer" ref="CaseNormalizer"/>
+						<object type="normalizer" ref="PossessiveNormalizer"/>
+						<object type="index" ref="paragraph-ntc-idx"/>
+					</split>
+					<split id="caseSensitive">
+						<object type="normalizer" ref="WordNamedNormalizer"/>
+						<object type="normalizer" ref="PossessiveNormalizer"/>
+						<object type="index" ref="paragraph-ntc-idx-case"/>
+					</split>					
+					<!-- 
+					<split id="stem">
+						<object type="normalizer" ref="StemNamedNormalizer"/>
+						<object type="normalizer" ref="CaseNormalizer"/>
+						<object type="index" ref="paragraph-idx-stem"/>
+					</split>
+					<split id="pos">
+						<object type="normalizer" ref="PosNamedNormalizer"/>
+						<object type="normalizer" ref="CaseNormalizer"/>
+						<fork>
+							<split>
+								<object type="index" ref="paragraph-idx-pos"/>
+							</split>
+						</fork>
+						<object type="tokenizer" ref="PlusTokenizer"/>
+						<object type="tokenMerger" ref="ProxTokenMerger"/>
+						<object type="index" ref="paragraph-idx-pos-single"/>
+					</split>
+					<split id="wordpos">
+						<object type="normalizer" ref="WordPosNamedNormalizer"/>
+						<object type="normalizer" ref="CaseNormalizer"/>
+						<object type="index" ref="paragraph-idx-wordpos"/>
+					</split>
+					<split id="stempos">
+						<object type="normalizer" ref="StemPosNamedNormalizer"/>
+						<object type="normalizer" ref="CaseNormalizer"/>
+						<object type="index" ref="paragraph-idx-stempos"/>
+					</split>
+					-->
+				</fork>
+			</workflow>
+		</subConfig>
+
+
+
+		
+		<subConfig type="workflow" id="sentenceWorkflow-ntc">
+			<objectType>cheshire3.workflow.CachingWorkflow</objectType>
+			<workflow>
+				<object type="xpathProcessor" ref="sentenceXPath"/>
+				<object type="extractor" ref="TaggedTermExtractor"/>
+				<object type="tokenizer" ref="SuppliedOffsetTokenizer"/>
+				<!-- <fork>
+					<split>
+						<object type="workflow" ref="ngramWorkflow"/>
+					</split>
+				</fork> -->
+				<object type="tokenMerger" ref="OffsetProxTokenMerger"/>
+				<fork>
+					<split id="word">
+						<object type="normalizer" ref="WordNamedNormalizer"/>
+						<object type="normalizer" ref="CaseNormalizer"/>
+						<object type="normalizer" ref="PossessiveNormalizer"/>
+						<object type="index" ref="sentence-ntc-idx"/>
+					</split>
+					<split id="caseSensitive">
+						<object type="normalizer" ref="WordNamedNormalizer"/>
+						<object type="normalizer" ref="PossessiveNormalizer"/>
+						<object type="index" ref="sentence-ntc-idx-case"/>
+					</split>					
+				<!-- 	
+					<split id="stem">
+						<object type="normalizer" ref="StemNamedNormalizer"/>
+						<object type="normalizer" ref="CaseNormalizer"/>
+						<object type="index" ref="sentence-idx-stem"/>
+					</split>
+				
+					<split id="pos">
+						<object type="normalizer" ref="PosNamedNormalizer"/>
+						<object type="normalizer" ref="CaseNormalizer"/>
+						<fork>
+							<split>
+								<object type="index" ref="sentence-idx-pos"/>
+							</split>
+						</fork>
+						<object type="tokenizer" ref="PlusTokenizer"/>
+						<object type="tokenMerger" ref="ProxTokenMerger"/>
+						<object type="index" ref="sentence-idx-pos-single"/>
+					</split>
+					<split id="wordpos">
+						<object type="normalizer" ref="WordPosNamedNormalizer"/>
+						<object type="normalizer" ref="CaseNormalizer"/>
+						<object type="index" ref="sentence-idx-wordpos"/>
+					</split>
+					<split id="stempos">
+						<object type="normalizer" ref="StemPosNamedNormalizer"/>
+						<object type="normalizer" ref="CaseNormalizer"/>
+						<object type="index" ref="sentence-idx-stempos"/>
+					</split>
+					 -->
+				</fork>
+			</workflow>
+		</subConfig>
+		
+		
+		<subConfig type="workflow" id="extraStuffWorkflow-ntc">
+			<objectType>cheshire3.workflow.CachingWorkflow</objectType>
+			<workflow>
+				<object type="xpathProcessor" ref="sentenceXPath"/>
+				<object type="extractor" ref="TaggedTermExtractor"/>
+				<object type="tokenizer" ref="SuppliedOffsetTokenizer"/>
+				<object type="tokenMerger" ref="OffsetProxTokenMerger"/>
+				<object type="normalizer" ref="WordNamedNormalizer"/>
+				<object type="normalizer" ref="CaseNormalizer"/>
+				<object type="normalizer" ref="PossessiveNormalizer"/>
+				<object type="index" ref="extraStuff-ntc-idx"/>
+			</workflow>
+		</subConfig>		
+		
+	<!--	<subConfig type="workflow" id="bookSentenceWorkflow">
+			<objectType>cheshire3.workflow.CachingWorkflow</objectType>
+			<workflow>
+				<fork>
+					<split>
+						<object type="xpathProcessor" ref="GEsentenceXPath"/>
+						<object type="extractor" ref="TaggedTermExtractor"/>
+						<object type="tokenizer" ref="SuppliedOffsetTokenizer"/>
+						<object type="tokenMerger" ref="OffsetProxTokenMerger"/>
+						<object type="normalizer" ref="WordNamedNormalizer"/>
+						<object type="normalizer" ref="CaseNormalizer"/>
+						<object type="normalizer" ref="PossessiveNormalizer"/>
+						<object type="index" ref="GE-idx"/>
+					</split>
+		
+					<split>
+						<object type="xpathProcessor" ref="BHsentenceXPath"/>
+						<object type="extractor" ref="TaggedTermExtractor"/>
+						<object type="tokenizer" ref="SuppliedOffsetTokenizer"/>
+						<object type="tokenMerger" ref="OffsetProxTokenMerger"/>
+						<object type="normalizer" ref="WordNamedNormalizer"/>
+						<object type="normalizer" ref="CaseNormalizer"/>
+						<object type="normalizer" ref="PossessiveNormalizer"/>
+						<object type="index" ref="BH-idx"/>
+					</split> 
+					<split>
+						<object type="xpathProcessor" ref="LDsentenceXPath"/>
+						<object type="extractor" ref="TaggedTermExtractor"/>
+						<object type="tokenizer" ref="SuppliedOffsetTokenizer"/>
+						<object type="tokenMerger" ref="OffsetProxTokenMerger"/>
+						<object type="normalizer" ref="WordNamedNormalizer"/>
+						<object type="normalizer" ref="CaseNormalizer"/>
+						<object type="normalizer" ref="PossessiveNormalizer"/>
+						<object type="index" ref="LD-idx"/>
+					</split>-->
+				<!-- 
+					<split>
+						<object type="xpathProcessor" ref="CCsentenceXPath"/>
+						<object type="extractor" ref="TaggedTermExtractor"/>
+						<object type="tokenizer" ref="SuppliedOffsetTokenizer"/>
+						<object type="tokenMerger" ref="OffsetProxTokenMerger"/>
+						<object type="normalizer" ref="WordNamedNormalizer"/>
+						<object type="normalizer" ref="CaseNormalizer"/>
+						<object type="normalizer" ref="PossessiveNormalizer"/>
+						<object type="index" ref="CC-sentence-idx"/>
+					</split>
+					 -->
+				<!--  	<split>
+						<object type="xpathProcessor" ref="OTsentenceXPath"/>
+						<object type="extractor" ref="TaggedTermExtractor"/>
+						<object type="tokenizer" ref="SuppliedOffsetTokenizer"/>
+						<object type="tokenMerger" ref="OffsetProxTokenMerger"/>
+						<object type="normalizer" ref="WordNamedNormalizer"/>
+						<object type="normalizer" ref="CaseNormalizer"/>
+						<object type="normalizer" ref="PossessiveNormalizer"/>
+						<object type="index" ref="OT-idx"/>
+					</split>	 			
+				</fork>
+			</workflow>
+		</subConfig>-->
+		
+		
+		<subConfig type="workflow" id="indexWorkflow-ntc">
+			<objectType>cheshire3.workflow.CachingWorkflow</objectType>
+			<assign from="input.id" to="recid" />
+			<workflow>
+				<fork>
+					<split>
+						<log>"Indexing Record "</log>
+						<object type="workflow" ref="sentenceWorkflow-ntc"/>
+					</split>
+					<split>
+						<object type="workflow" ref="paragraphWorkflow-ntc"/>
+					</split>
+					<split>
+						<object type="workflow" ref="chapterWorkflow-ntc"/>
+					</split>
+					<split>
+						<object type="workflow" ref="quoteWorkflow-ntc"/>
+					</split>
+					<split>
+						<object type="workflow" ref="nonQuoteWorkflow-ntc"/>
+					</split>
+					<split>
+						<object type="workflow" ref="susWorkflow-ntc"/>
+					</split>
+					<split>
+						<object type="workflow" ref="bookWorkflow"/>
+					</split>							
+				</fork>
+			</workflow>
+		</subConfig>
+	</subConfigs>
+</config>

@@ -1,0 +1,5 @@
+<config>
+	<subConfigs>
+		<path type="database" id="db_dickens">dbs/dickens/config.xml</path>
+	</subConfigs>
+</config>

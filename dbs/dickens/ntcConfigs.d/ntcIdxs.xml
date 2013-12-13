@@ -1,0 +1,502 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<subConfigs>
+		<!--  -->
+		<subConfig type="index" id="cont-ntc-idx">
+			<objectType>cheshire3.index.ProximityIndex</objectType>
+			<paths>
+				<object type="indexStore" ref="indexStore"/>
+			</paths>
+			<source>
+				<xpath ref="contXPath"/>
+				<process>
+					<object type="extractor" ref="SimpleExtractor"/>
+					<object type="tokenizer" ref="RegexpFindOffsetTokenizer"/>
+					<object type="tokenMerger" ref="OffsetProxTokenMerger"/>
+					<object type="normalizer" ref="CaseNormalizer"/>
+					<object type="normalizer" ref="PossessiveNormalizer"/>
+				</process>
+			</source>
+			<source mode="any|all|=|exact|window">
+				<process>
+					<object type="extractor" ref="SimpleExtractor"/>
+					<object type="tokenizer" ref="RegexpFindOffsetTokenizer"/>
+					<object type="tokenMerger" ref="OffsetProxTokenMerger"/>
+					<object type="normalizer" ref="CaseNormalizer"/>
+					<object type="normalizer" ref="PossessiveNormalizer"/>
+				</process>
+			</source>
+			<options>
+				<setting type="nProxInts">3</setting>
+				<setting type="proxVectors">1</setting>
+				<setting type="vectors">1</setting>
+			</options>
+		</subConfig>
+
+
+		<subConfig type="index" id="stru-ntc-idx">
+			<objectType>cheshire3.index.ProximityIndex</objectType>
+			<paths>
+				<object type="indexStore" ref="indexStore"/>
+			</paths>
+			<source>
+				<xpath ref="struXPath"/>
+				<process>
+					<object type="extractor" ref="SimpleExtractor"/>
+					<object type="tokenizer" ref="RegexpFindOffsetTokenizer"/>
+					<object type="tokenMerger" ref="OffsetProxTokenMerger"/>
+					<object type="normalizer" ref="CaseNormalizer"/>
+					<object type="normalizer" ref="PossessiveNormalizer"/>
+				</process>
+			</source>
+			<source mode="any|all|=|exact|window">
+				<process>
+					<object type="extractor" ref="SimpleExtractor"/>
+					<object type="tokenizer" ref="RegexpFindOffsetTokenizer"/>
+					<object type="tokenMerger" ref="OffsetProxTokenMerger"/>
+					<object type="normalizer" ref="CaseNormalizer"/>
+					<object type="normalizer" ref="PossessiveNormalizer"/>
+				</process>
+			</source>
+			<options>
+				<setting type="nProxInts">3</setting>
+				<setting type="proxVectors">1</setting>
+				<setting type="vectors">1</setting>
+			</options>
+		</subConfig>
+
+
+		<!-- article idxs -->
+		<!-- keyword -->
+		<subConfig type="index" id="chapter-ntc-idx">
+			<objectType>cheshire3.index.ProximityIndex</objectType>
+			<paths>
+				<object type="indexStore" ref="indexStore"/>
+			</paths>
+			<source>
+				<xpath ref="chapterXPath"/>
+				<process>
+					<object type="extractor" ref="TaggedTermExtractor"/>
+					<object type="tokenizer" ref="SuppliedOffsetTokenizer"/>
+					<object type="tokenMerger" ref="OffsetProxTokenMerger"/>
+					<object type="normalizer" ref="WordNamedNormalizer"/>
+					<object type="normalizer" ref="CaseNormalizer"/>
+					<object type="normalizer" ref="PossessiveNormalizer"/>
+				</process>
+			</source>
+			<source mode="any|all|=|exact|window">
+				<process>
+					<object type="extractor" ref="SimpleExtractor"/>
+					<object type="tokenizer" ref="RegexpFindOffsetTokenizer"/>
+					<object type="tokenMerger" ref="OffsetProxTokenMerger"/>
+					<object type="normalizer" ref="CaseNormalizer"/>
+					<object type="normalizer" ref="PossessiveNormalizer"/>
+				</process>
+			</source>
+			<options>
+				<setting type="nProxInts">3</setting>
+				<setting type="proxVectors">1</setting>
+				<setting type="vectors">1</setting>
+			</options>
+		</subConfig>
+		
+		<subConfig type="index" id="chapter-ntc-idx-case">
+			<objectType>cheshire3.index.ProximityIndex</objectType>
+			<paths>
+				<object type="indexStore" ref="indexStore"/>
+			</paths>
+			<source>
+				<xpath ref="chapterXPath"/>
+				<process>
+					<object type="extractor" ref="TaggedTermExtractor"/>
+					<object type="tokenizer" ref="SuppliedOffsetTokenizer"/>
+					<object type="tokenMerger" ref="OffsetProxTokenMerger"/>
+					<object type="normalizer" ref="PosNamedNormalizer"/>
+				</process>
+			</source>
+			<source mode="any|all|=|exact|window">
+				<process>
+					<object type="extractor" ref="SimpleExtractor"/>
+					<object type="tokenizer" ref="RegexpFindOffsetTokenizer"/>
+					<object type="tokenMerger" ref="OffsetProxTokenMerger"/>
+					<object type="normalizer" ref="PossessiveNormalizer"/>
+				</process>
+			</source>
+			<options>
+				<setting type="nProxInts">3</setting>
+				<setting type="proxVectors">1</setting>
+				<setting type="vectors">1</setting>
+			</options>
+		</subConfig>		
+
+		<!-- end chapter idxs -->
+
+
+		<!-- paragraph idxs -->
+		
+		<!-- keyword -->
+		<subConfig type="index" id="paragraph-ntc-idx">
+			<objectType>cheshire3.index.ProximityIndex</objectType>
+			<paths>
+				<object type="indexStore" ref="indexStore"/>
+			</paths>
+			<source>
+				<xpath ref="paragraphXPath"/>
+				<process>
+					<object type="extractor" ref="TaggedTermExtractor"/>
+					<object type="tokenizer" ref="SuppliedOffsetTokenizer"/>
+					<object type="tokenMerger" ref="OffsetProxTokenMerger"/>
+					<object type="normalizer" ref="WordNamedNormalizer"/>
+					<object type="normalizer" ref="CaseNormalizer"/>
+					<object type="normalizer" ref="PossessiveNormalizer"/>
+				</process>
+			</source>
+			<source mode="any|all|=|exact|window">
+				<process>
+					<object type="extractor" ref="SimpleExtractor"/>
+					<object type="tokenizer" ref="RegexpFindOffsetTokenizer"/>
+					<object type="tokenMerger" ref="OffsetProxTokenMerger"/>
+					<object type="normalizer" ref="CaseNormalizer"/>
+					<object type="normalizer" ref="PossessiveNormalizer"/>
+				</process>
+			</source>
+			<options>
+				<setting type="nProxInts">3</setting>
+				<setting type="proxVectors">1</setting>
+				<setting type="vectors">1</setting>
+			</options>
+		</subConfig>
+
+		<subConfig type="index" id="paragraph-ntc-idx-case">
+			<objectType>cheshire3.index.ProximityIndex</objectType>
+			<paths>
+				<object type="indexStore" ref="indexStore"/>
+			</paths>
+			<source>
+				<xpath ref="paragraphXPath"/>
+				<process>
+					<object type="extractor" ref="TaggedTermExtractor"/>
+					<object type="tokenizer" ref="SuppliedOffsetTokenizer"/>
+					<object type="tokenMerger" ref="OffsetProxTokenMerger"/>
+					<object type="normalizer" ref="PosNamedNormalizer"/>
+				</process>
+			</source>
+			<source mode="any|all|=|exact|window">
+				<process>
+					<object type="extractor" ref="SimpleExtractor"/>
+					<object type="tokenizer" ref="RegexpFindOffsetTokenizer"/>
+					<object type="tokenMerger" ref="OffsetProxTokenMerger"/>
+					<object type="normalizer" ref="PossessiveNormalizer"/>
+				</process>
+			</source>
+			<options>
+				<setting type="nProxInts">3</setting>
+				<setting type="proxVectors">1</setting>
+				<setting type="vectors">1</setting>
+			</options>
+		</subConfig>		
+		
+
+		
+		<!-- end paragraph idxs -->
+		
+		
+		<!-- sentence idxs -->
+		
+		<!-- keyword -->
+		<subConfig type="index" id="sentence-ntc-idx">
+			<objectType>cheshire3.index.ProximityIndex</objectType>
+			<paths>
+				<object type="indexStore" ref="indexStore"/>
+			</paths>
+			<source>
+				<xpath ref="sentenceXPath"/>
+				<process>
+					<object type="extractor" ref="TaggedTermExtractor"/>
+					<object type="tokenizer" ref="SuppliedOffsetTokenizer"/>
+					<object type="tokenMerger" ref="OffsetProxTokenMerger"/>
+					<object type="normalizer" ref="WordNamedNormalizer"/>
+					<object type="normalizer" ref="CaseNormalizer"/>
+					<object type="normalizer" ref="PossessiveNormalizer"/>
+				</process>
+			</source>
+			<source mode="any|all|=|exact|window">
+				<process>
+					<object type="extractor" ref="SimpleExtractor"/>
+					<object type="tokenizer" ref="RegexpFindOffsetTokenizer"/>
+					<object type="tokenMerger" ref="OffsetProxTokenMerger"/>
+					<object type="normalizer" ref="CaseNormalizer"/>
+					<object type="normalizer" ref="PossessiveNormalizer"/>
+				</process>
+			</source>
+			<options>
+				<setting type="nProxInts">3</setting>
+				<setting type="proxVectors">1</setting>
+				<setting type="vectors">1</setting>
+				<setting type="freqList">rec occ</setting>
+			</options>
+		</subConfig>
+		
+		<subConfig type="index" id="sentence-ntc-idx-case">
+			<objectType>cheshire3.index.ProximityIndex</objectType>
+			<paths>
+				<object type="indexStore" ref="indexStore"/>
+			</paths>
+			<source>
+				<xpath ref="sentenceXPath"/>
+				<process>
+					<object type="extractor" ref="TaggedTermExtractor"/>
+					<object type="tokenizer" ref="SuppliedOffsetTokenizer"/>
+					<object type="tokenMerger" ref="OffsetProxTokenMerger"/>
+					<object type="normalizer" ref="PosNamedNormalizer"/>
+				</process>
+			</source>
+			<source mode="any|all|=|exact|window">
+				<process>
+					<object type="extractor" ref="SimpleExtractor"/>
+					<object type="tokenizer" ref="RegexpFindOffsetTokenizer"/>
+					<object type="tokenMerger" ref="OffsetProxTokenMerger"/>
+					<object type="normalizer" ref="PossessiveNormalizer"/>
+				</process>
+			</source>
+			<options>
+				<setting type="nProxInts">3</setting>
+				<setting type="proxVectors">1</setting>
+				<setting type="vectors">1</setting>
+			</options>
+		</subConfig>		
+		
+		
+		<subConfig type="index" id="extraStuff-ntc-idx">
+			<objectType>cheshire3.index.ProximityIndex</objectType>
+			<paths>
+				<object type="indexStore" ref="indexStore"/>
+			</paths>
+			<source>
+				<xpath ref="extraStuffXPath"/>
+				<process>
+					<object type="extractor" ref="TaggedTermExtractor"/>
+					<object type="tokenizer" ref="SuppliedOffsetTokenizer"/>
+					<object type="tokenMerger" ref="OffsetProxTokenMerger"/>
+					<object type="normalizer" ref="WordNamedNormalizer"/>
+					<object type="normalizer" ref="CaseNormalizer"/>
+					<object type="normalizer" ref="PossessiveNormalizer"/>
+				</process>
+			</source>
+			<source mode="any|all|=|exact|window">
+				<process>
+					<object type="extractor" ref="SimpleExtractor"/>
+					<object type="tokenizer" ref="RegexpFindOffsetTokenizer"/>
+					<object type="tokenMerger" ref="OffsetProxTokenMerger"/>
+					<object type="normalizer" ref="CaseNormalizer"/>
+					<object type="normalizer" ref="PossessiveNormalizer"/>
+				</process>
+			</source>
+			<options>
+				<setting type="nProxInts">3</setting>
+				<setting type="proxVectors">1</setting>
+				<setting type="vectors">1</setting>
+				<setting type="freqList">rec occ</setting>
+			</options>
+		</subConfig>
+
+		<!--  ngrams -->
+		<subConfig type="index" id="2gram-ntc-idx">
+			<objectType>cheshire3.index.SimpleIndex</objectType>
+			<paths>
+				<object type="indexStore" ref="indexStore"/>
+			</paths>
+			<source>
+				<xpath>//s/txt</xpath>
+				<process>
+					<object type="extractor" ref="SimpleExtractor"/>
+					<object type="tokenizer" ref="RegexpSubTokenizer"/>
+					<object type="tokenMerger" ref="2GramTokenMerger"/>
+					<object type="normalizer" ref="CaseNormalizer"/>
+				</process>
+			</source>
+			<options>
+				<setting type="termIds">1</setting>
+				<setting type="freqList">rec occ</setting>
+			</options>
+		</subConfig>
+		
+		<subConfig type="index" id="3gram-ntc-idx">
+			<objectType>cheshire3.index.SimpleIndex</objectType>
+			<paths>
+				<object type="indexStore" ref="indexStore"/>
+			</paths>
+			<source>
+				<xpath>//s/txt</xpath>
+				<process>
+					<object type="extractor" ref="SimpleExtractor"/>
+					<object type="tokenizer" ref="RegexpSubTokenizer"/>
+					<object type="tokenMerger" ref="3GramTokenMerger"/>
+					<object type="normalizer" ref="CaseNormalizer"/>
+				</process>
+			</source>
+			<options>
+				<setting type="termIds">1</setting>
+				<setting type="freqList">rec occ</setting>
+			</options>
+		</subConfig>
+		
+		<subConfig type="index" id="4gram-ntc-idx">
+			<objectType>cheshire3.index.SimpleIndex</objectType>
+			<paths>
+				<object type="indexStore" ref="indexStore"/>
+			</paths>
+			<source>
+				<xpath>//s/txt</xpath>
+				<process>
+					<object type="extractor" ref="SimpleExtractor"/>
+					<object type="tokenizer" ref="RegexpSubTokenizer"/>
+					<object type="tokenMerger" ref="4GramTokenMerger"/>
+					<object type="normalizer" ref="CaseNormalizer"/>
+				</process>
+			</source>
+			<options>
+				<setting type="termIds">1</setting>
+				<setting type="freqList">rec occ</setting>
+			</options>
+		</subConfig>
+		
+		<subConfig type="index" id="5gram-ntc-idx">
+			<objectType>cheshire3.index.SimpleIndex</objectType>
+			<paths>
+				<object type="indexStore" ref="indexStore"/>
+			</paths>
+			<source>
+				<xpath>//s/txt</xpath>
+				<process>
+					<object type="extractor" ref="SimpleExtractor"/>
+					<object type="tokenizer" ref="RegexpSubTokenizer"/>
+					<object type="tokenMerger" ref="5GramTokenMerger"/>
+					<object type="normalizer" ref="CaseNormalizer"/>
+				</process>
+			</source>
+			<options>
+				<setting type="termIds">1</setting>
+				<setting type="freqList">rec occ</setting>
+			</options>
+		</subConfig>
+		<!--end sentence idxs  -->
+		
+		<!-- Quote Index -->
+		<subConfig type="index" id="quote-ntc-idx">
+			<objectType>cheshire3.index.ProximityIndex</objectType>
+			<paths>
+				<object type="indexStore" ref="indexStore"/>
+			</paths>
+			<source>
+				<xpath ref="quoteXPath"/>
+				<process>
+					<object type="extractor" ref="TaggedTermExtractor"/>
+					<object type="tokenizer" ref="SuppliedOffsetTokenizer"/>
+					<object type="tokenMerger" ref="OffsetProxTokenMerger"/>
+					<object type="normalizer" ref="CaseNormalizer"/>
+					<object type="normalizer" ref="PossessiveNormalizer"/>
+				</process>
+			</source>
+			<source mode="any|all|=|exact|window">
+				<process>
+					<object type="extractor" ref="SimpleExtractor"/>
+					<object type="tokenizer" ref="RegexpFindOffsetTokenizer"/>
+					<object type="tokenMerger" ref="OffsetProxTokenMerger"/>
+					<object type="normalizer" ref="CaseNormalizer"/>
+					<object type="normalizer" ref="PossessiveNormalizer"/>
+				</process>
+			</source>
+			<options>
+				<setting type="nProxInts">3</setting>
+				<setting type="proxVectors">1</setting>
+				<setting type="vectors">1</setting>
+				<setting type="freqList">rec occ</setting>
+			</options>
+		</subConfig> 
+		
+		
+		<subConfig type="index" id="sus-ntc-idx">
+			<objectType>cheshire3.index.ProximityIndex</objectType>
+			<paths>
+				<object type="indexStore" ref="indexStore"/>
+			</paths>
+			<source>
+				<xpath ref="susXPath"/>
+				<process>
+					<object type="extractor" ref="TaggedTermExtractor"/>
+					<object type="tokenizer" ref="SuppliedOffsetTokenizer"/>
+					<object type="tokenMerger" ref="OffsetProxTokenMerger"/>
+					<object type="normalizer" ref="CaseNormalizer"/>
+					<object type="normalizer" ref="PossessiveNormalizer"/>
+				</process>
+			</source>
+			<source mode="any|all|=|exact|window">
+				<process>
+					<object type="extractor" ref="SimpleExtractor"/>
+					<object type="tokenizer" ref="RegexpFindOffsetTokenizer"/>
+					<object type="tokenMerger" ref="OffsetProxTokenMerger"/>
+					<object type="normalizer" ref="CaseNormalizer"/>
+					<object type="normalizer" ref="PossessiveNormalizer"/>
+				</process>
+			</source>
+			<options>
+				<setting type="nProxInts">3</setting>
+				<setting type="proxVectors">1</setting>
+				<setting type="vectors">1</setting>
+				<setting type="freqList">rec occ</setting>
+			</options>
+		</subConfig> 
+		
+	
+		
+	<!-- 	<subConfig type="index" id="book-ntc-idx">
+			<objectType>cheshire3.index.SimpleIndex</objectType>
+			<paths>
+				<object type="indexStore" ref="indexStore"/>
+			</paths>
+			<source>
+				<xpath ref="bookXPath"/>
+				<process>
+					<object type="extractor" ref="SimpleExtractor"/>
+					<object type="tokenizer" ref="SimpleTokenizer"/>
+					<object type="tokenMerger" ref="SimpleTokenMerger"/>
+				</process>
+			</source>
+		</subConfig>-->
+		
+		
+		<subConfig type="index" id="non-quote-ntc-idx">
+			<objectType>cheshire3.index.ProximityIndex</objectType>
+			<paths>
+				<object type="indexStore" ref="indexStore"/>
+			</paths>
+			<source>
+				<xpath ref="nonQuoteXPath"/>
+				<process>
+					<object type="extractor" ref="TaggedTermExtractor"/>
+					<object type="tokenizer" ref="SuppliedOffsetTokenizer"/>
+					<object type="tokenMerger" ref="OffsetProxTokenMerger"/>
+					<object type="normalizer" ref="CaseNormalizer"/>
+					<object type="normalizer" ref="PossessiveNormalizer"/>
+				</process>
+			</source>
+			<source mode="any|all|=|exact|window">
+				<process>
+					<object type="extractor" ref="SimpleExtractor"/>
+					<object type="tokenizer" ref="RegexpFindOffsetTokenizer"/>
+					<object type="tokenMerger" ref="OffsetProxTokenMerger"/>
+					<object type="normalizer" ref="CaseNormalizer"/>
+					<object type="normalizer" ref="PossessiveNormalizer"/>
+				</process>
+			</source>
+			<options>
+				<setting type="nProxInts">3</setting>
+				<setting type="proxVectors">1</setting>
+				<setting type="vectors">1</setting>
+				<setting type="freqList">rec occ</setting>
+			</options>
+		</subConfig> 
+	
+	</subConfigs>
+</config>

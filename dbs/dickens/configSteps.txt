@@ -1,0 +1,37 @@
+
+steps taken to set up Dickens db from APU config
+================================================
+
+1. copied contents of dbs/apu (excluding data, indexes, stores) to dbs/dickens
+2. replaced references to apu in files to dickens with command: 
+	
+		find . -exec sed -i -e 's/apu/dickens/g' {} \;
+
+3. created db_dickens.xml in dbs/configs.d
+4. changed xpaths in configXPaths.xml
+	- /div[@type='chapter']/p/s etc
+
+5. stripped back indexes in configIdxs.xml
+	- chapter, paragraph, sentence and ngram (2-5)
+
+6. modified workflows to do chapter, paragraph, sentence and ngram
+
+7. postgres db: createdb db_dickens
+
+8. should probably change article-Txr to chapter-Txr in all places... just pointed to chapter.xsl for now
+
+
+WWW
+
+1. copied all files from www/apu to www/dickens
+2. rename handlers
+	- dickensHandler.py
+	- dickensSearchHandler.py
+	- dickensBrowseHandler.py
+3. replaced apu with dickens
+	find . -exec sed -i -e 's/apu/dickens/g' {} \;
+
+4. added dickens folder to install/htdocs
+5. added dickens.conf to install/conf.d
+6. altered interface.html so options match for dickens
+
