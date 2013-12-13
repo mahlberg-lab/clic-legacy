@@ -1,8 +1,0 @@
-<config>
-    <paths>
-        <path type="defaultPath">dbs</path>
-    </paths>
-    <subConfigs>
-        <path type="includeConfigs">dbs/configs.d</path>
-    </subConfigs>
-</config>
