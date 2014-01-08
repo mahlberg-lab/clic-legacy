@@ -1,7 +1,8 @@
 <config type="database" id="db_dickens">
 	<objectType>cheshire3.database.SimpleDatabase</objectType>
 	<paths>
-		<path type="defaultPath">../dbs/dickens</path>
+<!--		<path type="defaultPath">../dbs/dickens</path> -->
+		<path type="defaultPath">/home/aezros/cheshire3/dbs/dickens</path>
 		<path type="metadataPath">stores/metadata.bdb</path>
 		<path type="indexStoreList">indexStore</path>
 		<object type="recordStore" ref="recordStore"/>
