@@ -96,11 +96,11 @@
 		   </subConfig>
 
 	<subConfig type="normalizer" id="SubCorpusNormalizer">
-		<objectType>corpusNormalizer.CorpusNormalizer</objectType>
+		<objectType>clic.dickens.normalizer.CorpusNormalizer</objectType>
 	</subConfig>
 
 	<subConfig type="normalizer" id="NovelNormalizer">
-		<objectType>corpusNormalizer.NovelNormalizer</objectType>
+		<objectType>clic.dickens.normalizer.NovelNormalizer</objectType>
 	</subConfig>
 		
 	<subConfig type="transformer" id="geniaTransformer">
