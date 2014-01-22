@@ -1,2 +1,2 @@
-__all__ = ['dickens']
+__all__ = ['dickens', 'stats']
 

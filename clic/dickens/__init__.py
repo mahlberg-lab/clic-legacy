@@ -1,2 +1,2 @@
-__all__ = ['normalizer']
+__all__ = ['collocate', 'concordancer', 'normalizer']
 
