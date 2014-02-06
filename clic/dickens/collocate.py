@@ -36,7 +36,7 @@ class Collocate(object):
         serv = SimpleServer(session,
                             os.path.join(cheshire3Root, 'configs', 'serverConfig.xml')
                             )
-        self.db = self.serv.get_object(session, session.database)
+        self.db = serv.get_object(session, session.database)
         self.concStore = self.db.get_object(session, 'concordanceStore')
         self.collStore = self.db.get_object(session, 'collocateStore')
         self.idxStore = self.db.get_object(session, 'indexStore')
