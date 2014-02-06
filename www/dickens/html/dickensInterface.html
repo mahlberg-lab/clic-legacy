@@ -1,0 +1,220 @@
+
+<html>
+	<head>
+		<title>Dickens CLiC Interface</title>
+		<link href="/dickens/css/tabs.css" type="text/css" rel="stylesheet" />		
+		
+		<link href="/dickens/css/ricoGrid.css" type="text/css" rel="stylesheet" />		
+
+		<link rel="stylesheet" href="/dickens/css/browse.css" type="text/css"/>
+		<link rel="stylesheet" href="/dickens/css/search.css" type="text/css"/>
+		<link rel="stylesheet" href="/dickens/css/contextmenu.css" type="text/css"/>
+		
+		<script type="text/javascript" src="/dickens/js/prototype.js"></script>	
+		<script type="text/javascript" src="/dickens/js/rico.js"></script>		
+		<script type="text/javascript" src="/dickens/js/search.js"></script>
+		<script type="text/javascript" src="/dickens/js/browse.js"></script>
+		<script type="text/javascript" src="/dickens/js/collocate.js"></script>
+		<script type="text/javascript" src="/dickens/js/arm.js"></script>
+		<script type="text/javascript" src="/dickens/js/view.js"></script>
+		<script type="text/javascript" src="/dickens/js/contextmenu.js"></script>
+		<script type="text/javascript" src="/dickens/js/tabs.js"></script>
+		<script type="text/javascript">
+    			function loadPage() {
+				activateTabs('controlTab_');
+				getIndexList();
+				populateStatsTable();
+				SimpleContextMenu.setup({'preventDefault':true, 'preventForms':true});
+				SimpleContextMenu.attach('rightHead', 'rightSearchMenu');
+				SimpleContextMenu.attach('leftHead', 'leftSearchMenu');
+				SimpleContextMenu.attach('nodeHead', 'nodeSearchMenu');
+			}	
+  
+    		</script>
+	</head>
+	
+	<body onload="loadPage()">
+		
+<!-- context menu/pop-up menu code - not visible on load -->
+		<div id="popupWindow" class="popupWindow">
+			<div id="popupHeader" class="popupHeader"><span id="popupTitle"></span><span class="close" onclick="this.parentNode.parentNode.toggle()">x</span></div>
+			<div id="popupWindowFrame"></div>
+		</div>	
+		<ul id="leftSearchMenu" class="SimpleContextMenu">
+			<li><a href="javascript: doSort('left', 1)">1</a></li>
+			<li><a href="javascript: doSort('left', 2)">2</a></li>
+			<li><a href="javascript: doSort('left', 3)">3</a></li> 
+			<li><a href="javascript: doSort('left', 4)">4</a></li>   
+			<li><a href="javascript: doSort('left', 5)">5</a></li>     
+		</ul>
+		<ul id="rightSearchMenu" class="SimpleContextMenu">
+			<li><a href="javascript: doSort('right', 1)">1</a></li>
+			<li><a href="javascript: doSort('right', 2)">2</a></li>
+			<li><a href="javascript: doSort('right', 3)">3</a></li> 
+			<li><a href="javascript: doSort('right', 4)">4</a></li>   
+			<li><a href="javascript: doSort('right', 5)">5</a></li>     
+		</ul>
+    		<ul id="nodeSearchMenu" class="SimpleContextMenu">
+			<li><a href="javascript: doSort('node', 1)">sort</a></li>    
+    		</ul>
+
+<!-- visible page settings -->
+		<div id="header">
+			<h3>CLiC: Dickens Corpus</h3>
+		</div>
+		<div id="controls">
+			<div class="tabs" id="controlTab_">
+				<ul>
+					<li id="c1" class="tab_selected">Browse</li>
+					<li id="c2">Search</li>
+					<li id="c3">Stats</li>
+				</ul>
+			</div>	
+
+<!-- content of tabs containined in div and in controls div -->		
+			<div>		
+<!-- browse tab -->		
+				<div id="controlTab1" class="tabCanvas tab_visible">			
+					<form id="browseform">		  
+				  		<span class="searchComp">Word List for</span> 
+				  		<div class="left">
+				      			<select name="indexSelect" id="indexSelect">
+				      	
+				      			</select>  		   
+				   		</div>
+				   		<div class="arrows">
+				     			<input type="button" onclick="addIndex();" class="arrow" value=">"/>
+					 		<input type="button" onclick="removeIndex();" class="arrow" value="<"/>		   	 
+				   		</div>
+				   		<div id="box">
+	
+						</div>
+				  	</form>
+				  	<br />
+				  	<div class="left">
+				  		<a href="javascript:createComparison()">SHOW</a>
+				  	</div>
+					<br/>
+				</div>
+		
+<!-- search tab -->
+				<div id="controlTab2" class="tabCanvas">
+					<form id="searchForm" >			
+						<input name="operation" value="search" type="hidden"/>
+						<input name="mode" value="search" type="hidden"/>			
+						<span class="searchComp">Find</span> 
+						<ul class="searchComp">				
+							<li><input id="type_any" name="type" type="radio" value="any" checked="1"/><label>any of</label></li>
+							<li><input id="type_all" name="type" type="radio" value="all"/><label>all of</label></li>
+							<li><input id="type_phrase" name="type" type="radio" value="phrase"/><label>the phrase</label></li>				
+						</ul>
+						<span class="searchComp">
+							<input name="terms" id="terms" type="text" size="40" />
+							<br/>
+		<!--					<input name="caseSensitive" id="caseSensitive" type="checkbox"/> case sensitive?-->
+						</span>
+						<span class="searchComp">in </span>
+						<ul class="searchComp">
+							<li><input id="context_chapter" name="context" type="radio" value="chapter" /><label>a chapter</label></li>
+							<li><input id="context_paragraph" name="context" type="radio" value="paragraph"/><label>a paragraph</label></li>
+							<li><input id="context_sentence" name="context" type="radio" value="sentence" checked="1"/><label>a sentence</label></li>
+							<!-- <li><input id="context_window" name="context" type="radio" value="window" /><label>word span of </label><select name="span" id="span">
+							<option value="3">3</option>
+							<option value="4">4</option>
+							<option value="5" selected="true">5</option>
+							<option value="6">6</option>
+							<option value="7">7</option>
+							</select></input></li> -->
+							<li><input id="context_quote" name="context" type="radio" value="quote" /><label>quotations</label></li>
+							<li><input id="context_non-quote" name="context" type="radio" value="non-quote" /><label>not quotations</label></li>
+							<li><input id="context_longsus" name="context" type="radio" value="longsus" /><label>suspensions (5 word +)</label></li>
+							<li><input id="context_shortsus" name="context" type="radio" value="shortsus" /><label>suspensions (4 word or less)</label></li>
+						</ul>
+						<label>in</label>
+						<select name="book">
+							<option value="D.all">All Dickens</option>
+							<!-- <option value="A.all">All Austen</option> -->
+							<option value="D.novel">Novels</option>
+							<option value="D.other">Not Novels</option>
+							<option value="D.BH">BH</option>
+							<option value="D.BR">BR</option>
+							<option value="D.DC">DC</option>
+							<option value="D.DS">DS</option>
+							<option value="D.ED">ED</option>
+							<option value="D.GE">GE</option>
+							<option value="D.HT">HT</option>
+							<option value="D.LD">LD</option>
+							<option value="D.MC">MC</option>
+							<option value="D.NN">NN</option>
+							<option value="D.OCS">OCS</option>
+							<option value="D.OMF">OMF</option>
+							<option value="D.OT">OT</option>
+							<option value="D.PP">PP</option>
+							<option value="D.TTC">TTC</option>
+	
+							<!--	<option value="A.Emma">Emma</option>-->
+							<!--	<option value="A.MP">MP</option>-->
+							<!--	<option value="A.NA">NA</option>-->
+							<!--	<option value="A.Per">Per</option>-->
+							<!--	<option value="A.PrPr">PrPr</option>-->
+							<!--	<option value="A.SS">SS</option>	-->
+	
+	
+	
+							<!--	<option value="AN">AN</option>-->
+							<!--	<option value="CC">CC</option>-->
+							<!--	<option value="CHI">CHI</option>-->
+							<!--	<option value="CH">CH</option>-->
+							<!--	<option value="HM">HM</option>-->
+							<!--	<option value="SB">SB</option>-->
+							<!--	<option value="BL">BL</option>-->
+							<!--	<option value="UT">UT</option>-->
+						</select>
+
+						<!--
+						<ul class="searchComp">
+							<li><input id="context_taskFive" name="context" type="radio" value="taskFive" /><label>Task 5</label></li>
+							<li><input id="context_taskSix" name="context" type="radio" value="taskSix" /><label>Task 6</label></li>
+									
+						</ul>
+						-->
+						<!--<p>
+						display window +-
+						<select name="windowsize" id="windowsize">
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+							<option value="4">4</option>
+							<option value="5" selected="true">5</option>
+						</select>
+						</p>-->
+						<div style="clear: left; margin-bottom: -16px;">						
+							<a href="javascript:doSearch()">SEARCH</a>	
+						</div>
+					</form>			
+				</div>
+		
+<!-- Corpus Stats Tab -->		
+				<div id="controlTab3" class="tabCanvas">				 
+					<table id="statsTable">
+						
+					</table>
+				</div>
+			</div>
+		</div> <!-- end of id="controls" div -->
+		
+		<div id="resultTabWidget" class="tabber">
+			<div id="tabWidget">
+				<div id="tab_" class="tabs">
+					<ul>
+					</ul>
+				</div>
+				<div id="canvasContainer">
+				
+				</div>
+			</div>
+		</div>
+
+	</body>
+
+</html>
