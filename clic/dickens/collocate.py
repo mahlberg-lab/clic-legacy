@@ -55,7 +55,7 @@ class Collocate(object):
         string = self.collStore.fetch_document(self.session, id).get_raw(self.session)
         wordWindow = id[id.rfind('_') + 1:]
         collocates = Pickle.loads(string)
-        self.logger.log(collocates)
+        #self.logger.log(collocates)
         return collocates
 
     def create_collocateTable(self, id, window=5):

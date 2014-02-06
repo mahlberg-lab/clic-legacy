@@ -173,8 +173,8 @@ class Concordancer(object):
                 clines = []        
                 #for each rsItem
                 for k, i in enumerate(rs):
-                    self.logger.log('+++++++++++++++++++++++++')
-                    self.logger.log(i.proxInfo)
+                    #self.logger.log('+++++++++++++++++++++++++')
+                    #self.logger.log(i.proxInfo)
                     if idx == 'chapter':
                         elems = [0]
                     else:           
@@ -249,7 +249,7 @@ class Concordancer(object):
                         table = '<table class="frameTable">%s</table>' % ''.join(string)    
                 else:
                     table = ''
-                self.logger.log(clines)                                                              
+                #self.logger.log(clines)
                 self.save_concordance(clines, id, wordWindow)                                 
                 return (len(clines)-1, table) # add slots
 # [[words#, wordOffsets][words#, wordOffsets][words#, wordOffsets][recordStore, recId, index][[elem#, charOff],[elem#, charOff],[elem#, charOff],[elem#, charOff]]] 
