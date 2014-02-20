@@ -91,7 +91,7 @@ class SearchHandler(object):
       
         self.logger.log('search called')
         start = time.time()
-        form = FieldStorage(req)
+        form = FieldStorage(req) # RS: gives idx (e.g. c3.sentence-idx any/proxinfo "word")
         type_ = form.get('type', None)
         terms = form.get('terms', None)  
         book = form.get('book', 'all') 
@@ -302,11 +302,13 @@ class SearchHandler(object):
             tree = rec.get_dom(session).getroottree()
             self.logger.log('++++++++++++++++++++++++++++++++++++++++++++++++++++++++   %s' % context)
             if context in ['chapter', 'quote', 'non-quote', 'longsus', 'shortsus'] :
-                node = tree.xpath('//div[@type="chapter"]')[0]
+                node = tree.xpath('//div[@type="chapter"]')[0] ## gets the whole chapter
+                #self.logger.log(etree.tostring(node[0]))
             elif context == 'HISC' :
                 node = tree.xpath('//body/headline')[0]
             else:
-                node = tree.xpath('//*[@eid=%s]' % nodeIdxs[0])[0]
+                node = tree.xpath('//*[@eid=%s]' % nodeIdxs[0])[0] ## gets target sentence
+                #self.logger.log(etree.tostring(node[0]))
             walker = node.getiterator()
             texts = []
             for c in walker:
@@ -315,12 +317,13 @@ class SearchHandler(object):
                         texts.append(c.text)                        
                     if c.tail:
                         texts.append(c.tail)
-    
+
                 elif c.tag in extraSpaceElems:
                     texts.append(' ')
                 else:
                     continue
-            text = ''.join(texts).lstrip()          
+            text = ''.join(texts).lstrip()
+            #self.logger.log('text: %s' % text)  ## LOGGING TEXT CONTENT (whole chapter if subcorpus)       
             for j in range(0, len(wordOffsets)):
                 space = False
                 while not space and wordOffsets[j] > 0 :
@@ -332,15 +335,18 @@ class SearchHandler(object):
             if wordOffsets[1] > wordOffsets[0]:
                 left = text[wordOffsets[0]:wordOffsets[1]]
                 newleft = []
-                left = left[::-1]
+                #left = left[::-1] ## RS: THIS WILL REVERSE THE WORD DIRECTION
 
                 for w in left.split(' '):
                     if subcorpora != None:
-                        newleft.append("<span onclick=\"getCFP)'%s'(\">&#x202E;%s&#x202C; </span>" % (multiReplace(w, replhash), w))
+                        #newleft.append("<span onclick=\"getCFP)'%s'(\">&#x202E;%s&#x202C; </span>" % (multiReplace(w, replhash), w))
+                        ## RS: IS THE BELOW ALL I NEED?
+                        newleft.append("<span onclick=\"getCFP)('%s')\">%s</span>" % (multiReplace(w, replhash), w))
                     else:
-                        newleft.append("<span>&#x202E;%s&#x202C; </span>" % (w))                   
+                        newleft.append("<span>&#x202E;%s&#x202C; </span>" % (w))  
                     
                 left = ' '.join(newleft)
+                
                 #check this works for []
                 left = multiReplace(left, {']' : ']]', ')' : '))', '}':'}}', '& ' : 'amp; '})
                 left = multiReplace(left, {'[' : ']', '(' : ')', '{' : '}'})
