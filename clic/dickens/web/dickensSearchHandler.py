@@ -490,11 +490,12 @@ class SearchHandler(object):
         tree = rec.get_dom(session).getroottree()
         if context in ['chapter',
                        'window',
-                       'quote',
-                       'non-quote',
                        'longsus',
                        'shortsus']:
             baseXPath = '//div[@type="chapter"]/descendant::w[WOFFSET]'
+        elif context in ['quote',
+                       'non-quote',]:
+            baseXPath = '//*[@eid=EIDVALUE]/following::w[WOFFSET]'
         elif context == 'HISC':
             baseXPath = '/article/body/headline/descendant::w[WOFFSET]'
             el = tree.xpath('/article/body/headline')[0]
@@ -522,11 +523,12 @@ class SearchHandler(object):
         tree = rec.get_dom(session).getroottree()
         if context in ['chapter',
                        'window',
-                       'quote',
-                       'non-quote',
                        'longsus',
                        'shortsus']:
             baseXPath = '//div[@type="chapter"]/descendant::w[WOFFSET]'
+        elif context in ['quote',
+                       'non-quote',]:
+            baseXPath = '//*[@eid=EIDVALUE]/following::w[WOFFSET]'
         elif context == 'HISC':
             baseXPath = '//headline/descendant::w[WOFFSET]'
         else:
