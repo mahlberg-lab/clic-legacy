@@ -282,20 +282,21 @@ class SearchHandler(object):
         totalOccs = temp[1]
         wordWindow = temp[2]
 
-        #this isn't needed now - change to just display whatever it gets concordance does sorting out what
-        for i in range(0, len(concordance)):
+        # This isn't needed now - change to just display whatever it gets
+        # Concordance does sorting out what
+        for i, row in enumerate(concordance):
             count += 1;
-            recStore = concordance[i][3][0]
-            recid = concordance[i][3][1]           
-            context = concordance[i][3][2]
-            rsPage = concordance[i][3][3]
+            recStore = row[3][0]
+            recid = row[3][1]
+            context = row[3][2]
+            rsPage = row[3][3]
             recordStore = db.get_object(session, recStore)
             rec = recordStore.fetch_record(session, recid)
             nodeIdxs = []
             wordOffsets = []
-            for x in concordance[i][4]:
+            for x in row[4]:
                 nodeIdxs.append(x[0])
-                wordOffsets.append(x[1])        
+                wordOffsets.append(x[1])
             #self.logger.log(nodeIdxs)
             #self.logger.log(wordOffsets)
             # Get the paragraph/sentence/article with eid that matches
@@ -331,7 +332,7 @@ class SearchHandler(object):
                         wordOffsets[j] = wordOffsets[j]-1
                     else :
                         space = True
-                          
+
             if wordOffsets[1] > wordOffsets[0]:
                 left = text[wordOffsets[0]:wordOffsets[1]]
                 newleft = []
@@ -355,26 +356,35 @@ class SearchHandler(object):
             else:
                 left = ''
                 
-            if wordOffsets[2]>wordOffsets[1]:
+            if wordOffsets[2] > wordOffsets[1]:
                 right = text[wordOffsets[2]:wordOffsets[3]]
                 newright = []
                 for w in right.split(' '):
                     if subcorpora != None:
                         newright.append("<span onclick=\"getCFP('%s')\">%s</span>" % (multiReplace(w, replhash), w))
                     else:
-                        newright.append("<span>%s</span>" % (w))                   
+                        newright.append("<span>%s</span>" % (w))
                 right = ' '.join(newright)
                 key = text[wordOffsets[1]:wordOffsets[2]]
             else:
                 right = ''
                 key = text[wordOffsets[1]:]
-        
-            keyTagged = (left + '</td><td> ' + key + ' </td><td> ' + right)
-#            result.append('<tr><td><a href="/dickens/search?operation=search&amp;mode=article&amp;parent=%d&amp;elem=%d&amp;os1=%d&amp;os2=%d" target="_article">%d</a></td><td> %s</td></tr>' % (recid, nodeIdxs[0], max(wordOffsets[1], -1), max(wordOffsets[2], -1), count, keyTagged))
-            result.append('<tr><td><a href="javascript:displayArticle(\'%s\', %d, %d, \'%s\')">%d</a></td><td> %s</td></tr>' % (id, rsPage, nodeIdxs[0], '_'.join([str(x[1]) for x in  concordance[i][1]]), count, keyTagged))
-        
+
+            result.extend([
+                '<tr>',
+                '<td><a href="javascript:displayArticle(\'%s\', %d, %d, \'%s\')">%d</a></td>' % (id, rsPage, nodeIdxs[0], '_'.join([str(x[1]) for x in  concordance[i][1]]), count),
+                '<td>',
+                left,
+                '</td><td>',
+                key,
+                '</td><td>',
+                right,
+                '</td></tr>'
+            ])
+
            # keyTagged = (left + '&#x202C; </td><td> ' + key + ' </td><td> ' + right)
            # result.append('<tr><td><a href="/dickens/search?operation=search&amp;mode=article&amp;parent=%d&amp;elem=%d&amp;os1=%d&amp;os2=%d" target="_article">%d</a></td><td> &#x202E; %s</td></tr>' % (recid, nodeIdxs[0], max(wordOffsets[1], -1), max(wordOffsets[2], -1), count, keyTagged))
+
         resultString = '<ajax-response><response type="object" id="%s"><rows update_ui="true">%s</rows></response></ajax-response>' % (id, ' '.join(result))
         regex = re.compile('&(?!\w+;)')
         resultString = re.sub(regex, '&amp;', resultString)
@@ -478,7 +488,12 @@ class SearchHandler(object):
         rec = rs[page].fetch_record(session)
         #rec = recordStore.fetch_record(session, parent)
         tree = rec.get_dom(session).getroottree()
-        if context == 'chapter' or context == 'window' or context == 'quote' or context == 'non-quote' or context == 'longsus' or context == 'shortsus':
+        if context in ['chapter',
+                       'window',
+                       'quote',
+                       'non-quote',
+                       'longsus',
+                       'shortsus']:
             baseXPath = '//div[@type="chapter"]/descendant::w[WOFFSET]'
         elif context == 'HISC':
             baseXPath = '/article/body/headline/descendant::w[WOFFSET]'
@@ -492,8 +507,9 @@ class SearchHandler(object):
             word = tree.xpath(baseXPath.replace('WOFFSET', str(int(w)+1)))[0]
             word.set('inv', 'node')       
         return '<html><head></head><body><p>%s</p></body></html>' % articleTransformer.process_record(session, rec).get_raw(session)
-    
+
     def articleBrowse(self, form):
+        self.logger.log('ARTICLE BROWSE REQUESTED')
         id = form.get('id', None)
         context = id.split('|')[0]
         type=id.split('|')[1]
@@ -504,25 +520,63 @@ class SearchHandler(object):
         proxInfo = rs[page].proxInfo
         rec = rs[page].fetch_record(session)
         tree = rec.get_dom(session).getroottree()
-        if context in ['chapter', 'window', 'quote', 'non-quote', 'longsus', 'shortsus']:
+        if context in ['chapter',
+                       'window',
+                       'quote',
+                       'non-quote',
+                       'longsus',
+                       'shortsus']:
             baseXPath = '//div[@type="chapter"]/descendant::w[WOFFSET]'
         elif context == 'HISC':
             baseXPath = '//headline/descendant::w[WOFFSET]'
         else:
             baseXPath = '//*[@eid=EIDVALUE]/descendant::w[WOFFSET]'
-        for m in rs[page].proxInfo :
-            if type == 'phrase' or type == 'any' and not context in ['window', 'quote', 'non-quote', 'longsus', 'shortsus']:
+
+        self.logger.log(rs[page].proxInfo)
+        for m in rs[page].proxInfo:
+            if (type == 'phrase' or
+                type == 'any' and
+                not context in ['window',
+                                'quote',
+                                'non-quote',
+                                'longsus',
+                                'shortsus']
+            ):
                 for p in m:
-                    word = tree.xpath(multiReplace(baseXPath, {'EIDVALUE' : p[0], 'WOFFSET' : p[1]+1}))[0]
+                    xp = multiReplace(baseXPath,
+                                      {'EIDVALUE': p[0],
+                                       'WOFFSET': p[1] + 1
+                                       }
+                                      )
+                    word = tree.xpath(xp)[0]
                     word.set('inv', 'node')
-            elif type == 'all' or context in ['window', 'quote', 'non-quote', 'longsus', 'shortsus']:
-                word = tree.xpath(multiReplace(baseXPath, {'EIDVALUE' : m[0][0], 'WOFFSET' : m[0][1]+1}))[0]
+            elif (type == 'all' or
+                  context in ['window',
+                              'quote',
+                              'non-quote',
+                              'longsus',
+                              'shortsus']
+            ):
+                xp = multiReplace(baseXPath,
+                                  {'EIDVALUE': m[0][0],
+                                   'WOFFSET': m[0][1] + 1
+                                   }
+                                  )
+                word = tree.xpath(xp)[0]
                 word.set('inv', 'node')
                 for i in range(1, len(m)):
-                    word = tree.xpath(multiReplace(baseXPath, {'EIDVALUE' : m[i][0], 'WOFFSET' : m[i][1]+1}))[0]
+                    xp = multiReplace(baseXPath,
+                                      {'EIDVALUE': m[i][0],
+                                       'WOFFSET': m[i][1] + 1
+                                       }
+                                      )
+                    word = tree.xpath()[0]
                     word.set('inv', 'other')
-            
-        return '<html><head></head><body><p>%s</p></body></html>' % articleTransformer.process_record(session, rec).get_raw(session)
+
+        doc = articleTransformer.process_record(session, rec)
+        return ('<html><head></head><body><p>{0}</p></body></html>'
+                ''.format(doc.get_raw(session))
+                )
 
     def arm(self, form):
         self.logger.log('Build ARM')
@@ -547,7 +601,7 @@ class SearchHandler(object):
                 vectorStore.store_document(session, doc2)
                 vectorStore.commit_storing(session)
         return '<rsid>%s</rsid>' % id
-        
+
     def exportkwic(self, form, start=0):
         self.logger.log('exporting kwiclines')
         id = form.get('rsid', None)
@@ -567,7 +621,8 @@ class SearchHandler(object):
         totalOccs = temp[1]
         wordWindow = temp[2]
         
-        #this isn't needed now - change to just display whatever it gets concordance does sorting out what
+        # This isn't needed now - change to just display whatever it gets
+        # concordance does sorting out what
         for i in range(0, len(concordance)):
             count += 1;
             recStore = concordance[i][3][0]
