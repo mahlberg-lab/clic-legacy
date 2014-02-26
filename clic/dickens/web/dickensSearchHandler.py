@@ -91,22 +91,24 @@ class SearchHandler(object):
       
         self.logger.log('search called')
         start = time.time()
-        form = FieldStorage(req) # RS: gives idx (e.g. c3.sentence-idx any/proxinfo "word")
+        form = FieldStorage(req) 
+        #self.logger.log(form) # RS: <mod_python.util.FieldStorage object at 0x2e35a50>
         type_ = form.get('type', None)
-        terms = form.get('terms', None)  
-        book = form.get('book', 'all') 
+        #self.logger.log(form.get('type')) ## search mode: 'any' etc. (to print leave out None)
+        terms = form.get('terms', None)  ## search term
+        book = form.get('book', 'all') ## book id
         csCheckbox = form.get('caseSensitive', None)
-        caseSensitive = csCheckbox and "s" or "i"
-        id_ = form.get('id', None)
-        span = int(form.get('span', 0))
-        wordWindow = int(form.get('windowsize', 10))
-        gid = form.get('gid', None)
+        caseSensitive = csCheckbox and "s" or "i" ## sets case sensitive to s (sensitive) or i (insensitive)
+        id_ = form.get('id', None) ## search id (e.g. quote|any|superlative|0|10|i|D.all|)
+        span = int(form.get('span', 0)) ## starts at 0?
+        wordWindow = int(form.get('windowsize', 10)) ## WHY 10? - WHAT'S WINDOW SIZE?
+        gid = form.get('gid', None) ## c3.quote-idx any/proxinfo "superlative" and/proxinfo c3.book-idx = BH
         if id_:
             # remove the 'kwic_grid_' that comes from LiveGrid id 
             self.logger.log('ID SUPPLIED DISPLAYING LINES') 
             id_ = id_[10:]
-            start = int(form.get('offset', 0))
-            howmany = int(form.get('page_size', 100))            
+            start = int(form.get('offset', 0)) ## ?
+            howmany = int(form.get('page_size', 100))## ?           
             return self.kwicDisplay(id_, start, howmany)
         elif (gid != None):
             start = int(form.get('offset', 0))
@@ -115,25 +117,27 @@ class SearchHandler(object):
         else:
             if (terms == None):
                 self.logger.log('no terms') 
-               
+            
+            ## RS: return search id as context (e.g. 'quote'), search type (e.g. 'any'), search term (removing funny symbols),
+            ##     span (start at 0), windowsize (10 - why?), case sensitivity and book id.  
             id_ = '%s|%s|%s|%d|%d|%s|%s|' % (form.get('context', None), type_, multiReplace(terms, {'"' : '*', ' ' : '_', '<' : '(', '>' : ')'}), span, wordWindow, caseSensitive, book) 
             try:
-                rs = resultSetStore.fetch_resultSet(session, id_)
+                rs = resultSetStore.fetch_resultSet(session, id_) ## search query using cheshire method
             except cheshire3.exceptions.ObjectDoesNotExistException:
                 if type_ == 'CQL':
                     queryString = terms
                 else:
-                    (queryString, idx) = self.build_query(id_) 
+                    (queryString, idx) = self.build_query(id_) ## ALTERNATIVE QUERY SEARCH METHOD?
                                             
                 query = qf.get_query(session, queryString)
                 (mins, secs) = divmod(time.time() - start, 60)
-                self.logger.log('%s\nquery parsed: %s' % (queryString, secs))
+                self.logger.log('%s\nquery parsed: %s' % (queryString, secs)) ## print queryString (e.g. c3.quote-idx any/proxinfo "shocking") and time it takes
                 rs = db.search(session, query)
                 
                 (mins, secs) = divmod(time.time() - start, 60)
                 self.logger.log('db searched: %s' % secs)
                 
-                # Save ResultSet
+                # Save ResultSet ## RS: Don't have to ask cheshire twice for same search term
                 resultSetStore.begin_storing(session)
                 rs.id = id_                   
                 resultSetStore.store_resultSet(session, rs)
@@ -278,52 +282,52 @@ class SearchHandler(object):
         count = start
         concordancer = Concordancer(session, self.logger)
         temp = concordancer.load_concordance(id, start, nRecs)
+
         concordance = temp[0]
         totalOccs = temp[1]
         wordWindow = temp[2]
-
+        
         #this isn't needed now - change to just display whatever it gets concordance does sorting out what
-        for i in range(0, len(concordance)):
+        for i in range(0, len(concordance)): ## len = 4
             count += 1;
-            recStore = concordance[i][3][0]
-            recid = concordance[i][3][1]           
-            context = concordance[i][3][2]
-            rsPage = concordance[i][3][3]
+            recStore = concordance[i][3][0] ## name of record store query is found in (recordStore)
+            recid = concordance[i][3][1] ## which number of record query is found in
+            context = concordance[i][3][2] ## chapter, sentence. Never quotes, non-quotes etc. as these are currently sub-corpora            
+            rsPage = concordance[i][3][3] ## query order? (if three matches - 0,1,2)
             recordStore = db.get_object(session, recStore)
-            rec = recordStore.fetch_record(session, recid)
+            rec = recordStore.fetch_record(session, recid) ## get record
             nodeIdxs = []
             wordOffsets = []
             for x in concordance[i][4]:
-                nodeIdxs.append(x[0])
-                wordOffsets.append(x[1])        
+                nodeIdxs.append(x[0]) ## NOTE: returns 0 if in sub-corpora (e.g. node is chapter)
+                wordOffsets.append(x[1]) ## identifies search word? SEEMS TO FIND THE WRONG ONE FOR SUB-CORPORA
             #self.logger.log(nodeIdxs)
             #self.logger.log(wordOffsets)
             # Get the paragraph/sentence/article with eid that matches
             tree = rec.get_dom(session).getroottree()
             self.logger.log('++++++++++++++++++++++++++++++++++++++++++++++++++++++++   %s' % context)
             if context in ['chapter', 'quote', 'non-quote', 'longsus', 'shortsus'] :
-                node = tree.xpath('//div[@type="chapter"]')[0] ## gets the whole chapter
-                #self.logger.log(etree.tostring(node[0]))
-            elif context == 'HISC' :
+                node = tree.xpath('//div[@type="chapter"]')[0] ## gets the whole chapter in chapter and sub-corpora contexts
+            elif context == 'HISC' : ## ?
                 node = tree.xpath('//body/headline')[0]
             else:
-                node = tree.xpath('//*[@eid=%s]' % nodeIdxs[0])[0] ## gets target sentence
+                node = tree.xpath('//*[@eid=%s]' % nodeIdxs[0])[0] ## gets target sentence in sentence context
                 #self.logger.log(etree.tostring(node[0]))
             walker = node.getiterator()
             texts = []
             for c in walker:
-                if c.tag == 'txt':                        
+                if c.tag == 'txt': ## includes chapter                       
                     if c.text:
                         texts.append(c.text)                        
                     if c.tail:
-                        texts.append(c.tail)
+                        texts.append(c.tail) 
 
                 elif c.tag in extraSpaceElems:
                     texts.append(' ')
                 else:
                     continue
             text = ''.join(texts).lstrip()
-            #self.logger.log('text: %s' % text)  ## LOGGING TEXT CONTENT (whole chapter if subcorpus)       
+            #self.logger.log('text: %s' % text)  ## LOGGING TEXT CONTENT (NB: whole chapter if subcorpus)       
             for j in range(0, len(wordOffsets)):
                 space = False
                 while not space and wordOffsets[j] > 0 :
@@ -331,7 +335,8 @@ class SearchHandler(object):
                         wordOffsets[j] = wordOffsets[j]-1
                     else :
                         space = True
-                          
+            
+            #self.logger.log(text[wordOffsets[0]:wordOffsets[3]]) ### print whole concordance list (len = 4)            
             if wordOffsets[1] > wordOffsets[0]:
                 left = text[wordOffsets[0]:wordOffsets[1]]
                 newleft = []
