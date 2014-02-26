@@ -49,8 +49,8 @@ class Concordancer(object):
         idx = id.split('|')[0]
         if idx == 'window' or idx== 'quote' or idx == 'non-quote' or idx== 'longsus' or idx == 'shortsus':
             index = self.db.get_object(self.session, 'chapter-idx')
-        else:
-            index = self.db.get_object(self.session, '%s-idx' % idx)
+#RS         else:
+#RS         index = self.db.get_object(self.session, '%s-idx' % idx)
         try:
             rs = self.resultSetStore.fetch_resultSet(self.session, id)
         except:
@@ -136,21 +136,24 @@ class Concordancer(object):
         session = self.session
         idxStore = self.idxStore
         variableArray = id.split('|')
-        idx = variableArray[0]
-        type = variableArray[1]
-        terms = variableArray[2].replace('_', ' ')
+        idx = variableArray[0] ## sentence, quote, etc.
+        self.logger.log(idx)###
+        type = variableArray[1] ## any etc.
+        terms = variableArray[2].replace('_', ' ') 
         corpus = variableArray[6][:variableArray[6].find('.')]
         if corpus == 'A':
             prefix = '-austen'
         else:
             prefix = ''
         slots = []
-        if idx == 'window' :
+        if idx == 'window' : ## ?
             idx = 'chapter'
             type = 'window'
-        elif idx in ['quote', 'non-quote', 'longsus', 'shortsus']:
+        elif idx in ['quote', 'non-quote', 'longsus', 'shortsus']: ## RS: REMOVE THIS ?
             idx = 'chapter'
+        #self.logger.log('index is: %s' % idx) ### RS - quote should be found in quote index
         syntax = False
+        ## RS: LOOK INTO WHAT IS DONE HERE FOR TYPE==PHRASE
         if (type == 'phrase' and (terms.find('(') > -1 or terms.find('{') > -1 or terms.find('[') > -1)) :
             syntax = True
             iter = syntaxRe.finditer(terms)
@@ -164,6 +167,7 @@ class Concordancer(object):
             
         wordWindow = int(variableArray[4])
         index = self.db.get_object(session, '%s%s-idx' % (idx, prefix))
+
         try:
             rs = self.resultSetStore.fetch_resultSet(session, id)
         except:
@@ -174,7 +178,7 @@ class Concordancer(object):
                 #for each rsItem
                 for k, i in enumerate(rs):
                     #self.logger.log('+++++++++++++++++++++++++')
-                    #self.logger.log(i.proxInfo)
+                    #self.logger.log(i.proxInfo)###
                     if idx == 'chapter':
                         elems = [0]
                     else:           
@@ -183,6 +187,7 @@ class Concordancer(object):
                         for m in i.proxInfo:
                             temp.append(m[0][0])
                         elems = set(temp)
+                        self.logger.log(temp)
                     vecs = {}
                     #for each time the word occurs in the record 
                     for e in elems:
