@@ -1,5 +1,6 @@
 import os
 import re
+from lxml import etree
 
 try:
     import cPickle as Pickle
@@ -15,7 +16,6 @@ from cheshire3.server import SimpleServer
 cheshirePath = os.path.join('HOME', '/home/cheshire')
 
 maxSize = 5000;
-
 
 class Concordancer(object):
 
@@ -131,13 +131,13 @@ class Concordancer(object):
             return 0
 
     def create_concordance(self, id):
+        self.logger.log(id) ###
         self.logger.log('CREATING CONCORDANCE FOR RS: {0}'.format(id))     
         syntaxRe = re.compile('[\w]* |[\w]*$|[[(][ ]?[\w]*[ ]?[])][\s$]?|{[\w\s]+}[\s$]?')
         session = self.session
         idxStore = self.idxStore
         variableArray = id.split('|')
         idx = variableArray[0] ## sentence, quote, etc.
-        self.logger.log(idx)###
         type = variableArray[1] ## any etc.
         terms = variableArray[2].replace('_', ' ') 
         corpus = variableArray[6][:variableArray[6].find('.')]
@@ -149,11 +149,11 @@ class Concordancer(object):
         if idx == 'window' : ## ?
             idx = 'chapter'
             type = 'window'
-        elif idx in ['quote', 'non-quote', 'longsus', 'shortsus']: ## RS: REMOVE THIS ?
-            idx = 'chapter'
-        #self.logger.log('index is: %s' % idx) ### RS - quote should be found in quote index
+        ## RS: idx for quote is quote
+#         elif idx in ['quote', 'non-quote', 'longsus', 'shortsus']: 
+#             idx = 'chapter'
         syntax = False
-        ## RS: LOOK INTO WHAT IS DONE HERE FOR TYPE==PHRASE
+        ## RS: TO-DO: LOOK INTO WHAT IS DONE HERE FOR TYPE==PHRASE
         if (type == 'phrase' and (terms.find('(') > -1 or terms.find('{') > -1 or terms.find('[') > -1)) :
             syntax = True
             iter = syntaxRe.finditer(terms)
@@ -174,65 +174,137 @@ class Concordancer(object):
             self.logger.log('NO RS EXISTS')
         else:
             if (len(rs) > 0):
-                clines = []        
+                clines = [] ###       
                 #for each rsItem
                 for k, i in enumerate(rs):
+                    rec = i.fetch_record(session) ### RS: get record
+                    tree = rec.get_dom(session).getroottree() ### RS
                     #self.logger.log('+++++++++++++++++++++++++')
-                    #self.logger.log(i.proxInfo)###
-                    if idx == 'chapter':
-                        elems = [0]
-                    else:           
+                    if idx in ['chapter']:
+                        elems = [0] ## TO DO: TEST WHETHER CHAPTER CONCORDANCE WORKS
+                    
+                    elif idx in ['quote', 'non-quote']:
+                        temp = []
+                        for m in i.proxInfo:
+                            temp.append(m[0][0])
+                            elems = set(temp)
+                            nodeLength = len(m)                           
+                          
+                            ## nodeIdx and wordIdx: to be modified to sentence idx
+                            (e_q, w_q) = (m[0][0], m[0][1])
+                        
+                        ## find query in XML tree
+                        search_term = tree.xpath('//*[@eid="%d"]/following::w[%d+1]' % (e_q, w_q))
+                        ## verify it equals query
+                        if not search_term[0].text.lower() == terms:
+                            raise ValueError('Missing Search Term')
+                        else:
+                            ## get sentence XML and sentence eid
+                            sentence = tree.xpath('//*[@eid="%d"]/following::w[%d+1]/ancestor-or-self::s' % (e_q, w_q))[0]
+                            e_s = sentence.get('eid')
+                            
+                            s_walker = sentence.getiterator()
+                            count = 0
+                            for s in s_walker:
+                                if s.tag == 'w' and not s.text.lower() == terms.split(' ')[0]:
+                                    count += 1
+                                elif s.tag == 'w' and s.text.lower() == terms.split(' ')[0]:
+                                    break
+                        ## sentence wordIdx        
+                        w_s = count                        
+                        
+                        ## find offset ## TO-DO: DO I NEED THIS?
+#                         s_walker2 = sentence.getiterator()
+#                         for s in s_walker2:
+#                             if s.tag == 'txt':
+#                                 txt = s.text
+#                                 before_terms = txt.split(terms)[0]
+#                                 offset = len(before_terms) ## OFFSET                                
+                                        
+                        ## Get sentence index
+                        sent_index = self.db.get_object(session, 'sentence-idx') 
+                        vecs = {}
+                        for e in elems:
+                            ## define nodeIdx and wordIdx within sentence
+                            (e, w) = (int(e_s), int(w_s)) 
+                            ## self.logger.log((e,w)) ### (e,w) now matches that for sentence idx
+                            vecs[e] = idxStore.fetch_proxVector(session, sent_index, i, e)
+                            v = vecs[e] 
+                    
+                    ## for sentence etc.
+                    else: 
                         #first we need to get a set of the first number in the first list of each list
                         temp = []
                         for m in i.proxInfo:
                             temp.append(m[0][0])
                         elems = set(temp)
-                        self.logger.log(temp)
-                    vecs = {}
-                    #for each time the word occurs in the record 
-                    for e in elems:
-                        #get the prox vector for the node of the record
-                        vecs[e] = idxStore.fetch_proxVector(session, index, i, e)
-                    for m in i.proxInfo:
-                        if idx == 'chapter':
-                            (e, w) = (0, m[0][1])
-                        else:
+                        vecs = {}
+                        #for each time the word occurs in the record 
+                        for e in elems:
+                            #get the prox vector for the node of the record
+                            vecs[e] = idxStore.fetch_proxVector(session, index, i, e)
+                        for m in i.proxInfo:
                             (e, w) = (m[0][0], m[0][1])
                         if type == 'all' or type == 'window':              
                             nodeLength = 1
                         else :
                             nodeLength = len(m)
-                        v = vecs[e]
-                        #for word numbers 
-                        before = [[x[1], x[0]] for x in v[max(0, w-wordWindow):w]]
-                        node = [[x[1], x[0]] for x in v[w: min(w+nodeLength, len(v))]]
-                        after = [[x[1], x[0]] for x in v[min(w+nodeLength, len(v)):min(w+nodeLength+wordWindow, len(v))]]
+                            v = vecs[e]                    
+## OLD:                                                               
+#                     else: 
+#                         #first we need to get a set of the first number in the first list of each list
+#                         temp = []
+#                         for m in i.proxInfo:
+#                             temp.append(m[0][0])
+#                         elems = set(temp)
+#                     vecs = {}
+#                     #for each time the word occurs in the record 
+#                     for e in elems:
+#                         #get the prox vector for the node of the record
+#                         vecs[e] = idxStore.fetch_proxVector(session, index, i, e)
+#                     for m in i.proxInfo:
+#                         if idx == 'chapter':
+#                             (e, w) = (0, m[0][1])
+#                             #self.logger.log((e,w)) ###
+#                         else:
+#                             (e, w) = (m[0][0], m[0][1])
+#                             #self.logger.log((e,w)) ###
+#                         if type == 'all' or type == 'window':              
+#                             nodeLength = 1
+#                         else :
+#                             nodeLength = len(m)
+#                         v = vecs[e] ### RS: all sub-elements?
+#                         #for word numbers 
+#                         before = [[x[1], x[0]] for x in v[max(0, w-wordWindow):w]]
+#                         node = [[x[1], x[0]] for x in v[w: min(w+nodeLength, len(v))]]
+#                         after = [[x[1], x[0]] for x in v[min(w+nodeLength, len(v)):min(w+nodeLength+wordWindow, len(v))]]
 
-#                         before = [[x[1], x[2]] for x in v[max(0, w-wordWindow):w]]
-#                         node = [[x[1], x[2]] for x in v[w: min(w+nodeLength, len(v))]]
-#                         after = [[x[1], x[2]] for x in v[min(w+nodeLength, len(v)):min(w+nodeLength+wordWindow, len(v))]]
-                        
-                        finalOffset=0
-                        try:
-                            tid = vecs[e][w+nodeLength+wordWindow]
-                            finalOffset=tid[2]
-                        except:
-                            finalOffset = None
+                    before = [[x[1], x[0]] for x in v[max(0, w-wordWindow):w]]
+                    node = [[x[1], x[0]] for x in v[w: min(w+nodeLength, len(v))]]
+                    after = [[x[1], x[0]] for x in v[min(w+nodeLength, len(v)):min(w+nodeLength+wordWindow, len(v))]]
+                    
+                    finalOffset=0
+                    try:
+                        tid = vecs[e][w+nodeLength+wordWindow]
+                        finalOffset=tid[2]
+                    except:
+                        finalOffset = None
 
-                        lastNodeOffset = v[w+nodeLength-1][2]
-                          
-                        rhsOffset = v[min(w+nodeLength, len(v)-1)][2]
-                        if rhsOffset == lastNodeOffset:
-                            rhsOffset = None
-                          
-                        loc = [i.recordStore, i.id, idx, k]
-                        
-                        proxOffset = [[e, v[max(0, w-wordWindow)][2]], [e, v[w][2]], [e, rhsOffset], [e, finalOffset]]                                                                                                                                            
-                        conc = [before, node, after, loc, proxOffset]                    
-                        clines.append(conc)
+                    lastNodeOffset = v[w+nodeLength-1][2]
+                      
+                    rhsOffset = v[min(w+nodeLength, len(v)-1)][2]
+                    if rhsOffset == lastNodeOffset:
+                        rhsOffset = None
+                      
+                    loc = [i.recordStore, i.id, idx, k]
+                    
+                    proxOffset = [[e, v[max(0, w-wordWindow)][2]], [e, v[w][2]], [e, rhsOffset], [e, finalOffset]]                                                                                                                                            
+                    conc = [before, node, after, loc, proxOffset]                    
+                    clines.append(conc)
+
                 #self.logger.log('|||||||||||||||||||||||||||||||||||||||||||||')
                 #self.logger.log(slots)
-                if syntax :
+                if syntax : ### RS: Not in use
                     for s in slots:
                         d = s[2]
                         for c in clines:
@@ -254,7 +326,7 @@ class Concordancer(object):
                         table = '<table class="frameTable">%s</table>' % ''.join(string)    
                 else:
                     table = ''
-                #self.logger.log(clines)
+                self.logger.log(clines)
                 self.save_concordance(clines, id, wordWindow)                                 
                 return (len(clines)-1, table) # add slots
 # [[words#, wordOffsets][words#, wordOffsets][words#, wordOffsets][recordStore, recId, index][[elem#, charOff],[elem#, charOff],[elem#, charOff],[elem#, charOff]]] 
