@@ -181,7 +181,15 @@ class Concordancer(object):
                     tree = rec.get_dom(session).getroottree() ### RS
                     #self.logger.log('+++++++++++++++++++++++++')
                     if idx in ['chapter']:
-                        elems = [0] ## TO DO: TEST WHETHER CHAPTER CONCORDANCE WORKS
+                        elems = [0] 
+                        for m in i.proxInfo:
+                            (e, w) = (0, m[0][1])
+                            nodeLength = len(m) 
+                    
+                        vecs = {}  
+                        for e in elems:
+                            vecs[e] = idxStore.fetch_proxVector(session, index, i, e)   
+                        v = vecs[e]  
                     
                     elif idx in ['quote', 'non-quote']:
                         temp = []
