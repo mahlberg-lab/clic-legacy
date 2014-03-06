@@ -101,7 +101,8 @@ class SearchHandler(object):
         caseSensitive = csCheckbox and "s" or "i" ## sets case sensitive to s (sensitive) or i (insensitive)
         id_ = form.get('id', None) ## search id (e.g. quote|any|superlative|0|10|i|D.all|)
         span = int(form.get('span', 0)) ## starts at 0?
-        wordWindow = int(form.get('windowsize', 10)) ## WHY 10? - WHAT'S WINDOW SIZE?
+        #wordWindow = int(form.get('windowsize', 10)) ## We want to increase this
+        wordWindow = int(form.get('windowsize', 20)) ###
         gid = form.get('gid', None) ## c3.quote-idx any/proxinfo "superlative" and/proxinfo c3.book-idx = BH
         if id_:
             # remove the 'kwic_grid_' that comes from LiveGrid id 
@@ -322,8 +323,8 @@ class SearchHandler(object):
             # Get the paragraph/sentence/article with eid that matches
             tree = rec.get_dom(session).getroottree()
             self.logger.log('++++++++++++++++++++++++++++++++++++++++++++++++++++++++   %s' % context)
-            #if context in ['chapter', 'quote', 'non-quote', 'longsus', 'shortsus'] :
-            if context in ['chapter']:
+            if context in ['chapter', 'quote', 'non-quote', 'longsus', 'shortsus'] :
+            #if context in ['chapter']:
                 node = tree.xpath('//div[@type="chapter"]')[0] ## gets the whole chapter in chapter and sub-corpora contexts
             elif context == 'HISC' : ## ?
                 node = tree.xpath('//body/headline')[0]
