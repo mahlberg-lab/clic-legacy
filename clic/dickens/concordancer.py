@@ -149,7 +149,7 @@ class Concordancer(object):
         if idx == 'window' : ## ?
             idx = 'chapter'
             type = 'window'
-        ## RS: idx for quote is quote
+        ## RS: chapter index is accessed later on for individual idx type
 #         elif idx in ['quote', 'non-quote', 'longsus', 'shortsus']: 
 #             idx = 'chapter'
         syntax = False
@@ -166,7 +166,8 @@ class Concordancer(object):
                 counter += 1
             
         wordWindow = int(variableArray[4])
-        index = self.db.get_object(session, '%s%s-idx' % (idx, prefix))
+        ## RS: index read for individual idx types below
+        #index = self.db.get_object(session, '%s%s-idx' % (idx, prefix))
 
         try:
             rs = self.resultSetStore.fetch_resultSet(session, id)
@@ -178,114 +179,109 @@ class Concordancer(object):
                 #for each rsItem
                 for k, i in enumerate(rs):
                     rec = i.fetch_record(session) ### RS: get record
-                    tree = rec.get_dom(session).getroottree() ### RS
+                    tree = rec.get_dom(session).getroottree() ### RS: get xml
                     #self.logger.log('+++++++++++++++++++++++++')
+                    ## RS: elems start at 0 for all but sentence and paragraph
+                    if idx in ['chapter', 'quote', 'non-quote', 'longsus', 'shortsus']:  
+                        elems = [0] ## we are interested in content from element 0 in chapter index
+                    
                     if idx in ['chapter']:
-                        elems = [0] 
+                        index = self.db.get_object(session, '%s%s-idx' % (idx, prefix))
+                        ## proxInfo give 4 values: 
+                        ## [nodeIdx, wordIdx, offset, termId]
+                        ## nodeIdx ::= eid
+                        ## wordIdx ::= word position within that node 
+                        ## offset ::= character offset within that node 
+                        ## termId ::= the internal id of term within Cheshire3's indexes (can be a 5 digit number)
                         for m in i.proxInfo:
-                            (e, w) = (0, m[0][1])
+                            (e, w) = (0, m[0][1]) ## e=0, w=wordIdx
                             nodeLength = len(m) 
                     
                         vecs = {}  
-                        for e in elems:
-                            vecs[e] = idxStore.fetch_proxVector(session, index, i, e)   
-                        v = vecs[e]  
+                        for el in elems:
+                            vecs[el] = idxStore.fetch_proxVector(session, index, i, e)   
+                        v = vecs[el]  
                     
-                    elif idx in ['quote', 'non-quote']:
-                        temp = []
+                    ## NEW METHOD FOR QUOTES - FIND TARGET CHAPTER/SENTENCE: 
+                    ## (i) Find search word based on wordIdx - verify that it is equal to search term
+                    ## (ii) Get sentence and chapter xpath containing query. Count words until query match in target sentence          
+                    ## //*[@eid="e"]/following::w[w+1]/ancestor-or-self::s
+                    ## (iii) w (new wordIdx) as number of words before search term in sentence
+                    elif idx in ['quote', 'non-quote', 'longsus', 'shortsus']:
+                        #temp = []
                         for m in i.proxInfo:
-                            temp.append(m[0][0])
-                            elems = set(temp)
+                            #temp.append(m[0][0])
+                            #elems = set(temp)
                             nodeLength = len(m)                           
                           
-                            ## nodeIdx and wordIdx: to be modified to sentence idx
+                            ## (i) nodeIdx and wordIdx for idx
                             (e_q, w_q) = (m[0][0], m[0][1])
                         
-                        ## find query in XML tree
-                        search_term = tree.xpath('//*[@eid="%d"]/following::w[%d+1]' % (e_q, w_q))
-                        ## verify it equals query
-                        if not search_term[0].text.lower() == terms:
-                            raise ValueError('Missing Search Term')
-                        else:
-                            ## get sentence XML and sentence eid
-                            sentence = tree.xpath('//*[@eid="%d"]/following::w[%d+1]/ancestor-or-self::s' % (e_q, w_q))[0]
-                            e_s = sentence.get('eid')
-                            
-                            s_walker = sentence.getiterator()
-                            count = 0
-                            for s in s_walker:
-                                if s.tag == 'w' and not s.text.lower() == terms.split(' ')[0]:
-                                    count += 1
-                                elif s.tag == 'w' and s.text.lower() == terms.split(' ')[0]:
-                                    break
-                        ## sentence wordIdx        
-                        w_s = count                        
-                        
-                        ## find offset ## TO-DO: DO I NEED THIS?
-#                         s_walker2 = sentence.getiterator()
-#                         for s in s_walker2:
-#                             if s.tag == 'txt':
-#                                 txt = s.text
-#                                 before_terms = txt.split(terms)[0]
-#                                 offset = len(before_terms) ## OFFSET                                
+                            ## find query in XML tree
+                            search_term = tree.xpath('//*[@eid="%d"]/following::w[%d+1]' % (e_q, w_q))
+                            ## verify it equals query
+                            if not search_term[0].text.lower() == terms:
+                                raise ValueError('Non-matching Search Term')
+                            else:
+                                ## (ii)
+                                ## get sentence and chapter XML 
+                                sentence = tree.xpath('//*[@eid="%d"]/following::w[%d+1]/ancestor-or-self::s' % (e_q, w_q))[0]
+                                chapter = tree.xpath('//*[@eid="%d"]/following::w[%d+1]/ancestor-or-self::div' % (e_q, w_q))[0]
+                                
+                                ## count words to query match in matching sentence                                
+                                c_walker = chapter.getiterator()
+                                count = 0
+                                for c in c_walker:
+                                    if c.tag == 'w' and not c.text.lower() == terms.split(' ')[0]:
+                                        count += 1
+                                    elif c.tag == 'w' and c.text.lower() == terms.split(' ')[0]: 
+                                        ## verify sentence match
+                                        if not sentence == chapter.xpath('//div/descendant-or-self::w[%d+1]/ancestor-or-self::s' % count)[0] :
+                                            count += 1
+                                            continue  
+                                        elif sentence == chapter.xpath('//div/descendant-or-self::w[%d+1]/ancestor-or-self::s' % count)[0] :
+                                            ## verify word match
+                                            if not c.get('o') == search_term[0].get('o'):
+                                                count += 1
+                                                continue
+                                            else:
+                                                break
+                                ## chapter wordIdx        
+                                w = count 
+                                (e, w) = (0, w)                         
                                         
                         ## Get sentence index
-                        sent_index = self.db.get_object(session, 'sentence-idx') 
+                        chap_index = self.db.get_object(session, 'chapter-idx') 
                         vecs = {}
-                        for e in elems:
-                            ## define nodeIdx and wordIdx within sentence
-                            (e, w) = (int(e_s), int(w_s)) 
-                            ## self.logger.log((e,w)) ### (e,w) now matches that for sentence idx
-                            vecs[e] = idxStore.fetch_proxVector(session, sent_index, i, e)
-                            v = vecs[e] 
+                        for el in elems:
+                            vecs[el] = idxStore.fetch_proxVector(session, chap_index, i, int(e))
+                        v = vecs[el]
                     
                     ## for sentence etc.
                     else: 
+                        index = self.db.get_object(session, '%s%s-idx' % (idx, prefix))
                         #first we need to get a set of the first number in the first list of each list
                         temp = []
                         for m in i.proxInfo:
                             temp.append(m[0][0])
-                        elems = set(temp)
+                            elems = set(temp)
+                            (e, w) = (m[0][0], m[0][1]) 
+                            nodeLength = len(m)
                         vecs = {}
                         #for each time the word occurs in the record 
-                        for e in elems:
+                        for el in elems:
                             #get the prox vector for the node of the record
-                            vecs[e] = idxStore.fetch_proxVector(session, index, i, e)
-                        for m in i.proxInfo:
-                            (e, w) = (m[0][0], m[0][1])
-                        if type == 'all' or type == 'window':              
-                            nodeLength = 1
-                        else :
-                            nodeLength = len(m)
-                            v = vecs[e]                    
-## OLD:                                                               
-#                     else: 
-#                         #first we need to get a set of the first number in the first list of each list
-#                         temp = []
+                            vecs[el] = idxStore.fetch_proxVector(session, index, i, e)
+                        v = vecs[el] 
+
+## TO DO: Check whether I need this                        
 #                         for m in i.proxInfo:
-#                             temp.append(m[0][0])
-#                         elems = set(temp)
-#                     vecs = {}
-#                     #for each time the word occurs in the record 
-#                     for e in elems:
-#                         #get the prox vector for the node of the record
-#                         vecs[e] = idxStore.fetch_proxVector(session, index, i, e)
-#                     for m in i.proxInfo:
-#                         if idx == 'chapter':
-#                             (e, w) = (0, m[0][1])
-#                             #self.logger.log((e,w)) ###
-#                         else:
 #                             (e, w) = (m[0][0], m[0][1])
-#                             #self.logger.log((e,w)) ###
 #                         if type == 'all' or type == 'window':              
 #                             nodeLength = 1
 #                         else :
 #                             nodeLength = len(m)
-#                         v = vecs[e] ### RS: all sub-elements?
-#                         #for word numbers 
-#                         before = [[x[1], x[0]] for x in v[max(0, w-wordWindow):w]]
-#                         node = [[x[1], x[0]] for x in v[w: min(w+nodeLength, len(v))]]
-#                         after = [[x[1], x[0]] for x in v[min(w+nodeLength, len(v)):min(w+nodeLength+wordWindow, len(v))]]
+#                             v = vecs[e]                    
 
                     before = [[x[1], x[0]] for x in v[max(0, w-wordWindow):w]]
                     node = [[x[1], x[0]] for x in v[w: min(w+nodeLength, len(v))]]
