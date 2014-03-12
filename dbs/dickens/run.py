@@ -63,12 +63,46 @@ if ('-austen' in sys.argv):
         i = i+1           
     austenRecStore.commit_storing(session)                
     db.commit_indexing(session)
+
+### index 19C material
+if ('-ntc' in sys.argv):
+    geniaTxr = db.get_object(session, 'corpusTransformer')
+    indexWF = db.get_object(session, 'indexWorkflow-ntc')
+    ntcRecStore = db.get_object(session, 'ntcRecordStore') ##
+    data = '/home/aezros/Data/ntc_novels'
+    df.load(session, data)
+    ntcRecStore.begin_storing(session) ##?
+    db.begin_indexing(session) 
+    i = 1
+    errorCount= 0
+    for d in df :
+        print i,
+        doc = ampPreP.process_document(session, d)
+        try :
+            rec = xmlp.process_document(session, doc)
+            genia = geniaTxr.process_record(session, rec)
+            print 'rec created'
+            rec2 = xmlp.process_document(session, genia)
+            ntcrecStore.create_record(session, rec2) ##?
+            print 'rec stored'
+            db.add_record(session, rec2)
+            indexWF.process(session, rec2)
+        except:
+            print 'Error'
+            errorCount += 1
+            traceback.print_exc(file=sys.stdout)
+        i += 1
+    print errorCount
+    recStore.commit_storing(session)
+    db.commit_indexing(session)
+###	
     
 
 if ('-load' in sys.argv):
     geniaTxr = db.get_object(session, 'corpusTransformer')
     indexWF = db.get_object(session, 'indexWorkflow')
-    data = '/home/aezros/cheshire3/dbs/dickens/data/dickens_novels'
+    #data = '/home/aezros/cheshire3/dbs/dickens/data/dickens_novels'
+    data = '/home/aezros/Data/dickens_novels'
     df.load(session, data)
     recStore.begin_storing(session)
     db.begin_indexing(session) 
@@ -118,7 +152,8 @@ if ('-addIndex' in sys.argv):
 if ('-loadAll' in sys.argv):
     geniaTxr = db.get_object(session, 'corpusTransformer')
     indexWF = db.get_object(session, 'indexWorkflow')
-    df.load(session)
+    data = '/home/aezros/Data'
+    df.load(session, data)
     recStore.begin_storing(session)
     db.begin_indexing(session) 
 
