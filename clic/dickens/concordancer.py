@@ -49,8 +49,8 @@ class Concordancer(object):
         idx = id.split('|')[0]
         if idx == 'window' or idx== 'quote' or idx == 'non-quote' or idx== 'longsus' or idx == 'shortsus':
             index = self.db.get_object(self.session, 'chapter-idx')
-#RS         else:
-#RS         index = self.db.get_object(self.session, '%s-idx' % idx)
+        else:
+            index = self.db.get_object(self.session, '%s-idx' % idx)
         try:
             rs = self.resultSetStore.fetch_resultSet(self.session, id)
         except:
@@ -330,7 +330,7 @@ class Concordancer(object):
                         table = '<table class="frameTable">%s</table>' % ''.join(string)    
                 else:
                     table = ''
-                self.logger.log(clines)
+                #self.logger.log(clines)
                 self.save_concordance(clines, id, wordWindow)                                 
                 return (len(clines)-1, table) # add slots
 # [[words#, wordOffsets][words#, wordOffsets][words#, wordOffsets][recordStore, recId, index][[elem#, charOff],[elem#, charOff],[elem#, charOff],[elem#, charOff]]] 
@@ -359,7 +359,7 @@ class Concordancer(object):
 
     def load_concordance(self, id, offset=0, pageSize=None):
         global maxSize
-#        self.logger.log('loading concordance with id %s ' % id )
+        self.logger.log('loading concordance with id %s ' % id )
 
         wordWindow = None
         totalOccs = None

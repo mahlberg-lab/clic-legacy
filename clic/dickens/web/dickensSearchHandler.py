@@ -76,7 +76,7 @@ class SearchHandler(object):
         side = form.get('side', 'left')
         wordNumber = form.get('wordNumber', 1)
         concordancer = Concordancer(session, self.logger)
-        id = concordancer.sort_concordance(id, side, wordNumber)       
+        id = concordancer.sort_concordance(id, side, wordNumber)    
         return '<rsid>%s</rsid>' % id
 
     def filter(self, form):
@@ -282,11 +282,14 @@ class SearchHandler(object):
 
         count = start
         concordancer = Concordancer(session, self.logger)
-        temp = concordancer.load_concordance(id, start, nRecs)
-
-        concordance = temp[0]
-        totalOccs = temp[1]
-        wordWindow = temp[2]
+        #temp = concordancer.load_concordance(id, start, nRecs)
+        concordance, totalOccs, wordWindow = concordancer.load_concordance(id, start, nRecs)
+#         concordance = temp[0]
+#         totalOccs = temp[1]
+#         wordWindow = temp[2]
+        
+        ## RS - NEW: Call concordance.sort_concordance() ?
+        
         
         #this isn't needed now - change to just display whatever it gets concordance does sorting out what
         for i in range(0, len(concordance)): ## len = 4
@@ -407,7 +410,7 @@ class SearchHandler(object):
 
            # keyTagged = (left + '&#x202C; </td><td> ' + key + ' </td><td> ' + right)
            # result.append('<tr><td><a href="/dickens/search?operation=search&amp;mode=article&amp;parent=%d&amp;elem=%d&amp;os1=%d&amp;os2=%d" target="_article">%d</a></td><td> &#x202E; %s</td></tr>' % (recid, nodeIdxs[0], max(wordOffsets[1], -1), max(wordOffsets[2], -1), count, keyTagged))
-
+        ### RS Sort KWIC here?
         resultString = '<ajax-response><response type="object" id="%s"><rows update_ui="true">%s</rows></response></ajax-response>' % (id, ' '.join(result))
         regex = re.compile('&(?!\w+;)')
         resultString = re.sub(regex, '&amp;', resultString)

@@ -44,7 +44,6 @@ session.database = 'db_dickens'
 db = serv.get_object(session, session.database)
 authStore = db.get_object(session, 'authStore')
 
-
 # Discover objects...
 def handler(req):
     global db, htmlPath, logPath, cheshirePath, xmlp, recordStore

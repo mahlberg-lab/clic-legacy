@@ -7,7 +7,7 @@ from math import log1p
 from cheshire3.document import StringDocument
 from cheshire3.internal import cheshire3Root
 from cheshire3.server import SimpleServer
-from cheshire3.baseObjects import Session
+from cheshire.baseObjects import Session
 
 cheshirePath = os.path.join('HOME', '/home/cheshire')
 
@@ -29,10 +29,8 @@ class Keywords(object):
         self.logger.log('CREATING KEYWORDS FOR RS: {0}'.format(id)) 
         session = self.session
         db = self.db
-#         idxStore = self.idxStore
-#         variableArray = id.split('|')
-        ## id meant to tell what index (3-gram etc.) and what material (Dickens etc.) to create keyword list for
-        # Test resukklts
+
+        # Test results
         clauses = []
         for testMaterial in testMaterials:
             if testMaterial in ['dickens', 'ntc']:
@@ -47,6 +45,7 @@ class Keywords(object):
         test_results = db.search(session, test_query)
         test_idx = db.get_object(session, testIdxName)
         test_facets = test_idx.facets(session, test_results)
+        ## create dictionary containing word/cluster and number of occurrences
         test_dict = {x[0]: x[1][2] for x in test_facets}
         
         # [("term", (termId, totalRecords, totalOccurrences)), ("tern2", (...))]

@@ -27,7 +27,19 @@
 		</paths>
 	</subConfig>
 	
-	
+	<subConfig type="logger" id="keywordLogger">
+	    <objectType>cheshire3.logger.SimpleLogger</objectType>
+	    <paths>
+	        <path type="logPath">logs/keywords.log</path>
+	    </paths>
+	</subConfig>
+
+	<subConfig type="logger" id="clusterLogger">
+	    <objectType>cheshire3.logger.SimpleLogger</objectType>
+	    <paths>
+	        <path type="logPath">logs/clusters.log</path>
+	    </paths>
+	</subConfig>
 	
 	<subConfig type="documentFactory" id="SimpleDocumentFactory">
 		<objectType>cheshire3.documentFactory.SimpleDocumentFactory</objectType>
