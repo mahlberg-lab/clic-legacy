@@ -696,6 +696,9 @@
 					<object type="tokenMerger" ref="SimpleTokenMerger"/>
 				</process>
 			</source>
+			<options>
+				<setting type="longSize">4</setting>
+			</options>
 		</subConfig>
 		
 		<subConfig type="index" id="novel-idx">
@@ -720,6 +723,9 @@
 					<object type="normalizer" ref="CaseNormalizer"/>
 				</process>
 			</source>
+			<options>
+				<setting type="longSize">4</setting>
+			</options>
 		</subConfig>
 
 
@@ -737,6 +743,9 @@
 					<object type="normalizer" ref="SubCorpusNormalizer"/>
 				</process>
 			</source>
+			<options>
+				<setting type="longSize">4</setting>
+			</options>
 		</subConfig>
 		
 
