@@ -734,13 +734,24 @@
 			<paths>
 				<object type="indexStore" ref="indexStore"/>
 			</paths>
-			<source>
+			<source mode="data">
 				<xpath ref="bookXPath"/>
 				<process>
 					<object type="extractor" ref="SimpleExtractor"/>
 					<object type="tokenizer" ref="SimpleTokenizer"/>
 					<object type="tokenMerger" ref="SimpleTokenMerger"/>
 					<object type="normalizer" ref="SubCorpusNormalizer"/>
+				</process>
+			</source>
+			<source mode="=|all|any|exact|within">
+				<!-- Separate processing for query. Don't run query through
+				     the SubCorpusNormalizer otherwise "dickens" -> "ntc"
+				     because "dickens is not a book in the dickens corpus.
+			    -->
+				<process>
+					<object type="extractor" ref="SimpleExtractor"/>
+					<object type="tokenizer" ref="SimpleTokenizer"/>
+					<object type="tokenMerger" ref="SimpleTokenMerger"/>
 				</process>
 			</source>
 			<options>
