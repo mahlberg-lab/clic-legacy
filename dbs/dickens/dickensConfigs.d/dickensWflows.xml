@@ -234,7 +234,7 @@
 			<workflow>
 				<fork>
 			    	<split>
-						<log>"Indexing Record "</log>
+						<log level="info">"Indexing Record "</log>
 						<object type="workflow" ref="sentenceWorkflow"/>
 					</split>
 					<split>
