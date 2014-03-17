@@ -129,7 +129,7 @@ class Keywords(object):
             if freqTest > 5:
 #                 KW = '%s\t%d\t%d\t%.2f\t%.2f' % (i.queryTerm, freqTest, freqRef, LL, refTestRatio)
 #                 KW_list = ''.join(KW_list + '\n' + KW)
-                kw_list.append([term, freqTest, freqRef, LL, refTestRatio])
+                kw_list.append([term, freqTest, freqRef, LL])
 
             return kw_list 
                                             
