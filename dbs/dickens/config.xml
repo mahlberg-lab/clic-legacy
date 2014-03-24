@@ -30,14 +30,14 @@
 	<subConfig type="logger" id="keywordLogger">
 	    <objectType>cheshire3.logger.SimpleLogger</objectType>
 	    <paths>
-	        <path type="logPath">logs/keywords.log</path>
+	        <path type="filePath">logs/keywords.log</path>
 	    </paths>
 	</subConfig>
 
 	<subConfig type="logger" id="clusterLogger">
 	    <objectType>cheshire3.logger.SimpleLogger</objectType>
 	    <paths>
-	        <path type="logPath">logs/clusters.log</path>
+	        <path type="filePath">logs/clusters.log</path>
 	    </paths>
 	</subConfig>
 	
@@ -90,6 +90,8 @@
 				<path type="defaultPath">indexes</path>
 				<path type="tempPath">temp</path>
 				<path type="recordStoreHash">recordStore austenRecordStore contStore struStore</path>
+<!-- insert sortPath to avoid trouble with location of sort executive -->
+				<path type="sortPath">/bin/sort</path>
 			</paths>
 		</subConfig>
 <!--END STORES -->
