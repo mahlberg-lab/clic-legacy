@@ -46,7 +46,10 @@ class Keywords(object):
         test_idx = db.get_object(session, testIdxName)
         test_facets = test_idx.facets(session, test_results)
         ## create dictionary containing word/cluster and number of occurrences
-        test_dict = {x[0]: x[1][2] for x in test_facets}
+        #test_dict = {x[0]: x[1][2] for x in test_facets}
+        test_dict = {}
+        for x in test_facets:
+            test_dict[x[0]] = x[1][2]
         
         # [("term", (termId, totalRecords, totalOccurrences)), ("tern2", (...))]
         # Reference results
