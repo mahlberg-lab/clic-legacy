@@ -141,7 +141,7 @@ class Keywords(object):
 #                 KW_list = ''.join(KW_list + '\n' + KW)
                 kw_list.append([term, freqTest, freqRef, LL])
 
-        return kw_list[0:30]
+        return kw_list
                                             
         
         
