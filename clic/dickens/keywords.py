@@ -36,7 +36,7 @@ class Keywords(object):
             if testMaterial in ['dickens', 'ntc']:
                 testMatIdx = 'subCorpus-idx'
             else:
-                testMatIdx = 'novel-idx'
+                testMatIdx = 'book-idx'
             clauses.append('c3.{0} = "{1}"'.format(testMatIdx, testMaterial))
 
         test_query = self.qf.get_query(session,
@@ -49,14 +49,13 @@ class Keywords(object):
         test_dict = {x[0]: x[1][2] for x in test_facets}
         
         # [("term", (termId, totalRecords, totalOccurrences)), ("tern2", (...))]
-        # TODO: Repeat for reference
         # Reference results
         clauses_ref = []
         for refMaterial in refMaterials:
             if refMaterial in ['dickens', 'ntc']:
                 refMatIdx = 'subCorpus-idx'
             else:
-                refMatIdx = 'novel-idx'
+                refMatIdx = 'book-idx'
             clauses_ref.append('c3.{0} = "{1}"'.format(refMatIdx, refMaterial))
 
         ref_query = self.qf.get_query(session,
