@@ -28,4 +28,27 @@ class Clusters(object):
         session = self.session
         db = self.db
         
+        clauses = []
+        for Material in Materials:
+            if Material in ['dickens', 'ntc']:
+                MatIdx = 'subCorpus-idx'
+            else:
+                MatIdx = 'book-idx'
+            clauses.append('c3.{0} = "{1}"'.format(MatIdx, Material))
+            
+        query = self.qf.get_query(session,
+                                       ' or '.join(clauses)
+                                       )        
+        results = db.search(session, query)
         
+        idx = db.get_object(session, idxName)
+        facets = idx.facets(session, results)
+        dict = {}
+        for x in facets:
+            dict[x[0]] = x[1][2] 
+            
+        cluster_list = []
+        for term, freq in dict.iteritems():
+            cluster_list.append([term, freq])
+            
+        return cluster_list

@@ -21,7 +21,7 @@ def paramHandler(params):
     
     idxGroup = form.get('idxGroup', 'idx')
     idxMod = form.get('idxMod', '')
-    IdxName = "{0}-{1}".format(idxMod, idxGroup)
+    idxName = "{0}-{1}".format(idxMod, idxGroup)
     
     args = []
     ## if no ngram is specified the index is specific to Mod. If Mod is not specified default to sentence idx
@@ -53,6 +53,6 @@ def application(env, start_response):
 @cache.cache('keyword', expire=3600)
 def fetchClusters(args):
     
-    keyworder = Clusters()
+    cluster = Clusters()
 
-    return keyworder.list_keywords(args[0], args[1])
+    return cluster.list_clusters(args[0], args[1])
