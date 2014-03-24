@@ -26,7 +26,8 @@ class Keywords(object):
         self.logger = self.db.get_object(self.session, 'keywordLogger')
         
     def list_keywords(self, testIdxName, testMaterials, refIdxName, refMaterials):
-        self.logger.log('CREATING KEYWORDS FOR RS: {0}'.format(id)) 
+        #self.logger.log(10, 'CREATING KEYWORDS FOR RS: {0}'.format(id)) 
+        self.logger.log(10, ' '.join(testIdxName + testMaterials[0] + refIdxName + refMaterials[0]))
         session = self.session
         db = self.db
 
@@ -38,18 +39,22 @@ class Keywords(object):
             else:
                 testMatIdx = 'book-idx'
             clauses.append('c3.{0} = "{1}"'.format(testMatIdx, testMaterial))
+            
+        #return ' or '.join(clauses)
 
         test_query = self.qf.get_query(session,
                                        ' or '.join(clauses)
-                                       )
+                                       )        
         test_results = db.search(session, test_query)
+        #return len(test_results) ###
         test_idx = db.get_object(session, testIdxName)
         test_facets = test_idx.facets(session, test_results)
+        #return len(test_facets) ###
         ## create dictionary containing word/cluster and number of occurrences
         #test_dict = {x[0]: x[1][2] for x in test_facets}
         test_dict = {}
         for x in test_facets:
-            test_dict[x[0]] = x[1][2]
+            test_dict[x[0]] = x[1][2]        
         
         # [("term", (termId, totalRecords, totalOccurrences)), ("tern2", (...))]
         # Reference results
@@ -136,7 +141,7 @@ class Keywords(object):
 #                 KW_list = ''.join(KW_list + '\n' + KW)
                 kw_list.append([term, freqTest, freqRef, LL])
 
-            return kw_list 
+        return kw_list[0:30]
                                             
         
         

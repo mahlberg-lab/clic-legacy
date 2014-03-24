@@ -27,8 +27,11 @@ def application(env, start_response):
     refMaterials = form.getall('refMaterial')
     
     keyworder = Keywords()
-    resp.json = keyworder.list_keywords(testIdxName, testMaterials,
-                                        refIdxName, refMaterials
+#     resp.json = keyworder.list_keywords(testIdxName, testMaterials,
+#                                         refIdxName, refMaterials
+#                                         )
+    resp.json = keyworder.list_keywords('quote-3gram-idx', ['dickens'],
+                                        'non-quote-3gram-idx', ['dickens']
                                         )
     return resp(env, start_response)
 
