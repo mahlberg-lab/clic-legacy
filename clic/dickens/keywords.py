@@ -15,15 +15,15 @@ class Keywords(object):
     
     def __init__(self):
         self.session = Session()
-        session.database = 'db_dickens'
-        serv = SimpleServer(session,
+        self.session.database = 'db_dickens'
+        self.serv = SimpleServer(self.session,
                             os.path.join(cheshire3Root, 'configs', 'serverConfig.xml')
                             )
-        self.db = serv.get_object(session, session.database)
-        self.qf = self.db.get_object(session, 'defaultQueryFactory')
-        self.resultSetStore = self.db.get_object(session, 'resultSetStore')        
-        self.idxStore = self.db.get_object(session, 'indexStore')
-        self.logger = self.db.get_object(session, 'keywordLogger')
+        self.db = self.serv.get_object(self.session, self.session.database)
+        self.qf = self.db.get_object(self.session, 'defaultQueryFactory')
+        self.resultSetStore = self.db.get_object(self.session, 'resultSetStore')        
+        self.idxStore = self.db.get_object(self.session, 'indexStore')
+        self.logger = self.db.get_object(self.session, 'keywordLogger')
         
     def list_keywords(self, testIdxName, testMaterials, refIdxName, refMaterials):
         self.logger.log('CREATING KEYWORDS FOR RS: {0}'.format(id)) 
