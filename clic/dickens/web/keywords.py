@@ -1,38 +1,82 @@
 ## this is a wsgi-compatible script, receiving request from browser and uWSGI
 
+import re
+
+## User beaker to save search (cache). See documentation on http://beaker.readthedocs.org/en/latest/caching.html
+from beaker.cache import CacheManager
+from beaker.util import parse_cache_config_options
+
+cache_opts = {
+    'cache.type': 'file',
+    'cache.data_dir': '/tmp/cache/data',
+    'cache.lock_dir': '/tmp/cache/lock'
+}
+## 
+
+cache = CacheManager(**parse_cache_config_options(cache_opts))
+
 from webob import Request, Response
 
 from clic.dickens.keywords import Keywords
 
+def paramHandler(params):
+    form = params
+    print vars(form)
+    ## IdxGroup 1-gram, 3-6-gram. IdxGroup is the same for test and ref (name testIdxGroup for now)
+    testIdxGroup = form.get('testIdxGroup', 'idx') ## from url request: http://127.0.0.1:8080/?testIdxGroup=3gram-idx&testIdxMod=quote&testCollection[]=dickens&testCollection[]=dickens
+         
+    testIdxMod = form.get('testIdxMod', '')
+    refIdxMod = form.get('refIdxMod', '')
+    testIdxName = "{0}-{1}".format(testIdxMod, testIdxGroup)
+    refIdxName = "{0}-{1}".format(refIdxMod, testIdxGroup)
+    
+    args = []
+    if not re.match('\dgram-idx', testIdxGroup):
+        if not testIdxMod == '':
+            testIdxName = testIdxMod + '-idx'
+            refIdxName = refIdxMod + '-idx'
+        else:
+            testIdxName = 'sentence-idx'
+            refIdxName = 'sentence-idx'
+    args.insert(0, testIdxName)
+    args.insert(2, refIdxName)
+    
+    refbook_collection = []
+    book_collection = []         
+    
+    for i, w in enumerate(form.keys()):
+        if w == 'testCollection':
+            book_collection.append(form.values()[i])
+        if w == 'refCollection':
+            refbook_collection.append(form.values()[i])
+    
+    args.insert(1, book_collection)
+    args.insert(3, refbook_collection)
+    
+    
+    return args
+    
 
 def application(env, start_response):
     req = Request(env)
     resp = Response()
-    form = req.params
-    ## Get idx Group: 3gram etc
-    testIdxGroup = form.get('testIdxGroup', 'idx')
-    ## Get idx Mod: quote, non-quote etc.
-    testIdxMod = form.get('testIdxMod', '')
-    ## idx Name is a combination of Mod and Group (in that order)
-    testIdxName = "{0}-{1}".format(testIdxMod, testIdxGroup)
-    if testIdxName == '-idx': ## if no Mod or Group is defined use sentence idx as default
-        testIdxName = 'sentence-idx'
-    testMaterials = form.getall('testMaterial')
-    # Get rafe values as above
-    refIdxGroup = form.get('refIdxGroup', 'idx')
-    refIdxMod = form.get('refIdxMod', '')
-    refIdxName = "{0}-{1}".format(refIdxMod, refIdxGroup)
-    if refIdxName == '-idx':
-        refIdxName = 'sentence-idx'
-    refMaterials = form.getall('refMaterial')
+
+    args = paramHandler(req.params)  
+    
+
+    resp.json =  fetchKeywords(args)
+    
+    return resp(env, start_response)
+
+@cache.cache('keyword', expire=3600) ## expires after 3600 secs
+
+def fetchKeywords(args):
     
     keyworder = Keywords()
-#     resp.json = keyworder.list_keywords(testIdxName, testMaterials,
-#                                         refIdxName, refMaterials
-#                                         )
-    resp.json = keyworder.list_keywords('quote-3gram-idx', ['dickens'],
-                                        'non-quote-3gram-idx', ['dickens']
-                                        )
-    return resp(env, start_response)
+
+    return keyworder.list_keywords(args[0], args[1], args[2], args[3])
+    
+    
+    
 
     
