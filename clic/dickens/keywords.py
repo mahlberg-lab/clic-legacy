@@ -67,7 +67,10 @@ class Keywords(object):
         ref_results = db.search(session, ref_query)
         ref_idx = db.get_object(session, refIdxName)
         ref_facets = ref_idx.facets(session, ref_results)
-        ref_dict = {x[0]: x[1][2] for x in ref_facets}
+        #ref_dict = {x[0]: x[1][2] for x in ref_facets}
+        ref_dict = {}
+        for x in ref_facets:
+            ref_dict[x[0]] = x[1][2]
         
         ## get test length
         testLength = sum(test_dict.values())
