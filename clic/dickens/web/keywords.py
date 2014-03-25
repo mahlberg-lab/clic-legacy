@@ -51,7 +51,7 @@ def paramHandler(params):
             book_collection.append(form.values()[i])
         if w == 'refCollection':
             refbook_collection.append(form.values()[i])
-        if re.match('^vol',w)
+        if re.match('^vol',w):
             book_collection.append(form.values()[i])
             break
 
