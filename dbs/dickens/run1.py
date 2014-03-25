@@ -38,7 +38,8 @@ recStore.clear(session)
 db.clear_indexes(session)
 db.begin_indexing(session)
 recStore.begin_storing(session)
-df.load(session, 'data', cache=0, format='dir')
+data = "/usr/local/clic/dbs/dickens/data"
+df.load(session, data, cache=0, format='dir')
 
 for doc in df:
   rec = parser.process_document(session, doc)  # [1]
