@@ -21,7 +21,7 @@ serverConfig = os.path.join(cheshire3Root, 'configs', 'serverConfig.xml')
 serv = SimpleServer(session, serverConfig)
 
 db = serv.get_object(session, 'db_dickens')
-session.database = 'db_dickens'
+session.database = 'db_c_dickens'
 
 
 # establish objects for later use
