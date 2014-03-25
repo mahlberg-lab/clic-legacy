@@ -53,7 +53,7 @@ def paramHandler(params):
             refbook_collection.append(form.values()[i])
         if re.match('^vol',w)
             book_collection.append(form.values()[i])
-            break;
+            break
 
     args.insert(1, book_collection)
     args.insert(3, refbook_collection)
