@@ -39,6 +39,8 @@ def paramHandler(params):
             book_collection.append(form.values()[i])
     
     args.insert(1, book_collection)
+    
+    return args
 
 def application(env, start_response):
     req = Request(env) ## interpret request coming in
@@ -50,9 +52,12 @@ def application(env, start_response):
     
     return resp(env, start_response)
 
-@cache.cache('keyword', expire=3600)
+#@cache.cache('cluster', expire=3600)
 def fetchClusters(args):
     
     cluster = Clusters()
 
-    return cluster.list_clusters(args[0], args[1])
+    print args
+    clusterlist = cluster.list_clusters(args[0], args[1])
+    
+    return {'clusterlist' : clusterlist}
