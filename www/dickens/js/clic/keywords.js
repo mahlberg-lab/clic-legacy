@@ -39,7 +39,7 @@
  * Keyword handler javascript
  *
  */
-(function (keywordHandler, $, _,undefined) {
+(function (keywordHandler, $, _,Lib,undefined) {
 
 
 
@@ -59,4 +59,4 @@
 
 
 
-}(window.keywordHandler = window.keywordHandler ||{},jQuery,_));
+}(window.keywordHandler = window.keywordHandler ||{},jQuery,_,Lib));
