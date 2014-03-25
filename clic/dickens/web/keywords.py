@@ -23,13 +23,13 @@ def paramHandler(params):
     print vars(form)
     ## IdxGroup 1-gram, 3-6-gram. IdxGroup is the same for test and ref (name testIdxGroup for now)
     testIdxGroup = form.get('testIdxGroup', 'idx') ## from url request: http://127.0.0.1:8080/?testIdxGroup=3gram-idx&testIdxMod=quote&testCollection[]=dickens&testCollection[]=dickens
- 
+
     testIdxMod = form.get('testIdxMod', '')
     refIdxMod = form.get('refIdxMod', '')
     ## IdxNames assuming both Group (3-gram etc.) and Mod is selected
     testIdxName = "{0}-{1}".format(testIdxMod, testIdxGroup)
     refIdxName = "{0}-{1}".format(refIdxMod, testIdxGroup)
-    
+
     args = []
     ## if no ngram is specified the index is specific to Mod. If Mod is not specified default to sentence idx
     if not re.match('\dgram-idx', testIdxGroup):
@@ -41,41 +41,42 @@ def paramHandler(params):
             refIdxName = 'sentence-idx'
     args.insert(0, testIdxName)
     args.insert(2, refIdxName)
-    
+
     book_collection = []
-    refbook_collection = []         
-    
+    refbook_collection = []
+
     ## run loop along the search parameters. each key represents search category
     for i, w in enumerate(form.keys()):
         if w == 'testCollection':
             book_collection.append(form.values()[i])
         if w == 'refCollection':
             refbook_collection.append(form.values()[i])
-    
+        if re.match('^vol',w)
+            book_collection.append(form.values()[i])
+            break;
+
     args.insert(1, book_collection)
-    args.insert(3, refbook_collection)    
-    
-    return args    
+    args.insert(3, refbook_collection)
+
+    return args
 
 def application(env, start_response):
     req = Request(env)
     resp = Response()
 
-    args = paramHandler(req.params)      
+    args = paramHandler(req.params)
 
     resp.json =  fetchKeywords(args)
-    
+
     return resp(env, start_response)
 
-@cache.cache('keyword', expire=3600) ## expires after 3600 secs
 
+
+@cache.cache('keyword', expire=3600) ## expires after 3600 secs
 def fetchKeywords(args):
-    
+
     keyworder = Keywords()
 
-    return keyworder.list_keywords(args[0], args[1], args[2], args[3])
-    
-    
-    
+    keywords = keyworder.list_keywords(args[0], args[1], args[2], args[3])
 
-    
+    return {"keywords":keywords}
