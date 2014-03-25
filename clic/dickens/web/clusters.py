@@ -57,7 +57,6 @@ def fetchClusters(args):
     
     cluster = Clusters()
 
-    print args
     clusterlist = cluster.list_clusters(args[0], args[1])
     
     return {'clusterlist' : clusterlist}
