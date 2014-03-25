@@ -25,6 +25,7 @@ class Clusters(object):
         
     def list_clusters(self, idxName, Materials):
         #self.logger.log('CREATING CLUSTERS FOR RS: {0}'.format(id)) 
+        #self.logger.log(10, '%s\t%s' % (idxName + ' '.join(Materials)))
         session = self.session
         db = self.db
         

@@ -58,19 +58,21 @@ def paramHandler(params):
     args.insert(1, book_collection)
     args.insert(3, refbook_collection)
 
+    
     return args
 
 def application(env, start_response):
     req = Request(env)
-
+    
     resp =  Response(content_type='application/json', charset='UTF-8')
 
     args = paramHandler(req.params)
 
-    resp.json =  fetchKeywords(args)
-
+    #resp.json =  fetchKeywords(args)
+    fetchK = fetchKeywords(args)
+    resp.json = fetchK    
+    
     return resp(env, start_response)
-
 
 
 @cache.cache('keyword', expire=3600) ## expires after 3600 secs
