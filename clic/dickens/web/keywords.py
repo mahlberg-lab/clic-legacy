@@ -62,7 +62,8 @@ def paramHandler(params):
 
 def application(env, start_response):
     req = Request(env)
-    resp = Response()
+
+    resp =  Response(content_type='application/json', charset=UTF-8))
 
     args = paramHandler(req.params)
 
