@@ -8,8 +8,8 @@ import re
 ## User beaker to save search (cache). See documentation on http://beaker.readthedocs.org/en/latest/caching.html
 from beaker.cache import CacheManager
 from beaker.util import parse_cache_config_options
-from keywords import Keywords
-from clusters import Clusters
+from clic.dickens.keywords import Keywords
+from clic.dickens.clusters import Clusters
 
 from flask import request
 from flask import render_template
