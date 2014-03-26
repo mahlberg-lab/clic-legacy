@@ -44,8 +44,18 @@ def fetchKeywords(args):
     return {"keywords":keywords}
 
 def processArgs(args):
-  args.insert(0, args["testIdxName"])
-  args.insert(2, args["refIdxName"])
+
+  ## if no ngram is specified the index is specific to Mod. If Mod is not specified default to sentence idx
+  if not re.match('\dgram-idx', args["testIdxGroup"]):
+      if not testIdxMod == '':
+          testIdxName = args["testIdxMod"] + '-idx'
+          refIdxName = args["refIdxMod"] + '-idx'
+      else:
+          testIdxName = 'sentence-idx'
+          refIdxName = 'sentence-idx'
+  args.insert(0, testIdxName)
+  args.insert(2, refIdxName)
+
 
   book_collection = [args["testCollection"]]
   refbook_collection = [args["refCollection"]]
