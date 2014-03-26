@@ -30,7 +30,7 @@ cache = CacheManager(**parse_cache_config_options(cache_opts))
 @app.route('/',methods=['GET'])
 def index():
     args = request.args
-    print args
+    fetchKeywords(args)
     return "<span style='color:red'>I am app 1</span>"
 
 
@@ -38,7 +38,20 @@ def index():
 def fetchKeywords(args):
 
     keyworder = Keywords()
-
+    args = processArgs(args)
     keywords = keyworder.list_keywords(args[0], args[1], args[2], args[3])
 
     return {"keywords":keywords}
+
+def processArgs(args):
+  args.insert(0, args["testIdxName"])
+  args.insert(2, args["refIdxName"])
+
+  book_collection = [args["testCollection"]]
+  refbook_collection = [args["refCollection"]]
+
+
+  args.insert(1, book_collection)
+  args.insert(3, refbook_collection)
+
+  return args
