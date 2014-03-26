@@ -8,13 +8,11 @@ import re
 ## User beaker to save search (cache). See documentation on http://beaker.readthedocs.org/en/latest/caching.html
 from beaker.cache import CacheManager
 from beaker.util import parse_cache_config_options
-
-from flask import render_template
-
-from clic.dickens.keywords import Keywords
+from keywords import Keywords
+from clusters import Clusters
 
 from flask import request
-
+from flask import render_template
 
 cache_opts = {
     'cache.type': 'file',
@@ -24,7 +22,7 @@ cache_opts = {
 
 cache = CacheManager(**parse_cache_config_options(cache_opts))
 
-@app.route('/keywords',methods=['GET'])
+@app.route('/keywords/',methods=['GET'])
 def keywords():
     args = request.args
 
@@ -34,15 +32,14 @@ def keywords():
 
     return render_template('keywords.html', keywords=keywords)
 
-@app.route("/clusters", methods=["GET"])
-def clusters:
-  args = request.args
-  args = processArgs(args)
-  cluster = Clusters()
+@app.route("/clusters/", methods=["GET"])
+def clusters():
+    args = request.args
+    args = processArgs(args)
+    clusters_result = fetchClusters(args)
+    clusters = json.dumps(clusters_result)
 
-  clusterlist = cluster.list_clusters(args[0], args[1])
-
-  return {'clusterlist' : clusterlist}
+    return render_template('clusters.html', clusters=clusters)
 
 
 
@@ -53,7 +50,7 @@ def clusters:
 def fetchKeywords(args):
 
     keyworder = Keywords()
-    args = processArgs(args)
+    args = processArgs(args, "keywords")
     keywords = keyworder.list_keywords(args[0], args[1], args[2], args[3])
     return {"keywords":keywords}
 
@@ -61,7 +58,7 @@ def fetchKeywords(args):
 def fetchClusters(args):
 
     cluster = Clusters()
-
+    args = processArgs(args, "clusters")
     clusterlist = cluster.list_clusters(args[0], args[1])
 
     return {'clusterlist' : clusterlist}
@@ -78,34 +75,29 @@ def processArgs(args, method):
     if method == 'keywords':
 
 
-      testMod = str(args["testIdxMod"])
-      Group = str(args["testIdxGroup"])
-      refMod = str(args["refIdxMod"])
+        testMod = str(args["testIdxMod"])
+        Group = str(args["testIdxGroup"])
+        refMod = str(args["refIdxMod"])
 
-      book_collection = [args["testCollection"]]
-      refbook_collection = [args["refCollection"]]
+        book_collection = [args["testCollection"]]
+        refbook_collection = [args["refCollection"]]
 
-      testIdxName = "{0}-{1}".format(testMod, Group)
-      refIdxName = "{0}-{1}".format(refMod, Group)
-      methodArgs.insert(0, testIdxName)
+        testIdxName = "{0}-{1}".format(testMod, Group)
+        refIdxName = "{0}-{1}".format(refMod, Group)
+        methodArgs.insert(0, testIdxName)
 
-      ## if no ngram is specified the index is specific to Mod. If Mod is not specified default to sentence idx
-      if not re.match('\dgram-idx', Group):
-          if not args["testIdxMod"] == '':
-  #             testIdxName = args["testIdxMod"] + '-idx'
-  #             refIdxName = args["refIdxMod"] + '-idx'
-              testIdxName = testMod + '-idx'
-              refIdxName = refMod + '-idx'
+        ## if no ngram is specified the index is specific to Mod. If Mod is not specified default to sentence idx
+        if not re.match('\dgram-idx', Group):
+            if not args["testIdxMod"] == '':
+                testIdxName = testMod + '-idx'
+                refIdxName = refMod + '-idx'
 
-          else:
-              testIdxName = 'sentence-idx'
-              refIdxName = 'sentence-idx'
+        else:
+            testIdxName = 'sentence-idx'
+            refIdxName = 'sentence-idx'
 
 
         methodArgs.insert(2, refIdxName)
-
-
-
 
 
 
