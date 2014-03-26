@@ -32,3 +32,6 @@ PyZ3950_parsetab.*
 
 # O/S file buffers
 *~
+
+# Database config file template 
+/dbs/dickens/config.xml

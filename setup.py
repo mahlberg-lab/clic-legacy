@@ -12,6 +12,8 @@ use_setuptools()
 
 from setuptools import setup
 
+from clic.setuptools.commands import develop, install
+
 name_ = 'clic'
 version_ = '0.1'
 description_ = "CLiC Project"
@@ -61,4 +63,8 @@ setup(
         "Topic :: Internet :: WWW/HTTP :: HTTP Servers",
         "Topic :: Internet :: WWW/HTTP :: WSGI :: Middleware",
     ],
+    cmdclass = {
+        'develop': develop,
+        'install': install
+    },
 )
