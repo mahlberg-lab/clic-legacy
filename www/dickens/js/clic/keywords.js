@@ -8,17 +8,24 @@
 
 
 
-        keywordHandler.fetch = function(url,data)
+        keywordHandler.processor = function(data)
         {
-            var baseUrl="http://localhost:8080/"
-            var query = decodeURIComponent($.param(data));
-            var url = baseUrl + "?"+ query;
 
-            $.getJSON(url,function(data){
+            var tmplMarkup = $('#tmpl-keywords').html();
 
-              console.log(data);
+                if(_.isEmpty(keyword)){
 
-            })
+                        $('#keywords').html("<p>no keywords</p>");
+                    }
+                    else
+                    {
+                    var compiledTmpl = _.template(tmplMarkup, { keywords : data["keywords"] });
+
+                    $('#keywords').html(compiledTmpl);
+
+                  }
+
+
 
         }
 
