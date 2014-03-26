@@ -4,6 +4,7 @@ from __future__ import with_statement
 
 import inspect
 import os
+import re
 
 # Import Setuptools
 from ez_setup import use_setuptools
@@ -20,8 +21,16 @@ setuppath = inspect.getfile(inspect.currentframe())
 setupdir = os.path.dirname(setuppath)
 
 # Requirements
+
+dependency_links_ = []
+install_requires_ = []
 with open(os.path.join(setupdir, 'requirements.txt'), 'r') as fh:
-    install_requires_ = fh.readlines()
+    for line in fh:
+        if line.startswith('-e '):
+            dependency_links_.append(re.sub('^-e\s+', '', line.strip()))
+            install_requires_.append(line[line.rfind('#egg=') + 5:].strip())
+        else:
+            install_requires_.append(line.strip())
 
 # Description
 with open(os.path.join(setupdir, 'README.rst'), 'r') as fh:
@@ -36,6 +45,7 @@ setup(
     packages=['clic'],
     requires=['webob'],
     install_requires=install_requires_,
+    dependeny_links= dependency_links_,
     author = 'Catherine Smith',
     maintainer = 'John Harrison',
     maintainer_email = u'john.harrison@liv.ac.uk',
