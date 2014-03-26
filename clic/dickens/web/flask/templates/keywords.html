@@ -1,15 +1,79 @@
 <!doctype html>
 <html>
-<title>Keywords</title>
 <head>
+<title>Keywords</title>
+
+{% autoescape false %}
 {% if keywords %}
   <script>
-  var keywords = {keywords}
+  var keywords = {{keywords}}
   </script>
 {% endif %}
+{% endautoescape %}
+
+
+<style>
+
+table{
+	width:75%;
+	margin:1em auto;
+}
+td, th {
+  width: auto;
+  height: 2rem;
+  border: 1px solid #ccc;
+  text-align: center;
+}
+th {
+  background: lightblue;
+  border-color: white;
+}
+body {
+  padding: 1rem;
+}
+
+
+</style>
 
 <script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
 <script src="http://jashkenas.github.io/underscore/underscore-min.js"></script>
+<script>
+/**
+ * Keyword handler javascript
+ *
+ */
+(function (keywordHandler, $, _,undefined) {
+
+
+
+        keywordHandler.processor = function(data)
+        {
+
+            var tmplMarkup = $('#tmpl-keywords').html();
+
+                if(_.isEmpty(data)){
+
+                        $('#keywords').html("<p>no keywords</p>");
+                    }
+                    else
+                    {
+                    var compiledTmpl = _.template(tmplMarkup, { keywords : data["keywords"] });
+
+                    $('#keywords').html(compiledTmpl);
+
+                  }
+
+
+
+        }
+
+
+
+}(window.keywordHandler = window.keywordHandler ||{},jQuery,_));
+
+</script>
+
+
 
 
 
@@ -21,21 +85,30 @@
  <div id="keywords">
                <p> Loading keywords </p>
                 <script id="tmpl-keywords" type="text/template">
-                    <ul>
-
+                    <table class="tablesorter">
+					<tr><th>
+						Keyword
+					</th>
+					<th>Test Frequency</th>
+					<th>Ref Frequency</th>
+					<th>Log likelihood</th>
+					</tr>
                     <% for (var i = 0; i < keywords.length; i++) { %>
                       <% var keyword = keywords[i]; %>
-                      <li>
-                        <em><%= keyword[0] %></em>
-                        <em><%= keyword[1] %></em>
-                        <em><%= keyword[2] %></em>
-                        <em><%= keyword[3] %></em>
-                      </li>
+                      <tr>
+                        <td><%= keyword[0] %></td>
+                        <td><%= keyword[1] %></td>
+                        <td><%= keyword[2] %></td>
+                        <td><%= keyword[3] %></td>
+                      </tr>
                     <% } %>
-                </ul>
+                 <table>
 
                 </script>
 
  </div>
 </body>
+<script>
+keywordHandler.processor(keywords);
+</script>
 </html>

@@ -9,7 +9,7 @@ import re
 from beaker.cache import CacheManager
 from beaker.util import parse_cache_config_options
 
-
+from flask import render_template
 
 from clic.dickens.keywords import Keywords
 
@@ -34,14 +34,14 @@ def index():
 
     return render_template('keywords.html', keywords=keywords)
 
-#@cache.cache('keyword', expire=3600) ## expires after 3600 secs
+@cache.cache('keyword', expire=3600) ## expires after 3600 secs
 ## get keywords from dickens/keywords.py
 def fetchKeywords(args):
 
     keyworder = Keywords()
     args = processArgs(args)
     keywords = keyworder.list_keywords(args[0], args[1], args[2], args[3])
-    print keywords
+    
 
 
     return {"keywords":keywords}
