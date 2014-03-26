@@ -37,6 +37,7 @@ body {
 
 <script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
 <script src="http://jashkenas.github.io/underscore/underscore-min.js"></script>
+<script src="/js/jquery.tablesorter.min.js"></script>
 <script>
 /**
  * Keyword handler javascript
@@ -85,7 +86,8 @@ body {
  <div id="keywords">
                <p> Loading keywords </p>
                 <script id="tmpl-keywords" type="text/template">
-                    <table class="tablesorter">
+                    <table id="tablesorter">
+                    <thead>
 					<tr><th>
 						Keyword
 					</th>
@@ -93,6 +95,8 @@ body {
 					<th>Ref Frequency</th>
 					<th>Log likelihood</th>
 					</tr>
+					</thead>
+					<tbody>
                     <% for (var i = 0; i < keywords.length; i++) { %>
                       <% var keyword = keywords[i]; %>
                       <tr>
@@ -102,6 +106,7 @@ body {
                         <td><%= keyword[3] %></td>
                       </tr>
                     <% } %>
+                    </tbody>
                  <table>
 
                 </script>
@@ -110,5 +115,9 @@ body {
 </body>
 <script>
 keywordHandler.processor(keywords);
+$(document).ready(function(){
+	$("#tablesorter").tablesorter();
+	}
+	);
 </script>
 </html>
