@@ -8,7 +8,7 @@ from cheshire3.baseObjects import Session
 
 from lxml import etree
 
-class Concordancer(object):
+class Concordancer_New(object):
     
     def __init__(self):
         self.session = Session()
@@ -32,6 +32,8 @@ class Concordancer(object):
         db = self.db
         qf = self.qf
         
+        write_list = []
+        
         query = qf.get_query(session, 'c3.%s-idx = "%s"' % (idxName, terms))
         rs = db.search(session, query)
         if len(rs) > 0:
@@ -39,6 +41,10 @@ class Concordancer(object):
                 rec = i.fetch_record(session)
                 tree = rec.get_dom(session).getroottree() 
                 print tree.xpath('//div')[0].get('id')
+                
+#                 write_list.append(etree.tostring(tree))
+#                 write_tree = open('/home/aezros/Desktop/tree_bewithyou.xml', 'w')                    
+#                 write_tree.write('\n'.join(write_list))
                 
                 for m in i.proxInfo:                    
                
@@ -48,25 +54,27 @@ class Concordancer(object):
                         print e_q, w_q   
                         
                         ## locate search term in xml
-                        search_term = tree.xpath('//div/descendant::w[%d+1]' % w_q)                  
+                        search_term = tree.xpath('//*[@eid="%d"]/following::w[%d+1]' % (e_q, w_q))  
+                        print 'word onset within sentence: ', search_term[0].get('o')       
 
-                        sentence_tree = tree.xpath('//*[@eid="%d"]/following::w[%d+1]/ancestor-or-self::s' % (e_q, w_q))[0]                     
-                        chapter_tree = tree.xpath('//*[@eid="%d"]/following::w[%d+1]/ancestor-or-self::div' % (e_q, w_q))[0]  
+                        sentence_tree = tree.xpath('//*[@eid="%d"]/following::w[%d+1]/ancestor-or-self::s' % (e_q, w_q))
+                        print 'sentence id: ', sentence_tree[0].get('sid')  
+                        print sentence_tree[0].get('id')       
+                        chapter_tree = tree.xpath('//*[@eid="%d"]/following::w[%d+1]/ancestor-or-self::div' % (e_q, w_q))                         
+                       
+                        prec_s_tree = chapter_tree[0].xpath('//div/descendant::s[@sid="%s"]/preceding::s/descendant::w' % sentence_tree[0].get('sid'))
+                        prec_s_wcount = len(prec_s_tree)
+                        print prec_s_wcount
+
+                        same_s_tree = chapter_tree[0].xpath('//div/descendant::s[@sid="%s"]/descendant::w[@o="%s"]' % (sentence_tree[0].get('sid'), search_term[0].get('o')))
+                        wcount = prec_s_wcount + len(same_s_tree)
+                        print wcount
+
                         
-                        print sentence_tree.get('id')
                         
-                        ## count number of words in chapter_tree until (first) target word
                         
-                        #count = chapter_tree.xpath('count(//s)')
-                        
-                        count = 0
-#                         for word in chapter_tree.xpath('//w'):
-#                             count = count + int(word.get('o'))
-#                         
-#                         print count
-                        prec_s_tree = chapter_tree.xpath('//div/descendant::s[@sid="3"]/preceding-sibling::s/descendant::w')
-                        print len(prec_s_tree)
-                            
+
+
                         #//div/descendant::s[@sid="3"]/preceding-sibling::s/descendant::w
                         
 #                         count_words = 0
