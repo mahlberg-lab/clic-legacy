@@ -12,8 +12,12 @@ terms = 'be with you'
 #terms = 'youthful'
 idxName = 'quote'
 #idxName = 'sentence'
+#idxName = 'chapter'
 Materials = ['BH']
+wordWindow = 20
 
 concordance = Concordancer_New()
 
-conc = concordance.create_concordance(terms, idxName)#, Materials)
+conc = concordance.create_concordance(terms, idxName, wordWindow)#, Materials)
+
+print conc

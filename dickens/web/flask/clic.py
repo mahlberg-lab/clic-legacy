@@ -1,18 +1,21 @@
 from flask import Flask
+import json
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='')
 
 import re
 
-## User beaker to save search (cache). See documentation on http://beaker.readthedocs.org/en/latest/caching.html
+## Use beaker to save search (cache). See documentation on http://beaker.readthedocs.org/en/latest/caching.html
 from beaker.cache import CacheManager
 from beaker.util import parse_cache_config_options
 
 
-
-from clic.dickens.keywords import Keywords
+from dickens.keywords import Keywords
+from dickens.clusters import Clusters
+from dickens.concordance_new import Concordancer_New
 
 from flask import request
+from flask import render_template
 
 
 cache_opts = {
@@ -21,13 +24,12 @@ cache_opts = {
     'cache.lock_dir': '/tmp/cache/lock'
 }
 
-
-
 cache = CacheManager(**parse_cache_config_options(cache_opts))
 
 @app.route('/keywords/',methods=['GET'])
 def keywords():
     args = request.args
+    print args
 
     # put keywords into json
     keyword_result = fetchKeywords(args)
@@ -44,8 +46,15 @@ def clusters():
 
     return render_template('clusters.html', clusters=clusters)
 
+@app.route('/concordance/',methods=['GET'])
+def concordance():
+    args = request.args
+    print args
 
+    concordance_result = fetchConcordance(args)
+    concordance = json.dumps(concordance_result)
 
+    return render_template('concordance.html', concordance=concordance)
 
 
 @cache.cache('keyword', expire=3600) ## expires after 3600 secs
@@ -66,28 +75,35 @@ def fetchClusters(args):
 
     return {'clusterlist' : clusterlist}
 
-def processArgs(args, method):
+@cache.cache('concordance', expire=3600)
+def fetchConcordance(args):
 
+    concordancer = Concordancer_New()
+    args = processArgs(args, "concordances")
+    concordancelist = concordancer.create_concordances(args[0], args[1], args[2])
+
+    return {'concordancelist' : concordancelist}
+
+def processArgs(args, method):
+    
+    
     methodArgs = []
     testMod = str(args["testIdxMod"])
-    Group = str(args["testIdxGroup"])
-    testIdxName = "{0}-{1}".format(testMod, Group)
-    book_collection = [args["testCollection"]]
+     
+    if not method == 'concordance':
+        Group = str(args["testIdxGroup"])
+        book_collection = [args["testCollection"]]  
+        testIdxName = "{0}-{1}".format(testMod, Group)
+        methodArgs.insert(0, testIdxName)
+        methodArgs.insert(1, book_collection)
 
 
     if method == 'keywords':
 
-
-        testMod = str(args["testIdxMod"])
-        Group = str(args["testIdxGroup"])
         refMod = str(args["refIdxMod"])
-
-        book_collection = [args["testCollection"]]
         refbook_collection = [args["refCollection"]]
 
-        testIdxName = "{0}-{1}".format(testMod, Group)
-        refIdxName = "{0}-{1}".format(refMod, Group)
-        methodArgs.insert(0, testIdxName)
+        refIdxName = "{0}-{1}".format(refMod, Group)        
 
         ## if no ngram is specified the index is specific to Mod. If Mod is not specified default to sentence idx
         if not re.match('\dgram-idx', Group):
@@ -101,10 +117,18 @@ def processArgs(args, method):
 
 
         methodArgs.insert(2, refIdxName)
-
-
-
         methodArgs.insert(3, refbook_collection)
+        
+    elif method == 'concordance':
+        
+        testIdxName = testMod + '-idx'     
+        wordWindow = str(args["wordWindow"])
+        
+        methodArgs.insert(0, str(args["terms"]))
+        methodArgs.insert(1, testIdxName)
+        methodArgs.insert(2, wordWindow)
+        
+        return methodArgs
 
-    methodArgs.insert(1, book_collection)
+    
     return methodArgs
