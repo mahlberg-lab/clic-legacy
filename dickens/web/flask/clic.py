@@ -85,14 +85,14 @@ def fetchConcordance(args):
     return {'concordancelist' : concordancelist}
 
 def processArgs(args, method):
-    
-    
+
+
     methodArgs = []
     testMod = str(args["testIdxMod"])
-     
+
     if not method == 'concordance':
         Group = str(args["testIdxGroup"])
-        book_collection = [args["testCollection"]]  
+        book_collection = [args["testCollection"]]
         testIdxName = "{0}-{1}".format(testMod, Group)
         methodArgs.insert(0, testIdxName)
         methodArgs.insert(1, book_collection)
@@ -103,7 +103,7 @@ def processArgs(args, method):
         refMod = str(args["refIdxMod"])
         refbook_collection = [args["refCollection"]]
 
-        refIdxName = "{0}-{1}".format(refMod, Group)        
+        refIdxName = "{0}-{1}".format(refMod, Group)
 
         ## if no ngram is specified the index is specific to Mod. If Mod is not specified default to sentence idx
         if not re.match('\dgram-idx', Group):
@@ -118,17 +118,30 @@ def processArgs(args, method):
 
         methodArgs.insert(2, refIdxName)
         methodArgs.insert(3, refbook_collection)
-        
+
     elif method == 'concordance':
-        
-        testIdxName = testMod + '-idx'     
+
+        testIdxName = testMod + '-idx'
         wordWindow = str(args["wordWindow"])
-        
+
         methodArgs.insert(0, str(args["terms"]))
         methodArgs.insert(1, testIdxName)
         methodArgs.insert(2, wordWindow)
-        
+
         return methodArgs
 
-    
+
     return methodArgs
+
+def processCollections(args,collectionName):
+
+  collection = []
+
+
+    for i, w in enumerate(args.keys()):
+        if w == collectionName:
+            collection.append(args[i])
+
+        if re.match('^vol',w)
+            collection.append(args[i])
+            break
