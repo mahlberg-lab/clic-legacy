@@ -1,0 +1,79 @@
+<html>
+<title>Form for demo</title>
+
+<head>
+
+
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+
+
+
+</head>
+
+<body>
+    <h1>Prototype clic interface</h1>
+
+
+    <h2>Concordance</h2>
+  <form action="/concordances/" method="get" class="form-horizontal">
+      <fieldset>
+
+      <!-- Form Name -->
+      <legend>Concordances</legend>
+
+      <!-- Text input-->
+      <div class="control-group">
+        <label class="control-label" for="terms">Search Term</label>
+        <div class="controls">
+          <input id="terms" name="terms" type="text" placeholder="" class="input-xlarge">
+
+        </div>
+      </div>
+
+      <!-- Multiple Radios -->
+      <div class="control-group">
+        <label class="control-label" for="textIdxMod">within</label>
+        <div class="controls">
+          <label class="radio" for="textIdxMod-0">
+            <input type="radio" name="textIdxMod" id="textIdxMod-0" value="Chapter" checked="checked">
+            Chapter
+          </label>
+          <label class="radio" for="textIdxMod-1">
+            <input type="radio" name="textIdxMod" id="textIdxMod-1" value="Quote">
+            Quote
+          </label>
+          <label class="radio" for="textIdxMod-2">
+            <input type="radio" name="textIdxMod" id="textIdxMod-2" value="non-quote">
+            non-quote
+          </label>
+          <label class="radio" for="textIdxMod-3">
+            <input type="radio" name="textIdxMod" id="textIdxMod-3" value="short suspension">
+            short suspension
+          </label>
+          <label class="radio" for="textIdxMod-4">
+            <input type="radio" name="textIdxMod" id="textIdxMod-4" value="long suspension">
+            long suspension
+          </label>
+        </div>
+      </div>
+
+      <!-- Select Basic -->
+      <div class="control-group">
+        <label class="control-label" for="wordWindow">Number of words</label>
+        <div class="controls">
+          <select id="wordWindow" name="wordWindow" class="input-xlarge">
+            <option>20</option>
+            <option>30</option>
+          </select>
+        </div>
+      </div>
+
+      </fieldset>
+</form>
+
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+</body>
+</html>
