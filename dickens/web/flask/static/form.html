@@ -134,30 +134,23 @@
         </div>
       </div>
 
-	   <!-- Multiple Radios -->
+		      
+
+	  <!-- Select Basic -->
       <div class="control-group">
-        <label class="control-label" for="testCollection">within text collection</label>
+        <label class="control-label" for="testCollection">in collection</label>
         <div class="controls">
-          <label class="radio" for="testCollection-0">
-            <input type="radio" name="testCollection" id="testCollection-0" value="dickens" checked="checked">
-            Dickens
-          </label>
-          <label class="radio" for="testCollection-1">
-            <input type="radio" name="testCollection" id="testCollection-1" value="NTC">
-            Non-Dickens
-          </label>
-          <label class="radio" for="testCollection-2">
-            <input type="radio" name="testCollection" id="testCollection-2" value="BH">
-            Bleak House
-          </label>
-          <label class="radio" for="testCollection-3">
-            <input type="radio" name="testCollection" id="testCollection-3" value="GE">
-            Great Expectations
-          </label>
-          <label class="radio" for="testCollection-4">
-            <input type="radio" name="testCollection" id="testCollection-4" value="LD">
-            Little Dorrit
-          </label>
+          <select multiple id="testCollection" name="testCollection" class="input-xlarge">
+            <option value="volDickens"selected="selected">Dickens</option>            
+			<optgroup>
+			<option value="BH">Bleak House</option>
+			<option value="GE">Great Expectations</option>
+			<option value="NN">Nicholas Nickleby</option>
+			</optgroup>
+			<option value="volNTC">Non-Dickens</option>
+			<optgroup>
+			</optgroup>
+          </select>
         </div>
       </div>
 
