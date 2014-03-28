@@ -37,8 +37,10 @@ body {
 
 <script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
 <script src="http://jashkenas.github.io/underscore/underscore-min.js"></script>
-<script src="/js/jquery.tablesorter.min.js"></script>
+<script src="/js/tablesorter/jquery.tablesorter.min.js"></script>
 <script src="/js/clic.js"></script>
+<link rel="stylesheet" href="/js/tablesorter/themes/blue/style.css" />
+
 
 <meta charset="utf-8">
 
@@ -53,7 +55,7 @@ body {
 						Cluster
 					</th>
 					<th> Frequency</th>
-					
+
 					</tr>
 					</thead>
 					<tbody>
@@ -62,7 +64,7 @@ body {
                       <tr>
                         <td><%= cluster[0] %></td>
                         <td><%= cluster[1] %></td>
-                       
+
                       </tr>
                     <% } %>
                     </tbody>
