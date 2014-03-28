@@ -89,21 +89,19 @@ body {
                     <table id="tablesorter">
                     <thead>
 					<tr><th>
-						Keyword
+						Cluster
 					</th>
-					<th>Test Frequency</th>
-					<th>Ref Frequency</th>
-					<th>Log likelihood</th>
+					<th> Frequency</th>
+					
 					</tr>
 					</thead>
 					<tbody>
                     <% for (var i = 0; i < clusters.length; i++) { %>
-                      <% var keyword = clusters[i]; %>
+                      <% var cluster = clusters[i]; %>
                       <tr>
-                        <td><%= keyword[0] %></td>
-                        <td><%= keyword[1] %></td>
-                        <td><%= keyword[2] %></td>
-                        <td><%= keyword[3] %></td>
+                        <td><%= cluster[0] %></td>
+                        <td><%= cluster[1] %></td>
+                       
                       </tr>
                     <% } %>
                     </tbody>

@@ -39,13 +39,14 @@ def keywords():
 
 @app.route("/ajax-keywords",methods=['GET'])
 def ajax_keyords():
-    args.request.args
+    args = request.args
     return json.dumps(fetchKeywords(args))
+
 
 @app.route("/clusters/", methods=["GET"])
 def clusters():
     args = request.args
-    args = processArgs(args)
+    
     clusters_result = fetchClusters(args)
     clusters = json.dumps(clusters_result)
 
@@ -54,7 +55,7 @@ def clusters():
 @app.route('/concordance/',methods=['GET'])
 def concordance():
     args = request.args
-    print args
+  
 
     concordance_result = fetchConcordance(args)
     concordance = json.dumps(concordance_result)
@@ -71,27 +72,28 @@ def fetchKeywords(args):
     keywords = keyworder.list_keywords(args[0], args[1], args[2], args[3])
     return {"keywords":keywords}
 
-@cache.cache('cluster', expire=3600)
+#@cache.cache('cluster', expire=3600)
 def fetchClusters(args):
 
     cluster = Clusters()
+    
     args = processArgs(args, "clusters")
+ 
     clusterlist = cluster.list_clusters(args[0], args[1])
 
-    return {'clusterlist' : clusterlist}
+    return {'clusters' : clusterlist}
 
 @cache.cache('concordance', expire=3600)
 def fetchConcordance(args):
 
     concordancer = Concordancer_New()
-    args = processArgs(args, "concordances")
-    concordancelist = concordancer.create_concordances(args[0], args[1], args[2])
+    args = processArgs(args, "concordance")
+    concordancelist = concordancer.create_concordance(args[0], args[1], args[2])
 
     return {'concordancelist' : concordancelist}
 
 def processArgs(args, method):
-
-
+   
     methodArgs = []
     testMod = str(args["testIdxMod"])
 
@@ -140,14 +142,13 @@ def processArgs(args, method):
 
 def processCollections(args,collectionName):
 
-  collection = []
+    collection = []
 
+    for i, w in enumerate(args.keys()):
+        if w == collectionName:
+            collection.append(args[i])
 
-  for i, w in enumerate(args.keys()):
-    if w == collectionName:
-      collection.append(args[i])
-
-    if re.match('^vol',w):
-      collection.append(args[i])
-      break
-  return collection
+        if re.match('^vol',w):
+            collection.append(args[i])
+            break
+    return collection

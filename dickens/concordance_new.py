@@ -35,19 +35,21 @@ class Concordancer_New(object):
         extraSpaceElems = ['s']
         conc_lines = []
         
-        query = qf.get_query(session, 'c3.%s-idx = "%s"' % (idxName, terms))
-        rs = db.search(session, query)        
+        query = qf.get_query(session, 'c3.%s = "%s"' % (idxName, terms))
+        rs = db.search(session, query)   
+    
         if len(rs) > 0:
             temp = []
             for i in rs:
                 rec = i.fetch_record(session)
-                tree = rec.get_dom(session).getroottree()              
+                tree = rec.get_dom(session).getroottree()           
                
                 for m in i.proxInfo: 
                     
                     if idxName in ['chapter']:     
                         elems = [0]      
-                        (e, w) = (0, m[0][1])                   
+                        (e, w) = (0, m[0][1])   
+                        print w                
                
                     elif idxName in ['quote', 'non-quote', 'longsus', 'shortsus']:  
                         elems = [0] 
