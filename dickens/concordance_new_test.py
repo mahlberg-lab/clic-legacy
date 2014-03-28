@@ -10,7 +10,7 @@ from dickens.concordance_new import Concordancer_New
 
 terms = 'be with you'
 #terms = 'youthful'
-idxName = 'quote'
+idxName = 'quote-idx'
 #idxName = 'sentence'
 #idxName = 'chapter'
 Materials = ['BH']
