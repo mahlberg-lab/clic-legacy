@@ -16,7 +16,7 @@
 
 
     <h2>Concordance</h2>
-  <form action="/concordances/" method="get" class="form-horizontal">
+  <form action="/concordances/" method="get" class="form-horizontal" enctype="multipart/form-data">
       <fieldset>
 
       <!-- Form Name -->
@@ -33,26 +33,26 @@
 
       <!-- Multiple Radios -->
       <div class="control-group">
-        <label class="control-label" for="textIdxMod">within</label>
+        <label class="control-label" for="testIdxMod">within</label>
         <div class="controls">
-          <label class="radio" for="textIdxMod-0">
-            <input type="radio" name="textIdxMod" id="textIdxMod-0" value="Chapter" checked="checked">
+          <label class="radio" for="testIdxMod-0">
+            <input type="radio" name="testIdxMod" id="testIdxMod-0" value="Chapter" checked="checked">
             Chapter
           </label>
-          <label class="radio" for="textIdxMod-1">
-            <input type="radio" name="textIdxMod" id="textIdxMod-1" value="Quote">
+          <label class="radio" for="testIdxMod-1">
+            <input type="radio" name="testIdxMod" id="testIdxMod-1" value="quote">
             Quote
           </label>
-          <label class="radio" for="textIdxMod-2">
-            <input type="radio" name="textIdxMod" id="textIdxMod-2" value="non-quote">
+          <label class="radio" for="testIdxMod-2">
+            <input type="radio" name="testIdxMod" id="testIdxMod-2" value="non-quote">
             non-quote
           </label>
-          <label class="radio" for="textIdxMod-3">
-            <input type="radio" name="textIdxMod" id="textIdxMod-3" value="short suspension">
+          <label class="radio" for="testIdxMod-3">
+            <input type="radio" name="testIdxMod" id="testIdxMod-3" value="shortsus">
             short suspension
           </label>
-          <label class="radio" for="textIdxMod-4">
-            <input type="radio" name="textIdxMod" id="textIdxMod-4" value="long suspension">
+          <label class="radio" for="testIdxMod-4">
+            <input type="radio" name="testIdxMod" id="testIdxMod-4" value="longsus">
             long suspension
           </label>
         </div>
@@ -70,6 +70,8 @@
       </div>
 
       </fieldset>
+      
+      <input type="submit" value="enter" />
 </form>
 
 

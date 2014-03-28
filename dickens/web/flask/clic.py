@@ -56,6 +56,7 @@ def clusters():
 @app.route('/concordances/',methods=['GET'])
 def concordances():
     args = request.args  
+    print args["terms"]
 
     concordances_result = fetchConcordance(args)
     concordances = json.dumps(concordances_result)
