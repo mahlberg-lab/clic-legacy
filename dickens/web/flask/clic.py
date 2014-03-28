@@ -1,7 +1,7 @@
 from flask import Flask
 import json
 
-app = Flask(__name__, static_url_path='')
+app = Flask(__name__, debug=True, static_url_path='')
 
 import re
 
