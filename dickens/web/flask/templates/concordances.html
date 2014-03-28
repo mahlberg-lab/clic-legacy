@@ -1,1 +1,130 @@
-{{concordances}}
+!doctype html>
+<html>
+<head>
+<title>Concordances</title>
+
+{% autoescape false %}
+{% if concordances %}
+  <script>
+  var concordances = {{concordances}}
+  </script>
+{% endif %}
+{% endautoescape %}
+
+
+<style>
+
+table{
+  width:75%;
+  margin:1em auto;
+}
+td, th {
+  width: auto;
+  height: 2rem;
+  border: 1px solid #ccc;
+  text-align: center;
+}
+th {
+  background: lightblue;
+  border-color: white;
+}
+body {
+  padding: 1rem;
+}
+
+
+</style>
+
+<script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
+<script src="http://jashkenas.github.io/underscore/underscore-min.js"></script>
+<script src="/js/jquery.tablesorter.min.js"></script>
+<script>
+/**
+ *  handler javascript
+ *  takes json input from the gloal variable and returns the html table
+ *  stored in the appropriate template
+ */
+(function (jsonHandler, $, _,undefined) {
+
+
+
+        jsonHandler.processor = function(data,dataName)
+        {
+
+
+            getTemplate(data,dataName);
+
+
+        }
+
+        getTemplate= function(dataName){
+
+          var tmplMarkup = $('#tmpl-'+dataName).html();
+
+              if(_.isEmpty(data)){
+
+                      $('#'+dataName).html("<p> no "+dataName+"</p>");
+                  }
+                  else
+                  {
+                  var compiledTmpl = _.template(tmplMarkup, { dataName : data[dataName] });
+
+                  $('#'+dataName).html(compiledTmpl);
+
+                }
+
+        }
+
+
+
+}(window.jsonHandler = window.jsonHandler ||{},jQuery,_));
+
+</script>
+
+
+
+
+
+
+<meta charset="utf-8">
+
+</head>
+<body>
+ <div id="concordances">
+               <p> Loading concordances </p>
+                <script id="tmpl-concordances" type="text/template">
+                    <table id="tablesorter">
+                    <thead>
+          <tr><th>
+            Keyword
+          </th>
+          <th>Left Context</th>
+          <th>Node</th>
+          <th>Right Context</th>
+          </tr>
+          </thead>
+          <tbody>
+                    <% for (var i = 0; i < concordances.length; i++) { %>
+                      <% var concordances = concordances[i]; %>
+                      <tr>
+                        <td><%= concordances[0] %></td>
+                        <td><%= concordances[1] %></td>
+                        <td><%= concordances[2] %></td>
+
+                      </tr>
+                    <% } %>
+                    </tbody>
+                 <table>
+
+                </script>
+
+ </div>
+</body>
+<script>
+keywordHandler.processor(concordances,'concordances');
+$(document).ready(function(){
+  $("#tablesorter").tablesorter();
+  }
+  );
+</script>
+</html>
