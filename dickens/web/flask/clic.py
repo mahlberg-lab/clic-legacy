@@ -37,6 +37,7 @@ def keywords():
 
     return render_template('keywords.html', keywords=keywords)
 
+## ajax route: for splitting screen
 @app.route('/ajax-keywords',methods=['GET'])
 def ajax_keyords():
     args = request.args
@@ -63,7 +64,6 @@ def concordance():
 
 
 @cache.cache('keyword', expire=3600) ## expires after 3600 secs
-## get keywords from dickens/keywords.py
 def fetchKeywords(args):
 
     keyworder = Keywords()
@@ -71,7 +71,7 @@ def fetchKeywords(args):
     keywords = keyworder.list_keywords(args[0], args[1], args[2], args[3])
     return {'keywords':keywords}
 
-#@cache.cache('cluster', expire=3600)
+@cache.cache('cluster', expire=3600)
 def fetchClusters(args):
 
     cluster = Clusters()
@@ -98,7 +98,7 @@ def processArgs(args, method):
 
     if not method == 'concordance':
         Group = str(args['testIdxGroup'])
-        book_collection = args.getlist('testCollection') 
+        book_collection = args.getlist('testCollection') ## args is a multiDictionary: use .getlist() to access individual books
         testIdxName = "{0}-{1}".format(testMod, Group)
         methodArgs.insert(0, testIdxName)
         methodArgs.insert(1, book_collection)

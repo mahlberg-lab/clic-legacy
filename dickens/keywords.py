@@ -27,7 +27,7 @@ class Keywords(object):
         
     def list_keywords(self, testIdxName, testMaterials, refIdxName, refMaterials):
         #self.logger.log(10, 'CREATING KEYWORDS FOR RS: {0}'.format(id)) 
-        self.logger.log(10, ' '.join(testIdxName + testMaterials[0] + refIdxName + refMaterials[0]))
+        #self.logger.log(10, ' '.join(testIdxName + testMaterials[0] + refIdxName + refMaterials[0]))
         session = self.session
         db = self.db
 
