@@ -38,55 +38,7 @@ body {
 <script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
 <script src="http://jashkenas.github.io/underscore/underscore-min.js"></script>
 <script src="/js/jquery.tablesorter.min.js"></script>
-<script>
-/**
- *  handler javascript
- *  takes json input from the gloal variable and returns the html table
- *  stored in the appropriate template
- */
-(function (jsonHandler, $, _,undefined) {
-
-
-
-        jsonHandler.processor = function(data,dataName)
-        {
-
-			
-            getTemplate(data,dataName);
-
-
-        }
-
-        getTemplate= function(data,dataName){
-
-          var tmplMarkup = $('#tmpl-'+dataName).html();
-
-              if(_.isEmpty(data)){
-
-                      $('#'+dataName).html("<p> no "+dataName+"</p>");
-                  }
-                  else
-                  {
-                   
-                   var templateData={dataItems:data[dataName]};	
-                  
-                   var compiledTmpl = _.template(tmplMarkup, templateData);
-				  
-                  $('#'+dataName).html(compiledTmpl);
-
-                }
-
-        }
-
-
-
-}(window.jsonHandler = window.jsonHandler ||{},jQuery,_));
-
-</script>
-
-
-
-
+<script src="/js/clic.js"></script>
 
 
 <meta charset="utf-8">
