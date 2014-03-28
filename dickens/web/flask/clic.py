@@ -145,3 +145,4 @@ def processCollections(args,collectionName):
         if re.match('^vol',w)
             collection.append(args[i])
             break
+    return collection
