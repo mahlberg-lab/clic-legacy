@@ -138,11 +138,11 @@ def processCollections(args,collectionName):
   collection = []
 
 
-    for i, w in enumerate(args.keys()):
-        if w == collectionName:
-            collection.append(args[i])
+  for i, w in enumerate(args.keys()):
+    if w == collectionName:
+      collection.append(args[i])
 
-        if re.match('^vol',w)
-            collection.append(args[i])
-            break
-    return collection
+    if re.match('^vol',w)
+      collection.append(args[i])
+      break
+  return collection
