@@ -53,14 +53,14 @@ def clusters():
 
     return render_template('clusters.html', clusters=clusters)
 
-@app.route('/concordance/',methods=['GET'])
-def concordance():
+@app.route('/concordances/',methods=['GET'])
+def concordances():
     args = request.args  
 
-    concordance_result = fetchConcordance(args)
-    concordance = json.dumps(concordance_result)
+    concordances_result = fetchConcordance(args)
+    concordances = json.dumps(concordances_result)
 
-    return render_template('concordance.html', concordance=concordance)
+    return render_template('concordances.html', concordances=concordances)
 
 
 @cache.cache('keyword', expire=3600) ## expires after 3600 secs
@@ -82,21 +82,21 @@ def fetchClusters(args):
 
     return {'clusters' : clusterlist}
 
-@cache.cache('concordance', expire=3600)
+@cache.cache('concordances', expire=3600)
 def fetchConcordance(args):
 
     concordancer = Concordancer_New()
-    args = processArgs(args, 'concordance')
-    concordancelist = concordancer.create_concordance(args[0], args[1], args[2])
+    args = processArgs(args, 'concordances')
+    concordances = concordancer.create_concordance(args[0], args[1], args[2])
 
-    return {'concordancelist' : concordancelist}
+    return {'concordances' : concordances}
 
 def processArgs(args, method):
    
     methodArgs = []
     testMod = str(args["testIdxMod"])
 
-    if not method == 'concordance':
+    if not method == 'concordances':
         Group = str(args['testIdxGroup'])
         book_collection = args.getlist('testCollection') ## args is a multiDictionary: use .getlist() to access individual books
         testIdxName = "{0}-{1}".format(testMod, Group)
@@ -125,7 +125,7 @@ def processArgs(args, method):
         methodArgs.insert(2, refIdxName)
         methodArgs.insert(3, refbook_collection)
 
-    elif method == 'concordance':
+    elif method == 'concordances':
 
         testIdxName = testMod + '-idx'
         wordWindow = str(args['wordWindow'])
