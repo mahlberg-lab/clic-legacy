@@ -1,4 +1,4 @@
-!doctype html>
+<!doctype html>
 <html>
 <head>
 <title>Concordances</title>
@@ -51,13 +51,13 @@ body {
         jsonHandler.processor = function(data,dataName)
         {
 
-
+			
             getTemplate(data,dataName);
 
 
         }
 
-        getTemplate= function(dataName){
+        getTemplate= function(data,dataName){
 
           var tmplMarkup = $('#tmpl-'+dataName).html();
 
@@ -67,8 +67,11 @@ body {
                   }
                   else
                   {
-                  var compiledTmpl = _.template(tmplMarkup, { dataName : data[dataName] });
-
+                   
+                   var templateData={dataItems:data[dataName]};	
+                  
+                   var compiledTmpl = _.template(tmplMarkup, templateData);
+				  
                   $('#'+dataName).html(compiledTmpl);
 
                 }
@@ -95,21 +98,19 @@ body {
                 <script id="tmpl-concordances" type="text/template">
                     <table id="tablesorter">
                     <thead>
-          <tr><th>
-            Keyword
-          </th>
+          <tr>
           <th>Left Context</th>
           <th>Node</th>
           <th>Right Context</th>
           </tr>
           </thead>
           <tbody>
-                    <% for (var i = 0; i < concordances.length; i++) { %>
-                      <% var concordances = concordances[i]; %>
+                    <% for (var i = 0; i < dataItems.length; i++) { %>
+                      <% var dataItems = dataItems[i]; %>
                       <tr>
-                        <td><%= concordances[0] %></td>
-                        <td><%= concordances[1] %></td>
-                        <td><%= concordances[2] %></td>
+                        <td><%= dataItems[0] %></td>
+                        <td><%= dataItems[1] %></td>
+                        <td><%= dataItems[2] %></td>
 
                       </tr>
                     <% } %>
@@ -121,7 +122,7 @@ body {
  </div>
 </body>
 <script>
-keywordHandler.processor(concordances,'concordances');
+jsonHandler.processor(concordances,"concordances");
 $(document).ready(function(){
   $("#tablesorter").tablesorter();
   }
