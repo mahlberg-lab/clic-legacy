@@ -37,6 +37,11 @@ def keywords():
 
     return render_template('keywords.html', keywords=keywords)
 
+@app.route("/ajax-keywords",methods=['GET'])
+def ajax_keyords():
+    args.request.args
+    return json.dumps(fetchKeywords(args))
+
 @app.route("/clusters/", methods=["GET"])
 def clusters():
     args = request.args
