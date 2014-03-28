@@ -23,7 +23,7 @@ class Keywords(object):
         self.qf = self.db.get_object(self.session, 'defaultQueryFactory')
         self.resultSetStore = self.db.get_object(self.session, 'resultSetStore')        
         self.idxStore = self.db.get_object(self.session, 'indexStore')
-        self.logger = self.db.get_object(self.session, 'keywordLogger')
+        #self.logger = self.db.get_object(self.session, 'keywordLogger')
         
     def list_keywords(self, testIdxName, testMaterials, refIdxName, refMaterials):
         #self.logger.log(10, 'CREATING KEYWORDS FOR RS: {0}'.format(id)) 

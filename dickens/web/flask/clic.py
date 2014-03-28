@@ -37,13 +37,13 @@ def keywords():
 
     return render_template('keywords.html', keywords=keywords)
 
-@app.route("/ajax-keywords",methods=['GET'])
+@app.route('/ajax-keywords',methods=['GET'])
 def ajax_keyords():
     args = request.args
     return json.dumps(fetchKeywords(args))
 
 
-@app.route("/clusters/", methods=["GET"])
+@app.route('/clusters/', methods=['GET'])
 def clusters():
     args = request.args
     
@@ -54,8 +54,7 @@ def clusters():
 
 @app.route('/concordance/',methods=['GET'])
 def concordance():
-    args = request.args
-  
+    args = request.args  
 
     concordance_result = fetchConcordance(args)
     concordance = json.dumps(concordance_result)
@@ -68,16 +67,16 @@ def concordance():
 def fetchKeywords(args):
 
     keyworder = Keywords()
-    args = processArgs(args, "keywords")
+    args = processArgs(args, 'keywords')
     keywords = keyworder.list_keywords(args[0], args[1], args[2], args[3])
-    return {"keywords":keywords}
+    return {'keywords':keywords}
 
 #@cache.cache('cluster', expire=3600)
 def fetchClusters(args):
 
     cluster = Clusters()
     
-    args = processArgs(args, "clusters")
+    args = processArgs(args, 'clusters')
  
     clusterlist = cluster.list_clusters(args[0], args[1])
 
@@ -87,7 +86,7 @@ def fetchClusters(args):
 def fetchConcordance(args):
 
     concordancer = Concordancer_New()
-    args = processArgs(args, "concordance")
+    args = processArgs(args, 'concordance')
     concordancelist = concordancer.create_concordance(args[0], args[1], args[2])
 
     return {'concordancelist' : concordancelist}
@@ -98,8 +97,8 @@ def processArgs(args, method):
     testMod = str(args["testIdxMod"])
 
     if not method == 'concordance':
-        Group = str(args["testIdxGroup"])
-        book_collection = [args["testCollection"]]
+        Group = str(args['testIdxGroup'])
+        book_collection = args.getlist('testCollection') 
         testIdxName = "{0}-{1}".format(testMod, Group)
         methodArgs.insert(0, testIdxName)
         methodArgs.insert(1, book_collection)
@@ -107,14 +106,14 @@ def processArgs(args, method):
 
     if method == 'keywords':
 
-        refMod = str(args["refIdxMod"])
-        refbook_collection = [args["refCollection"]]
+        refMod = str(args['refIdxMod'])
+        refbook_collection = args.getlist('refCollection') 
 
         refIdxName = "{0}-{1}".format(refMod, Group)
 
         ## if no ngram is specified the index is specific to Mod. If Mod is not specified default to sentence idx
         if not re.match('\dgram-idx', Group):
-            if not args["testIdxMod"] == '':
+            if not args['testIdxMod'] == '':
                 testIdxName = testMod + '-idx'
                 refIdxName = refMod + '-idx'
 
@@ -129,9 +128,9 @@ def processArgs(args, method):
     elif method == 'concordance':
 
         testIdxName = testMod + '-idx'
-        wordWindow = str(args["wordWindow"])
+        wordWindow = str(args['wordWindow'])
 
-        methodArgs.insert(0, str(args["terms"]))
+        methodArgs.insert(0, str(args['terms']))
         methodArgs.insert(1, testIdxName)
         methodArgs.insert(2, wordWindow)
 
@@ -140,15 +139,3 @@ def processArgs(args, method):
 
     return methodArgs
 
-def processCollections(args,collectionName):
-
-    collection = []
-
-    for i, w in enumerate(args.keys()):
-        if w == collectionName:
-            collection.append(args[i])
-
-        if re.match('^vol',w):
-            collection.append(args[i])
-            break
-    return collection

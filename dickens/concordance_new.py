@@ -46,14 +46,13 @@ class Concordancer_New(object):
                
                 for m in i.proxInfo: 
                     
-                    if idxName in ['chapter']:     
+                    if idxName in ['chapter-idx']:     
                         elems = [0]      
-                        (e, w) = (0, m[0][1])   
-                        print w                
+                        (e, w) = (0, m[0][1])                                           
                
-                    elif idxName in ['quote', 'non-quote', 'longsus', 'shortsus']:  
+                    elif idxName in ['quote-idx', 'non-quote-idx', 'longsus-idx', 'shortsus-idx']:  
                         elems = [0] 
-                        (e_q, w_q) = (m[0][0], m[0][1])                        
+                        (e_q, w_q) = (m[0][0], m[0][1])                    
                         
                         ## locate search term in xml
                         search_term = tree.xpath('//*[@eid="%d"]/following::w[%d+1]' % (e_q, w_q))     
@@ -84,17 +83,17 @@ class Concordancer_New(object):
                         (e, w) = (m[0][0], m[0][1]) 
                     
                     ## get indexes
-                    if idxName in ['quote', 'non-quote', 'longsus', 'shortsus']: 
+                    if idxName in ['quote-idx', 'non-quote-idx', 'longsus-idx', 'shortsus-idx']: 
                         index = db.get_object(session, 'chapter-idx')                 
                     else:
-                        index = db.get_object(session, '%s-idx' % (idxName))
+                        index = db.get_object(session, '%s' % (idxName))
                         
                     vecs = {}  
                     for el in elems:
                         vecs[el] = self.idxStore.fetch_proxVector(session, index, i, e)   
                     v = vecs[el] 
                     
-                    nodeLength = len(m)                
+                    nodeLength = len(m)            
                 
 #                     finalOffset=0
 #                     try:
@@ -110,6 +109,7 @@ class Concordancer_New(object):
 #                         rightHandOffset = None
                             
                     ## string location
+                    wordWindow = int(wordWindow)
                     leftOnset = v[max(0, w-(wordWindow+1))][2]
                     leftOffset = v[w][2]
                     nodeOffset = v[min(w+nodeLength, len(v)-1)][2]
@@ -119,7 +119,7 @@ class Concordancer_New(object):
                     
                     proxOffset = [leftOnset, leftOffset, nodeOffset, rightOffset]
 
-                    if idxName in ['sentence']:
+                    if idxName in ['sentence-idx']:
                         tree = tree.xpath('//*[@eid=%s]' % i.proxInfo[0][0][0])[0]
                     else:
                         tree
