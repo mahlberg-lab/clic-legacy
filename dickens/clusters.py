@@ -50,6 +50,7 @@ class Clusters(object):
             
         cluster_list = []
         for term, freq in dict.iteritems():
-            cluster_list.append([term, freq])
-      
+            if freq >= 2:
+                cluster_list.append([term, freq])      
+        
         return cluster_list

@@ -10,9 +10,9 @@ from dickens.concordance_new import Concordancer_New
 
 terms = 'be with you'
 #terms = 'youthful'
-idxName = 'quote-idx'
-#idxName = 'sentence'
-#idxName = 'chapter'
+#idxName = 'quote-idx'
+#idxName = 'sentence-idx'
+idxName = 'chapter-idx'
 Materials = ['BH']
 wordWindow = 20
 
@@ -20,4 +20,4 @@ concordance = Concordancer_New()
 
 conc = concordance.create_concordance(terms, idxName, wordWindow)#, Materials)
 
-print conc
+#print conc
