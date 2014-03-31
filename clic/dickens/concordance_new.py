@@ -8,7 +8,7 @@ from cheshire3.baseObjects import Session
 
 from lxml import etree
 
-class Concordancer(object):
+class Concordancer_New(object):
     
     def __init__(self):
         self.session = Session()
@@ -26,96 +26,131 @@ class Concordancer(object):
 #         ## get search id and identify the relevant records
 #         args = request.args
         
-    def create_concordance(self, terms, idxName): #, Materials): 
+    def create_concordance(self, terms, idxName, wordWindow): #, Materials): 
         ## create a list of lists containing each three contexts, and a list within those contexts containing each word
         session = self.session
         db = self.db
         qf = self.qf
         
-        query = qf.get_query(session, 'c3.%s-idx = "%s"' % (idxName, terms))
-        rs = db.search(session, query)
+        extraSpaceElems = ['s']
+        conc_lines = []
+        
+        query = qf.get_query(session, 'c3.%s = "%s"' % (idxName, terms))
+        rs = db.search(session, query)   
+    
         if len(rs) > 0:
+            temp = []
             for i in rs:
                 rec = i.fetch_record(session)
-                tree = rec.get_dom(session).getroottree() 
-                print tree.xpath('//div')[0].get('id')
-                
-                for m in i.proxInfo:                    
+                tree = rec.get_dom(session).getroottree()           
                
-                    if idxName in ['quote', 'non-quote', 'longsus', 'shortsus']:  
+                for m in i.proxInfo: 
+                    
+                    if idxName in ['chapter-idx']:     
+                        elems = [0]      
+                        (e, w) = (0, m[0][1])                                           
+               
+                    elif idxName in ['quote-idx', 'non-quote-idx', 'longsus-idx', 'shortsus-idx']:  
                         elems = [0] 
-                        (e_q, w_q) = (m[0][0], m[0][1])     
-                        print e_q, w_q   
+                        (e_q, w_q) = (m[0][0], m[0][1])                    
                         
                         ## locate search term in xml
-                        search_term = tree.xpath('//div/descendant::w[%d+1]' % w_q)                  
+                        search_term = tree.xpath('//*[@eid="%d"]/following::w[%d+1]' % (e_q, w_q))     
 
-                        sentence_tree = tree.xpath('//*[@eid="%d"]/following::w[%d+1]/ancestor-or-self::s' % (e_q, w_q))[0]                     
-                        chapter_tree = tree.xpath('//*[@eid="%d"]/following::w[%d+1]/ancestor-or-self::div' % (e_q, w_q))[0]  
+                        sentence_tree = tree.xpath('//*[@eid="%d"]/following::w[%d+1]/ancestor-or-self::s' % (e_q, w_q))    
+                        chapter_tree = tree.xpath('//*[@eid="%d"]/following::w[%d+1]/ancestor-or-self::div' % (e_q, w_q))                         
+                       
+                        prec_s_tree = chapter_tree[0].xpath('//div//s[@sid="%s"]/preceding::s/descendant::w' % sentence_tree[0].get('sid'))
+                        prec_s_wcount = len(prec_s_tree)
+
+                        ## count words within sentence
+                        count_s = 0                        
+                        for word in chapter_tree[0].xpath('//div//s[@sid="%s"]/descendant::w' % sentence_tree[0].get('sid')):
+                            if not word.get('o') == search_term[0].get('o'):
+                                count_s += 1
+                            else:
+                                break
+
+                        wcount = prec_s_wcount + count_s
+                                    
+                        w = wcount
+                        (e, w) = (0, w) 
                         
-                        print sentence_tree.get('id')
+                    ## sentences etc.                      
+                    else:
+                        temp.append(m[0][0])
+                        elems = set(temp)
+                        (e, w) = (m[0][0], m[0][1]) 
+                    
+                    ## get indexes
+                    if idxName in ['quote-idx', 'non-quote-idx', 'longsus-idx', 'shortsus-idx']: 
+                        index = db.get_object(session, 'chapter-idx')                 
+                    else:
+                        index = db.get_object(session, '%s' % (idxName))
                         
-                        ## count number of words in chapter_tree until (first) target word
-                        
-                        #count = chapter_tree.xpath('count(//s)')
-                        
-                        count = 0
-#                         for word in chapter_tree.xpath('//w'):
-#                             count = count + int(word.get('o'))
-#                         
-#                         print count
-                        prec_s_tree = chapter_tree.xpath('//div/descendant::s[@sid="3"]/preceding-sibling::s/descendant::w')
-                        print len(prec_s_tree)
+                    vecs = {}  
+                    for el in elems:
+                        vecs[el] = self.idxStore.fetch_proxVector(session, index, i, e)   
+                    v = vecs[el] 
+                    
+                    nodeLength = len(m)            
+                
+#                     finalOffset=0
+#                     try:
+#                         tid = v[w+nodeLength+wordWindow]         
+#                         finalOffset=tid[2]
+#                     except:
+#                         finalOffset = None
+#                       
+#                     ## test if node is at the end of string (i.e. node offset corresponds with right-hand offset)
+#                     lastNodeOffset = v[w+nodeLength-1][2]
+#                     rightHandOffset = v[min(w+nodeLength, len(v)-1)][2]
+#                     if rightHandOffset == lastNodeOffset:
+#                         rightHandOffset = None
                             
-                        #//div/descendant::s[@sid="3"]/preceding-sibling::s/descendant::w
-                        
-#                         count_words = 0
-#                         for word in chapter_tree.xpath('//div/descendant::w'):
-#                             #if word.xpath('//w/ancestor::s[@id=%s]' % sentence_tree.get('id')):
-#                             if not word.xpath('//w/ancestor::s')[0].get('id') == sentence_tree.get('id'):
-#                             #if word.xpath('//w/ancestor::s[@sid="1"]'):
-#                                 count_words += 1
-#                             else:
-#                                 break
-#                         print count_words
-                                  
-                             
-#                         c_walker = chapter_tree.getiterator()
-#                         count = 0
-#                         print terms.split(' ')[0]
-#                         for c in c_walker:
-#                               
-#                             if c.tag == 'w' and not c.text.lower() == terms.split(' ')[0]:
-#                                 count += 1
-#                             elif c.tag == 'w' and c.text.lower() == terms.split(' ')[0]: 
-#                                 ## verify sentence match
-#                                 if not sentence_tree == chapter_tree.xpath('//div/descendant-or-self::w[%d+1]/ancestor-or-self::s' % count)[0] :
-#                                     count += 1 ##?
-#                                     continue  
-#                                 elif sentence_tree == chapter_tree.xpath('//div/descendant-or-self::w[%d+1]/ancestor-or-self::s' % count)[0] :
-#                                     ## verify word match
-#                                     print c.get('o'), search_term[0].get('o')
-#                                     if not c.get('o') == search_term[0].get('o'):
-#                                         count += 1 ##?
-#                                         continue
-#                                     else:
-#                                         break
-#                                       
-#                         w = count
-#                         (e, w) = (0, w) 
-#                         print 'word number: ', w
-#                         
-#                         ## for quotes I want the chapter tree 
-#                         if idxName == 'quote': 
-#                                                       
-#                             #for x in chapter_tree.xpath('//div/descendant-or-self::w[%d+1]' % w):
-#                             #for x in chapter_tree.xpath('//div/descendant::w[%d+1]' % w):
-#                             for x in chapter_tree.xpath('//div/descendant::w[3927]'):
-#                                 print x.text
-#                                 
-#                             print len(chapter_tree.xpath('//div/descendant::w'))
-#                                 
-                break
+                    ## string location
+                    wordWindow = int(wordWindow)
+                    leftOnset = v[max(0, w-(wordWindow+1))][2]
+                    leftOffset = v[w][2]
+                    nodeOffset = v[min(w+nodeLength, len(v)-1)][2]
+                    rightOffset = v[min(w+nodeLength+wordWindow, len(v)-1)][2]
+#                     finalOffset = finalOffset
+
+                    
+                    proxOffset = [leftOnset, leftOffset, nodeOffset, rightOffset]
+
+                    if idxName in ['sentence-idx']:
+                        tree = tree.xpath('//*[@eid=%s]' % i.proxInfo[0][0][0])[0]
+                    else:
+                        tree
+                     
+                    walker = tree.getiterator()
+                    texts = []
+                    for c in walker:
+                        if c.tag == 'txt':                       
+                            if c.text:
+                                texts.append(c.text)                        
+                            if c.tail:
+                                texts.append(c.tail)
+                       
+                        ## add space to sentence
+                        elif c.tag in extraSpaceElems :
+                            texts.append(' ')
+                        else:
+                            continue     
+                      
+                    text = ''.join(texts).lstrip()
+                    left_text = [text[proxOffset[0]:proxOffset[1]]]
+                    node_text = [text[proxOffset[1]:proxOffset[2]]]
+                    print node_text
+                    right_text = [text[proxOffset[2]:proxOffset[3]]]
+
+                    conc_line = [re.split('\s|^|$', left_text[0]), re.split('\s|^|$', node_text[0]), re.split('\s|^|$', right_text[0])]
+                     
+                    conc_lines.append(conc_line)
+             
+        return conc_lines
+                
 
                             
             

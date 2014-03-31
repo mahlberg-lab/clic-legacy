@@ -1,0 +1,314 @@
+<html>
+<title>Form for demo</title>
+
+<head>
+
+  <script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+
+
+
+</head>
+
+<body>
+
+ <div class="container">
+   <h1>Prototype clic interface</h1>
+<div class=" row col-xs-8 col-md-offset-1">
+    <h2>Concordance</h2>
+  <form action="/concordances/" method="get" class="form-horizontal" enctype="multipart/form-data">
+      <fieldset>
+
+      <!-- Form Name -->
+      <legend>Concordances</legend>
+
+      <!-- Text input-->
+      <div class="control-group">
+        <label class="control-label" for="terms">Search for</label>
+        <div class="controls">
+          <input id="terms" name="terms" type="text" placeholder="" class="input-xlarge">
+
+        </div>
+      </div>
+
+      <!-- Multiple Radios -->
+      <div class="control-group">
+        <label class="control-label" for="testIdxMod">within</label>
+        <div class="controls">
+          <label class="radio" for="testIdxMod-0">
+            <input type="radio" name="testIdxMod" id="testIdxMod-0" value="Chapter" checked="checked">
+            Chapter
+          </label>
+          <label class="radio" for="testIdxMod-1">
+            <input type="radio" name="testIdxMod" id="testIdxMod-1" value="quote">
+            Quote
+          </label>
+          <label class="radio" for="testIdxMod-2">
+            <input type="radio" name="testIdxMod" id="testIdxMod-2" value="non-quote">
+            non-quote
+          </label>
+          <label class="radio" for="testIdxMod-3">
+            <input type="radio" name="testIdxMod" id="testIdxMod-3" value="shortsus">
+            short suspension
+          </label>
+          <label class="radio" for="testIdxMod-4">
+            <input type="radio" name="testIdxMod" id="testIdxMod-4" value="longsus">
+            long suspension
+          </label>
+        </div>
+      </div>
+
+      <!-- Select Basic -->
+      <div class="control-group">
+        <label class="control-label" for="wordWindow">Number of words</label>
+        <div class="controls">
+          <select id="wordWindow" name="wordWindow" class="input-xlarge">
+            <option selected="selected">20</option>
+            <option>30</option>
+          </select>
+        </div>
+      </div>
+
+      </fieldset>
+
+      <input type="submit" value="enter" />
+</form>
+</div>
+
+<div class=" row col-xs-8 col-md-offset-1">
+    <h2>Clusters</h2>
+  <form action="/clusters/" method="get" class="form-horizontal" enctype="multipart/form-data">
+      <fieldset>
+
+      <!-- Form Name -->
+      <legend>Clusters</legend>
+      
+      <!-- Multiple Radios -->
+      <div class="control-group">
+        <label class="control-label" for="testIdxGroup">Create</label>
+        <div class="controls">
+          <label class="radio" for="testIdxGroup-0">
+            <input type="radio" name="testIdxGroup" id="testIdxGroup-0" value="sentence" checked="checked">
+            Word list
+          </label>
+          <label class="radio" for="testIdxGroup-1">
+            <input type="radio" name="testIdxGroup" id="testIdxGroup-1" value="3gram-idx">
+            3-gram list
+          </label>
+          <label class="radio" for="testIdxGroup-2">
+            <input type="radio" name="testIdxGroup" id="testIdxGroup-2" value="4gram-idx">
+            4-gram list
+          </label>
+          <label class="radio" for="testIdxGroup-3">
+            <input type="radio" name="testIdxGroup" id="testIdxGroup-3" value="5gram-idx">
+            5-gram list
+          </label>
+        </div>
+      </div>
+
+      <!-- Multiple Radios -->
+      <div class="control-group">
+        <label class="control-label" for="testIdxMod">within</label>
+        <div class="controls">
+          <label class="radio" for="testIdxMod-0">
+            <input type="radio" name="testIdxMod" id="testIdxMod-0" value="Chapter" checked="checked">
+            Whole text collection
+          </label>
+          <label class="radio" for="testIdxMod-1">
+            <input type="radio" name="testIdxMod" id="testIdxMod-1" value="quote">
+            Quote
+          </label>
+          <label class="radio" for="testIdxMod-2">
+            <input type="radio" name="testIdxMod" id="testIdxMod-2" value="non-quote">
+            non-quote
+          </label>
+          <label class="radio" for="testIdxMod-3">
+            <input type="radio" name="testIdxMod" id="testIdxMod-3" value="shortsus">
+            short suspension
+          </label>
+          <label class="radio" for="testIdxMod-4">
+            <input type="radio" name="testIdxMod" id="testIdxMod-4" value="longsus">
+            long suspension
+          </label>
+        </div>
+      </div>
+
+		      
+
+	  <!-- Select Basic -->
+      <div class="control-group">
+        <label class="control-label" for="testCollection">in collection</label>
+        <div class="controls">
+          <select multiple id="testCollection" name="testCollection" class="input-xlarge">
+            <option value="volDickens"selected="selected">Dickens</option>            
+			<optgroup>
+			<option value="BH">Bleak House</option>
+			<option value="GE">Great Expectations</option>
+			<option value="NN">Nicholas Nickleby</option>
+			</optgroup>
+			<option value="volNTC">Non-Dickens</option>
+			<optgroup>
+			</optgroup>
+          </select>
+        </div>
+      </div>
+
+      </fieldset>
+
+      <input type="submit" value="enter" />
+</form>
+</div>
+
+<div class=" row col-xs-8 col-md-offset-1">
+    <h2>Keywords</h2>
+  <form action="/keywords/" method="get" class="form-horizontal" enctype="multipart/form-data">
+      <fieldset>
+
+      <!-- Form Name -->
+      <legend>Keywords</legend>
+      
+      <!-- Multiple Radios -->
+      <div class="control-group">
+        <label class="control-label" for="testIdxGroup">Find key words...</label>
+        <div class="controls">
+          <label class="radio" for="testIdxGroup-0">
+            <input type="radio" name="testIdxGroup" id="testIdxGroup-0" value="sentence" checked="checked">
+            Words
+           </label>
+         <label class="control-label" for="testIdxGroup">or clusters...</label>
+          
+          <label class="radio" for="testIdxGroup-1">
+            <input type="radio" name="testIdxGroup" id="testIdxGroup-1" value="3gram-idx">
+            3-grams
+          </label>
+          <label class="radio" for="testIdxGroup-2">
+            <input type="radio" name="testIdxGroup" id="testIdxGroup-2" value="4gram-idx">
+            4-grams
+          </label>
+          <label class="radio" for="testIdxGroup-3">
+            <input type="radio" name="testIdxGroup" id="testIdxGroup-3" value="5gram-idx">
+            5-grams
+          </label>
+        </div>
+      </div>
+
+      <!-- Multiple Radios -->
+      <div class="control-group">
+        <label class="control-label" for="testIdxMod">within</label>
+        <div class="controls">
+          <label class="radio" for="testIdxMod-0">
+            <input type="radio" name="testIdxMod" id="testIdxMod-0" value="chapter" checked="checked">
+            Chapter
+          </label>
+          <label class="radio" for="testIdxMod-1">
+            <input type="radio" name="testIdxMod" id="testIdxMod-1" value="quote">
+            Quote
+          </label>
+          <label class="radio" for="testIdxMod-2">
+            <input type="radio" name="testIdxMod" id="testIdxMod-2" value="non-quote">
+            non-quote
+          </label>
+          <label class="radio" for="testIdxMod-3">
+            <input type="radio" name="testIdxMod" id="testIdxMod-3" value="shortsus">
+            short suspension
+          </label>
+          <label class="radio" for="testIdxMod-4">
+            <input type="radio" name="testIdxMod" id="testIdxMod-4" value="longsus">
+            long suspension
+          </label>
+        </div>
+      </div>
+
+	   <!-- Multiple Radios -->
+      <div class="control-group">
+        <label class="control-label" for="testCollection">within text collection</label>
+        <div class="controls">
+          <label class="radio" for="testCollection-0">
+            <input type="radio" name="testCollection" id="testCollection-0" value="dickens" checked="checked">
+            Dickens
+          </label>
+          <label class="radio" for="testCollection-1">
+            <input type="radio" name="testCollection" id="testCollection-1" value="NTC">
+            Non-Dickens
+          </label>
+          <label class="radio" for="testCollection-2">
+            <input type="radio" name="testCollection" id="testCollection-2" value="BH">
+            Bleak House
+          </label>
+          <label class="radio" for="testCollection-3">
+            <input type="radio" name="testCollection" id="testCollection-3" value="GE">
+            Great Expectations
+          </label>
+          <label class="radio" for="testCollection-4">
+            <input type="radio" name="testCollection" id="testCollection-4" value="LD">
+            Little Dorrit
+          </label>
+        </div>
+      </div>
+      
+       <!-- Multiple Radios -->
+      <div class="control-group">
+        <label class="control-label" for="refIdxMod">with reference to</label>
+        <div class="controls">
+          <label class="radio" for="refIdxMod-0">
+            <input type="radio" name="refIdxMod" id="refIdxMod-0" value="Chapter" checked="checked">
+            Chapter
+          </label>
+          <label class="radio" for="refIdxMod-1">
+            <input type="radio" name="refIdxMod" id="refIdxMod-1" value="quote">
+            Quote
+          </label>
+          <label class="radio" for="refIdxMod-2">
+            <input type="radio" name="refIdxMod" id="refIdxMod-2" value="non-quote">
+            non-quote
+          </label>
+          <label class="radio" for="refIdxMod-3">
+            <input type="radio" name="refIdxMod" id="refIdxMod-3" value="shortsus">
+            short suspension
+          </label>
+          <label class="radio" for="refIdxMod-4">
+            <input type="radio" name="refIdxMod" id="refIdxMod-4" value="longsus">
+            long suspension
+          </label>
+        </div>
+      </div>
+
+	   <!-- Multiple Radios -->
+      <div class="control-group">
+        <label class="control-label" for="refCollection">within text collection</label>
+        <div class="controls">
+          <label class="radio" for="refCollection-0">
+            <input type="radio" name="refCollection" id="refCollection-0" value="dickens" checked="checked">
+            Dickens
+          </label>
+          <label class="radio" for="refCollection-1">
+            <input type="radio" name="refCollection" id="refCollection-1" value="NTC">
+            Non-Dickens
+          </label>
+          <label class="radio" for="refCollection-2">
+            <input type="radio" name="refCollection" id="refCollection-2" value="BH">
+            Bleak House
+          </label>
+          <label class="radio" for="refCollection-3">
+            <input type="radio" name="refCollection" id="refCollection-3" value="GE">
+            Great Expectations
+          </label>
+          <label class="radio" for="refCollection-4">
+            <input type="radio" name="refCollection" id="refCollection-4" value="LD">
+            Little Dorrit
+          </label>
+        </div>
+      </div>
+
+      </fieldset>
+
+      <input type="submit" value="enter" />
+</form>
+</div>
+
+</div>
+<!-- Latest compiled and minified JavaScript -->
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+</body>
+</html>

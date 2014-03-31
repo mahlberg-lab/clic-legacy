@@ -1,12 +1,12 @@
 <!doctype html>
 <html>
 <head>
-<title>Clusters</title>
+<title>Concordances</title>
 
 {% autoescape false %}
-{% if clusters %}
+{% if concordances %}
   <script>
-  var clusters = {{clusters}}
+  var concordances = {{concordances}}
   </script>
 {% endif %}
 {% endautoescape %}
@@ -15,8 +15,8 @@
 <style>
 
 table{
-	width:75%;
-	margin:1em auto;
+  width:75%;
+  margin:1em auto;
 }
 td, th {
   width: auto;
@@ -46,24 +46,24 @@ body {
 
 </head>
 <body>
- <div id="clusters">
-               <p> Loading clusters </p>
-                <script id="tmpl-clusters" type="text/template">
+ <div id="concordances">
+               <p> Loading concordances </p>
+                <script id="tmpl-concordances" type="text/template">
                     <table id="tablesorter">
                     <thead>
-					<tr><th>
-						Cluster
-					</th>
-					<th> Frequency</th>
-
-					</tr>
-					</thead>
-					<tbody>
+          <tr>
+          <th>Left Context</th>
+          <th>Node</th>
+          <th>Right Context</th>
+          </tr>
+          </thead>
+          <tbody>
                     <% for (var i = 0; i < dataItems.length; i++) { %>
-                      <% var cluster = dataItems[i]; %>
+                      <% var dataItems = dataItems[i]; %>
                       <tr>
-                        <td><%= cluster[0] %></td>
-                        <td><%= cluster[1] %></td>
+                        <td><%= dataItems[0] %></td>
+                        <td><%= dataItems[1] %></td>
+                        <td><%= dataItems[2] %></td>
 
                       </tr>
                     <% } %>
@@ -75,10 +75,10 @@ body {
  </div>
 </body>
 <script>
-jsonHandler.processor(clusters, "clusters");
+jsonHandler.processor(concordances,"concordances");
 $(document).ready(function(){
-	$("#tablesorter").tablesorter();
-	}
-	);
+  $("#tablesorter").tablesorter();
+  }
+  );
 </script>
 </html>

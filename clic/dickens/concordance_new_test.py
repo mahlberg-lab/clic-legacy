@@ -6,13 +6,18 @@ from cheshire3.internal import cheshire3Root
 from cheshire3.server import SimpleServer
 from cheshire3.baseObjects import Session
 
-from clic.dickens.concordance_new import Concordancer
+from dickens.concordance_new import Concordancer_New
 
 terms = 'be with you'
-idxName = 'quote'
+#terms = 'youthful'
+idxName = 'quote-idx'
 #idxName = 'sentence'
+#idxName = 'chapter'
 Materials = ['BH']
+wordWindow = 20
 
-concordance = Concordancer()
+concordance = Concordancer_New()
 
-conc = concordance.create_concordance(terms, idxName)#, Materials)
+conc = concordance.create_concordance(terms, idxName, wordWindow)#, Materials)
+
+print conc

@@ -1,17 +1,13 @@
-<!doctype html>
 <html>
+<title>Form for demo</title>
+
 <head>
-<title>Keywords</title>
-
-{% autoescape false %}
-{% if keywords %}
-  <script>
-  var keywords = {{keywords}}
-  </script>
-{% endif %}
-{% endautoescape %}
-
-
+	<script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
+<script src="http://jashkenas.github.io/underscore/underscore-min.js"></script>
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+<script src="/js/json_parse.js"></script>
+<script src="/js/clic.js"></script>
 <style>
 
 table{
@@ -34,23 +30,13 @@ body {
 
 
 </style>
-
-<script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
-<script src="http://jashkenas.github.io/underscore/underscore-min.js"></script>
-<script src="/js/tablesorter/jquery.tablesorter.min.js"></script>
-<script src="/js/clic.js"></script>
-<link rel="stylesheet" href="/js/tablesorter/themes/blue/style.css" />
-
-
-
-
-
-
-
-<meta charset="utf-8">
-
 </head>
+
 <body>
+
+ <div class="container">
+   <h1>Prototype clic interface</h1>
+<div class=" row col-xs-8 col-md-offset-1">
  <div id="keywords">
                <p> Loading keywords </p>
                 <script id="tmpl-keywords" type="text/template">
@@ -80,12 +66,21 @@ body {
                 </script>
 
  </div>
-</body>
+</div>
+
+</div>
+<!-- Latest compiled and minified JavaScript -->
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 <script>
-jsonHandler.processor(keywords,"keywords");
-$(document).ready(function(){
-	$("#tablesorter").tablesorter();
-	}
-	);
+
+$.get("/ajax-keywords?testIdxGroup=3gram-idx&testIdxMod=quote&testCollection=GE&refIdxMod=non-quote&refCollection=OMF",function(data){
+	
+	console.log(data);
+	data = JSON.parse(data);
+	console.log(data["dataItems"]);
+
+        jsonHandler.processor(data,"keywords");	
+});
 </script>
+</body>
 </html>
