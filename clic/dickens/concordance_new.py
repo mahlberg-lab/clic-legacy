@@ -41,6 +41,7 @@ class Concordancer_New(object):
         if len(rs) > 0:
             temp = []
             for i in rs:
+                
                 rec = i.fetch_record(session)
                 tree = rec.get_dom(session).getroottree()           
                
@@ -148,7 +149,7 @@ class Concordancer_New(object):
                     conc_line = [re.split('\s|^|$', left_text[0]), re.split('\s|^|$', node_text[0]), re.split('\s|^|$', right_text[0])]
                      
                     conc_lines.append(conc_line)
-             
+
         return conc_lines
                 
 
