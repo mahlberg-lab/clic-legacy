@@ -41,6 +41,7 @@ class Clusters(object):
                                        ' or '.join(clauses)
                                        )        
         results = db.search(session, query)
+        print len(results)
         
         idx = db.get_object(session, idxName)
         facets = idx.facets(session, results)
