@@ -129,17 +129,32 @@ class Keywords(object):
             ## 2. Log Likelihood
             ## Compare actual observations with expected ocurrence for both test and ref, and add these values
             ## Use log1p() (for natural logarithm - ln) instead of log()
-            try:
-                LL = 2*((freqTest*log1p(freqTest/expectedTest)) + (freqRef*log1p(freqRef/expectedRef)))
-            except:
-                LL = 909090
-                  
-            #print '%s\t%d\t%d\t%.2f' % (i.queryTerm, freqTest, freqRef, LL) 
-            ## only print if occurence > 5
-            if freqTest > 5:
-#                 KW = '%s\t%d\t%d\t%.2f\t%.2f' % (i.queryTerm, freqTest, freqRef, LL, refTestRatio)
-#                 KW_list = ''.join(KW_list + '\n' + KW)
-                kw_list.append([term, freqTest, freqRef, LL])
+            if freqTest*log1p(freqTest/expectedTest) >= freqRef*log1p(freqRef/expectedRef):
+                try:
+                    LL = 2*((freqTest*log1p(freqTest/expectedTest)) + (freqRef*log1p(freqRef/expectedRef)))
+                    LL = '%.3f' % LL
+                except:
+                    LL = 909090
+            else:
+                try:
+                    LL = -2*((freqTest*log1p(freqTest/expectedTest)) + (freqRef*log1p(freqRef/expectedRef)))
+                    LL = '%.3f' % LL
+                except:
+                    LL = 909090
+            
+            if freqRef == 5.0e-324:
+                freqRef2 = 0
+            else:
+                freqRef2 = freqRef
+                
+            if LL > 15.13 or LL < -15.13:
+                p_value = 0.0001
+            else:
+                p_value = 0.001
+            
+            ## only print if occurence > 3
+            if freqTest > 3 and p_value == 0.0001:
+                kw_list.append([term, freqTest, freqRef2, LL, p_value])
 
         return kw_list
                                             

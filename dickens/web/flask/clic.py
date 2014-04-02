@@ -33,6 +33,7 @@ def keywords():
 
     # put keywords into json
     keyword_result = fetchKeywords(args)
+    #print keyword_result
     keywords = json.dumps(keyword_result)
 
     return render_template('keywords.html', keywords=keywords)
@@ -64,7 +65,7 @@ def concordances():
     return render_template('concordances.html', concordances=concordances)
 
 
-@cache.cache('keyword', expire=3600) ## expires after 3600 secs
+#@cache.cache('keyword', expire=3600) ## expires after 3600 secs
 def fetchKeywords(args):
 
     keyworder = Keywords()
@@ -111,17 +112,18 @@ def processArgs(args, method):
         refbook_collection = args.getlist('refCollection') 
 
         refIdxName = "{0}-{1}".format(refMod, Group)
+        print refIdxName
 
         ## if no ngram is specified the index is specific to Mod. If Mod is not specified default to sentence idx
-        if not re.match('\dgram-idx', Group):
-            if not args['testIdxMod'] == '':
-                testIdxName = testMod + '-idx'
-                refIdxName = refMod + '-idx'
-
-        else:
-            testIdxName = 'sentence-idx'
-            refIdxName = 'sentence-idx'
-
+        ## THERE WILL BE DEFAULT SELECT IN INTERFACE
+#         if not re.match('\dgram-idx', Group):
+#             if not args['testIdxMod'] == '':
+#                 testIdxName = testMod + '-idx'
+#                 refIdxName = refMod + '-idx'
+# 
+#         else:
+#             testIdxName = 'sentence-idx'
+#             refIdxName = 'sentence-idx'
 
         methodArgs.insert(2, refIdxName)
         methodArgs.insert(3, refbook_collection)
