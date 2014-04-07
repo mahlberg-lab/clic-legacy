@@ -208,7 +208,7 @@ class Concordancer_New(object):
                      
                     conc_lines.append(conc_line)
                     
-                if count > 5:
+                if count > 200:
                     break
 
         conc_lines.insert(0, len(conc_lines))  

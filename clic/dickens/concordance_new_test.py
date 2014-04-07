@@ -10,14 +10,14 @@ from cheshire3.baseObjects import Session
 
 from dickens.concordance_new import Concordancer_New
 
-terms = 'dense fog'
+terms = 'hands'
 #terms = 'youthful'
 #idxName = 'non-quote-idx'
 #idxName = 'sentence-idx'
 idxName = 'chapter-idx'
 Materials = ['dickens']
 wordWindow = 10
-selectWords = 'any'
+selectWords = 'whole'
 
 args = [terms, idxName, wordWindow, Materials, selectWords]
 
@@ -30,7 +30,7 @@ def getConcordance(args):
 x = json.dumps(getConcordance(args))
 print x
 
-# filewrite = open('/home/aezros/concordance_2600hits', 'w')
-# filewrite.write(x)
+filewrite = open('/home/aezros/concordance_300hits', 'w')
+filewrite.write(x)
 
 
