@@ -3,11 +3,16 @@ from dickens.keywords import Keywords
 keywords = Keywords()
 
 
-testIdxName = 'quote-3gram-idx'
+testIdxName = 'quote-4gram-idx'
+#testMaterials = ['dickens']
 testMaterials = ['GE']
-refIdxName = 'quote-3gram-idx'
-refMaterials = ['BH']
+refIdxName = 'non-quote-4gram-idx'
+#refMaterials = ['dickens']
+refMaterials = ['GE']
 
 test = keywords.list_keywords(testIdxName, testMaterials, refIdxName, refMaterials)
 
 print test
+
+filewrite = open('/home/aezros/keywords_GE_quotes.txt', 'w')
+filewrite.write(''.join('{"keywords" : ' + '%s' + '}') % str(test))

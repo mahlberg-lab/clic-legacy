@@ -145,16 +145,21 @@ class Keywords(object):
             if freqRef == 5.0e-324:
                 freqRef2 = 0
             else:
-                freqRef2 = freqRef
+                freqRef2 = int('%.0f' % freqRef)
                 
-            if LL > 15.13 or LL < -15.13:
+            if float(LL) > 15.13 or float(LL) < -15.13:
                 p_value = 0.0001
             else:
-                p_value = 0.001
-            
+                p_value = 0.001            
+           
+            dec_Test = '%.2f' % freqTest
+            dec_Ref = '%.2f' % freqRef
+            propTest = float(dec_Test)/100
+            propRef = float(dec_Ref)/100
+           
             ## only print if occurence > 3
             if freqTest > 3 and p_value == 0.0001:
-                kw_list.append([term, freqTest, freqRef2, LL, p_value])
+                kw_list.append([term, freqTest, propTest, freqRef2, propRef, LL, p_value])
 
         return kw_list
                                             
