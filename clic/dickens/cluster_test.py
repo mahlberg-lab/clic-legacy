@@ -1,9 +1,9 @@
-from clic.dickens.clusters import Clusters
+from dickens.clusters import Clusters
 
 clusters = Clusters()
 
 idxName = 'quote-3gram-idx'
-Materials = ['BH']
+Materials = ['dickens']
 
 test = clusters.list_clusters(idxName, Materials)
 

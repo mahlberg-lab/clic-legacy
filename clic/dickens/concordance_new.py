@@ -25,13 +25,9 @@ class Concordancer_New(object):
         self.qf = self.db.get_object(self.session, 'defaultQueryFactory')
         self.resultSetStore = self.db.get_object(self.session, 'resultSetStore')        
         self.idxStore = self.db.get_object(self.session, 'indexStore')
-        ## self.logger = self.db.get_object(self.session, 'concordanceLogger') ## TODO: add to dbs/dickens/config
-        
-#     def search(self, req):        
-#         ## get search id and identify the relevant records
-#         args = request.args
-        
-    def create_concordance(self, terms, idxName, wordWindow): #, Materials): 
+        ## self.logger = self.db.get_object(self.session, 'concordanceLogger') ## TODO: add to dbs/dickens/config        
+       
+    def create_concordance(self, terms, idxName, wordWindow, Materials, selectWords): 
         ## create a list of lists containing each three contexts, and a list within those contexts containing each word
         session = self.session
         db = self.db
@@ -40,8 +36,33 @@ class Concordancer_New(object):
         extraSpaceElems = ['s']
         conc_lines = []
         
-        query = qf.get_query(session, 'c3.%s = "%s"' % (idxName, terms))
-        rs = db.search(session, query)   
+        Dickens_vol = ['BH', 'BR', 'DC',
+                        'DS', 'ED', 'GE', 'HT', 'ld', 'MC', 'NN',
+                        'OCS', 'OMF', 'OT', 'PP', 'TTC']
+        books = []
+        for Material in Materials:
+            MatIdx = 'book-idx'
+            if Material in ['dickens', 'ntc']:
+                for book in Dickens_vol:
+                    books.append('c3.{0} = "{1}"'.format(MatIdx, book))  
+            else:
+                books.append('c3.{0} = "{1}"'.format(MatIdx, Material)) 
+                
+        if selectWords == "whole":
+            terms = [terms]  
+        else:
+            terms = terms.split(' ')
+        
+        term_clauses = []
+        for term in terms:
+            term_clauses.append('c3.{0} = "{1}"'.format(idxName, term))
+        
+        print term_clauses
+        
+        ## /proxInfo needed to search individual books
+        #query = qf.get_query(session, ' or '.join(books) + ' and/proxInfo ' + 'c3.%s = "%s"' % (idxName, terms)) 
+        query = qf.get_query(session, ' or '.join(books) + ' and/proxInfo ' + ' or '.join(term_clauses))         
+        rs = db.search(session, query)  
     
         if len(rs) > 0:
             count = 0
@@ -186,11 +207,11 @@ class Concordancer_New(object):
                                 [para_book, sent_book, word_book]]
                      
                     conc_lines.append(conc_line)
-                    print count
                     
-#                 if count >= 25:
-#                     break
+                if count > 5:
+                    break
 
+        conc_lines.insert(0, len(conc_lines))  
         return conc_lines
                 
 
