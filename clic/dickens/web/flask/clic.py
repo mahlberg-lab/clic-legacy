@@ -33,6 +33,7 @@ def keywords():
 
     # put keywords into json
     keyword_result = fetchKeywords(args)
+    #print keyword_result
     keywords = json.dumps(keyword_result)
 
     return render_template('keywords.html', keywords=keywords)
@@ -56,7 +57,6 @@ def clusters():
 @app.route('/concordances/',methods=['GET'])
 def concordances():
     args = request.args  
-    print args["terms"]
 
     concordances_result = fetchConcordance(args)
     concordances = json.dumps(concordances_result)
@@ -64,7 +64,7 @@ def concordances():
     return render_template('concordances.html', concordances=concordances)
 
 
-@cache.cache('keyword', expire=3600) ## expires after 3600 secs
+#@cache.cache('keyword', expire=3600) ## expires after 3600 secs
 def fetchKeywords(args):
 
     keyworder = Keywords()
@@ -72,7 +72,7 @@ def fetchKeywords(args):
     keywords = keyworder.list_keywords(args[0], args[1], args[2], args[3])
     return {'keywords':keywords}
 
-@cache.cache('cluster', expire=3600)
+#@cache.cache('cluster', expire=3600)
 def fetchClusters(args):
 
     cluster = Clusters()
@@ -83,27 +83,27 @@ def fetchClusters(args):
 
     return {'clusters' : clusterlist}
 
-@cache.cache('concordances', expire=3600)
+#@cache.cache('concordances', expire=3600)
 def fetchConcordance(args):
 
     concordancer = Concordancer_New()
     args = processArgs(args, 'concordances')
-    concordances = concordancer.create_concordance(args[0], args[1], args[2])
+    print args
+    concordances = concordancer.create_concordance(args[0], args[1], args[2], args[3], args[4])
 
     return {'concordances' : concordances}
 
 def processArgs(args, method):
    
     methodArgs = []
-    testMod = str(args["testIdxMod"])
+    testMod = str(args["testIdxMod"])    
 
     if not method == 'concordances':
-        Group = str(args['testIdxGroup'])
-        book_collection = args.getlist('testCollection') ## args is a multiDictionary: use .getlist() to access individual books
+        Group = str(args['testIdxGroup']) ## testGroup not used in concordances
         testIdxName = "{0}-{1}".format(testMod, Group)
         methodArgs.insert(0, testIdxName)
+        book_collection = args.getlist('testCollection') ## args is a multiDictionary: use .getlist() to access individual books
         methodArgs.insert(1, book_collection)
-
 
     if method == 'keywords':
 
@@ -113,15 +113,15 @@ def processArgs(args, method):
         refIdxName = "{0}-{1}".format(refMod, Group)
 
         ## if no ngram is specified the index is specific to Mod. If Mod is not specified default to sentence idx
-        if not re.match('\dgram-idx', Group):
-            if not args['testIdxMod'] == '':
-                testIdxName = testMod + '-idx'
-                refIdxName = refMod + '-idx'
-
-        else:
-            testIdxName = 'sentence-idx'
-            refIdxName = 'sentence-idx'
-
+        ## THERE WILL BE DEFAULT SELECT IN INTERFACE
+#         if not re.match('\dgram-idx', Group):
+#             if not args['testIdxMod'] == '':
+#                 testIdxName = testMod + '-idx'
+#                 refIdxName = refMod + '-idx'
+# 
+#         else:
+#             testIdxName = 'sentence-idx'
+#             refIdxName = 'sentence-idx'
 
         methodArgs.insert(2, refIdxName)
         methodArgs.insert(3, refbook_collection)
@@ -130,12 +130,15 @@ def processArgs(args, method):
 
         testIdxName = testMod + '-idx'
         wordWindow = str(args['wordWindow'])
+        book_collection = args.getlist('testCollection')
+        select_words = str(args['selectWords'])
+        print select_words
 
         methodArgs.insert(0, str(args['terms']))
         methodArgs.insert(1, testIdxName)
         methodArgs.insert(2, wordWindow)
-
-        return methodArgs
+        methodArgs.insert(3, book_collection)    
+        methodArgs.insert(4, select_words)    
 
 
     return methodArgs

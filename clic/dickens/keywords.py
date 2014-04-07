@@ -129,17 +129,37 @@ class Keywords(object):
             ## 2. Log Likelihood
             ## Compare actual observations with expected ocurrence for both test and ref, and add these values
             ## Use log1p() (for natural logarithm - ln) instead of log()
-            try:
-                LL = 2*((freqTest*log1p(freqTest/expectedTest)) + (freqRef*log1p(freqRef/expectedRef)))
-            except:
-                LL = 909090
-                  
-            #print '%s\t%d\t%d\t%.2f' % (i.queryTerm, freqTest, freqRef, LL) 
-            ## only print if occurence > 5
-            if freqTest > 5:
-#                 KW = '%s\t%d\t%d\t%.2f\t%.2f' % (i.queryTerm, freqTest, freqRef, LL, refTestRatio)
-#                 KW_list = ''.join(KW_list + '\n' + KW)
-                kw_list.append([term, freqTest, freqRef, LL])
+            if freqTest*log1p(freqTest/expectedTest) >= freqRef*log1p(freqRef/expectedRef):
+                try:
+                    LL = 2*((freqTest*log1p(freqTest/expectedTest)) + (freqRef*log1p(freqRef/expectedRef)))
+                    LL = '%.3f' % LL
+                except:
+                    LL = 909090
+            else:
+                try:
+                    LL = -2*((freqTest*log1p(freqTest/expectedTest)) + (freqRef*log1p(freqRef/expectedRef)))
+                    LL = '%.3f' % LL
+                except:
+                    LL = 909090
+            
+            if freqRef == 5.0e-324:
+                freqRef2 = 0
+            else:
+                freqRef2 = int('%.0f' % freqRef)
+                
+            if float(LL) > 15.13 or float(LL) < -15.13:
+                p_value = 0.0001
+            else:
+                p_value = 0.001            
+           
+            dec_Test = '%.2f' % freqTest
+            dec_Ref = '%.2f' % freqRef
+            propTest = float(dec_Test)/100
+            propRef = float(dec_Ref)/100
+           
+            ## only print if occurence > 3
+            if freqTest > 3 and p_value == 0.0001:
+                kw_list.append([term, freqTest, propTest, freqRef2, propRef, LL, p_value])
 
         return kw_list
                                             

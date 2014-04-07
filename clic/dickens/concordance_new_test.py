@@ -1,5 +1,7 @@
 import os
 import re
+import timeit
+import json
 
 from cheshire3.document import StringDocument
 from cheshire3.internal import cheshire3Root
@@ -8,16 +10,27 @@ from cheshire3.baseObjects import Session
 
 from dickens.concordance_new import Concordancer_New
 
-terms = 'be with you'
+terms = 'hands'
 #terms = 'youthful'
-#idxName = 'quote-idx'
+#idxName = 'non-quote-idx'
 #idxName = 'sentence-idx'
 idxName = 'chapter-idx'
-Materials = ['BH']
-wordWindow = 20
+Materials = ['dickens']
+wordWindow = 10
+selectWords = 'whole'
 
-concordance = Concordancer_New()
+args = [terms, idxName, wordWindow, Materials, selectWords]
 
-conc = concordance.create_concordance(terms, idxName, wordWindow)#, Materials)
+def getConcordance(args):
 
-#print conc
+    concordance = Concordancer_New()     
+    conc = concordance.create_concordance(args[0], args[1], args[2], args[3], args[4])
+    return {'concordances' : conc}
+
+x = json.dumps(getConcordance(args))
+print x
+
+filewrite = open('/home/aezros/concordance_300hits', 'w')
+filewrite.write(x)
+
+

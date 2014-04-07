@@ -41,16 +41,19 @@ class Clusters(object):
                                        ' or '.join(clauses)
                                        )        
         results = db.search(session, query)
+        print len(results)
         
         idx = db.get_object(session, idxName)
         facets = idx.facets(session, results)
         dict = {}
         for x in facets:
-            dict[x[0]] = x[1][2] 
-            
+            dict[x[0]] = x[1][2]             
+                  
+                   
         cluster_list = []
         for term, freq in dict.iteritems():
             if freq >= 2:
-                cluster_list.append([term, freq])      
-        
+                prop = (float(freq)/float(len(dict))) * 100
+                cluster_list.append([term, freq, str(prop)[:5]])  
+
         return cluster_list
