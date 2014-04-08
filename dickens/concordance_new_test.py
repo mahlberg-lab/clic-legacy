@@ -2,6 +2,9 @@ import os
 import re
 import timeit
 import json
+import time
+
+start = time.time()
 
 from cheshire3.document import StringDocument
 from cheshire3.internal import cheshire3Root
@@ -21,16 +24,20 @@ selectWords = 'whole'
 
 args = [terms, idxName, wordWindow, Materials, selectWords]
 
-def getConcordance(args):
+def getConcordance(args):   
 
     concordance = Concordancer_New()     
     conc = concordance.create_concordance(args[0], args[1], args[2], args[3], args[4])
     return {'concordances' : conc}
 
-x = json.dumps(getConcordance(args))
-print x
+   
 
-filewrite = open('/home/aezros/concordance_300hits', 'w')
-filewrite.write(x)
+x = json.dumps(getConcordance(args))
+
+print x
+print "it took", time.time() - start, "seconds to execute the script"
+
+# filewrite = open('/home/aezros/concordance_300hits', 'w')
+# filewrite.write(x)
 
 

@@ -1,5 +1,6 @@
 import os
 import re
+import timeit
 
 from cheshire3.document import StringDocument
 from cheshire3.internal import cheshire3Root
@@ -208,11 +209,13 @@ class Concordancer_New(object):
                      
                     conc_lines.append(conc_line)
                     
-                if count > 200:
-                    break
+#                 if count > 20:
+#                     break
+                break
 
         conc_lines.insert(0, len(conc_lines))  
         return conc_lines
+    
                 
 
                             
