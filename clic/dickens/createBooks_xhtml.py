@@ -36,7 +36,8 @@ class Chapter_view(object):
 
         book = self.search_book(book_results)        
         
-        chapter_list = [] ## one list per chapter
+        #chapter_list = [] ## one list per chapter
+        chapter_dict = {}
         for ch in book:
             
             rec = ch.fetch_record(session)
@@ -90,12 +91,11 @@ class Chapter_view(object):
                                '</body>' + '\n\n' +
                                '</html>')
             
-            chapter_list.append(chapter)
-            chapter_list.append(ch_number)
-            print ch_number
+            chapter_dict[chapter] = ch_number
+            print tree.xpath('//div')[0].get('book'), ch_number
             #break
             
-        return chapter_list
+        return chapter_dict
             
 
 

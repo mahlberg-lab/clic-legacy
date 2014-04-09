@@ -211,20 +211,26 @@ class Concordancer_New(object):
                     word_book = count_word + int(word_chap)
                     
                     left = re.split('\s|$', left_text[0])   
+                    if left[-1] == '':
+                        left = left[0:len(left)-1]
                     node = re.split('\s|$', node_text[0]) 
+                    if node[-1] == '':
+                        node = node[0:len(node)-1]
                     right = re.split('\s|$', right_text[0]) 
+                    if right[-1] == '':
+                        right = right[0:len(right)-1]
 #                     conc_line = [re.split('\s|^|$', left_text[0]), re.split('\s|^|$', node_text[0]), re.split('\s|^|$', right_text[0]),
 #                                 [book, book_title, chapter, para_chap, sent_chap, word_chap],
 #                                 [para_book, sent_book, word_book, total_word]]
 
-                    conc_line = [left[0:len(left)-1], node[0:len(node)-1], right[0:len(right)-1],
+                    conc_line = [left, node, right,
                                 [book, book_title, chapter, para_chap, sent_chap, str(word_chap)],
                                 [str(para_book), str(sent_book), str(word_book), str(total_word)]]
                      
                     conc_lines.append(conc_line)
                     
-                if count > 25:
-                    break
+#                 if count > 25:
+#                     break
 
 
         conc_lines.insert(0, len(conc_lines))  
