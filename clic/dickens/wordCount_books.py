@@ -8,6 +8,8 @@ from cheshire3.internal import cheshire3Root
 from cheshire3.server import SimpleServer
 from cheshire3.baseObjects import Session
 
+print cheshire3Root
+
 session = Session()
 session.database = 'db_dickens'
 serv = SimpleServer(session,

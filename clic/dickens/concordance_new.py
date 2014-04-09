@@ -11,7 +11,7 @@ from lxml import etree
 
 import json
 
-booklist_r = open('/home/aezros/clic/dickens/booklist', 'r')
+booklist_r = open('/home/aezros/clic/clic/dickens/booklist', 'r')
 booklist = json.load(booklist_r)
 
 class Concordancer_New(object):
@@ -177,7 +177,7 @@ class Concordancer_New(object):
 
                     #conc_line = [re.split('\s|^|$', left_text[0]), re.split('\s|^|$', node_text[0]), re.split('\s|^|$', right_text[0])]
                     
-                    ###
+                    ### 
                     book = tree.xpath('//div')[0].get('book')
                     chapter = tree.xpath('//div')[0].get('num')
                     para_chap = tree.xpath('//div//descendant::w[%d+1]/ancestor-or-self::p' % w)[0].get('pid')
@@ -188,9 +188,14 @@ class Concordancer_New(object):
                     count_para = 0
                     count_sent = 0
                     count_word = 0
+                    booktitle = []
+                    total_word = []
                     for b in booklist:
                         if b[0][0] == book:
-          
+                            
+                            booktitle.append(b[0][1])
+                            total_word.append(b[1][0][2])
+                                      
                             for j, c in enumerate(b[2]):
                                 while j+1 < int(chapter):
                                     count_para = count_para + int(c[0])
@@ -198,20 +203,29 @@ class Concordancer_New(object):
                                     count_word = count_word + int(c[2])
                                     j += 1
                                     break
-                              
+                    
+                    book_title = booktitle[0]   ## get book title 
+                    total_word = total_word[0]     
                     para_book = count_para + int(para_chap)       
                     sent_book = count_sent + int(sent_chap)  
-                    word_book = count_word + int(word_chap)    
+                    word_book = count_word + int(word_chap)
+                    
+                    left = re.split('\s|$', left_text[0])   
+                    node = re.split('\s|$', node_text[0]) 
+                    right = re.split('\s|$', right_text[0]) 
+#                     conc_line = [re.split('\s|^|$', left_text[0]), re.split('\s|^|$', node_text[0]), re.split('\s|^|$', right_text[0]),
+#                                 [book, book_title, chapter, para_chap, sent_chap, word_chap],
+#                                 [para_book, sent_book, word_book, total_word]]
 
-                    conc_line = [re.split('\s|^|$', left_text[0]), re.split('\s|^|$', node_text[0]), re.split('\s|^|$', right_text[0]),
-                                [book, chapter, para_chap, sent_chap, word_chap],
-                                [para_book, sent_book, word_book]]
+                    conc_line = [left[0:len(left)-1], node[0:len(node)-1], right[0:len(right)-1],
+                                [book, book_title, chapter, para_chap, sent_chap, str(word_chap)],
+                                [str(para_book), str(sent_book), str(word_book), str(total_word)]]
                      
                     conc_lines.append(conc_line)
                     
-#                 if count > 20:
-#                     break
-                break
+                if count > 25:
+                    break
+
 
         conc_lines.insert(0, len(conc_lines))  
         return conc_lines

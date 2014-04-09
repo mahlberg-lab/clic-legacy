@@ -11,7 +11,7 @@ from cheshire3.internal import cheshire3Root
 from cheshire3.server import SimpleServer
 from cheshire3.baseObjects import Session
 
-from dickens.concordance_new import Concordancer_New
+from clic.dickens.concordance_new import Concordancer_New
 
 terms = 'hands'
 #terms = 'youthful'
