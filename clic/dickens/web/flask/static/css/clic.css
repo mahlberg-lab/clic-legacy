@@ -1,0 +1,33 @@
+body {
+    padding-top: 50px;
+}
+
+.chkBooklist {
+    bottom: 5px;
+    position: relative;
+    right: 20px;
+}
+
+.checkbox.chkBooklist input {
+    position: relative;
+    top: 5px;
+}
+
+div#booksModal.modal .allChkLabel {
+    font-size: 24px;
+}
+
+#booksModal .modal-dialog, #booksModalTestMaterial .modal-dialog, #booksModalRefMaterial .modal-dialog
+{
+    width: 950px;
+}
+
+
+.clicSelectSmallLabel {
+    margin-right: 10px;
+    position: relative;
+    top: 4px;
+}
+.clicSelectSmall {
+    width: 40%;
+}

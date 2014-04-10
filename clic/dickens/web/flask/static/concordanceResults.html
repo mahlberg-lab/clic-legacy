@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../assets/ico/favicon.ico">
+
+    <title>CLiC - Results</title>
+
+    <script type="text/javascript">
+        var pageLoad = (new Date()).getTime();
+    </script>
+
+    <!-- Bootstrap core CSS -->
+    <link href="dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!--Custom CSS-->
+    <link href="css/clic.css" rel="stylesheet">
+
+    <!-- DataTables theme -->
+    <link href="js/thirdparty/DataTables-1.9.4/media/css/jquery.dataTables.css" rel="stylesheet">
+
+    <!--<script src="js/thirdparty/pace-0.5.1/pace.min.js"></script>-->
+    <script src='js/thirdparty/pace-0.5.1/pace.min.js'></script>
+    <link href="js/thirdparty/pace-0.5.1/themes/pace-theme-loading-bar.css" rel="stylesheet"/>
+
+    <!--[if lt IE 9]>
+    <script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <style type="text/css">
+
+        #stats {
+            padding: 10px;
+            border: dotted 1px grey;
+            margin: 10px auto 0 auto;
+            width: 50%;
+        }
+
+        h1 {
+            font-size: 40px;
+            margin-bottom: 0px
+        }
+
+        .skinny {
+            line-height: 14px;
+        }
+
+        .skinny > li > a {
+            padding: 3px 15px !important;
+        }
+
+        .concordancexx {
+            text-align: center;
+            overflow: hidden;
+            white-space: nowrap;
+            padding-right: 1em;
+            border-right: 4px solid #ccc;
+        }
+
+        .concordance2 {
+            text-align: center;
+            max-width: 600px;
+            overflow: hidden;
+            white-space: nowrap;
+            padding-right: 1em;
+        }
+
+        tdXXX {
+            max-height: 1em;
+            white-space: nowrap;
+        }
+
+        .hilight {
+            background: #C5FFB8 !important;
+            text-align: center
+        }
+
+        .rightXXX {
+            text-align: left;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            max-width: 300px
+        }
+
+        .leftXXX {
+            text-align: right;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            max-width: 300px
+        }
+
+        th {
+            border-bottom: 3px solid #666
+        }
+
+        .highlight {
+            background: #D9EDF7;
+            padding: 2px 6px;
+            margin: 0 0.5em;
+        }
+    </style>
+
+</head>
+
+<body>
+
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">CLiC</a>
+        </div>
+        <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="index.html">Home</a></li>
+                <li class="active"><a href="concordance.html">Concordance</a></li>
+                <li><a href="keywords.html">Keywords</a></li>
+                <li><a href="clusters.html">Clusters</a></li>
+                <li><a href="about.html">About</a></li>
+            </ul>
+        </div>
+        <!--/.nav-collapse -->
+    </div>
+</div>
+
+<!--container-->
+<div class="container">
+
+    <h3 id="concordanceResults">Concordance Results List</h3>
+
+    <div class="row">
+
+        <div id="resultsHeader">
+            <div id="switchView">View: <a href="#" id="kwicView">KWIC</a> | <a href="#" id="plotView">Plot</a> | <a
+                    href="#" id="statsView">Statistics</a></div>
+        </div>
+
+        <table width="80%" class="table table-hover" id="dataTable">
+            <thead>
+            <tr>
+                <th></th>
+                <th>Left</th>
+                <th>Node</th>
+                <th>Right</th>
+                <th>Book</th>
+                <th>Ch</th>
+                <th>Para</th>
+                <th>Sent</th>
+                <th>%</th>
+            </tr>
+            </thead>
+
+            <tbody id="resultsTbody"></tbody>
+
+        </table>
+
+
+    </div>
+
+    <br><br>
+
+    <div id="stats"></div>
+</div>
+</div>
+<!-- /.container -->
+
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+<script src="dist/js/bootstrap.min.js"></script>
+
+
+<!--Generic JS-->
+<script src="js/clic.js"></script>
+
+<!-- datatables plugin http://www.datatables.net/ -->
+<script src="js/thirdparty/DataTables-1.9.4/media/js/jquery.dataTables.min.js"></script>
+
+
+<!--<script src="js/thirdparty/tablesorter/js/jquery.tablesorter.min.js"></script>-->
+
+<script>
+    $(function () {
+
+        // custom sort functions see http://www.datatables.net/release-datatables/examples/basic_init/multi_col_sort.html
+        jQuery.fn.dataTableExt.oSort['string-case-asc'] = function (x, y) {
+            return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+        };
+
+        jQuery.fn.dataTableExt.oSort['string-case-desc'] = function (x, y) {
+            return ((x < y) ? 1 : ((x > y) ? -1 : 0));
+        };
+
+        /* new sort on L1 */
+//        jQuery.fn.dataTableExt.oSort['string-L1-asc'] = function (x, y) {
+//            var xwords = x.split(' ');
+//            var ywords = y.split(' ');
+//            return ((xwords[xwords.length - 1] < ywords[ywords.length - 1]) ? -1 : ((xwords[xwords.length - 1] > ywords[ywords.length - 1]) ? 1 : 0));
+//        };
+//
+//        jQuery.fn.dataTableExt.oSort['string-L1-desc'] = function (x, y) {
+//            var xwords = x.split(' ');
+//            var ywords = y.split(' ');
+//            return ((xwords[0] < ywords[0]) ? 1 : ((xwords[0] > ywords[0]) ? -1 : 0));
+//        };
+
+        jQuery.fn.dataTableExt.oSort['string-L1-asc'] = function (x, y) {
+            var xwords = x.split(' ');
+            var ywords = y.split(' ');
+            return ((xwords[10] < ywords[10]) ? -1 : ((xwords[10] > ywords[10]) ? 1 : 0));
+        };
+
+        jQuery.fn.dataTableExt.oSort['string-L1-desc'] = function (x, y) {
+            var xwords = x.split(' ');
+            var ywords = y.split(' ');
+            return ((xwords[10] < ywords[10]) ? 1 : ((xwords[10] > ywords[10]) ? -1 : 0));
+        };
+
+
+        /* new sort on R1 */
+        jQuery.fn.dataTableExt.oSort['string-R1-asc'] = function (x, y) {
+            var xwords = x.split(' ');
+            var ywords = y.split(' ');
+            return ((xwords[0] < ywords[0]) ? -1 : ((xwords[0] > ywords[0]) ? 1 : 0));
+        };
+
+        jQuery.fn.dataTableExt.oSort['string-R1-desc'] = function (x, y) {
+            var xwords = x.split(' ');
+            var ywords = y.split(' ');
+            return ((xwords[0] < ywords[0]) ? 1 : ((xwords[0] > ywords[0]) ? -1 : 0));
+        };
+
+        showConcordance();
+
+        // CONCORDANCE VIEW
+        function showConcordance() {
+            $.ajax({
+                url: 'exampleJson/concordances200Hits.json',
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+
+                    // start timer
+                    var start = (new Date).getTime();
+
+                    var content = '';
+                    // loop out values
+                    for (var x = 1; x < data.concordances.length; x++) {
+                        var wordsLhs = '';
+                        var wordsRhs = '';
+                        content += '<tr>';
+                        // counter
+                        content += '<td>' + x + '</td>';
+                        // words left
+                        for (var s = 0; s < data.concordances[x][0].length; s++) {
+                            wordsLhs += data.concordances[x][0][s] + ' ';
+                        }
+                        content += '<td class="left">' + wordsLhs + '</td>';
+                        // search term
+                        content += '<td class="hilight">' + data.concordances[x][1][0] + '</td>';
+                        // words right
+                        for (var s = 0; s < data.concordances[x][2].length; s++) {
+                            wordsRhs += data.concordances[x][2][s] + ' ';
+                        }
+                        content += '<td class="right">' + wordsRhs + '</td>';
+                        //Book Title
+                        content += '<td>' + data.concordances[x][3][1] + '</td>';
+                        // Chapter
+                        content += '<td>' + data.concordances[x][3][2] + '</td>';
+                        // Paragraph
+                        content += '<td>' + data.concordances[x][3][3] + '</td>';
+                        // Sentence
+                        content += '<td>' + data.concordances[x][3][4] + '</td>';
+                        // % Words in chapter = Word No. in Book / Total words in Book
+                        var wordsInChapter = (data.concordances[x][4][2] / data.concordances[x][4][3]) * 100;
+                        content += '<td>' + Math.round(wordsInChapter) + '%</td>';
+                        content += '</tr>';
+                    }
+
+                    var end = (new Date).getTime();
+                    $('#stats').append('Time to parse JSON : ' + (end - start) / 1000 + ' seconds<br>');
+                    //                console.log(content);
+                    $('#resultsTbody').html(content);
+
+                    $('#dataTable').dataTable({
+
+                        // counter on column0, recounts when filter see http://www.datatables.net/release-datatables/examples/api/counter_column.html
+                        "fnDrawCallback": function (oSettings) {
+                            var that = this;
+
+                            /* Need to redo the counters if filtered or sorted */
+                            if (oSettings.bSorted || oSettings.bFiltered) {
+                                this.$('td:first-child', {"filter": "applied"}).each(function (i) {
+                                    that.fnUpdate(i + 1, this.parentNode, 0, false, false);
+                                });
+                            }
+                        },
+
+                        // filter & sort, dont paginate, dont sort frst (index) column, only search/filter on Left/Node/Right
+
+                        "bFilter": true,
+                        "bSort": true,
+                        "bPaginate": false,
+                        "aoColumnDefs": [
+                            { "bSortable": false, "aTargets": [ 0 ] },
+                            { "bSearchable": false, "aTargets": [0, 4, 5, 6, 7, 8 ] },
+                            // custom sort Left using L1; right using R1
+                            { "sType": "string-L1", "aTargets": [ 1 ] },
+                            { "sType": "string-R1", "aTargets": [ 3 ] }
+                        ],
+                        // change phrase on search box (as now limited to just concordance)
+                        "oLanguage": {
+                            "sSearch": "Filter concordance:"
+                        }
+                    });
+                },
+                error: function (e) {
+                    //called when there is an error
+                    console.log(e.message);
+                    alert("error retrieving JSON");
+                }
+            });
+        }
+
+
+        // STATS VIEW
+
+
+
+
+
+        // SWITCH VIEWS
+        $('#kwicView').click(function () {
+            $('#concordanceResults').text('Results List');
+            $("#dataTable").dataTable().fnDestroy(); //destroy first
+            showConcordance();
+        });
+        $('#plotView').click(function () {
+            $('#concordanceResults').text('Results Plot');
+            alert('Plot View');
+        });
+        $('#statsView').click(function () {
+            $('#concordanceResults').text('Results Statistics');
+        });
+
+
+
+        $(window).load(function () {
+            var end = (new Date).getTime();
+            $('#stats').append('Time to load page : ' + (end - pageLoad) / 1000 + ' seconds<br>');
+        });
+
+
+    });
+</script>
+
+
+</body>
+</html>

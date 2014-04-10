@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>DataTables - CLiC</title>
+
+    <!-- Bootstrap -->
+    <link href="/bootstrap-3.1.1/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Font Awseome for facet ticks etc -->
+    <link href="/bootstrap-3.1.1/font-awesome.css" rel="stylesheet">
+
+    <!-- DataTables theme -->
+    <link href="/js/DataTables-1.9.4/media/css/jquery.dataTables.css" rel="stylesheet">
+
+    <!-- pace loading gif http://github.hubspot.com/pace/docs/welcome/ -->
+    <script src="/js/pace.min.js"></script>
+    <link href="/js/pace.loadingBar.css" rel="stylesheet" />
+
+    <style type="text/css">
+        h1					{font-size: 40px; margin-bottom: 0px}
+        .skinny				{line-height: 14px;}
+        .skinny	> li > a 	{padding: 3px 15px !important;}
+
+        .concordancexx		{text-align: center; overflow: hidden; white-space:nowrap; padding-right: 1em; border-right: 4px solid #ccc;}
+
+        .concordance2		{text-align: center; max-width: 600px; overflow: hidden; white-space:nowrap; padding-right: 1em; }
+
+        tdXXX					{max-height: 1em; white-space:nowrap;}
+        .hilight			{background: #C5FFB8 !important; text-align: center}
+        .rightXXX				{text-align: left;  overflow: hidden; text-overflow:ellipsis; white-space:nowrap;  max-width: 300px }
+        .leftXXX				{text-align: right; overflow: hidden; text-overflow:ellipsis; white-space:nowrap;  max-width: 300px }
+
+        th					{border-bottom: 3px solid #666}
+        .highlight			{background: #D9EDF7;  padding: 2px 6px; margin: 0 0.5em;}
+    </style>
+
+</head>
+<body>
+<!-- NAVBAR -->
+<div class="navbar navbar-inverse" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">DataTables Example - CLiC</a>
+        </div>
+        <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <!-- <li class="active"><a href="mapExamples.php?page=UK Map">UK Map</a></li><li><a href="mapExamples.php?page=UK Heatmap">UK Heatmap</a></li><li><a href="mapExamples.php?page=World Map Few">World Map Few</a></li><li><a href="mapExamples.php?page=World Heatmap Few">World Heatmap Few</a></li><li><a href="mapExamples.php?page=World Map">World Map</a></li><li><a href="mapExamples.php?page=World Heatmap">World Heatmap</a></li><li><a href="mapExamples.php?page=Choropleth">Choropleth</a></li><li><a href="mapExamples.php?page=Country">Country</a></li>    -->
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div>
+</div>
+
+<!-- CONTENT -->
+<div class="container">
+
+    <div class="row">
+
+        <h2>Sortable columns</h2>
+
+        <table width="80%" class="table table-hover" id="dataTable">
+            <thead>
+            <tr>
+                <th> </th>
+                <th>Left</th>
+                <th>Node</th>
+                <th>Right</th>
+                <th>Book</th>
+                <th>Ch</th>
+                <th>Para</th>
+                <th>Sent</th>
+                <th>%</th>
+            </tr>
+            </thead>
+
+            <tbody>
+
+            <tr><td>	1	</td><td  class="left">	 "Take the pencil and write under my name, 'I forgive her.'" Chapter 50 My little</td><td class="hilight">hands</td><td class="right"> had been dressed twice or thrice in the night, and again in the morni	</td><td>	Great Expectations	</td><td>	4	</td><td>	7	</td><td>	9	</td><td>	26%	</td></tr>
+            <tr><td>	2	</td><td  class="left">	as it on; not on her fair neck, but loose upon her flowing figure. A dozen</td><td class="hilight">hands</td><td class="right"> assist her. She is all confusion. The youngest gentleman in company t	</td><td>	Martin Chuzzlewit	</td><td>	1	</td><td>	2	</td><td>	3	</td><td>	67%	</td></tr>
+            <tr><td>	3	</td><td  class="left">	f whose clothes, and fashion of whose jewellery, whispers go about, behind</td><td class="hilight">hands</td><td class="right">; the bilious Bitherstone, who is not of Mr Toots's time, affecting to	</td><td>	Dombey and Son	</td><td>	6	</td><td>	9	</td><td>	12	</td><td>	50%	</td></tr>
+            <tr><td>	4	</td><td  class="left">	riah. 'Oh, no! I'm a very umble person.' It was no fancy of mine about his</td><td class="hilight">hands</td><td class="right">, I observed; for he frequently ground the palms against each other as	</td><td>	David Copperfield	</td><td>	3	</td><td>	4	</td><td>	6	</td><td>	25%	</td></tr>
+            <tr><td>	5	</td><td  class="left">	e I have heard that song the last time?' With his rapid native action, his</td><td class="hilight">hands</td><td class="right"> made the outline of a high hook nose, pushed his eyes near together, 	</td><td>	Little Dorrit	</td><td>	7	</td><td>	11	</td><td>	15	</td><td>	17%	</td></tr>
+            <tr><td>	6	</td><td  class="left">	ace while he was out, and I accompanied him into the street, after shaking</td><td class="hilight">hands</td><td class="right"> With my guardian. We found a new set of people lingering outside, but	</td><td>	Great Expectations	</td><td>	2	</td><td>	3	</td><td>	4	</td><td>	90%	</td></tr>
+            <tr><td>	7	</td><td  class="left">	 mentioned by name,' she very readily accepted the proposal. After shaking</td><td class="hilight">hands</td><td class="right"> With Mr Toodle and Polly, and kissing all the children, Miss Tox left	</td><td>	Dombey and Son	</td><td>	6	</td><td>	8	</td><td>	11	</td><td>	8%	</td></tr>
+            <tr><td>	8	</td><td  class="left">	d taking leave of them there. The collegian under treatment, after shaking</td><td class="hilight">hands</td><td class="right">, would occasionally stop to wrap up something in a bit of paper, and 	</td><td>	Little Dorrit	</td><td>	1	</td><td>	1	</td><td>	2	</td><td>	30%	</td></tr>
+            <tr><td>	9	</td><td  class="left">	hind a large crimson bag, which he placed on his table, and, after shaking</td><td class="hilight">hands</td><td class="right"> with Perker, withdrew. Then there entered two or three more Serjeants	</td><td>	Pickwick Papers	</td><td>	7	</td><td>	10	</td><td>	13	</td><td>	88%	</td></tr>
+            <tr><td>	10	</td><td  class="left">	t out; and on my answering 'Yes,' instantly extinguished it. After shaking</td><td class="hilight">hands</td><td class="right"> with me - his hand felt like a fish, in the dark - he opened the door	</td><td>	David Copperfield	</td><td>	3	</td><td>	4	</td><td>	6	</td><td>	7%	</td></tr>
+            <tr><td>	11	</td><td  class="left">	thus far, the two old gentlemen severally took snuff, and afterwards shook</td><td class="hilight">hands</td><td class="right">, according to their invariable custom. 'Now, Miss Maylie,' said Mr. B	</td><td>	Oliver Twist	</td><td>	4	</td><td>	6	</td><td>	8	</td><td>	76%	</td></tr>
+            <tr><td>	12	</td><td  class="left">	s to say it this time, after observing these operations. They again joined</td><td class="hilight">hands</td><td class="right">. "To-night?" said the mender of roads. "To-night," said the man, putt	</td><td>	A Tale of Two Cities	</td><td>	2	</td><td>	4	</td><td>	5	</td><td>	100%	</td></tr>
+            <tr><td>	13	</td><td  class="left">	eable as I could. Wemmick came down to the door with me, and I again shook</td><td class="hilight">hands</td><td class="right"> with him, and wished him joy. "Thankee!" said Wemmick, rubbing his ha	</td><td>	Great Expectations	</td><td>	5	</td><td>	8	</td><td>	10	</td><td>	70%	</td></tr>
+            <tr><td>	14	</td><td  class="left">	rk, 'You know better what it ought to be than I do, Wegg,' and again shook</td><td class="hilight">hands</td><td class="right"> with him upon it. 'Could you begin to night, Wegg?' he then demanded.	</td><td>	Our Mutual Friend	</td><td>	1	</td><td>	1	</td><td>	1	</td><td>	89%	</td></tr>
+            <tr><td>	15	</td><td  class="left">	made'em fast to the chaise, to prevent his giving us the slip again.' With</td><td class="hilight">hands</td><td class="right"> trembling with delight, Squeers unloosened the cord; and Smike, to al	</td><td>	Nicholas Nickleby	</td><td>	1	</td><td>	2	</td><td>	3	</td><td>	6%	</td></tr>
+            <tr><td>	16	</td><td  class="left">	at he did not know what to say or do, but kept over and over again shaking</td><td class="hilight">hands</td><td class="right"> with me, and then with Steerforth, and then with me, and then rufflin	</td><td>	David Copperfield	</td><td>	4	</td><td>	6	</td><td>	8	</td><td>	44%	</td></tr>
+            <tr><td>	17	</td><td  class="left">	 as exemplified in his so soon dropping into poetry, Mr Boffin again shook</td><td class="hilight">hands</td><td class="right"> with that ligneous sharper, and besought him to name his hour. Mr Weg	</td><td>	Our Mutual Friend	</td><td>	1	</td><td>	1	</td><td>	1	</td><td>	73%	</td></tr>
+            <tr><td>	18	</td><td  class="left">	calculation of the date it may bear, implying scant effects in the agent's</td><td class="hilight">hands</td><td class="right">. All the while, Vholes, buttoned up in body and mind, looks at him at	</td><td>	Bleak House	</td><td>	8	</td><td>	12	</td><td>	15	</td><td>	100%	</td></tr>
+            <tr><td>	19	</td><td  class="left">	ve gone down into the country for a whole year, and lived with Agnes!' Her</td><td class="hilight">hands</td><td class="right"> were clasped upon my shoulder, and her chin rested on them, and her b	</td><td>	David Copperfield	</td><td>	8	</td><td>	12	</td><td>	17	</td><td>	14%	</td></tr>
+            <tr><td>	20	</td><td  class="left">	am shouted: 'Mas'r Davy! It's Mas'r Davy!' In a moment we were all shaking</td><td class="hilight">hands</td><td class="right"> with one another, and asking one another how we did, and telling one 	</td><td>	David Copperfield	</td><td>	4	</td><td>	6	</td><td>	8	</td><td>	26%	</td></tr>
+            <tr><td>	21	</td><td  class="left">	fter dozen, score after score, more, more, more, up they came; all shaking</td><td class="hilight">hands</td><td class="right"> with Martin. Such varieties of hand s, the thick, the thin, the short,	</td><td>	Martin Chuzzlewit	</td><td>	4	</td><td>	6	</td><td>	8	</td><td>	92%	</td></tr>
+
+            <tbody>
+        </table>
+
+        <h2>Plain table</h2>
+
+        <table width="80%" class="table table-striped table-hover">
+            <thead>
+            <tr>
+                <th> </th>
+                <th class="concordance2">Concordance</th>
+                <th>Book</th>
+                <th>Ch</th>
+                <th>Para</th>
+                <th>Sent</th>
+                <th>%</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr>
+                <td>1</td>
+                <td class="concordance2">"Take the pencil and write under my name, 'I forgive her.'" Chapter 50 My <span class="highlight">hands</span> had been dressed twice or thrice in the night, and again in the morni</td>
+                <td>Great Expectations</td>
+                <td>4</td>
+                <td>7</td>
+                <td>9</td>
+                <td>26%</td>
+            </tr>
+
+            <tr>
+                <td>2</td>
+                <td class="concordance2">as it on; not on her fair neck, but loose upon her flowing figure. A dozen <span class="highlight">hands</span> assist her. She is all confusion. The youngest gentleman in company t</td>
+                <td>Martin Chuzzlewit</td>
+                <td>1</td>
+                <td>2</td>
+                <td>3</td>
+                <td>67%</td>
+            </tr>
+            <tbody>
+        </table>
+
+        <!-- Javascript -->
+        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+        <!-- <script src="/jquery/jquery-1.11.0.min.js"></script> -->
+        <script src="/js/DataTables-1.9.4/media/js/jquery.js"></script>
+
+        <!-- Include all compiled plugins (below), or include individual files as needed -->
+        <script src="/bootstrap-3.1.1/js/bootstrap.min.js"></script>
+
+        <!-- datatables plugin http://www.datatables.net/ -->
+        <script src="/js/DataTables-1.9.4/media/js/jquery.dataTables.min.js"></script>
+
+
+        <script>
+            // custom sort functions see http://www.datatables.net/release-datatables/examples/basic_init/multi_col_sort.html
+            jQuery.fn.dataTableExt.oSort['string-case-asc']  = function(x,y) {
+                return ((x < y) ? -1 : ((x > y) ?  1 : 0));
+            };
+
+            jQuery.fn.dataTableExt.oSort['string-case-desc'] = function(x,y) {
+                return ((x < y) ?  1 : ((x > y) ? -1 : 0));
+            };
+
+            /* new sort on L1 */
+            jQuery.fn.dataTableExt.oSort['string-L1-asc']  = function(x,y) {
+                var xwords = x.split(' ');
+                var ywords = y.split(' ');
+                return ((xwords[xwords.length - 1] < ywords[ywords.length - 1]) ? -1 : ((xwords[xwords.length - 1] > ywords[ywords.length - 1]) ?  1 : 0));
+            };
+
+            jQuery.fn.dataTableExt.oSort['string-L1-desc'] = function(x,y) {
+                var xwords = x.split(' ');
+                var ywords = y.split(' ');
+                return ((xwords[0] < ywords[0]) ?  1 : ((xwords[0] > ywords[0]) ? -1 : 0));
+            };
+
+
+            /* new sort on R1 */
+            jQuery.fn.dataTableExt.oSort['string-R1-asc']  = function(x,y) {
+                var xwords = x.split(' ');
+                var ywords = y.split(' ');
+                return ((xwords[0] < ywords[0]) ? -1 : ((xwords[0] > ywords[0]) ?  1 : 0));
+            };
+
+            jQuery.fn.dataTableExt.oSort['string-R1-desc'] = function(x,y) {
+                var xwords = x.split(' ');
+                var ywords = y.split(' ');
+                return ((xwords[0] < ywords[0]) ?  1 : ((xwords[0] > ywords[0]) ? -1 : 0));
+            };
+
+
+            $(document).ready(function() {
+                $('#dataTable').dataTable( {
+                    // counter on column0, recounts when filter see http://www.datatables.net/release-datatables/examples/api/counter_column.html
+                    "fnDrawCallback": function ( oSettings ) {
+                        var that = this;
+
+                        /* Need to redo the counters if filtered or sorted */
+                        if ( oSettings.bSorted || oSettings.bFiltered )
+                        {
+                            this.$('td:first-child', {"filter":"applied"}).each( function (i) {
+                                that.fnUpdate( i+1, this.parentNode, 0, false, false );
+                            } );
+                        }
+                    },
+
+                    // filter & sort, dont paginate, dont sort frst (index) column, only search/filter on Left/Node/Right
+                    "bFilter": true,
+                    "bSort": true,
+                    "bPaginate": false,
+                    "aoColumnDefs": [
+                        { "bSortable": false, "aTargets": [ 0 ] },
+                        { "bSearchable": false, "aTargets": [0,4,5,6,7,8 ] },
+                        // custom sort Left using L1; right using R1
+                        { "sType": "string-L1", "aTargets": [ 1 ] },
+                        { "sType": "string-R1", "aTargets": [ 3 ] }
+                    ],
+                    // change phrase on search box (as now limited to just concordance)
+                    "oLanguage": {
+                        "sSearch": "Filter concordance:"
+                    }
+
+                } );
+            } );
+        </script>
+
+</body>
+</html>
