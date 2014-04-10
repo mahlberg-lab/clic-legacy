@@ -151,7 +151,7 @@
                     href="#" id="statsView">Statistics</a></div>
         </div>
 
-        <table width="80%" class="table table-hover" id="dataTable">
+        <table width="100%" class="table table-hover" id="dataTable">
             <thead>
             <tr>
                 <th></th>
@@ -162,7 +162,7 @@
                 <th>Ch</th>
                 <th>Para</th>
                 <th>Sent</th>
-                <th>%</th>
+                <th>In book</th>
             </tr>
             </thead>
 
@@ -292,18 +292,22 @@
                             wordsRhs += data.concordances[x][2][s] + ' ';
                         }
                         content += '<td class="right">' + wordsRhs + '</td>';
-                        //Book Title
-                        content += '<td>' + data.concordances[x][3][1] + '</td>';
+                        //Book ID
+                        content += '<td>' + data.concordances[x][3][0] + '</td>';
                         // Chapter
                         content += '<td>' + data.concordances[x][3][2] + '</td>';
                         // Paragraph
                         content += '<td>' + data.concordances[x][3][3] + '</td>';
                         // Sentence
                         content += '<td>' + data.concordances[x][3][4] + '</td>';
-                        // % Words in chapter = Word No. in Book / Total words in Book
+                        // % In book
                         var wordsInChapter = (data.concordances[x][4][2] / data.concordances[x][4][3]) * 100;
-                        content += '<td>' + Math.round(wordsInChapter) + '%</td>';
-                        content += '</tr>';
+                        var xVal = Math.round(wordsInChapter)/2;
+                        content += '<td><svg width="50px" height="15px" xmlns="http://www.w3.org/2000/svg">' +
+                                '<rect x="0" y="4" width="50" height="7" fill="#ccc"/>' +
+                                '<line x1="'+xVal+'" x2="'+xVal+'" y1="0" y2="15" stroke="black" stroke-width="2px"/>' +
+                                '</svg>';
+                        content += '</tr></td>';
                     }
 
                     var end = (new Date).getTime();

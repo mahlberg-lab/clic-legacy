@@ -10,10 +10,6 @@
 
     <title>CLiC - Results</title>
 
-    <script type="text/javascript">
-        var pageLoad = (new Date()).getTime();
-    </script>
-
     <!-- Bootstrap core CSS -->
     <link href="dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -36,7 +32,16 @@
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-
+    <style>
+        table.dataTable {
+            margin: 0;
+            width: auto;
+        }
+        .dataTables_filter {
+            float: left;
+            margin: 15px 0;
+        }
+    </style>
 
 </head>
 
@@ -73,11 +78,11 @@
 
     <div class="row">
 
-        <table width="60%" class="table table-hover" id="dataTable">
+        <table class="table table-hover" id="dataTable">
             <thead>
             <tr>
                 <th>No</th>
-                <th>Phrase</th>
+                <th>n-gram</th>
                 <th>Freq</th>
                 <th>%</th>
             </tr>
@@ -147,14 +152,33 @@
                 $('#resultsTbody').html(content);
 
                 // create Datatable
-                $('#dataTable').dataTable( {
+                var oTable = $('#dataTable').dataTable( {
+
+                    "fnDrawCallback": function (oSettings) {
+                        var that = this;
+
+                        /* Need to redo the counters if filtered or sorted */
+                        if (oSettings.bSorted || oSettings.bFiltered) {
+                            this.$('td:first-child', {"filter": "applied"}).each(function (i) {
+                                that.fnUpdate(i + 1, this.parentNode, 0, false, false);
+                            });
+                        }
+                    },
+
                     "bPaginate": false,
                     "bLengthChange": false,
-                    "bFilter": false,
+                    "bFilter": true,
                     "bSort": true,
-                    "bInfo": false,
-                    "bAutoWidth": true
+                    "aoColumnDefs": [
+                        { "bSearchable": false, "aTargets": [0,2,3] }
+                    ],
+                    // change phrase on search box
+                    "oLanguage": {
+                        "sSearch": "Filter n-gram:"
+                    }
                 } );
+                oTable.fnSort( [ [2,'desc'] ] ); //sort on freq desc
+
 
             },
             error: function(e)

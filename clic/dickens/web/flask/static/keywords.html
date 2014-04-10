@@ -352,16 +352,16 @@
         // All Dickens checkbox toggle within modal
         $(document).on("click", "#allDickensChk", function(event){
             if(this.checked) {
-                $(".chkDickens").prop('checked', true);
+                $("#booksModalTestMaterial .chkDickens").prop('checked', true);
             }else{
-                $(".chkDickens").prop('checked', false);
+                $("#booksModalTestMaterial .chkDickens").prop('checked', false);
             }
         });
 
 
         // All Dickens checkbox - toggle if all books selected/unselected
-        $(document).on("click", ".chkDickens", function(event){
-            if ($('.chkDickens:checked').length != $('.chkDickens').length) {
+        $(document).on("click", "#booksModalTestMaterial .chkDickens", function(event){
+            if ($('#booksModalTestMaterial .chkDickens:checked').length != $('#booksModalTestMaterial .chkDickens').length) {
                 $("#booksModalTestMaterial #allDickensChk").prop('checked', false);
             } else {
                 $("#booksModalTestMaterial #allDickensChk").prop('checked', true);
@@ -495,11 +495,11 @@
         })
 
         // All Dickens checkbox toggle within modal
-        $(document).on("click", "#allDickensChk", function(event){
+        $(document).on("click", "#booksModalRefMaterial #allDickensChk", function(event){
             if(this.checked) {
-                $(".chkDickens").prop('checked', true);
+                $("#booksModalRefMaterial .chkDickens").prop('checked', true);
             }else{
-                $(".chkDickens").prop('checked', false);
+                $("#booksModalRefMaterial .chkDickens").prop('checked', false);
             }
         });
 
