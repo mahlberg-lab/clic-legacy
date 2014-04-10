@@ -30,20 +30,19 @@ cache = CacheManager(**parse_cache_config_options(cache_opts))
 @app.route('/keywords/',methods=['GET'])
 def keywords():
     args = request.args
-    print args
-
     # put keywords into json
     keyword_result = fetchKeywords(args)
     #print keyword_result
     keywords = json.dumps(keyword_result)
+    return keywords
 
-    return render_template('keywords.html', keywords=keywords)
+    #return render_template('keywords.html', keywords=keywords)
 
 ## ajax route: for splitting screen
 @app.route('/ajax-keywords',methods=['GET'])
 def ajax_keyords():
     args = request.args
-    return json.dumps(fetchKeywords(args))
+    #return json.dumps(fetchKeywords(args))
 
 
 @app.route('/clusters/', methods=['GET'])
@@ -53,7 +52,7 @@ def clusters():
     clusters_result = fetchClusters(args)
     clusters = json.dumps(clusters_result)
 
-    return render_template('clusters.html', clusters=clusters)
+    #return render_template('clusters.html', clusters=clusters)
 
 @app.route('/concordances/',methods=['GET'])
 def concordances():
@@ -61,8 +60,9 @@ def concordances():
 
     concordances_result = fetchConcordance(args)
     concordances = json.dumps(concordances_result)
+    return concordances
 
-    return render_template('concordances.html', concordances=concordances)
+    #return render_template('concordances.html', concordances=concordances)
 
 
 #@cache.cache('keyword', expire=3600) ## expires after 3600 secs
