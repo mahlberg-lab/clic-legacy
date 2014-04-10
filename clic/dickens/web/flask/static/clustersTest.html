@@ -112,13 +112,9 @@
     $(function () {
 
         // Get URL params
-        // example call : /clusters/?testIdxGroup=3gram-idx&testIdxMod=quote&testCollection=GE
-
         var params = location.search;
-        console.log('/clusters/' + params);
 
         $.ajax({
-//            url: 'exampleJson/clusters_GE.json',
             url: '/clusters/' + params,
             type: 'GET',
             dataType: 'json',

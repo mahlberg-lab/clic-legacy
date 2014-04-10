@@ -252,8 +252,19 @@
 
         // CONCORDANCE VIEW
         function showConcordance() {
+
+            // Get URL params
+            var params = location.search;
+            var host = window.location.hostname;
+
+            if (host == 'http://dev.webapps.nottingham.ac.uk'){
+                jsonUrl = 'exampleJson/concordances200Hits.json';
+            } else {
+                jsonUrl = '/concordances/' + params; // from the app
+            }
+
             $.ajax({
-                url: 'exampleJson/concordances200Hits.json',
+                url: jsonUrl,
                 type: 'GET',
                 dataType: 'json',
                 success: function (data) {

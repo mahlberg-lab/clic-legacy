@@ -116,8 +116,18 @@
 <script>
     $(function () {
 
+        // Get URL params
+        var params = location.search;
+        var host = window.location.hostname;
+
+        if (host == 'http://dev.webapps.nottingham.ac.uk'){
+            jsonUrl = 'exampleJson/keywords_GE_quotes.json';
+        } else {
+            jsonUrl = '/keywords/' + params; // from the app
+        }
+
         $.ajax({
-            url: 'exampleJson/keywords_GE_quotes.json',
+            url: jsonUrl,
             type: 'GET',
             dataType: 'json',
             success: function(data)
