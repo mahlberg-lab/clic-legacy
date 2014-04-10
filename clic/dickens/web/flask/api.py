@@ -1,3 +1,4 @@
+from __future__ import absolute_import  ## help python find modules within clic package (see John H email 09.04.2014)
 from flask import Flask
 import json
 
@@ -10,9 +11,9 @@ from beaker.cache import CacheManager
 from beaker.util import parse_cache_config_options
 
 
-from dickens.keywords import Keywords
-from dickens.clusters import Clusters
-from dickens.concordance_new import Concordancer_New
+from clic.dickens.keywords import Keywords
+from clic.dickens.clusters import Clusters
+from clic.dickens.concordance_new import Concordancer_New
 
 from flask import request
 from flask import render_template
