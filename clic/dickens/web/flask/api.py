@@ -36,8 +36,6 @@ def keywords():
     keywords = json.dumps(keyword_result)
     return keywords
 
-    #return render_template('keywords.html', keywords=keywords)
-
 ## ajax route: for splitting screen
 @app.route('/ajax-keywords',methods=['GET'])
 def ajax_keyords():
@@ -49,10 +47,9 @@ def ajax_keyords():
 def clusters():
     args = request.args
     
-    clusters_result = fetchClusters(args)
+    clusters_result = fetchClusters(args)    
     clusters = json.dumps(clusters_result)
-
-    #return render_template('clusters.html', clusters=clusters)
+    return clusters
 
 @app.route('/concordances/',methods=['GET'])
 def concordances():
@@ -61,8 +58,6 @@ def concordances():
     concordances_result = fetchConcordance(args)
     concordances = json.dumps(concordances_result)
     return concordances
-
-    #return render_template('concordances.html', concordances=concordances)
 
 
 #@cache.cache('keyword', expire=3600) ## expires after 3600 secs
@@ -90,7 +85,7 @@ def fetchConcordance(args):
     concordancer = Concordancer_New()
     args = processArgs(args, 'concordances')
     print args
-    concordances = concordancer.create_concordance(args[0], args[1], args[2], args[3], args[4])
+    concordances = concordancer.create_concordance(args[0], args[1], args[2], args[3])
 
     return {'concordances' : concordances}
 
@@ -130,16 +125,16 @@ def processArgs(args, method):
     elif method == 'concordances':
 
         testIdxName = testMod + '-idx'
-        wordWindow = str(args['wordWindow'])
+        #wordWindow = str(args['wordWindow'])
         book_collection = args.getlist('testCollection')
         select_words = str(args['selectWords'])
         print select_words
 
         methodArgs.insert(0, str(args['terms']))
         methodArgs.insert(1, testIdxName)
-        methodArgs.insert(2, wordWindow)
-        methodArgs.insert(3, book_collection)    
-        methodArgs.insert(4, select_words)    
+        #methodArgs.insert(2, wordWindow) ## wordwindow set to 10 by default
+        methodArgs.insert(2, book_collection)    
+        methodArgs.insert(3, select_words)    
 
 
     return methodArgs

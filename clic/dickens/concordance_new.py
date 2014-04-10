@@ -28,7 +28,7 @@ class Concordancer_New(object):
         self.idxStore = self.db.get_object(self.session, 'indexStore')
         ## self.logger = self.db.get_object(self.session, 'concordanceLogger') ## TODO: add to dbs/dickens/config        
        
-    def create_concordance(self, terms, idxName, wordWindow, Materials, selectWords): 
+    def create_concordance(self, terms, idxName, Materials, selectWords): 
         ## create a list of lists containing each three contexts, and a list within those contexts containing each word
         session = self.session
         db = self.db
@@ -36,6 +36,7 @@ class Concordancer_New(object):
         
         extraSpaceElems = ['s']
         conc_lines = []
+        wordWindow = 10
         
         Dickens_vol = ['BH', 'BR', 'DC',
                         'DS', 'ED', 'GE', 'HT', 'ld', 'MC', 'NN',
