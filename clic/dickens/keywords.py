@@ -25,7 +25,7 @@ class Keywords(object):
         self.idxStore = self.db.get_object(self.session, 'indexStore')
         #self.logger = self.db.get_object(self.session, 'keywordLogger')
         
-    def list_keywords(self, testIdxName, testMaterials, refIdxName, refMaterials):
+    def list_keywords(self, testIdxName, testMaterials, refIdxName, refMaterials, pValue):
         #self.logger.log(10, 'CREATING KEYWORDS FOR RS: {0}'.format(id)) 
         #self.logger.log(10, ' '.join(testIdxName + testMaterials[0] + refIdxName + refMaterials[0]))
         session = self.session
@@ -159,7 +159,7 @@ class Keywords(object):
            
             ## only print if occurence > 3
             if freqTest > 3 and p_value == 0.0001:
-                kw_list.append([term, freqTest, propTest, freqRef2, propRef, LL, p_value])
+                kw_list.append([term, freqTest, propTest, freqRef2, propRef, LL, pValue])
 
         return kw_list
                                             

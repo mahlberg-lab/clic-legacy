@@ -65,7 +65,8 @@ def fetchKeywords(args):
 
     keyworder = Keywords()
     args = processArgs(args, 'keywords')
-    keywords = keyworder.list_keywords(args[0], args[1], args[2], args[3])
+    print args
+    keywords = keyworder.list_keywords(args[0], args[1], args[2], args[3], args[4])
     return {'keywords':keywords}
 
 #@cache.cache('cluster', expire=3600)
@@ -84,7 +85,6 @@ def fetchConcordance(args):
 
     concordancer = Concordancer_New()
     args = processArgs(args, 'concordances')
-    print args
     concordances = concordancer.create_concordance(args[0], args[1], args[2], args[3])
 
     return {'concordances' : concordances}
@@ -119,8 +119,11 @@ def processArgs(args, method):
 #             testIdxName = 'sentence-idx'
 #             refIdxName = 'sentence-idx'
 
+        pValue = str(args['pValue'])
+
         methodArgs.insert(2, refIdxName)
         methodArgs.insert(3, refbook_collection)
+        methodArgs.insert(4, pValue)
 
     elif method == 'concordances':
 
