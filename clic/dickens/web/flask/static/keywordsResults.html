@@ -17,7 +17,8 @@
     <link href="css/clic.css" rel="stylesheet">
 
     <!-- DataTables theme -->
-    <link href="js/thirdparty/DataTables-1.9.4/media/css/jquery.dataTables.css" rel="stylesheet">
+    <!--<link href="js/thirdparty/DataTables-1.9.4/media/css/jquery.dataTables.css" rel="stylesheet">-->
+    <link href="js/thirdparty/DataTables1.10.0-beta.2/media/css/dataTables.bootstrap.css" rel="stylesheet">
 
     <!--<script src="js/thirdparty/pace-0.5.1/pace.min.js"></script>-->
     <script src='js/thirdparty/pace-0.5.1/pace.min.js'></script>
@@ -33,15 +34,34 @@
     <![endif]-->
 
     <style>
-        table.dataTable {
-            margin: 0;
+
+        /* space around table before info /above filter*/
+        #dataTable {
+            margin: 10px 0;
             width: auto;
         }
+
         .dataTables_filter {
             float: left;
             margin: 15px 0;
         }
+
+        div.dataTables_info {
+            clear: left;
+        }
+
+        /* stronger TH */
+        #dataTable th {
+            border-bottom: 3px solid #666
+        }
+
+        /* stronger on hover colour */
+        .table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+            background-color: #D9EDF7 !important;
+        }
+
     </style>
+
 
 </head>
 
@@ -73,19 +93,19 @@
 
 <!--container-->
 <div class="container">
-
-    <h3>Keywords Results List</h3>
-
     <div class="row">
 
-        <table class="table table-hover" id="dataTable">
+        <h2>Keywords Results List</h2>
+
+
+        <table class="table table-striped table-hover dataTable no-footer" id="dataTable">
             <thead>
             <tr>
                 <th>No</th>
                 <th>n-gram</th>
-                <th>Test Freq</th>
+                <th class="nowrap">Test Freq</th>
                 <th>%</th>
-                <th>Ref Freq</th>
+                <th class="nowrap">Ref Freq</th>
                 <th>%</th>
                 <th>K</th>
                 <th>P</th>
@@ -109,7 +129,8 @@
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
-<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+<!--<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>-->
+<script src="js/thirdparty/DataTables1.10.0-beta.2/media/js/jquery.js"></script>
 <script src="dist/js/bootstrap.min.js"></script>
 
 
@@ -117,7 +138,12 @@
 <script src="js/clic.js"></script>
 
 <!-- datatables plugin http://www.datatables.net/ -->
-<script src="js/thirdparty/DataTables-1.9.4/media/js/jquery.dataTables.min.js"></script>
+<!--<script src="js/thirdparty/DataTables-1.9.4/media/js/jquery.dataTables.min.js"></script>-->
+
+<!-- datatables plugin http://www.datatables.net/ -->
+<script src="js/thirdparty/DataTables1.10.0-beta.2/media/js/jquery.dataTables.min.js"></script>
+<!-- datatables bootstrap js (css is above) see http://next.datatables.net/manual/styling/bootstrap -->
+<script src="js/thirdparty/DataTables1.10.0-beta.2/media/js/dataTables.bootstrap.js"></script>
 
 
 <script>
@@ -127,7 +153,7 @@
         var params = location.search;
         var host = window.location.hostname;
 
-        if (host == 'dev.webapps.nottingham.ac.uk'){
+        if (host == 'dev.webapps.nottingham.ac.uk') {
             jsonUrl = 'exampleJson/keywords_GE_quotes.json';
         } else {
             jsonUrl = '/keywords/' + params; // from the app
@@ -137,15 +163,14 @@
             url: jsonUrl,
             type: 'GET',
             dataType: 'json',
-            success: function(data)
-            {
+            success: function (data) {
                 var content = '';
                 var baseNode = data.keywords;
 
                 // loop out values
                 for (var x = 1; x < baseNode.length; x++) {
                     content += '<tr>';
-                    content += '<td>'+ x +'</td>';
+                    content += '<td>' + x + '</td>';
                     for (var s = 0; s < baseNode[x].length; s++) {
                         content += '<td>' + baseNode[x][s] + '</td>';
                     }
@@ -155,7 +180,7 @@
                 $('#resultsTbody').html(content);
 
                 // create Datatable
-                var oTable = $('#dataTable').dataTable( {
+                var oTable = $('#dataTable').dataTable({
 
                     "fnDrawCallback": function (oSettings) {
                         var that = this;
@@ -172,18 +197,21 @@
                     "bSort": true,
                     "bFilter": true,
                     "aoColumnDefs": [
-                        { "bSearchable": false, "aTargets": [0,2,3,4,5,6,7] }
+                        { "bSearchable": false, "aTargets": [0, 2, 3, 4, 5, 6, 7] }
                     ],
                     // change phrase on search box
                     "oLanguage": {
                         "sSearch": "Filter n-gram:"
-                    }
-                } );
-                oTable.fnSort( [ [6,'desc'] ] ); //sort on K desc
+                    },
+                    // duplicate controls iflp
+                    "sDom": '<"top"fi<"clear">>rt<"bottom"i<"clear">>'
+                });
+                oTable.fnSort([
+                    [6, 'desc']
+                ]); //sort on K desc
 
             },
-            error: function(e)
-            {
+            error: function (e) {
                 //called when there is an error
                 console.log(e.message);
                 alert("error retrieving JSON");
