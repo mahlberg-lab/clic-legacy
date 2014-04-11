@@ -38,8 +38,8 @@
             width: auto;
         }
         .dataTables_filter {
-            float: left;
-            margin: 15px 0;
+           float: left;
+           margin: 15px 0;
         }
     </style>
 
@@ -175,7 +175,9 @@
                     // change phrase on search box
                     "oLanguage": {
                         "sSearch": "Filter n-gram:"
-                    }
+                    },
+                    // duplicate controls iflp
+                    "sDom": '<"top"fi<"clear">>rt<"bottom"i<"clear">>'
                 } );
                 oTable.fnSort( [ [2,'desc'] ] ); //sort on freq desc
 

@@ -43,6 +43,7 @@
         }
     </style>
 
+
 </head>
 
 <body>
@@ -83,9 +84,9 @@
             <tr>
                 <th>No</th>
                 <th>n-gram</th>
-                <th>Test Freq</th>
+                <th class="nowrap">Test Freq</th>
                 <th>%</th>
-                <th>Ref Freq</th>
+                <th class="nowrap">Ref Freq</th>
                 <th>%</th>
                 <th>K</th>
                 <th>P</th>
@@ -177,7 +178,9 @@
                     // change phrase on search box
                     "oLanguage": {
                         "sSearch": "Filter n-gram:"
-                    }
+                    },
+                    // duplicate controls iflp
+                    "sDom": '<"top"fi<"clear">>rt<"bottom"i<"clear">>'
                 } );
                 oTable.fnSort( [ [6,'desc'] ] ); //sort on K desc
 

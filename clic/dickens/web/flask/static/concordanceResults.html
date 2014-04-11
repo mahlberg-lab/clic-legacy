@@ -145,12 +145,13 @@
     <h3 id="concordanceResults">Concordance Results List</h3>
 
     <div class="row">
+        <div id="switchView" class="pull-left">View: <a href="#" id="kwicView">KWIC</a> | <a href="#" id="plotView">Plot</a> | <a
+                href="#" id="statsView">Statistics</a></div>
+        <button id="toggleMetadata" type="button" class="btn btn-info pull-right">Toggle metadata</button>
+    </div>
+    <br>
+    <div class="row">
 
-        <div id="resultsHeader">
-            <div id="switchView">View: <a href="#" id="kwicView">KWIC</a> | <a href="#" id="plotView">Plot</a> | <a
-                    href="#" id="statsView">Statistics</a></div>
-        </div>
-        <br>
         <table width="100%" class="table table-hover" id="dataTable">
             <thead>
             <tr>
@@ -282,14 +283,14 @@
                         for (var s = 0; s < data.concordances[x][0].length; s++) {
                             wordsLhs += data.concordances[x][0][s] + ' ';
                         }
-                        content += '<td class="left">' + wordsLhs + '</td>';
+                        content += '<td class="left nowrap" align="right">' + wordsLhs + '</td>';
                         // search term
                         content += '<td class="hilight">' + data.concordances[x][1][0] + '</td>';
                         // words right
                         for (var s = 0; s < data.concordances[x][2].length; s++) {
                             wordsRhs += data.concordances[x][2][s] + ' ';
                         }
-                        content += '<td class="right">' + wordsRhs + '</td>';
+                        content += '<td class="right nowrap">' + wordsRhs + '</td>';
                         //Book ID
                         content += '<td>' + data.concordances[x][3][0] + '</td>';
                         // Chapter
@@ -343,7 +344,7 @@
                         "oLanguage": {
                             "sSearch": "Filter concordance:"
                         },
-                        // duplicate controls iflp ( info,
+                        // duplicate controls iflp
                         "sDom": '<"top"if<"clear">>rt<"bottom"i<"clear">>'
                     });
                 },
@@ -355,12 +356,24 @@
             });
         }
 
+        // show hide columns
+        $('#toggleMetadata').click(function () {
 
-        // STATS VIEW
+            /* Get the DataTables object again - this is not a recreation, just a get of the object */
+            var oTable = $('#dataTable').dataTable();
+            // until have time to find a more elegant solution
+            var index;
+            var colsList = [5,6,7,8];
+            for (index = 0; index < colsList.length; ++index) {
+                var bVis = oTable.fnSettings().aoColumns[colsList[index]].bVisible;
+                oTable.fnSetColumnVis( colsList[index], bVis ? false : true );
+            }
+        });
 
 
         // SWITCH VIEWS
         $('#kwicView').click(function () {
+            // to do - do this with show hide divs
             $('#concordanceResults').text('Results List');
             $("#dataTable").dataTable().fnDestroy(); //destroy first
             showConcordance();

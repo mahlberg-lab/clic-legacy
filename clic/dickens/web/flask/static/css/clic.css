@@ -23,6 +23,17 @@ div#booksModal.modal .allChkLabel {
 }
 
 
+#resultsHeader {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+#switchView {
+    position: relative;
+    top: 13px;
+}
+
+
 .clicSelectSmallLabel {
     margin-right: 10px;
     position: relative;
@@ -30,6 +41,10 @@ div#booksModal.modal .allChkLabel {
 }
 .clicSelectSmall {
     width: 40%;
+}
+
+table .nowrap {
+    white-space: nowrap;
 }
 
 /*Datatables overrides*/
