@@ -48,6 +48,6 @@ table .nowrap {
 }
 
 /*Datatables overrides*/
-.dataTables_info {
-   margin-top: 5px;
-}
+/*.dataTables_info {*/
+   /*margin-top: 5px;*/
+/*}*/

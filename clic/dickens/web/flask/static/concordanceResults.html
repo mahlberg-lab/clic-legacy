@@ -21,11 +21,12 @@
     <link href="css/clic.css" rel="stylesheet">
 
     <!-- DataTables theme -->
-    <link href="js/thirdparty/DataTables-1.9.4/media/css/jquery.dataTables.css" rel="stylesheet">
+    <!--<link href="js/thirdparty/DataTables-1.9.4/media/css/jquery.dataTables.css" rel="stylesheet">-->
+    <link href="js/thirdparty/DataTables1.10.0-beta.2/media/css/dataTables.bootstrap.css" rel="stylesheet">
 
     <!--<script src="js/thirdparty/pace-0.5.1/pace.min.js"></script>-->
-    <script src='js/thirdparty/pace-0.5.1/pace.min.js'></script>
-    <link href="js/thirdparty/pace-0.5.1/themes/pace-theme-loading-bar.css" rel="stylesheet"/>
+    <!--<script src='js/thirdparty/pace-0.5.1/pace.min.js'></script>-->
+    <!--<link href="js/thirdparty/pace-0.5.1/themes/pace-theme-loading-bar.css" rel="stylesheet"/>-->
 
     <!--[if lt IE 9]>
     <script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
@@ -38,77 +39,26 @@
 
     <style type="text/css">
 
-        #stats {
-            padding: 10px;
-            border: dotted 1px grey;
-            margin: 10px auto 0 auto;
-            width: 50%;
+        /* CONCORDANCE TABLE */
+        /* space around table before info /above filter*/
+        #dataTable			{margin: 10px 0;}
+        /* stronger TH */
+        #dataTable th		{border-bottom: 3px solid #666}
+        /* stronger on hover colour */
+        .table-hover tbody tr:hover td, .table-hover tbody tr:hover th { background-color: #A2C4D0 !important; }
+        /* hilight node */
+        .hilight			{background: #A2C4D0 !important; text-align: center}
+        /* only 1 line of text */
+        td					{max-height: 1em; white-space:nowrap;}
+        .right				{text-align: left;  overflow: hidden; text-overflow:ellipsis; white-space:nowrap;  max-width: 300px }
+        .left				{text-align: right; overflow: hidden; text-overflow:ellipsis; white-space:nowrap;  max-width: 300px; direction: rtl;  }
+        /* see re cut off text on left: http://stackoverflow.com/questions/3759387/text-overflow-behaviour-in-css-with-non-left-values-for-text-align */
+        .book				{text-align: left;  overflow: hidden; text-overflow:ellipsis; white-space:nowrap;  max-width: 100px }
+
+        .dataTables_info {
+            float: left;
         }
 
-        h1 {
-            font-size: 40px;
-            margin-bottom: 0px
-        }
-
-        .skinny {
-            line-height: 14px;
-        }
-
-        .skinny > li > a {
-            padding: 3px 15px !important;
-        }
-
-        .concordancexx {
-            text-align: center;
-            overflow: hidden;
-            white-space: nowrap;
-            padding-right: 1em;
-            border-right: 4px solid #ccc;
-        }
-
-        .concordance2 {
-            text-align: center;
-            max-width: 600px;
-            overflow: hidden;
-            white-space: nowrap;
-            padding-right: 1em;
-        }
-
-        tdXXX {
-            max-height: 1em;
-            white-space: nowrap;
-        }
-
-        .hilight {
-            background: #C5FFB8 !important;
-            text-align: center
-        }
-
-        .rightXXX {
-            text-align: left;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            max-width: 300px
-        }
-
-        .leftXXX {
-            text-align: right;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            max-width: 300px
-        }
-
-        th {
-            border-bottom: 3px solid #666
-        }
-
-        .highlight {
-            background: #D9EDF7;
-            padding: 2px 6px;
-            margin: 0 0.5em;
-        }
     </style>
 
 </head>
@@ -142,17 +92,17 @@
 <!--container-->
 <div class="container">
 
-    <h3 id="concordanceResults">Concordance Results List</h3>
-
     <div class="row">
-        <div id="switchView" class="pull-left">View: <a href="#" id="kwicView">KWIC</a> | <a href="#" id="plotView">Plot</a> | <a
+
+        <h2 id="concordanceResults">Concordance Results List</h2>
+
+      <div class="row">  <div id="switchView" class="pull-left">View: <a href="#" id="kwicView">KWIC</a> | <a href="#" id="plotView">Plot</a> | <a
                 href="#" id="statsView">Statistics</a></div>
-        <button id="toggleMetadata" type="button" class="btn btn-info pull-right">Toggle metadata</button>
-    </div>
-    <br>
-    <div class="row">
+        <button id="toggleMetadata" type="button" class="btn btn-info pull-right">Toggle metadata</button></div>
 
-        <table width="100%" class="table table-hover" id="dataTable">
+        <br>
+        
+        <table width="100%" class="table table-striped table-hover dataTable no-footer" id="dataTable">
             <thead>
             <tr>
                 <th></th>
@@ -183,7 +133,8 @@
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
-<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+<!--<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>-->
+<script src="js/thirdparty/DataTables1.10.0-beta.2/media/js/jquery.js"></script>
 <script src="dist/js/bootstrap.min.js"></script>
 
 
@@ -191,60 +142,48 @@
 <script src="js/clic.js"></script>
 
 <!-- datatables plugin http://www.datatables.net/ -->
-<script src="js/thirdparty/DataTables-1.9.4/media/js/jquery.dataTables.min.js"></script>
+<script src="js/thirdparty/DataTables1.10.0-beta.2/media/js/jquery.dataTables.min.js"></script>
+<!-- datatables bootstrap js (css is above) see http://next.datatables.net/manual/styling/bootstrap -->
+<script src="js/thirdparty/DataTables1.10.0-beta.2/media/js/dataTables.bootstrap.js"></script>
 
-
-<!--<script src="js/thirdparty/tablesorter/js/jquery.tablesorter.min.js"></script>-->
 
 <script>
     $(function () {
 
         // custom sort functions see http://www.datatables.net/release-datatables/examples/basic_init/multi_col_sort.html
-        jQuery.fn.dataTableExt.oSort['string-case-asc'] = function (x, y) {
-            return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+        jQuery.fn.dataTableExt.oSort['string-case-asc']  = function(x,y) {
+            return ((x < y) ? -1 : ((x > y) ?  1 : 0));
         };
 
-        jQuery.fn.dataTableExt.oSort['string-case-desc'] = function (x, y) {
-            return ((x < y) ? 1 : ((x > y) ? -1 : 0));
+        jQuery.fn.dataTableExt.oSort['string-case-desc'] = function(x,y) {
+            return ((x < y) ?  1 : ((x > y) ? -1 : 0));
         };
 
         /* new sort on L1 */
-//        jQuery.fn.dataTableExt.oSort['string-L1-asc'] = function (x, y) {
-//            var xwords = x.split(' ');
-//            var ywords = y.split(' ');
-//            return ((xwords[xwords.length - 1] < ywords[ywords.length - 1]) ? -1 : ((xwords[xwords.length - 1] > ywords[ywords.length - 1]) ? 1 : 0));
-//        };
-//
-//        jQuery.fn.dataTableExt.oSort['string-L1-desc'] = function (x, y) {
-//            var xwords = x.split(' ');
-//            var ywords = y.split(' ');
-//            return ((xwords[0] < ywords[0]) ? 1 : ((xwords[0] > ywords[0]) ? -1 : 0));
-//        };
-
-        jQuery.fn.dataTableExt.oSort['string-L1-asc'] = function (x, y) {
+        jQuery.fn.dataTableExt.oSort['string-L1-asc']  = function(x,y) {
             var xwords = x.split(' ');
             var ywords = y.split(' ');
-            return ((xwords[10] < ywords[10]) ? -1 : ((xwords[10] > ywords[10]) ? 1 : 0));
+            return ((xwords[xwords.length - 1].toLowerCase() < ywords[ywords.length - 1].toLowerCase()) ? -1 : ((xwords[xwords.length - 1].toLowerCase() > ywords[ywords.length - 1].toLowerCase()) ?  1 : 0));
         };
 
-        jQuery.fn.dataTableExt.oSort['string-L1-desc'] = function (x, y) {
+        jQuery.fn.dataTableExt.oSort['string-L1-desc'] = function(x,y) {
             var xwords = x.split(' ');
             var ywords = y.split(' ');
-            return ((xwords[10] < ywords[10]) ? 1 : ((xwords[10] > ywords[10]) ? -1 : 0));
+            return ((xwords[xwords.length - 1].toLowerCase() < ywords[ywords.length - 1].toLowerCase()) ?  1 : ((xwords[xwords.length - 1].toLowerCase() > ywords[ywords.length - 1].toLowerCase()) ? -1 : 0));
         };
 
 
         /* new sort on R1 */
-        jQuery.fn.dataTableExt.oSort['string-R1-asc'] = function (x, y) {
+        jQuery.fn.dataTableExt.oSort['string-R1-asc']  = function(x,y) {
             var xwords = x.split(' ');
             var ywords = y.split(' ');
-            return ((xwords[0] < ywords[0]) ? -1 : ((xwords[0] > ywords[0]) ? 1 : 0));
+            return ((xwords[0].toLowerCase() < ywords[0].toLowerCase()) ? -1 : ((xwords[0].toLowerCase() > ywords[0].toLowerCase()) ?  1 : 0));
         };
 
-        jQuery.fn.dataTableExt.oSort['string-R1-desc'] = function (x, y) {
+        jQuery.fn.dataTableExt.oSort['string-R1-desc'] = function(x,y) {
             var xwords = x.split(' ');
             var ywords = y.split(' ');
-            return ((xwords[0] < ywords[0]) ? 1 : ((xwords[0] > ywords[0]) ? -1 : 0));
+            return ((xwords[0].toLowerCase() < ywords[0].toLowerCase()) ?  1 : ((xwords[0].toLowerCase() > ywords[0].toLowerCase()) ? -1 : 0));
         };
 
         showConcordance();
@@ -291,8 +230,8 @@
                             wordsRhs += data.concordances[x][2][s] + ' ';
                         }
                         content += '<td class="right nowrap">' + wordsRhs + '</td>';
-                        //Book ID
-                        content += '<td>' + data.concordances[x][3][0] + '</td>';
+                        //Book
+                        content += '<td>' + data.concordances[x][3][1] + '</td>';
                         // Chapter
                         content += '<td>' + data.concordances[x][3][2] + '</td>';
                         // Paragraph
