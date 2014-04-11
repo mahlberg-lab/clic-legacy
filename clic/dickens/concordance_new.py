@@ -11,7 +11,8 @@ from lxml import etree
 
 import json
 
-booklist_r = open('/home/aezros/clic/clic/dickens/booklist', 'r')
+#booklist_r = open('/home/aezros/clic/clic/dickens/booklist', 'r')
+booklist_r = open('booklist', 'r')
 booklist = json.load(booklist_r)
 
 class Concordancer_New(object):
@@ -32,11 +33,13 @@ class Concordancer_New(object):
         ## create a list of lists containing each three contexts, and a list within those contexts containing each word
         session = self.session
         db = self.db
-        qf = self.qf
+        qf = self.qf        
         
         extraSpaceElems = ['s']
         conc_lines = []
         wordWindow = 10
+        
+        #print os.path.abspath(__package__)
         
         Dickens_vol = ['BH', 'BR', 'DC',
                         'DS', 'ED', 'GE', 'HT', 'ld', 'MC', 'NN',
@@ -230,8 +233,8 @@ class Concordancer_New(object):
                      
                     conc_lines.append(conc_line)
                     
-#                 if count > 25:
-#                     break
+                if count > 25:
+                    break
 
 
         conc_lines.insert(0, len(conc_lines))  
