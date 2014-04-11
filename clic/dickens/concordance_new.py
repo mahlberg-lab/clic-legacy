@@ -37,9 +37,8 @@ class Concordancer_New(object):
         
         extraSpaceElems = ['s']
         conc_lines = []
-        wordWindow = 10
-        
-        #print os.path.abspath(__package__)
+        wordWindow = 10      
+    
         
         Dickens_vol = ['BH', 'BR', 'DC',
                         'DS', 'ED', 'GE', 'HT', 'ld', 'MC', 'NN',
