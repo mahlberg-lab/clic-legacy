@@ -31,3 +31,8 @@ div#booksModal.modal .allChkLabel {
 .clicSelectSmall {
     width: 40%;
 }
+
+/*Datatables overrides*/
+.dataTables_info {
+   margin-top: 5px;
+}

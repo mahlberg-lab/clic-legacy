@@ -150,7 +150,7 @@
             <div id="switchView">View: <a href="#" id="kwicView">KWIC</a> | <a href="#" id="plotView">Plot</a> | <a
                     href="#" id="statsView">Statistics</a></div>
         </div>
-
+        <br>
         <table width="100%" class="table table-hover" id="dataTable">
             <thead>
             <tr>
@@ -160,9 +160,9 @@
                 <th>Right</th>
                 <th>Book</th>
                 <th>Ch</th>
-                <th>Para</th>
-                <th>Sent</th>
-                <th>In book</th>
+                <th>Par</th>
+                <th>Sen</th>
+                <th>In bk</th>
             </tr>
             </thead>
 
@@ -174,8 +174,6 @@
     </div>
 
     <br><br>
-
-    <div id="stats"></div>
 </div>
 </div>
 <!-- /.container -->
@@ -257,7 +255,7 @@
             var params = location.search;
             var host = window.location.hostname;
 
-            if (host == 'dev.webapps.nottingham.ac.uk'){
+            if (host == 'dev.webapps.nottingham.ac.uk') {
                 jsonUrl = 'exampleJson/concordances200Hits.json';
             } else {
                 jsonUrl = '/concordances/' + params; // from the app
@@ -302,16 +300,16 @@
                         content += '<td>' + data.concordances[x][3][4] + '</td>';
                         // % In book
                         var wordsInChapter = (data.concordances[x][4][2] / data.concordances[x][4][3]) * 100;
-                        var xVal = Math.round(wordsInChapter)/2;
+                        var xVal = Math.round(wordsInChapter) / 2;
                         content += '<td><svg width="50px" height="15px" xmlns="http://www.w3.org/2000/svg">' +
                                 '<rect x="0" y="4" width="50" height="7" fill="#ccc"/>' +
-                                '<line x1="'+xVal+'" x2="'+xVal+'" y1="0" y2="15" stroke="black" stroke-width="2px"/>' +
+                                '<line x1="' + xVal + '" x2="' + xVal + '" y1="0" y2="15" stroke="black" stroke-width="2px"/>' +
                                 '</svg>';
                         content += '</tr></td>';
                     }
 
                     var end = (new Date).getTime();
-                    $('#stats').append('Time to parse JSON : ' + (end - start) / 1000 + ' seconds<br>');
+                    console.log('Time to parse JSON : ' + (end - start) / 1000 + ' seconds');
                     //                console.log(content);
                     $('#resultsTbody').html(content);
 
@@ -344,7 +342,9 @@
                         // change phrase on search box (as now limited to just concordance)
                         "oLanguage": {
                             "sSearch": "Filter concordance:"
-                        }
+                        },
+                        // duplicate controls iflp ( info,
+                        "sDom": '<"top"if<"clear">>rt<"bottom"i<"clear">>'
                     });
                 },
                 error: function (e) {
@@ -357,9 +357,6 @@
 
 
         // STATS VIEW
-
-
-
 
 
         // SWITCH VIEWS
@@ -377,10 +374,9 @@
         });
 
 
-
         $(window).load(function () {
             var end = (new Date).getTime();
-            $('#stats').append('Time to load page : ' + (end - pageLoad) / 1000 + ' seconds<br>');
+            console.log('Time to load page : ' + (end - pageLoad) / 1000 + ' seconds');
         });
 
 
