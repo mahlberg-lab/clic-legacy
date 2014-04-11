@@ -396,9 +396,9 @@
 
             // Individual Dickens checked?
             if ($('#booksModalTestMaterial #allDickensChk').prop('checked') == false) {
-                if ($('.chkDickens:checked').length != 0 ) {
+                if ($('#booksModalTestMaterial .chkDickens:checked').length != 0 ) {
                     var individualDickensCheck = true;
-                    $(".chkDickens:checked").each(function () {
+                    $("#booksModalTestMaterial .chkDickens:checked").each(function () {
                         containerHtml += $(this).closest(".checkbox").wrap('<p/>').parent().html(); //wrap first so we get html of container
                     });
                 }
@@ -536,21 +536,21 @@
         // Return selections from modal to main
         $(document).on("click", "#booksModalRefSubmit", function(event){
 
-            var containerHtml = '';
+            var containerHtmlRef = '';
             $('#booksReferenceMaterial').html('');
 
             // Individual Dickens checked?
             if ($('#booksModalRefMaterial #allDickensChk').prop('checked') == false) {
-                if ($('.chkDickens:checked').length != 0 ) {
+                if ($('#booksModalRefMaterial .chkDickens:checked').length != 0 ) {
                     var individualDickensCheck = true;
-                    $(".chkDickens:checked").each(function () {
-                        containerHtml += $(this).closest(".checkbox").wrap('<p/>').parent().html(); //wrap first so we get html of container
+                    $("#booksModalRefMaterial .chkDickens:checked").each(function () {
+                        containerHtmlRef += $(this).closest(".checkbox").wrap('<p/>').parent().html(); //wrap first so we get html of container
                     });
                 }
             } else {
                 // all checked
                 $('#booksModalRefMaterial #allDickensDiv').removeClass('chkBooklist');
-                containerHtml += $('#allDickensDiv').wrap('<p/>').parent().html();
+                containerHtmlRef += $('#allDickensDiv').wrap('<p/>').parent().html();
             }
 
             // Individual NTC checked?
@@ -558,17 +558,16 @@
                 if ($('.chkNtc:checked').length != 0 ) {
                     var individualNtcCheck = true;
                     $(".chkNtc:checked").each(function () {
-                        containerHtml += $(this).closest(".checkbox").wrap('<p/>').parent().html(); //wrap first so we get html of container
+                        containerHtmlRef += $(this).closest(".checkbox").wrap('<p/>').parent().html(); //wrap first so we get html of container
                     });
                 }
             } else {
                 // all checked
                 $('#booksModalRefMaterial #allNtcDiv').removeClass('chkBooklist');
-                containerHtml += $('#allNtcDiv').wrap('<p/>').parent().html();
+                containerHtmlRef += $('#allNtcDiv').wrap('<p/>').parent().html();
             }
 
-
-            $('#booksReferenceMaterial').html(containerHtml);
+            $('#booksReferenceMaterial').html(containerHtmlRef);
             $('#booksModalRefMaterial').modal('hide');
 
         });
