@@ -141,7 +141,7 @@ class Concordancer_New(object):
                             
                     ## string location
                     wordWindow = int(wordWindow)
-                    leftOnset = v[max(0, w-(wordWindow+1))][2]
+                    leftOnset = v[max(0, w-(wordWindow))][2]  ## 10 words
                     leftOffset = v[w][2]
                     nodeOffset = v[min(w+nodeLength, len(v)-1)][2]
                     rightOffset = v[min(w+nodeLength+wordWindow, len(v)-1)][2]
