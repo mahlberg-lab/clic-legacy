@@ -1,6 +1,6 @@
 import os
 import re
-from math import log1p
+import operator
 
 from cheshire3.document import StringDocument
 from cheshire3.internal import cheshire3Root
@@ -55,5 +55,7 @@ class Clusters(object):
             if freq >= 2:
                 prop = (float(freq)/float(len(dict))) * 100
                 cluster_list.append([term, freq, str(prop)[:5]])  
+                
+        cluster_list.sort(key=operator.itemgetter(1), reverse=True)
 
-        return cluster_list
+        return cluster_list[0:1000]
