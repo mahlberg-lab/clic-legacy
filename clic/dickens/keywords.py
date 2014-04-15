@@ -3,6 +3,7 @@
 import os
 import re
 from math import log1p
+import operator
 
 from cheshire3.document import StringDocument
 from cheshire3.internal import cheshire3Root
@@ -80,28 +81,7 @@ class Keywords(object):
         ## get test length
         testLength = sum(test_dict.values())
         refLength = sum(ref_dict.values())
-# 
-#         refLength = 0
-#         for i in referenceIndex:
-#             refLength += i.totalOccs
-#         ## refLength is the difference between reference and test
-#         refLength = refLength - testLength
 
-#         KW_list = ""
-#         for i in testIndex:
-#             freqTest = i.totalOccs
-#             q = qf.get_query(session, 'c3.%s-idx = "%s"' % (idx, i.queryTerm))
-#             ## search for query in sentences
-#             ## (not sure what 1, = does)
-#             ref = referenceIndex.scan(session, q, 1, '=')
-#             if len(ref):
-#                 ## We want to know how many observations of a given word is found in ref corpus but not in test corpus
-#                 ## Subtract number of occurrences in testIndex from number of occurrences in sentences
-#                 freqRef = float(ref[0][1][2] - freqTest)
-#                 if freqRef <= 0:
-#                     freqRef = 5.0e-324 
-#             else:
-#                 freqRef = 5.0e-324
         
         kw_list = []
         for term, freqTest in test_dict.iteritems():
@@ -145,23 +125,44 @@ class Keywords(object):
             if freqRef == 5.0e-324:
                 freqRef2 = 0
             else:
-                freqRef2 = int('%.0f' % freqRef)
-                
-            if float(LL) > 15.13 or float(LL) < -15.13:
-                p_value = 0.0001
-            else:
-                p_value = 0.001            
+                freqRef2 = int('%.0f' % freqRef)               
+       
            
             dec_Test = '%.2f' % freqTest
             dec_Ref = '%.2f' % freqRef
-            propTest = float(dec_Test)/100
-            propRef = float(dec_Ref)/100
+            #propTest = (float(dec_Test)/354362) * 10000 (normalised per 10000)
+            #propRef = (float(dec_Ref)/354362) * 10000  
+            propTest = (float(dec_Test)/testLength) * 100
+            propRef = (float(dec_Ref)/refLength) * 100
            
-            ## only print if occurence > 3
-            if freqTest > 3 and p_value == 0.0001:
-                kw_list.append([term, freqTest, propTest, freqRef2, propRef, LL, pValue])
 
-        return kw_list
+            if float(pValue) <= 0.000001: ## not dealing with smaller p values as yet
+                if float(LL) >= 23.92:# or float(LL) <= -23.92:
+                    kw_list.append([term, str(freqTest), '%.2f' % propTest, str(freqRef2), '%.2f' % propRef, float(LL), pValue])
+                      
+            else:
+                if float(pValue) == 0.00001:
+                    if (float(LL) > 19.59):# or (float(LL) < -19.59):
+                        kw_list.append([term, str(freqTest), '%.2f' % propTest, str(freqRef2), '%.2f' % propRef, float(LL), pValue])    
+                elif float(pValue) == 0.0001: 
+                    if (float(LL) > 15.13):# or (float(LL) < -15.13):
+                        kw_list.append([term, str(freqTest), '%.2f' % propTest, str(freqRef2), '%.2f' % propRef, float(LL), pValue])  
+                elif float(pValue) == 0.001: 
+                    if (float(LL) > 10.83):# or (float(LL) < -10.83):
+                        kw_list.append([term, str(freqTest), '%.2f' % propTest, str(freqRef2), '%.2f' % propRef, float(LL), pValue]) 
+                elif float(pValue) == 0.01: 
+                    if (float(LL) > 6.63):# or (float(LL) < -6.63):
+                        kw_list.append([term, str(freqTest), '%.2f' % propTest, str(freqRef2), '%.2f' % propRef, float(LL), pValue]) 
+                elif float(pValue) == 0.05: 
+                    if (float(LL) > 3.84):# or (float(LL) < -3.84):
+                        kw_list.append([term, str(freqTest), '%.2f' % propTest, str(freqRef2), '%.2f' % propRef, float(LL), pValue]) 
+                elif float(pValue) == 0.1: ## NB: returns all values
+                    if (float(LL) > 2.71):# or (float(LL) < -2.71):
+                        kw_list.append([term, str(freqTest), '%.2f' % propTest, str(freqRef2), '%.2f' % propRef, float(LL), pValue]) 
+
+        kw_list.sort(key=operator.itemgetter(5), reverse=True) ## reverse for descending order
+        
+        return kw_list[0:500] ## NB: Interface doesn't return first list item
                                             
         
         
