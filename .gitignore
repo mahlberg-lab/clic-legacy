@@ -36,6 +36,9 @@ PyZ3950_parsetab.*
 # Database config file template 
 /dbs/dickens/config.xml
 
+# Log files
+/dbs/dickens/logs/*.log
+
 #phpstorm
 
 .idea

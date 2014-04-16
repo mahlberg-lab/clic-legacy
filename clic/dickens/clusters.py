@@ -21,11 +21,10 @@ class Clusters(object):
         self.qf = self.db.get_object(self.session, 'defaultQueryFactory')
         self.resultSetStore = self.db.get_object(self.session, 'resultSetStore')        
         self.idxStore = self.db.get_object(self.session, 'indexStore')
-        #self.logger = self.db.get_object(self.session, 'clusterLogger') ## add to dbs/dickens/config
+        self.logger = self.db.get_object(self.session, 'clusterLogger') ## added to dbs/dickens/config.xml
         
     def list_clusters(self, idxName, Materials):
-        #self.logger.log('CREATING CLUSTERS FOR RS: {0}'.format(id)) 
-        #self.logger.log(10, '%s\t%s' % (idxName + ' '.join(Materials)))
+        #self.logger.log(10, 'CREATING CLUSTERS FOR RS: {0} in {1}'.format(idxName, Materials)) 
         session = self.session
         db = self.db
         
