@@ -27,8 +27,7 @@ class Keywords(object):
         self.logger = self.db.get_object(self.session, 'keywordLogger')
         
     def list_keywords(self, testIdxName, testMaterials, refIdxName, refMaterials, pValue):
-        #self.logger.log(10, 'CREATING KEYWORDS FOR RS: {0} in {1}, compared to {2} in {3}'.format(testIdxName, testMaterials, 
-                                                                                                  refIdxName, refMaterials)) 
+        #self.logger.log(10, 'CREATING KEYWORDS FOR RS: {0} in {1}, compared to {2} in {3}'.format(testIdxName, testMaterials, refIdxName, refMaterials)) 
         session = self.session
         db = self.db
 
