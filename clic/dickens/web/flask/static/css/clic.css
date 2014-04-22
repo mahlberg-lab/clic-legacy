@@ -1,7 +1,121 @@
 body {
-    padding-top: 63px;
+    /*padding-top: 63px;*/
 }
 
+/* UoN blues & header  - later do in new bootstrap theme? */
+h1.uonHeaderh1 {
+    font-size: 40px;
+    margin-bottom: 0px;
+    margin-top: 10px;
+}
+
+.navbar-inverse {
+    background-color: #003366;
+    border-color: #003366;
+}
+
+.navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:hover, .navbar-inverse .navbar-nav > .active > a:focus {
+    background-color: #001A4D;
+    color: #FFFFFF;
+}
+
+/*
+end UoN blues
+*/
+
+
+/*
+Datatable Common
+*/
+
+/* space around table before info /above filter*/
+.container .uonDatatable {
+    /*margin: 10px 0;*/
+    width: auto;
+}
+
+/* stronger TH */
+.container .uonDatatable th {
+    border-bottom: 3px solid #666;
+}
+
+/* stronger on hover colour */
+.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+    background-color: #A2C4D0 !important;
+}
+
+.dataTables_info {
+    float: left;
+    clear: left;
+}
+
+/*
+End Datatable Common
+*/
+
+
+
+
+/*
+Concordance results
+*/
+
+#dataTableConcordance td					{max-height: 1em; white-space:nowrap;}
+#dataTableConcordance .right				{text-align: left;  overflow: hidden; text-overflow:ellipsis; white-space:nowrap;  max-width: 300px }
+#dataTableConcordance .left				{text-align: right; overflow: hidden; text-overflow:ellipsis; white-space:nowrap;  max-width: 300px; direction: rtl;  }
+/* see re cut off text on left: http://stackoverflow.com/questions/3759387/text-overflow-behaviour-in-css-with-non-left-values-for-text-align */
+#dataTableConcordance .book				{text-align: left;  overflow: hidden; text-overflow:ellipsis; white-space:nowrap;  max-width: 100px }
+
+/* hilight node */
+.hilight {
+    background: #A2C4D0 !important;
+    text-align: center
+}
+
+/*
+End Concordance results
+*/
+
+
+/*
+Keywords results
+ */
+
+#dataTableKeywords_wrapper .dataTables_filter {
+   float: left;
+   margin-top: 15px;
+}
+
+#dataTableKeywords_wrapper .dataTables_info {
+    clear: left;
+    float: none;
+}
+
+/*
+End Keywords results
+*/
+
+
+/*
+Clusters results
+*/
+
+#dataTableClusters_wrapper .dataTables_filter {
+    float: left;
+    margin-top: 15px;
+}
+
+#dataTableClusters_wrapper .dataTables_info {
+    clear: left;
+    float: none;
+}
+
+/*
+End Clusters results
+*/
+
+
+/* Book lists & related modal */
 .chkBooklist {
     bottom: 5px;
     position: relative;
@@ -17,11 +131,11 @@ div#booksModal.modal .allChkLabel {
     font-size: 24px;
 }
 
-#booksModal .modal-dialog, #booksModalTestMaterial .modal-dialog, #booksModalRefMaterial .modal-dialog
-{
+#booksModal .modal-dialog, #booksModalTestMaterial .modal-dialog, #booksModalRefMaterial .modal-dialog {
     width: 950px;
 }
 
+/* End Book lists & related modal */
 
 #resultsHeader {
     width: 100%;
@@ -33,12 +147,12 @@ div#booksModal.modal .allChkLabel {
     top: 13px;
 }
 
-
 .clicSelectSmallLabel {
     margin-right: 10px;
     position: relative;
     top: 4px;
 }
+
 .clicSelectSmall {
     width: 40%;
 }
@@ -47,7 +161,3 @@ table .nowrap {
     white-space: nowrap;
 }
 
-/*Datatables overrides*/
-/*.dataTables_info {*/
-   /*margin-top: 5px;*/
-/*}*/
