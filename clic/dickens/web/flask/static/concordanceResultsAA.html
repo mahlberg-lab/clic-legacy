@@ -85,25 +85,8 @@
         <button id="toggleMetadata" type="button" class="btn btn-info pull-right">Toggle metadata</button></div>
 
         <br>
-        
-        <table width="100%" class="table table-striped table-hover dataTable no-footer uonDatatable" id="dataTableConcordance">
-            <thead>
-            <tr>
-                <th></th>
-                <th>Left</th>
-                <th>Node</th>
-                <th>Right</th>
-                <th>Book</th>
-                <th>Ch</th>
-                <th>Par</th>
-                <th>Sen</th>
-                <th>In bk</th>
-            </tr>
-            </thead>
 
-            <tbody id="resultsTbody"></tbody>
-
-        </table>
+        <div id="tableContainer"></div>
 
 
     </div>
@@ -185,98 +168,144 @@
                 jsonUrl = '/concordances/' + params; // from the app
             }
 
+
             $.ajax({
-                url: jsonUrl,
-                type: 'GET',
-                dataType: 'json',
-                success: function (data) {
+            url: jsonUrl,
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
 
-                    // start timer
-                    var start = (new Date).getTime();
+            //Create new JSON just for datatable
+            var jsonArr = [];
+            var jsonTest = '{"concordances": [';
 
-                    var content = '';
-                    // loop out values
-                    for (var x = 1; x < data.concordances.length; x++) {
-                        var wordsLhs = '';
-                        var wordsRhs = '';
-                        content += '<tr>';
-                        // counter
-                        content += '<td>' + x + '</td>';
-                        // words left
-                        for (var s = 0; s < data.concordances[x][0].length; s++) {
-                            wordsLhs += data.concordances[x][0][s] + ' ';
-                        }
-                        content += '<td class="left nowrap" align="right">' + wordsLhs + '</td>';
-                        // search term
-                        content += '<td class="hilight">' + data.concordances[x][1][0] + '</td>';
-                        // words right
-                        for (var s = 0; s < data.concordances[x][2].length; s++) {
-                            wordsRhs += data.concordances[x][2][s] + ' ';
-                        }
-                        content += '<td class="right nowrap">' + wordsRhs + '</td>';
-                        //Book
-                        content += '<td class="book">' + data.concordances[x][3][1] + '</td>';
-                        // Chapter
-                        content += '<td>' + data.concordances[x][3][2] + '</td>';
-                        // Paragraph
-                        content += '<td>' + data.concordances[x][3][3] + '</td>';
-                        // Sentence
-                        content += '<td>' + data.concordances[x][3][4] + '</td>';
-                        // % In book
-                        var wordsInChapter = (data.concordances[x][4][2] / data.concordances[x][4][3]) * 100;
-                        var xVal = Math.round(wordsInChapter) / 2;
-                        content += '<td><svg width="50px" height="15px" xmlns="http://www.w3.org/2000/svg">' +
-                                '<rect x="0" y="4" width="50" height="7" fill="#ccc"/>' +
-                                '<line x1="' + xVal + '" x2="' + xVal + '" y1="0" y2="15" stroke="black" stroke-width="2px"/>' +
-                                '</svg>';
-                        content += '</tr></td>';
-                    }
 
-                    var end = (new Date).getTime();
-                    console.log('Time to parse JSON : ' + (end - start) / 1000 + ' seconds');
+            for (var x = 1; x < data.concordances.length; x++) {
 
-                    $('#resultsTbody').html(content);
+                var wordsLhs = '';
+                var wordsRhs = '';
+                var node = '';
 
-                    $('#dataTableConcordance').dataTable({
-
-                        // counter on column0, recounts when filter see http://www.datatables.net/release-datatables/examples/api/counter_column.html
-                        "fnDrawCallback": function (oSettings) {
-                            var that = this;
-
-                            /* Need to redo the counters if filtered or sorted */
-                            if (oSettings.bSorted || oSettings.bFiltered) {
-                                this.$('td:first-child', {"filter": "applied"}).each(function (i) {
-                                    that.fnUpdate(i + 1, this.parentNode, 0, false, false);
-                                });
-                            }
-                        },
-
-                        // filter & sort, dont paginate, dont sort frst (index) column, only search/filter on Left/Node/Right
-
-                        "bFilter": true,
-                        "bSort": true,
-                        "bPaginate": false,
-                        "aoColumnDefs": [
-                            { "bSortable": false, "aTargets": [ 0, 8 ] },
-                            { "bSearchable": false, "aTargets": [0, 4, 5, 6, 7, 8 ] },
-                            // custom sort Left using L1; right using R1
-                            { "sType": "string-L1", "aTargets": [ 1 ] },
-                            { "sType": "string-R1", "aTargets": [ 3 ] }
-                        ],
-                        // change phrase on search box (as now limited to just concordance)
-                        "oLanguage": {
-                            "sSearch": "Filter concordance:"
-                        },
-                        // duplicate controls iflp
-                        "sDom": '<"top"if<"clear">>rt<"bottom"if<"clear">>'
-                    });
-                },
-                error: function (e) {
-                    //called when there is an error
-                    console.log(e.message);
-                    alert("error retrieving JSON");
+                // words left
+                for (var s = 0; s < data.concordances[x][0].length; s++) {
+                    wordsLhs += data.concordances[x][0][s] + ' ';
                 }
-            });
+                // search term
+                node = data.concordances[x][1][0];
+//                // words right
+//                for (var s = 0; s < data.concordances[x][2].length; s++) {
+//                    wordsRhs += data.concordances[x][2][s] + ' ';
+//                }
+//                content += '<td class="right nowrap">' + wordsRhs + '</td>';
+//                //Book
+//                content += '<td class="book">' + data.concordances[x][3][1] + '</td>';
+//                // Chapter
+//                content += '<td>' + data.concordances[x][3][2] + '</td>';
+//                // Paragraph
+//                content += '<td>' + data.concordances[x][3][3] + '</td>';
+//                // Sentence
+//                content += '<td>' + data.concordances[x][3][4] + '</td>';
+//                // % In book
+//                var wordsInChapter = (data.concordances[x][4][2] / data.concordances[x][4][3]) * 100;
+//                var xVal = Math.round(wordsInChapter) / 2;
+//                content += '<td><svg width="50px" height="15px" xmlns="http://www.w3.org/2000/svg">' +
+//                        '<rect x="0" y="4" width="50" height="7" fill="#ccc"/>' +
+//                        '<line x1="' + xVal + '" x2="' + xVal + '" y1="0" y2="15" stroke="black" stroke-width="2px"/>' +
+//                        '</svg>';
+//                content += '</tr></td>';
+
+//                jsonArr.push([x]);
+
+
+                jsonTest += '["'+x+'","'+wordsLhs+'","'+node+'"]';
+
+
+
+            }
+
+                jsonTest = jsonTest.substring(0, jsonTest.length - 1);
+                jsonTest +=  ']}';
+
+                console.log(jsonTest);
+
+
+//
+//            $('#tableContainer').html('<table width="100%" class="table table-striped table-hover dataTable no-footer uonDatatable" id="dataTableConcordance"></table>');
+//            var oTable = $('#dataTableConcordance').dataTable({
+//
+//                "fnDrawCallback": function ( oSettings ) {
+//                    /* Need to redo the counters if filtered or sorted */
+//                    if ( oSettings.bSorted || oSettings.bFiltered )
+//                    {
+//                        for ( var i=0, iLen=oSettings.aiDisplay.length ; i<iLen ; i++ )
+//                        {
+//                            $('td:eq(0)', oSettings.aoData[ oSettings.aiDisplay[i] ].nTr ).html( i+1 );
+//                        }
+//                    }
+//                },
+//                // Using dataTable Ajax method directly
+//                "sAjaxSource": jsonUrl,
+//                "sAjaxDataProp": "concordances",
+//                // via own ajax call
+////                    "aaData": data.keywords,
+//
+//                "aoColumns": [
+//                    { "sTitle": "No" },
+//                    { "sTitle": "Left" ,   "sClass": "nowrap" },
+//                    { "sTitle": "Node", "sClass": "nowrap" },
+//                    { "sTitle": "Right" },
+//                    { "sTitle": "Book" , "sClass": "nowrap" },
+//                    { "sTitle": "Ch" },
+//                    { "sTitle": "Par" },
+//                    { "sTitle": "Sen" },
+//                    { "sTitle": "In bk" }
+//                ],
+////                "aoColumnDefs": [
+////                    { "bSortable": false, "aTargets": [ 0 ] },
+////                    { "bSortable": false, "aTargets": [ 0 ] },
+////                    { "bSearchable": false, "aTargets": [0, 2, 3, 4, 5, 6, 7] }
+////                ],
+//
+//                "bDeferRender": true,
+//                "bPaginate": false,
+//                "bSort": true,
+//                "bFilter": true,
+//
+//                // change phrase on search box
+//                "oLanguage": {
+//                    "sSearch": "Filter n-gram:"
+//                },
+//                // duplicate controls iflp
+//                "sDom": '<"top"fi<"clear">>rt<"bottom"if<"clear">>'
+//            });
+//                oTable.fnSort([[6, 'desc'] ]); //sort on K desc - Rein now sorts JSON
+
+
+            },
+            error: function (e) {
+                //called when there is an error
+                console.log(e.message);
+                alert("error retrieving JSON");
+            }
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         }
 
         // show hide columns

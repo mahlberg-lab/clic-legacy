@@ -43,10 +43,8 @@
 
 <div class="container">
     <img class="pull-right" src="img/uonlogo.png">
-
     <div class="header">
         <h1 class="uonHeaderh1">CLiC</h1>
-
         <p class="hidden-xs">A corpus tool to support the analysis of literary texts</p>
     </div>
 </div>
@@ -82,7 +80,20 @@
 
         <h3>Clusters Results List</h3>
 
-        <div id="tableContainer"></div>
+        <table class="table table-striped table-hover dataTable no-footer uonDatatable" id="dataTableClusters">
+            <thead>
+            <tr>
+                <th>No</th>
+                <th>n-gram</th>
+                <th>Freq</th>
+                <th>%</th>
+            </tr>
+            </thead>
+
+            <tbody id="resultsTbody"></tbody>
+
+        </table>
+
 
     </div>
 
@@ -119,78 +130,90 @@
         var params = location.search;
         var host = window.location.hostname;
 
-        if (host == 'dev.webapps.nottingham.ac.uk') {
+        if (host == 'dev.webapps.nottingham.ac.uk'){
             jsonUrl = 'exampleJson/clusters_GE.json';
         } else {
             jsonUrl = '/clusters/' + params; // from the app
         }
 
-//        $.ajax({
-//            url: jsonUrl,
-//            type: 'GET',
-//            dataType: 'json',
-//            success: function(data)
-//            {
+        $.ajax({
+            url: jsonUrl,
+            type: 'GET',
+            dataType: 'json',
+            success: function(data)
+            {
+                // start timer
+                var jsonStart = (new Date).getTime();
 
+                var content = '';
+                var baseNode = data.clusters;
 
-        $('#tableContainer').html('<table class="table table-striped table-hover dataTable no-footer uonDatatable" id="dataTableClusters"></table>');
-        var oTable = $('#dataTableClusters').dataTable({
-
-            // Using dataTable Ajax method directly
-            "sAjaxSource": jsonUrl,
-            "sAjaxDataProp": "clusters",
-            // via own ajax call
-//            "aaData": data.clusters,
-
-            "oLanguage": {
-                "sEmptyTable":     "My Custom Message On Empty Table"
-            },
-
-            "aoColumns": [
-                { "sTitle": "No" },
-                { "sTitle": "n-gram" },
-                { "sTitle": "Freq" },
-                { "sTitle": "%" }
-            ],
-
-            "fnDrawCallback": function ( oSettings ) {
-                /* Need to redo the counters if filtered or sorted */
-                if ( oSettings.bSorted || oSettings.bFiltered )
-                {
-                    for ( var i=0, iLen=oSettings.aiDisplay.length ; i<iLen ; i++ )
-                    {
-                        $('td:eq(0)', oSettings.aoData[ oSettings.aiDisplay[i] ].nTr ).html( i+1 );
+                // loop out values
+                for (var x = 1; x < baseNode.length; x++) {
+                    content += '<tr>';
+                    content += '<td>'+ x +'</td>';
+                    for (var s = 0; s < baseNode[x].length; s++) {
+                        content += '<td>' + baseNode[x][s] + '</td>';
                     }
+                    content += '</tr>';
                 }
-            },
 
-            "bDeferRender": true,
-            "bPaginate": false,
-            "bLengthChange": false,
-            "bFilter": true,
-            "bSort": true,
-            "aoColumnDefs": [
-                { "bSortable": false, "aTargets": [ 0 ] },
-                { "bSearchable": false, "aTargets": [0,2,3] }
-            ],
-            // change phrase on search box
-            "oLanguage": {
-                "sSearch": "Filter n-gram:"
+                var end = (new Date).getTime();
+                console.log('Time to parse JSON: ' + (end - jsonStart) / 1000 + ' seconds');
+
+                // start timer
+                var htmlStart = (new Date).getTime();
+                $('#resultsTbody').html(content);
+                var end = (new Date).getTime();
+                console.log('Time to render HTML table: ' + (end - htmlStart) / 1000 + ' seconds');
+
+                // create Datatable
+
+                // start timer
+                var dataTableStart = (new Date).getTime();
+                var oTable = $('#dataTableClusters').dataTable( {
+
+                    "bDeferRender": true,
+
+                    "fnDrawCallback": function (oSettings) {
+                        var that = this;
+
+                        /* Need to redo the counters if filtered or sorted */
+                        if (oSettings.bSorted || oSettings.bFiltered) {
+                            this.$('td:first-child', {"filter": "applied"}).each(function (i) {
+                                that.fnUpdate(i + 1, this.parentNode, 0, false, false);
+                            });
+                        }
+                    },
+
+                    "bPaginate": false,
+                    "bLengthChange": false,
+                    "bFilter": true,
+                    "bSort": true,
+                    "aoColumnDefs": [
+                        { "bSortable": false, "aTargets": [ 0 ] },
+                        { "bSearchable": false, "aTargets": [0,2,3] }
+                    ],
+                    // change phrase on search box
+                    "oLanguage": {
+                        "sSearch": "Filter n-gram:"
+                    },
+                    // duplicate controls iflp
+                    "sDom": '<"top"fi<"clear">>rt<"bottom"if<"clear">>'
+                } );
+                oTable.fnSort( [ [2,'desc'] ] ); //sort on freq desc
+
+                var end = (new Date).getTime();
+                console.log('Time to produce dataTable: ' + (end - dataTableStart) / 1000 + ' seconds');
+
             },
-            // duplicate controls iflp
-            "sDom": '<"top"fi<"clear">>rt<"bottom"if<"clear">>'
+            error: function(e)
+            {
+                //called when there is an error
+                console.log(e.message);
+                alert("error retrieving JSON");
+            }
         });
-
-//        oTable.fnSort([[2, 'desc'] ]); //sort table on freq desc ... Rein now sorting JSON
-
-//            },
-//            error: function(e)
-//            {
-//                //called when there is an error
-//                console.log(e.message);
-//                alert("error retrieving JSON");
-//            }
-//        });
 
         // page load timer
         $(window).load(function () {
