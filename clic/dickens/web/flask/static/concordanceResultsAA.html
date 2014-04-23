@@ -217,20 +217,15 @@
 //                jsonArr.push([x]);
 
 
-                jsonTest += '["'+x+'"]';
+                jsonTest += '["'+x+'","'+wordsLhs+'","'+node+'"]';
 
-//                var last_element = my_array[my_array.length - 1];
-                myArray[0] == myArray[myArray.length - 1])
 
-                if(data.concordances[0] == [data.concordances.length - 1] ){
-                    jsonTest += ',';
-                }
 
             }
 
-                jsonTest += jsonArr + ']}';
+                jsonTest = jsonTest.substring(0, jsonTest.length - 1);
+                jsonTest +=  ']}';
 
-//                console.log(jsonArr);
                 console.log(jsonTest);
 
 
