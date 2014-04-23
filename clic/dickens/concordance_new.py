@@ -11,7 +11,10 @@ from lxml import etree
 
 import json
 
-booklist_r = open('/home/aezros/clic/clic/dickens/booklist', 'r')
+wd = os.getcwd()
+
+booklist_r = open(''.join(wd + '/clic/dickens/booklist'), 'r')
+#booklist_r = open('/home/aezros/clic/clic/dickens/booklist', 'r')
 #booklist_r = open('booklist', 'r')
 booklist = json.load(booklist_r)
 

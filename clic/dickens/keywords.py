@@ -137,31 +137,33 @@ class Keywords(object):
 
             if float(pValue) <= 0.000001: ## not dealing with smaller p values as yet
                 if float(LL) >= 23.92:# or float(LL) <= -23.92:
-                    kw_list.append([term, str(freqTest), '%.2f' % propTest, str(freqRef2), '%.2f' % propRef, float(LL), pValue])
+                    kw_list.append(['', term, str(freqTest), '%.2f' % propTest, str(freqRef2), '%.2f' % propRef, float(LL), pValue])
                       
             else:
                 if float(pValue) == 0.00001:
                     if (float(LL) > 19.59):# or (float(LL) < -19.59):
-                        kw_list.append([term, str(freqTest), '%.2f' % propTest, str(freqRef2), '%.2f' % propRef, float(LL), pValue])    
+                        kw_list.append(['', term, str(freqTest), '%.2f' % propTest, str(freqRef2), '%.2f' % propRef, float(LL), pValue])    
                 elif float(pValue) == 0.0001: 
                     if (float(LL) > 15.13):# or (float(LL) < -15.13):
-                        kw_list.append([term, str(freqTest), '%.2f' % propTest, str(freqRef2), '%.2f' % propRef, float(LL), pValue])  
+                        kw_list.append(['', term, str(freqTest), '%.2f' % propTest, str(freqRef2), '%.2f' % propRef, float(LL), pValue])  
                 elif float(pValue) == 0.001: 
                     if (float(LL) > 10.83):# or (float(LL) < -10.83):
-                        kw_list.append([term, str(freqTest), '%.2f' % propTest, str(freqRef2), '%.2f' % propRef, float(LL), pValue]) 
+                        kw_list.append(['', term, str(freqTest), '%.2f' % propTest, str(freqRef2), '%.2f' % propRef, float(LL), pValue]) 
                 elif float(pValue) == 0.01: 
                     if (float(LL) > 6.63):# or (float(LL) < -6.63):
-                        kw_list.append([term, str(freqTest), '%.2f' % propTest, str(freqRef2), '%.2f' % propRef, float(LL), pValue]) 
+                        kw_list.append(['', term, str(freqTest), '%.2f' % propTest, str(freqRef2), '%.2f' % propRef, float(LL), pValue]) 
                 elif float(pValue) == 0.05: 
                     if (float(LL) > 3.84):# or (float(LL) < -3.84):
-                        kw_list.append([term, str(freqTest), '%.2f' % propTest, str(freqRef2), '%.2f' % propRef, float(LL), pValue]) 
+                        kw_list.append(['', term, str(freqTest), '%.2f' % propTest, str(freqRef2), '%.2f' % propRef, float(LL), pValue]) 
                 elif float(pValue) == 0.1: ## NB: returns all values
                     if (float(LL) > 2.71):# or (float(LL) < -2.71):
-                        kw_list.append([term, str(freqTest), '%.2f' % propTest, str(freqRef2), '%.2f' % propRef, float(LL), pValue]) 
+                        kw_list.append(['', term, str(freqTest), '%.2f' % propTest, str(freqRef2), '%.2f' % propRef, float(LL), pValue]) 
 
-        kw_list.sort(key=operator.itemgetter(5), reverse=True) ## reverse for descending order
+        kw_list.sort(key=operator.itemgetter(6), reverse=True) ## reverse for descending order
         
-        return kw_list[0:1500] ## NB: Interface doesn't return first list item
+        print kw_list[0]
+        #return kw_list[0:1500] ## NB: Interface doesn't return first list item
+        return kw_list
 
                                             
         

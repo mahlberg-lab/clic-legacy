@@ -60,7 +60,7 @@ def concordances():
     return concordances
 
 
-@cache.cache('keyword', expire=3600) ## expires after 3600 secs
+#@cache.cache('keyword', expire=3600) ## expires after 3600 secs
 def fetchKeywords(args):
 
     keyworder = Keywords()
@@ -69,7 +69,7 @@ def fetchKeywords(args):
     keywords = keyworder.list_keywords(args[0], args[1], args[2], args[3], args[4])
     return {'keywords':keywords}
 
-@cache.cache('cluster', expire=3600)
+#@cache.cache('cluster', expire=3600)
 def fetchClusters(args):
 
     cluster = Clusters()

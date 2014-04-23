@@ -53,8 +53,11 @@ class Clusters(object):
         for term, freq in dict.iteritems():
             if freq >= 2:
                 prop = (float(freq)/float(len(dict))) * 100
-                cluster_list.append([term, freq, str(prop)[:5]])  
+                cluster_list.append(['', term, freq, str(prop)[:5]])  ## add empty array node at beginning (see Pete email 23.04.14)
                 
-        cluster_list.sort(key=operator.itemgetter(1), reverse=True)
-
-        return cluster_list[0:1000]
+        cluster_list.sort(key=operator.itemgetter(2), reverse=True)
+        
+        if len(cluster_list) <= 5000:
+            return cluster_list
+        else:
+            return cluster_list[0:4999]
