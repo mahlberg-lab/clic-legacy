@@ -125,22 +125,33 @@
             jsonUrl = '/clusters/' + params; // from the app
         }
 
-        $.ajax({
-            url: jsonUrl,
-            type: 'GET',
-            dataType: 'json',
-            success: function(data)
-            {
+//        $.ajax({
+//            url: jsonUrl,
+//            type: 'GET',
+//            dataType: 'json',
+//            success: function(data)
+//            {
 
-        // need to add an empty node to json for numbered column
-        $.each(data.clusters, function(i, n) { n.unshift(''); });
 
         $('#tableContainer').html('<table class="table table-striped table-hover dataTable no-footer uonDatatable" id="dataTableClusters"></table>');
         var oTable = $('#dataTableClusters').dataTable({
 
             // Using dataTable Ajax method directly
-//            "sAjaxSource": jsonUrl,
-//            "sAjaxDataProp": "clusters",
+            "sAjaxSource": jsonUrl,
+            "sAjaxDataProp": "clusters",
+            // via own ajax call
+//            "aaData": data.clusters,
+
+            "oLanguage": {
+                "sEmptyTable":     "My Custom Message On Empty Table"
+            },
+
+            "aoColumns": [
+                { "sTitle": "No" },
+                { "sTitle": "n-gram" },
+                { "sTitle": "Freq" },
+                { "sTitle": "%" }
+            ],
 
             "fnDrawCallback": function ( oSettings ) {
                 /* Need to redo the counters if filtered or sorted */
@@ -152,14 +163,7 @@
                     }
                 }
             },
-            // via own ajax call
-            "aaData": data.clusters,
-            "aoColumns": [
-                { "sTitle": "No" },
-                { "sTitle": "n-gram" },
-                { "sTitle": "Freq" },
-                { "sTitle": "%" }
-            ],
+
             "bDeferRender": true,
             "bPaginate": false,
             "bLengthChange": false,
@@ -177,16 +181,16 @@
             "sDom": '<"top"fi<"clear">>rt<"bottom"if<"clear">>'
         });
 
-        oTable.fnSort([[2, 'desc'] ]); //sort table on freq desc
+//        oTable.fnSort([[2, 'desc'] ]); //sort table on freq desc ... Rein now sorting JSON
 
-            },
-            error: function(e)
-            {
-                //called when there is an error
-                console.log(e.message);
-                alert("error retrieving JSON");
-            }
-        });
+//            },
+//            error: function(e)
+//            {
+//                //called when there is an error
+//                console.log(e.message);
+//                alert("error retrieving JSON");
+//            }
+//        });
 
         // page load timer
         $(window).load(function () {

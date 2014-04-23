@@ -121,36 +121,31 @@
             jsonUrl = '/keywords/' + params; // from the app
         }
 
-        $.ajax({
-            url: jsonUrl,
-            type: 'GET',
-            dataType: 'json',
-            success: function (data) {
-
-                // need to add an empty node to json for numbered column
-                $.each(data.keywords, function (i, n) {
-                    n.unshift('');
-                });
+//        $.ajax({
+//            url: jsonUrl,
+//            type: 'GET',
+//            dataType: 'json',
+//            success: function (data) {
 
                 $('#tableContainer').html('<table class="table table-striped table-hover dataTable no-footer uonDatatable" id="dataTableKeywords"></table>');
                 var oTable = $('#dataTableKeywords').dataTable({
 
-                    // Using dataTable Ajax method directly
-//            "sAjaxSource": jsonUrl,
-//            "sAjaxDataProp": "keywords",
-
-                    "fnDrawCallback": function (oSettings) {
-                        var that = this;
-
+                    "fnDrawCallback": function ( oSettings ) {
                         /* Need to redo the counters if filtered or sorted */
-                        if (oSettings.bSorted || oSettings.bFiltered) {
-                            this.$('td:first-child', {"filter": "applied"}).each(function (i) {
-                                that.fnUpdate(i + 1, this.parentNode, 0, false, false);
-                            });
+                        if ( oSettings.bSorted || oSettings.bFiltered )
+                        {
+                            for ( var i=0, iLen=oSettings.aiDisplay.length ; i<iLen ; i++ )
+                            {
+                                $('td:eq(0)', oSettings.aoData[ oSettings.aiDisplay[i] ].nTr ).html( i+1 );
+                            }
                         }
                     },
+                    // Using dataTable Ajax method directly
+                    "sAjaxSource": jsonUrl,
+                    "sAjaxDataProp": "keywords",
                     // via own ajax call
-                    "aaData": data.keywords,
+//                    "aaData": data.keywords,
+
                     "aoColumns": [
                         { "sTitle": "No" },
                         { "sTitle": "n-gram" ,   "sClass": "nowrap" },
@@ -161,15 +156,17 @@
                         { "sTitle": "K" },
                         { "sTitle": "P" }
                     ],
+                    "aoColumnDefs": [
+                        { "bSortable": false, "aTargets": [ 0 ] },
+                        { "bSortable": false, "aTargets": [ 0 ] },
+                        { "bSearchable": false, "aTargets": [0, 2, 3, 4, 5, 6, 7] }
+                    ],
 
                     "bDeferRender": true,
                     "bPaginate": false,
                     "bSort": true,
                     "bFilter": true,
-                    "aoColumnDefs": [
-                        { "bSortable": false, "aTargets": [ 0 ] },
-                        { "bSearchable": false, "aTargets": [0, 2, 3, 4, 5, 6, 7] }
-                    ],
+
                     // change phrase on search box
                     "oLanguage": {
                         "sSearch": "Filter n-gram:"
@@ -177,17 +174,16 @@
                     // duplicate controls iflp
                     "sDom": '<"top"fi<"clear">>rt<"bottom"if<"clear">>'
                 });
-                oTable.fnSort([
-                    [6, 'desc']
-                ]); //sort on K desc
+//                oTable.fnSort([[6, 'desc'] ]); //sort on K desc - Rein now sorts JSON
 
-            },
-            error: function (e) {
-                //called when there is an error
-                console.log(e.message);
-                alert("error retrieving JSON");
-            }
-        });
+
+//            },
+//            error: function (e) {
+//                //called when there is an error
+//                console.log(e.message);
+//                alert("error retrieving JSON");
+//            }
+//        });
 
     });
 </script>
