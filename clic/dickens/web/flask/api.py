@@ -92,16 +92,29 @@ def fetchConcordance(args):
 def processArgs(args, method):
    
     methodArgs = []
-    testMod = str(args["testIdxMod"])    
+    
+    if method == 'clusters':
+        if not str(args["testIdxMod"]) == 'chapter':
+            testMod = str(args["testIdxMod"])
+            Group = str(args['testIdxGroup']) 
+            testIdxName = "{0}-{1}".format(testMod, Group)
+        else:
+            testMod = ''
+            Group = str(args['testIdxGroup']) 
+            testIdxName = "{0}".format(Group)
 
-    if not method == 'concordances':
+        methodArgs.insert(0, testIdxName)
+        book_collection = args.getlist('testCollection') ## args is a multiDictionary: use .getlist() to access individual books
+        methodArgs.insert(1, book_collection)
+        
+
+    if method == 'keywords':
+        testMod = str(args["testIdxMod"])
         Group = str(args['testIdxGroup']) ## testGroup not used in concordances
         testIdxName = "{0}-{1}".format(testMod, Group)
         methodArgs.insert(0, testIdxName)
         book_collection = args.getlist('testCollection') ## args is a multiDictionary: use .getlist() to access individual books
         methodArgs.insert(1, book_collection)
-
-    if method == 'keywords':
 
         refMod = str(args['refIdxMod'])
         refbook_collection = args.getlist('refCollection') 

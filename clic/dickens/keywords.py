@@ -162,7 +162,7 @@ class Keywords(object):
         kw_list.sort(key=operator.itemgetter(6), reverse=True) ## reverse for descending order
         
         #return kw_list[0:1500] ## NB: Interface doesn't return first list item
-        return kw_list
+        return kw_list[0:4999]
 
                                             
         
