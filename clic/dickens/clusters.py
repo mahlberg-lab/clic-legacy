@@ -34,13 +34,12 @@ class Clusters(object):
                 MatIdx = 'subCorpus-idx'
             else:
                 MatIdx = 'book-idx'
-            clauses.append('c3.{0} = "{1}"'.format(MatIdx, Material))
-            
+            clauses.append('c3.{0} = "{1}"'.format(MatIdx, Material))            
+           
         query = self.qf.get_query(session,
                                        ' or '.join(clauses)
                                        )        
         results = db.search(session, query)
-        print len(results)
         
         idx = db.get_object(session, idxName)
         facets = idx.facets(session, results)
