@@ -199,6 +199,8 @@
                     for (var x = 1; x < data.concordances.length; x++) {
                         var wordsLhs = '';
                         var wordsRhs = '';
+                        var node = '';
+
                         content += '<tr>';
                         // counter
                         content += '<td>' + x + '</td>';
@@ -207,8 +209,13 @@
                             wordsLhs += data.concordances[x][0][s] + ' ';
                         }
                         content += '<td class="left nowrap" align="right">' + wordsLhs + '</td>';
-                        // search term
-                        content += '<td class="hilight">' + data.concordances[x][1][0] + '</td>';
+
+                        // node
+                        for (var s = 0; s < data.concordances[x][1].length; s++) {
+                            node += data.concordances[x][1][s] + ' ';
+                        }
+                        content += '<td class="hilight">' + node + '</td>';
+
                         // words right
                         for (var s = 0; s < data.concordances[x][2].length; s++) {
                             wordsRhs += data.concordances[x][2][s] + ' ';

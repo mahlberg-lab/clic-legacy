@@ -155,6 +155,11 @@
 
         showConcordance();
 
+
+        function addslashes( str ) {
+            return (str + '').replace(/[\\"']/g, '\\$&').replace(/\u0000/g, '\\0');
+        }
+
         // CONCORDANCE VIEW
         function showConcordance() {
 
@@ -176,9 +181,7 @@
             success: function (data) {
 
             //Create new JSON just for datatable
-            var jsonArr = [];
             var jsonTest = '{"concordances": [';
-
 
             for (var x = 1; x < data.concordances.length; x++) {
 
@@ -191,11 +194,13 @@
                     wordsLhs += data.concordances[x][0][s] + ' ';
                 }
                 // search term
-                node = data.concordances[x][1][0];
-//                // words right
-//                for (var s = 0; s < data.concordances[x][2].length; s++) {
-//                    wordsRhs += data.concordances[x][2][s] + ' ';
-//                }
+                node = data.concordances[x][1][0].replace(/"/g, '\\"');
+
+                // words right
+                for (var s = 0; s < data.concordances[x][2].length; s++) {
+                    wordsRhs += data.concordances[x][2][s] + ' ';
+                }
+
 //                content += '<td class="right nowrap">' + wordsRhs + '</td>';
 //                //Book
 //                content += '<td class="book">' + data.concordances[x][3][1] + '</td>';
@@ -217,9 +222,7 @@
 //                jsonArr.push([x]);
 
 
-                jsonTest += '["'+x+'","'+wordsLhs+'","'+node+'"]';
-
-
+                jsonTest += '["'+x+'","'+wordsLhs.replace(/"/g, '\\"')+'","'+node+'","'+wordsRhs.replace(/"/g, '\\"')+'"],';
 
             }
 
