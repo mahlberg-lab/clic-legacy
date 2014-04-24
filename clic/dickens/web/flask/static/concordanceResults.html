@@ -37,14 +37,52 @@
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
+    <style>
+        /* data table header */
+        h2.with-pills {
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+
+        .dataTables_wrapper > div {
+            border: 1px solid #666;
+            padding: 6px;
+        }
+
+        .dataTables_info {
+            display: inline;
+            margin-right: 2em;
+            float: none;
+        }
+
+        .DTTT .btn {
+            padding: 4px 8px;
+        }
+
+        .dataTables_filter {
+            display: inline;
+        }
+
+        .dataTables_filter .form-control {
+            margin-left: 6px;
+        }
+
+        .skinny				{line-height: 14px;}
+        .skinny	> li > a 	{padding: 3px 15px !important;}
+
+
+    </style>
+
 </head>
 
 <body>
 
 <div class="container">
     <img class="pull-right" src="img/uonlogo.png">
+
     <div class="header">
         <h1 class="uonHeaderh1">CLiC</h1>
+
         <p class="hidden-xs">A corpus tool to support the analysis of literary texts</p>
     </div>
 </div>
@@ -62,8 +100,7 @@
         </div>
         <div class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
-                <li><a href="index.html">Home</a></li>
-                <li class="active"><a href="concordance.html">Concordance</a></li>
+                <li class="active"><a href="index.html">Concordance</a></li>
                 <li><a href="keywords.html">Keywords</a></li>
                 <li><a href="clusters.html">Clusters</a></li>
                 <li><a href="about.html">About</a></li>
@@ -78,38 +115,46 @@
 
     <div class="row">
 
-        <h3 id="concordanceResults">Concordance Results List</h3>
+        <div class="row">
+            <!--<div id="switchView" class="pull-left">View: <a href="#" id="kwicView">KWIC</a> | <a href="#" id="plotView">Plot</a>-->
+                <!--| <a-->
+                        <!--href="#" id="statsView">Statistics</a></div>-->
+            <!--<button id="toggleMetadata" type="button" class="btn btn-info pull-right">Toggle metadata</button></div>-->
 
-      <div class="row">  <div id="switchView" class="pull-left">View: <a href="#" id="kwicView">KWIC</a> | <a href="#" id="plotView">Plot</a> | <a
-                href="#" id="statsView">Statistics</a></div>
-        <button id="toggleMetadata" type="button" class="btn btn-info pull-right">Toggle metadata</button></div>
+            <!-- Choose view -->
+            <ul class="nav nav-pills pull-right skinny clearfix">
+                <li class="active"><a href="#">KWIC</a></li>
+                <li><a href="#">Plot</a></li>
+                <li><a href="#">Statistics</a></li>
+            </ul>
 
-        <br>
-        
-        <table width="100%" class="table table-striped table-hover dataTable no-footer uonDatatable" id="dataTableConcordance">
-            <thead>
-            <tr>
-                <th></th>
-                <th>Left</th>
-                <th>Node</th>
-                <th>Right</th>
-                <th>Book</th>
-                <th>Ch</th>
-                <th>Par</th>
-                <th>Sen</th>
-                <th>In bk</th>
-            </tr>
-            </thead>
+            <h2 class="with-pills">Concordance Results</h2>
 
-            <tbody id="resultsTbody"></tbody>
+            <table width="100%" class="table table-striped table-hover dataTable no-footer uonDatatable"
+                   id="dataTableConcordance">
+                <thead>
+                <tr>
+                    <th></th>
+                    <th>Left</th>
+                    <th>Node</th>
+                    <th>Right</th>
+                    <th>Book</th>
+                    <th>Ch</th>
+                    <th>Par</th>
+                    <th>Sen</th>
+                    <th>In bk</th>
+                </tr>
+                </thead>
 
-        </table>
+                <tbody id="resultsTbody"></tbody>
+
+            </table>
 
 
+        </div>
+
+        <br><br>
     </div>
-
-    <br><br>
-</div>
 </div>
 <!-- /.container -->
 
@@ -127,203 +172,228 @@
 
 <!-- datatables plugin http://www.datatables.net/ -->
 <script src="js/thirdparty/DataTables1.10.0-beta.2/media/js/jquery.dataTables.min.js"></script>
+<script src="js/thirdparty/DataTables1.10.0-beta.2/extensions/TableTools/js/dataTables.tableTools.min.js"></script>
 <!-- datatables bootstrap js (css is above) see http://next.datatables.net/manual/styling/bootstrap -->
 <script src="js/thirdparty/DataTables1.10.0-beta.2/media/js/dataTables.bootstrap.js"></script>
 
 
 <script>
-    $(function () {
+$(function () {
 
-        // custom sort functions see http://www.datatables.net/release-datatables/examples/basic_init/multi_col_sort.html
-        jQuery.fn.dataTableExt.oSort['string-case-asc']  = function(x,y) {
-            return ((x < y) ? -1 : ((x > y) ?  1 : 0));
-        };
+    // custom sort functions see http://www.datatables.net/release-datatables/examples/basic_init/multi_col_sort.html
+    jQuery.fn.dataTableExt.oSort['string-case-asc'] = function (x, y) {
+        return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+    };
 
-        jQuery.fn.dataTableExt.oSort['string-case-desc'] = function(x,y) {
-            return ((x < y) ?  1 : ((x > y) ? -1 : 0));
-        };
+    jQuery.fn.dataTableExt.oSort['string-case-desc'] = function (x, y) {
+        return ((x < y) ? 1 : ((x > y) ? -1 : 0));
+    };
 
-        /* new sort on L1 */
-        jQuery.fn.dataTableExt.oSort['string-L1-asc']  = function(x,y) {
-            var xwords = x.split(' ');
-            var ywords = y.split(' ');
-            return ((xwords[xwords.length - 1].toLowerCase() < ywords[ywords.length - 1].toLowerCase()) ? -1 : ((xwords[xwords.length - 1].toLowerCase() > ywords[ywords.length - 1].toLowerCase()) ?  1 : 0));
-        };
+    /* new sort on L1 */
+    jQuery.fn.dataTableExt.oSort['string-L1-asc'] = function (x, y) {
+        var xwords = x.split(' ');
+        var ywords = y.split(' ');
+        return ((xwords[xwords.length - 1].toLowerCase() < ywords[ywords.length - 1].toLowerCase()) ? -1 : ((xwords[xwords.length - 1].toLowerCase() > ywords[ywords.length - 1].toLowerCase()) ? 1 : 0));
+    };
 
-        jQuery.fn.dataTableExt.oSort['string-L1-desc'] = function(x,y) {
-            var xwords = x.split(' ');
-            var ywords = y.split(' ');
-            return ((xwords[xwords.length - 1].toLowerCase() < ywords[ywords.length - 1].toLowerCase()) ?  1 : ((xwords[xwords.length - 1].toLowerCase() > ywords[ywords.length - 1].toLowerCase()) ? -1 : 0));
-        };
+    jQuery.fn.dataTableExt.oSort['string-L1-desc'] = function (x, y) {
+        var xwords = x.split(' ');
+        var ywords = y.split(' ');
+        return ((xwords[xwords.length - 1].toLowerCase() < ywords[ywords.length - 1].toLowerCase()) ? 1 : ((xwords[xwords.length - 1].toLowerCase() > ywords[ywords.length - 1].toLowerCase()) ? -1 : 0));
+    };
 
 
-        /* new sort on R1 */
-        jQuery.fn.dataTableExt.oSort['string-R1-asc']  = function(x,y) {
-            var xwords = x.split(' ');
-            var ywords = y.split(' ');
-            return ((xwords[0].toLowerCase() < ywords[0].toLowerCase()) ? -1 : ((xwords[0].toLowerCase() > ywords[0].toLowerCase()) ?  1 : 0));
-        };
+    /* new sort on R1 */
+    jQuery.fn.dataTableExt.oSort['string-R1-asc'] = function (x, y) {
+        var xwords = x.split(' ');
+        var ywords = y.split(' ');
+        return ((xwords[0].toLowerCase() < ywords[0].toLowerCase()) ? -1 : ((xwords[0].toLowerCase() > ywords[0].toLowerCase()) ? 1 : 0));
+    };
 
-        jQuery.fn.dataTableExt.oSort['string-R1-desc'] = function(x,y) {
-            var xwords = x.split(' ');
-            var ywords = y.split(' ');
-            return ((xwords[0].toLowerCase() < ywords[0].toLowerCase()) ?  1 : ((xwords[0].toLowerCase() > ywords[0].toLowerCase()) ? -1 : 0));
-        };
+    jQuery.fn.dataTableExt.oSort['string-R1-desc'] = function (x, y) {
+        var xwords = x.split(' ');
+        var ywords = y.split(' ');
+        return ((xwords[0].toLowerCase() < ywords[0].toLowerCase()) ? 1 : ((xwords[0].toLowerCase() > ywords[0].toLowerCase()) ? -1 : 0));
+    };
 
-        showConcordance();
+    showConcordance();
 
-        // CONCORDANCE VIEW
-        function showConcordance() {
+    // CONCORDANCE VIEW
+    function showConcordance() {
 
-            // Get URL params
-            var params = location.search;
-            var host = window.location.hostname;
+        // Get URL params
+        var params = location.search;
+        var host = window.location.hostname;
 
-            if (host == 'dev.webapps.nottingham.ac.uk') {
-                jsonUrl = 'exampleJson/concordances200Hits.json';
-            } else {
-                jsonUrl = '/concordances/' + params; // from the app
-            }
-
-            $.ajax({
-                url: jsonUrl,
-                type: 'GET',
-                dataType: 'json',
-                success: function (data) {
-
-                    // start timer
-                    var start = (new Date).getTime();
-
-                    var content = '';
-                    // loop out values
-                    for (var x = 1; x < data.concordances.length; x++) {
-                        var wordsLhs = '';
-                        var wordsRhs = '';
-                        var node = '';
-
-                        content += '<tr>';
-                        // counter
-                        content += '<td>' + x + '</td>';
-                        // words left
-                        for (var s = 0; s < data.concordances[x][0].length; s++) {
-                            wordsLhs += data.concordances[x][0][s] + ' ';
-                        }
-                        content += '<td class="left nowrap" align="right">' + wordsLhs + '</td>';
-
-                        // node
-                        for (var s = 0; s < data.concordances[x][1].length; s++) {
-                            node += data.concordances[x][1][s] + ' ';
-                        }
-                        content += '<td class="hilight">' + node + '</td>';
-
-                        // words right
-                        for (var s = 0; s < data.concordances[x][2].length; s++) {
-                            wordsRhs += data.concordances[x][2][s] + ' ';
-                        }
-                        content += '<td class="right nowrap">' + wordsRhs + '</td>';
-                        //Book
-                        content += '<td class="book">' + data.concordances[x][3][1] + '</td>';
-                        // Chapter
-                        content += '<td>' + data.concordances[x][3][2] + '</td>';
-                        // Paragraph
-                        content += '<td>' + data.concordances[x][3][3] + '</td>';
-                        // Sentence
-                        content += '<td>' + data.concordances[x][3][4] + '</td>';
-                        // % In book
-                        var wordsInChapter = (data.concordances[x][4][2] / data.concordances[x][4][3]) * 100;
-                        var xVal = Math.round(wordsInChapter) / 2;
-                        content += '<td><svg width="50px" height="15px" xmlns="http://www.w3.org/2000/svg">' +
-                                '<rect x="0" y="4" width="50" height="7" fill="#ccc"/>' +
-                                '<line x1="' + xVal + '" x2="' + xVal + '" y1="0" y2="15" stroke="black" stroke-width="2px"/>' +
-                                '</svg>';
-                        content += '</tr></td>';
-                    }
-
-                    var end = (new Date).getTime();
-                    console.log('Time to parse JSON : ' + (end - start) / 1000 + ' seconds');
-
-                    $('#resultsTbody').html(content);
-
-                    $('#dataTableConcordance').dataTable({
-
-                        // counter on column0, recounts when filter see http://www.datatables.net/release-datatables/examples/api/counter_column.html
-                        "fnDrawCallback": function (oSettings) {
-                            var that = this;
-
-                            /* Need to redo the counters if filtered or sorted */
-                            if (oSettings.bSorted || oSettings.bFiltered) {
-                                this.$('td:first-child', {"filter": "applied"}).each(function (i) {
-                                    that.fnUpdate(i + 1, this.parentNode, 0, false, false);
-                                });
-                            }
-                        },
-
-                        // filter & sort, dont paginate, dont sort frst (index) column, only search/filter on Left/Node/Right
-
-                        "bFilter": true,
-                        "bSort": true,
-                        "bPaginate": false,
-                        "aoColumnDefs": [
-                            { "bSortable": false, "aTargets": [ 0, 8 ] },
-                            { "bSearchable": false, "aTargets": [0, 4, 5, 6, 7, 8 ] },
-                            // custom sort Left using L1; right using R1
-                            { "sType": "string-L1", "aTargets": [ 1 ] },
-                            { "sType": "string-R1", "aTargets": [ 3 ] }
-                        ],
-                        // change phrase on search box (as now limited to just concordance)
-                        "oLanguage": {
-                            "sSearch": "Filter concordance:"
-                        },
-                        // duplicate controls iflp
-                        "sDom": '<"top"if<"clear">>rt<"bottom"if<"clear">>'
-                    });
-                },
-                error: function (e) {
-                    //called when there is an error
-                    console.log(e.message);
-                    alert("error retrieving JSON");
-                }
-            });
+        if (host == 'dev.webapps.nottingham.ac.uk') {
+            jsonUrl = 'exampleJson/concordances200Hits.json';
+        } else {
+            jsonUrl = '/concordances/' + params; // from the app
         }
 
-        // show hide columns
-        $('#toggleMetadata').click(function () {
+        $.ajax({
+            url: jsonUrl,
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
 
-            /* Get the DataTables object again - this is not a recreation, just a get of the object */
-            var oTable = $('#dataTableConcordance').dataTable();
-            // until have time to find a more elegant solution
-            var index;
-            var colsList = [5,6,7,8];
-            for (index = 0; index < colsList.length; ++index) {
-                var bVis = oTable.fnSettings().aoColumns[colsList[index]].bVisible;
-                oTable.fnSetColumnVis( colsList[index], bVis ? false : true );
+                // start timer
+                var start = (new Date).getTime();
+
+                var content = '';
+                // loop out values
+                for (var x = 1; x < data.concordances.length; x++) {
+                    var wordsLhs = '';
+                    var wordsRhs = '';
+                    var node = '';
+
+                    content += '<tr>';
+                    // counter
+                    content += '<td>' + x + '</td>';
+                    // words left
+                    for (var s = 0; s < data.concordances[x][0].length; s++) {
+                        wordsLhs += data.concordances[x][0][s] + ' ';
+                    }
+                    content += '<td class="left nowrap" align="right">' + wordsLhs + '</td>';
+
+                    // node
+                    for (var s = 0; s < data.concordances[x][1].length; s++) {
+                        node += data.concordances[x][1][s] + ' ';
+                    }
+                    content += '<td class="hilight">' + node + '</td>';
+
+                    // words right
+                    for (var s = 0; s < data.concordances[x][2].length; s++) {
+                        wordsRhs += data.concordances[x][2][s] + ' ';
+                    }
+                    content += '<td class="right nowrap">' + wordsRhs + '</td>';
+                    //Book
+                    content += '<td class="book">' + data.concordances[x][3][1] + '</td>';
+                    // Chapter
+                    content += '<td>' + data.concordances[x][3][2] + '</td>';
+                    // Paragraph
+                    content += '<td>' + data.concordances[x][3][3] + '</td>';
+                    // Sentence
+                    content += '<td>' + data.concordances[x][3][4] + '</td>';
+                    // % In book
+                    var wordsInChapter = (data.concordances[x][4][2] / data.concordances[x][4][3]) * 100;
+                    var xVal = Math.round(wordsInChapter) / 2;
+                    content += '<td><svg width="50px" height="15px" xmlns="http://www.w3.org/2000/svg">' +
+                            '<rect x="0" y="4" width="50" height="7" fill="#ccc"/>' +
+                            '<line x1="' + xVal + '" x2="' + xVal + '" y1="0" y2="15" stroke="black" stroke-width="2px"/>' +
+                            '</svg>';
+                    content += '</tr></td>';
+                }
+
+                var end = (new Date).getTime();
+                console.log('Time to parse JSON : ' + (end - start) / 1000 + ' seconds');
+
+                $('#resultsTbody').html(content);
+
+                $('#dataTableConcordance').dataTable({
+
+                    // counter on column0, recounts when filter see http://www.datatables.net/release-datatables/examples/api/counter_column.html
+                    "fnDrawCallback": function (oSettings) {
+                        var that = this;
+
+                        /* Need to redo the counters if filtered or sorted */
+                        if (oSettings.bSorted || oSettings.bFiltered) {
+                            this.$('td:first-child', {"filter": "applied"}).each(function (i) {
+                                that.fnUpdate(i + 1, this.parentNode, 0, false, false);
+                            });
+                        }
+                    },
+
+                    // filter & sort, dont paginate, dont sort frst (index) column, only search/filter on Left/Node/Right
+
+                    "bFilter": true,
+                    "bSort": true,
+                    "bPaginate": false,
+                    "aoColumnDefs": [
+                        { "bSortable": false, "aTargets": [ 0, 8 ] },
+                        { "bSearchable": false, "aTargets": [0, 4, 5, 6, 7, 8 ] },
+                        // custom sort Left using L1; right using R1
+                        { "sType": "string-L1", "aTargets": [ 1 ] },
+                        { "sType": "string-R1", "aTargets": [ 3 ] }
+                    ],
+                    // change phrase on search box (as now limited to just concordance)
+                    "oLanguage": {
+                        "sSearch": "Filter concordance:"
+                    },
+                    // duplicate controls iflp
+                    // plus add dataTools eg save
+                    "sDom": '<iTf>rt<iTf>',
+                    "oTableTools": {
+                        "aButtons": [
+                            "csv",
+                            "print",
+                            {
+                                "sExtends": "text",
+                                "sButtonText": "Toggle metadata",
+                                "fnClick": function (nButton, oConfig, oFlash) {
+                                    /* Get the DataTables object again - this is not a recreation, just a get of the object */
+                                    var oTable = $('#dataTableConcordance').dataTable();
+                                    // until have time to find a more elegant solution
+                                    var index;
+                                    var colsList = [5, 6, 7, 8];
+                                    for (index = 0; index < colsList.length; ++index) {
+                                        var bVis = oTable.fnSettings().aoColumns[colsList[index]].bVisible;
+                                        oTable.fnSetColumnVis(colsList[index], bVis ? false : true);
+                                    }
+                                }
+                            }
+                        ],
+                        "sSwfPath": "js/thirdparty/DataTables1.10.0-beta.2/extensions/TableTools/swf/copy_csv_xls.swf"
+                    }
+                });
+//                    $('<button id="refresh">Refresh</button>').appendTo('div.dataTables_filter');
+            },
+            error: function (e) {
+                //called when there is an error
+                console.log(e.message);
+                alert("error retrieving JSON");
             }
         });
+    }
+
+    // show hide columns
+//    $('#ToolTables_dataTableConcordance_0').click(function () {
+//        alert('test');
+//        /* Get the DataTables object again - this is not a recreation, just a get of the object */
+//        var oTable = $('#dataTableConcordance').dataTable();
+//        // until have time to find a more elegant solution
+//        var index;
+//        var colsList = [5, 6, 7, 8];
+//        for (index = 0; index < colsList.length; ++index) {
+//            var bVis = oTable.fnSettings().aoColumns[colsList[index]].bVisible;
+//            oTable.fnSetColumnVis(colsList[index], bVis ? false : true);
+//        }
+//    });
 
 
-        // SWITCH VIEWS
-        $('#kwicView').click(function () {
-            // to do - do this with show hide divs
-            $('#concordanceResults').text('Results List');
-            $("#dataTableConcordance").dataTable().fnDestroy(); //destroy first
-            showConcordance();
-        });
-        $('#plotView').click(function () {
-            $('#concordanceResults').text('Results Plot');
-            alert('Plot View');
-        });
-        $('#statsView').click(function () {
-            $('#concordanceResults').text('Results Statistics');
-        });
-
-
-        $(window).load(function () {
-            var end = (new Date).getTime();
-            console.log('Time to load page : ' + (end - pageLoad) / 1000 + ' seconds');
-        });
-
-
+    // SWITCH VIEWS
+    $('#kwicView').click(function () {
+        // to do - do this with show hide divs
+        $('#concordanceResults').text('Results List');
+        $("#dataTableConcordance").dataTable().fnDestroy(); //destroy first
+        showConcordance();
     });
+    $('#plotView').click(function () {
+        $('#concordanceResults').text('Results Plot');
+        alert('Plot View');
+    });
+    $('#statsView').click(function () {
+        $('#concordanceResults').text('Results Statistics');
+    });
+
+
+    $(window).load(function () {
+        var end = (new Date).getTime();
+        console.log('Time to load page : ' + (end - pageLoad) / 1000 + ' seconds');
+    });
+
+
+});
 </script>
 
 
