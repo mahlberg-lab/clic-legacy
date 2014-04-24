@@ -8,9 +8,9 @@
     <meta name="author" content="">
     <link rel="shortcut icon" href="../../assets/ico/favicon.ico">
 
-    <title>CLiC - About</title>
+    <title>CLiC 1.0</title>
 
-    <!-- Bootstrap core CSS -->
+    <!-- Bootstrap core CSS .. -->
     <link href="dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!--Custom CSS-->
@@ -50,10 +50,11 @@
         </div>
         <div class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
-                <li><a href="index.html">Concordance</a></li>
+                <li class="active"><a href="index.html">Home</a></li>
+                <li><a href="concordance.html">Concordance</a></li>
                 <li><a href="keywords.html">Keywords</a></li>
                 <li><a href="clusters.html">Clusters</a></li>
-                <li class="active"><a href="about.html">About</a></li>
+                <li><a href="about.html">About</a></li>
             </ul>
         </div>
         <!--/.nav-collapse -->
@@ -65,21 +66,12 @@
     <br><br>
 
     <div class="jumbotron">
-        <h1>About CLiC</h1>
+        <h1>CLiC</h1>
 
-        <p class="lead">CLiC 1.0 (Corpus Linguistics in Cheshire) is developed as part of an AHRC-funded project: “<a href="http://www.nottingham.ac.uk/CRAL/Projects/CLiC.aspx">CLiC
-            Dickens -
-            Characterisation in the representation of speech and body language from a corpus linguistic perspective</a>”. </p>
+        <p class="lead">CLiC 1.0 is a corpus tool designed to supports the analysis of literary texts. At present, the
+            available corpora are Dickens’s novels and a selection of novels by other 19th century authors.</p>
 
-        <p>The project demonstrates through
-        corpus stylistics how computer-assisted methods can be used to study literary texts and lead to new insights
-        into how readers perceive fictional characters.<br><br>CLiC specifically supports the analysis of fictional speech and
-        literary body language by enabling the user to search in particular parts of the texts, e.g. in quotes, which
-        typically contain the direct speech of fictional characters in the novels.<br><br>Initially, the texts that can be
-        searched will be Dickens’s novels and novels written by other 19th century authors.</p>
-        
-        <p>For feedback and questions please contact us on email <a href="mailto:clic@nottingham.ac.uk">clic@nottingham.ac.uk</a>.</p>
-
+        <p><a class="btn btn-lg btn-success" href="about.html" role="button">Learn more</a></p>
     </div>
 
 
@@ -90,18 +82,22 @@
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
-<!--<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>-->
-<script src="js/thirdparty/DataTables1.10.0-beta.2/media/js/jquery.js"></script>
-
+<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
 <script src="dist/js/bootstrap.min.js"></script>
 
 <!--Generic JS-->
 <script src="js/clic.js"></script>
 
+<script src="js/thirdparty/tablesorter/js/jquery.tablesorter.min.js"></script>
+
 <script>
     $(function () {
-
-
+        $('table').tablesorter({
+            widgets: ['zebra', 'columns'],
+            usNumberFormat: false,
+            sortReset: true,
+            sortRestart: true
+        });
     });
 </script>
 
