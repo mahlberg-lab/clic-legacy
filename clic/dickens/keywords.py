@@ -111,13 +111,13 @@ class Keywords(object):
             if freqTest*log1p(freqTest/expectedTest) >= freqRef*log1p(freqRef/expectedRef):
                 try:
                     LL = 2*((freqTest*log1p(freqTest/expectedTest)) + (freqRef*log1p(freqRef/expectedRef)))
-                    LL = '%.3f' % LL
+                    LL = '%.2f' % LL
                 except:
                     LL = 909090
             else:
                 try:
                     LL = -2*((freqTest*log1p(freqTest/expectedTest)) + (freqRef*log1p(freqRef/expectedRef)))
-                    LL = '%.3f' % LL
+                    LL = '%.2f' % LL
                 except:
                     LL = 909090
             
@@ -161,7 +161,6 @@ class Keywords(object):
 
         kw_list.sort(key=operator.itemgetter(6), reverse=True) ## reverse for descending order
         
-        print kw_list[0]
         #return kw_list[0:1500] ## NB: Interface doesn't return first list item
         return kw_list
 
