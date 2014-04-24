@@ -133,13 +133,14 @@ def processArgs(args, method):
 #             refIdxName = 'sentence-idx'
 
         pValue = str(args['pValue'])
-
+        
         methodArgs.insert(2, refIdxName)
         methodArgs.insert(3, refbook_collection)
         methodArgs.insert(4, pValue)
 
     elif method == 'concordances':
 
+        testMod = str(args["testIdxMod"])
         testIdxName = testMod + '-idx'
         #wordWindow = str(args['wordWindow'])
         book_collection = args.getlist('testCollection')
