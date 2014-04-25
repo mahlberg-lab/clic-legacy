@@ -418,9 +418,9 @@
 
             // Individual NTC checked?
             if ($('#booksModalTestMaterial #allNtcChk').prop('checked') == false) {
-                if ($('.chkNtc:checked').length != 0 ) {
+                if ($('#booksModalTestMaterial .chkNtc:checked').length != 0 ) {
                     var individualNtcCheck = true;
-                    $(".chkNtc:checked").each(function () {
+                    $("#booksModalTestMaterial .chkNtc:checked").each(function () {
                         containerHtml += $(this).closest(".checkbox").wrap('<p/>').parent().html(); //wrap first so we get html of container
                     });
                 }
@@ -563,9 +563,9 @@
 
             // Individual NTC checked?
             if ($('#booksModalRefMaterial #allNtcChk').prop('checked') == false) {
-                if ($('.chkNtc:checked').length != 0 ) {
+                if ($('#booksModalRefMaterial .chkNtc:checked').length != 0 ) {
                     var individualNtcCheck = true;
-                    $(".chkNtc:checked").each(function () {
+                    $("#booksModalRefMaterial .chkNtc:checked").each(function () {
                         containerHtmlRef += $(this).closest(".checkbox").wrap('<p/>').parent().html(); //wrap first so we get html of container
                     });
                 }
