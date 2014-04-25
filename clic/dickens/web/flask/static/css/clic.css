@@ -44,10 +44,58 @@ Datatable Common
     background-color: #A2C4D0 !important;
 }
 
-.dataTables_info {
-    float: left;
-    clear: left;
+/*.dataTables_info {*/
+    /*float: left;*/
+    /*clear: left;*/
+/*}*/
+
+
+/* data table header */
+
+h2.without-pills {
+    bottom: 18px;
+    position: relative;
 }
+
+h2.with-pills {
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+.dataTables_wrapper > div {
+    border: 1px solid #666;
+    padding: 6px;
+    min-height: 40px;
+}
+.dataTables_filter > label {
+    bottom: 2px;
+    position: relative;
+}
+
+.dataTables_filter .form-control {
+    margin-left: 6px;
+}
+
+.skinny				{line-height: 14px;}
+.skinny	> li > a 	{padding: 3px 15px !important;}
+
+.DTTT .btn {
+    padding: 4px 8px;
+}
+
+.dataTables_info {
+    display: inline;
+    margin-right: 2em;
+    float: none;
+}
+
+.dataTables_filter {
+    display: inline;
+}
+
+
+
+
 
 /*
 End Datatable Common
@@ -82,13 +130,13 @@ Keywords results
  */
 
 #dataTableKeywords_wrapper .dataTables_filter {
-   float: left;
-   margin-top: 15px;
+   /*float: left;*/
+   /*margin-top: 15px;*/
 }
 
 #dataTableKeywords_wrapper .dataTables_info {
-    clear: left;
-    float: none;
+    /*clear: left;*/
+    /*float: none;*/
 }
 
 /*
@@ -101,13 +149,13 @@ Clusters results
 */
 
 #dataTableClusters_wrapper .dataTables_filter {
-    float: left;
-    margin-top: 15px;
+    /*float: left;*/
+    /*margin-top: 15px;*/
 }
 
 #dataTableClusters_wrapper .dataTables_info {
-    clear: left;
-    float: none;
+    /*clear: left;*/
+    /*float: none;*/
 }
 
 /*

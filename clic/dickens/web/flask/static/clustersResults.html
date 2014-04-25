@@ -79,7 +79,7 @@
 
     <div class="row">
 
-        <h3>Clusters Results</h3>
+        <h2 class="without-pills">Clusters Results</h2>
 
         <div id="tableContainer"></div>
 
@@ -108,6 +108,7 @@
 
 <!-- datatables plugin http://www.datatables.net/ -->
 <script src="js/thirdparty/DataTables1.10.0-beta.2/media/js/jquery.dataTables.min.js"></script>
+<script src="js/thirdparty/DataTables1.10.0-beta.2/extensions/TableTools/js/dataTables.tableTools.min.js"></script>
 <!-- datatables bootstrap js (css is above) see http://next.datatables.net/manual/styling/bootstrap -->
 <script src="js/thirdparty/DataTables1.10.0-beta.2/media/js/dataTables.bootstrap.js"></script>
 
@@ -176,8 +177,12 @@
             "oLanguage": {
                 "sSearch": "Filter n-gram:"
             },
+            "oTableTools": {
+                "aButtons": [ "csv", "print" ],
+                "sSwfPath": "js/thirdparty/DataTables1.10.0-beta.2/extensions/TableTools/swf/copy_csv_xls.swf"
+            },
             // duplicate controls iflp
-            "sDom": '<"top"fi<"clear">>rt<"bottom"if<"clear">>'
+            "sDom": '<iTf>rt<if>'
         });
 
 //        oTable.fnSort([[2, 'desc'] ]); //sort table on freq desc ... Rein now sorting JSON
