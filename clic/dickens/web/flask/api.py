@@ -109,17 +109,27 @@ def processArgs(args, method):
         
 
     if method == 'keywords':
-        testMod = str(args["testIdxMod"])
-        Group = str(args['testIdxGroup']) ## testGroup not used in concordances
-        testIdxName = "{0}-{1}".format(testMod, Group)
+        #testMod = str(args["testIdxMod"])
+        Group = str(args['testIdxGroup']) 
+        if not str(args["testIdxMod"]) == 'chapter':
+            testMod = str(args["testIdxMod"])            
+            testIdxName = "{0}-{1}".format(testMod, Group)
+        else:
+            testMod = ''
+            testIdxName = "{0}".format(Group)
+#         Group = str(args['testIdxGroup']) ## testGroup not used in concordances
+#         testIdxName = "{0}-{1}".format(testMod, Group)
         methodArgs.insert(0, testIdxName)
         book_collection = args.getlist('testCollection') ## args is a multiDictionary: use .getlist() to access individual books
         methodArgs.insert(1, book_collection)
 
-        refMod = str(args['refIdxMod'])
         refbook_collection = args.getlist('refCollection') 
-
-        refIdxName = "{0}-{1}".format(refMod, Group)
+        if not str(args["refIdxMod"]) == 'chapter':
+            refMod = str(args['refIdxMod'])            
+            refIdxName = "{0}-{1}".format(refMod, Group)
+        else:
+            refMod = ''
+            refIdxName = "{0}".format(Group)
 
         ## if no ngram is specified the index is specific to Mod. If Mod is not specified default to sentence idx
         ## THERE WILL BE DEFAULT SELECT IN INTERFACE

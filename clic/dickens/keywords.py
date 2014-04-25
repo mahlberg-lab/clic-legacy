@@ -1,4 +1,4 @@
-### THIS IS A SKETCH
+
 
 import os
 import re
@@ -87,7 +87,9 @@ class Keywords(object):
             try:
                 ## We want to know how many observations of a given word is found in ref corpus but not in test corpus
                 ## Subtract number of occurrences in testIndex from number of occurrences in sentences
-                freqRef = float(ref_dict[term] - freqTest)
+                ## NO - mutually exclusive
+                #freqRef = float(ref_dict[term] - freqTest)
+                freqRef = float(ref_dict[term])
             except KeyError:
                 freqRef = 5.0e-324
             else:
@@ -162,7 +164,8 @@ class Keywords(object):
         kw_list.sort(key=operator.itemgetter(6), reverse=True) ## reverse for descending order
         
         #return kw_list[0:1500] ## NB: Interface doesn't return first list item
-        return kw_list[0:4999]
+        #return kw_list[0:4999]
+        return kw_list[0:50]
 
                                             
         
