@@ -46,7 +46,6 @@ class Clusters(object):
         dict = {}
         for x in facets:
             dict[x[0]] = x[1][2]             
-                  
                    
         cluster_list = []
         for term, freq in dict.iteritems():
@@ -56,7 +55,7 @@ class Clusters(object):
                 
         cluster_list.sort(key=operator.itemgetter(2), reverse=True)
         
-        if len(cluster_list) <= 5000:
-            return cluster_list
-        else:
-            return cluster_list[0:4999]
+#         if len(cluster_list) <= 5000:
+#             return cluster_list
+#         else:
+#             return cluster_list[0:4999]
