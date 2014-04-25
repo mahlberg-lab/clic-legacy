@@ -40,23 +40,17 @@ class Keywords(object):
                 testMatIdx = 'book-idx'
             clauses.append('c3.{0} = "{1}"'.format(testMatIdx, testMaterial))
             
-        #return ' or '.join(clauses)
-
         test_query = self.qf.get_query(session,
                                        ' or '.join(clauses)
                                        )        
         test_results = db.search(session, test_query)
-        #return len(test_results) ###
         test_idx = db.get_object(session, testIdxName)
         test_facets = test_idx.facets(session, test_results)
-        #return len(test_facets) ###
         ## create dictionary containing word/cluster and number of occurrences
-        #test_dict = {x[0]: x[1][2] for x in test_facets}
         test_dict = {}
         for x in test_facets:
             test_dict[x[0]] = x[1][2]        
         
-        # [("term", (termId, totalRecords, totalOccurrences)), ("tern2", (...))]
         # Reference results
         clauses_ref = []
         for refMaterial in refMaterials:
@@ -77,7 +71,8 @@ class Keywords(object):
         for x in ref_facets:
             ref_dict[x[0]] = x[1][2]
         
-        ## get test length
+        ## get test and ref lengths
+        ## I use total counts to calculate expected values
         testLength = sum(test_dict.values())
         refLength = sum(ref_dict.values())
 
@@ -85,10 +80,10 @@ class Keywords(object):
         kw_list = []
         for term, freqTest in test_dict.iteritems():
             try:
-                ## We want to know how many observations of a given word is found in ref corpus but not in test corpus
+                ## Method 1: how many observations of a given word is found in ref corpus but not in test corpus
                 ## Subtract number of occurrences in testIndex from number of occurrences in sentences
-                ## NO - mutually exclusive
                 #freqRef = float(ref_dict[term] - freqTest)
+                ## Method 2: treat groups as mutually exclusive. NOTE: When comparing quotes with whole text the occurrences will overlap
                 freqRef = float(ref_dict[term])
             except KeyError:
                 freqRef = 5.0e-324
@@ -100,10 +95,10 @@ class Keywords(object):
             ## 1. Expected occurrence within corpus
             ## 1a. Expected reference value: based on sentence index
             ## - Get the total N from corpus 1 (reference corpus)
-            ## - Multiply by the sum of observations only found in corpus 1 and those only found in corpus 2 (test corpus)
+            ## - Multiply by the sum of observations found in ref corpus and those found in test corpus
             ## - Divide by the sum of total N in test corpus and reference corpus
             expectedRef = refLength*(freqTest+freqRef)/(testLength+refLength)
-            ## 1b. Expected test value: based on quotes index
+            ## 1b. Expected test value
             ## Equivalent steps to 1a, but multiply by test N
             expectedTest = testLength*(freqTest+freqRef)/(testLength+refLength)
               
@@ -131,8 +126,6 @@ class Keywords(object):
            
             dec_Test = '%.2f' % freqTest
             dec_Ref = '%.2f' % freqRef
-            #propTest = (float(dec_Test)/354362) * 10000 (normalised per 10000)
-            #propRef = (float(dec_Ref)/354362) * 10000  
             propTest = (float(dec_Test)/testLength) * 100
             propRef = (float(dec_Ref)/refLength) * 100
            
@@ -161,11 +154,11 @@ class Keywords(object):
                     if (float(LL) > 2.71):# or (float(LL) < -2.71):
                         kw_list.append(['', term, str(freqTest), '%.2f' % propTest, str(freqRef2), '%.2f' % propRef, float(LL), pValue]) 
 
-        kw_list.sort(key=operator.itemgetter(6), reverse=True) ## reverse for descending order
+        ## sort by K value (descending)
+        kw_list.sort(key=operator.itemgetter(6), reverse=True) ## reverse=TRUE for descending order
         
         #return kw_list[0:1500] ## NB: Interface doesn't return first list item
-        #return kw_list[0:4999]
-        return kw_list[0:50]
+        return kw_list[0:4999]
 
                                             
         

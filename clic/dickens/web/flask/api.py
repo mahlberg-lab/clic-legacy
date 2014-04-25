@@ -160,7 +160,7 @@ def processArgs(args, method):
         methodArgs.insert(1, testIdxName)
         #methodArgs.insert(2, wordWindow) ## wordwindow set to 10 by default
         methodArgs.insert(2, book_collection)    
-        methodArgs.insert(3, select_words)    
+        methodArgs.insert(3, select_words)  
 
 
     return methodArgs

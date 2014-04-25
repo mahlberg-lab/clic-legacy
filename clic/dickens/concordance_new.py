@@ -179,7 +179,7 @@ class Concordancer_New(object):
                     
                     ## Define leftOnset as w - 10, then get all w and n between that and node
                     wordWindow = int(wordWindow)
-                    leftOnset = max(0, w-wordWindow+1)
+                    leftOnset = max(1, w-wordWindow+1) ## we operate with word position, not list position (word 1 = 0 position in list)
                     nodeOnset = w+1
                     nodeOffset = w+nodeLength
                     try:
