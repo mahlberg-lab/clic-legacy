@@ -37,42 +37,6 @@
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-    <style>
-        /* data table header */
-        h2.with-pills {
-            margin-top: 0;
-            margin-bottom: 20px;
-        }
-
-        .dataTables_wrapper > div {
-            border: 1px solid #666;
-            padding: 6px;
-        }
-
-        .dataTables_info {
-            display: inline;
-            margin-right: 2em;
-            float: none;
-        }
-
-        .DTTT .btn {
-            padding: 4px 8px;
-        }
-
-        .dataTables_filter {
-            display: inline;
-        }
-
-        .dataTables_filter .form-control {
-            margin-left: 6px;
-        }
-
-        .skinny				{line-height: 14px;}
-        .skinny	> li > a 	{padding: 3px 15px !important;}
-
-
-    </style>
-
 </head>
 
 <body>
@@ -142,7 +106,7 @@
                     <th>Ch</th>
                     <th>Par</th>
                     <th>Sen</th>
-                    <th>In bk</th>
+                    <th>In&nbsp;bk</th>
                 </tr>
                 </thead>
 
@@ -226,7 +190,7 @@ $(function () {
         var host = window.location.hostname;
 
         if (host == 'dev.webapps.nottingham.ac.uk') {
-            jsonUrl = 'exampleJson/concordances200Hits.json';
+            jsonUrl = 'exampleJson/concordances200HitsBothWords.json';
         } else {
             jsonUrl = '/concordances/' + params; // from the app
         }
@@ -322,7 +286,7 @@ $(function () {
                     },
                     // duplicate controls iflp
                     // plus add dataTools eg save
-                    "sDom": '<iTf>rt<iTf>',
+                    "sDom": '<iTf>rt<if>',
                     "oTableTools": {
                         "aButtons": [
                             "csv",
@@ -346,7 +310,6 @@ $(function () {
                         "sSwfPath": "js/thirdparty/DataTables1.10.0-beta.2/extensions/TableTools/swf/copy_csv_xls.swf"
                     }
                 });
-//                    $('<button id="refresh">Refresh</button>').appendTo('div.dataTables_filter');
             },
             error: function (e) {
                 //called when there is an error
