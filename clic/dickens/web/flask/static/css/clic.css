@@ -129,9 +129,24 @@ End Concordance results
 Keywords results
  */
 
+#dataTableKeywords_wrapper > div {
+    /*width: 67%;*/
+}
+
 #dataTableKeywords_wrapper .dataTables_filter {
    /*float: left;*/
    /*margin-top: 15px;*/
+}
+
+#dataTableKeywords_wrapper .dataTables_filter > label {
+    /*float: none;*/
+    margin-left: 10px;
+
+}
+
+#dataTableKeywords_wrapper .toolbar {
+    /*display: inline-block;*/
+    /*min-width: 51%;*/
 }
 
 #dataTableKeywords_wrapper .dataTables_info {
@@ -147,6 +162,10 @@ End Keywords results
 /*
 Clusters results
 */
+
+#dataTableClusters_wrapper > div {
+    /*width: 67%;*/
+}
 
 #dataTableClusters_wrapper .dataTables_filter {
     /*float: left;*/
@@ -209,3 +228,8 @@ table .nowrap {
     white-space: nowrap;
 }
 
+
+/*Plot view*/
+.tablePlot					{max-width: 900px;}
+.book 						{white-space: nowrap; width: 10%;}
+.plot 						{width: 90%; }
