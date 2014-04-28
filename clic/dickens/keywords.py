@@ -79,85 +79,86 @@ class Keywords(object):
         
         kw_list = []
         for term, freqTest in test_dict.iteritems():
-            try:
-                ## Method 1: how many observations of a given word is found in ref corpus but not in test corpus
-                ## Subtract number of occurrences in testIndex from number of occurrences in sentences
-                #freqRef = float(ref_dict[term] - freqTest)
-                ## Method 2: treat groups as mutually exclusive. NOTE: When comparing quotes with whole text the occurrences will overlap
-                freqRef = float(ref_dict[term])
-            except KeyError:
-                freqRef = 5.0e-324
-            else:
-                if freqRef <= 0:
+            if freqTest > 1:
+                try:
+                    ## Method 1: how many observations of a given word is found in ref corpus but not in test corpus
+                    ## Subtract number of occurrences in testIndex from number of occurrences in sentences
+                    #freqRef = float(ref_dict[term] - freqTest)
+                    ## Method 2: treat groups as mutually exclusive. NOTE: When comparing quotes with whole text the occurrences will overlap
+                    freqRef = float(ref_dict[term])
+                except KeyError:
                     freqRef = 5.0e-324
-            
-            ## following Paul Ryson formula for log likelihood (http://ucrel.lancs.ac.uk/llwizard.html)
-            ## 1. Expected occurrence within corpus
-            ## 1a. Expected reference value: based on sentence index
-            ## - Get the total N from corpus 1 (reference corpus)
-            ## - Multiply by the sum of observations found in ref corpus and those found in test corpus
-            ## - Divide by the sum of total N in test corpus and reference corpus
-            expectedRef = refLength*(freqTest+freqRef)/(testLength+refLength)
-            ## 1b. Expected test value
-            ## Equivalent steps to 1a, but multiply by test N
-            expectedTest = testLength*(freqTest+freqRef)/(testLength+refLength)
-              
-            ## 2. Log Likelihood
-            ## Compare actual observations with expected ocurrence for both test and ref, and add these values
-            ## Use log1p() (for natural logarithm - ln) instead of log()
-            if freqTest*log1p(freqTest/expectedTest) >= freqRef*log1p(freqRef/expectedRef):
-                try:
-                    LL = 2*((freqTest*log1p(freqTest/expectedTest)) + (freqRef*log1p(freqRef/expectedRef)))
-                    LL = '%.2f' % LL
-                except:
-                    LL = 909090
-            else:
-                try:
-                    LL = -2*((freqTest*log1p(freqTest/expectedTest)) + (freqRef*log1p(freqRef/expectedRef)))
-                    LL = '%.2f' % LL
-                except:
-                    LL = 909090
-            
-            if freqRef == 5.0e-324:
-                freqRef2 = 0
-            else:
-                freqRef2 = int('%.0f' % freqRef)               
-       
+                else:
+                    if freqRef <= 0:
+                        freqRef = 5.0e-324
+                
+                ## following Paul Ryson formula for log likelihood (http://ucrel.lancs.ac.uk/llwizard.html)
+                ## 1. Expected occurrence within corpus
+                ## 1a. Expected reference value: based on sentence index
+                ## - Get the total N from corpus 1 (reference corpus)
+                ## - Multiply by the sum of observations found in ref corpus and those found in test corpus
+                ## - Divide by the sum of total N in test corpus and reference corpus
+                expectedRef = refLength*(freqTest+freqRef)/(testLength+refLength)
+                ## 1b. Expected test value
+                ## Equivalent steps to 1a, but multiply by test N
+                expectedTest = testLength*(freqTest+freqRef)/(testLength+refLength)
+                  
+                ## 2. Log Likelihood
+                ## Compare actual observations with expected ocurrence for both test and ref, and add these values
+                ## Use log1p() (for natural logarithm - ln) instead of log()
+                if freqTest*log1p(freqTest/expectedTest) >= freqRef*log1p(freqRef/expectedRef):
+                    try:
+                        LL = 2*((freqTest*log1p(freqTest/expectedTest)) + (freqRef*log1p(freqRef/expectedRef)))
+                        LL = '%.2f' % LL
+                    except:
+                        LL = 909090
+                else:
+                    try:
+                        LL = -2*((freqTest*log1p(freqTest/expectedTest)) + (freqRef*log1p(freqRef/expectedRef)))
+                        LL = '%.2f' % LL
+                    except:
+                        LL = 909090
+                
+                if freqRef == 5.0e-324:
+                    freqRef2 = 0
+                else:
+                    freqRef2 = int('%.0f' % freqRef)               
            
-            dec_Test = '%.2f' % freqTest
-            dec_Ref = '%.2f' % freqRef
-            propTest = (float(dec_Test)/testLength) * 100
-            propRef = (float(dec_Ref)/refLength) * 100
-           
-
-            if float(pValue) <= 0.000001: ## not dealing with smaller p values as yet
-                if float(LL) >= 23.92:# or float(LL) <= -23.92:
-                    kw_list.append(['', term, str(freqTest), '%.2f' % propTest, str(freqRef2), '%.2f' % propRef, float(LL), pValue])
-                      
-            else:
-                if float(pValue) == 0.00001:
-                    if (float(LL) > 19.59):# or (float(LL) < -19.59):
-                        kw_list.append(['', term, str(freqTest), '%.2f' % propTest, str(freqRef2), '%.2f' % propRef, float(LL), pValue])    
-                elif float(pValue) == 0.0001: 
-                    if (float(LL) > 15.13):# or (float(LL) < -15.13):
-                        kw_list.append(['', term, str(freqTest), '%.2f' % propTest, str(freqRef2), '%.2f' % propRef, float(LL), pValue])  
-                elif float(pValue) == 0.001: 
-                    if (float(LL) > 10.83):# or (float(LL) < -10.83):
-                        kw_list.append(['', term, str(freqTest), '%.2f' % propTest, str(freqRef2), '%.2f' % propRef, float(LL), pValue]) 
-                elif float(pValue) == 0.01: 
-                    if (float(LL) > 6.63):# or (float(LL) < -6.63):
-                        kw_list.append(['', term, str(freqTest), '%.2f' % propTest, str(freqRef2), '%.2f' % propRef, float(LL), pValue]) 
-                elif float(pValue) == 0.05: 
-                    if (float(LL) > 3.84):# or (float(LL) < -3.84):
-                        kw_list.append(['', term, str(freqTest), '%.2f' % propTest, str(freqRef2), '%.2f' % propRef, float(LL), pValue]) 
-                elif float(pValue) == 0.1: ## NB: returns all values
-                    if (float(LL) > 2.71):# or (float(LL) < -2.71):
-                        kw_list.append(['', term, str(freqTest), '%.2f' % propTest, str(freqRef2), '%.2f' % propRef, float(LL), pValue]) 
+               
+                dec_Test = '%.2f' % freqTest
+                dec_Ref = '%.2f' % freqRef
+                propTest = (float(dec_Test)/testLength) * 100
+                propRef = (float(dec_Ref)/refLength) * 100
+               
+    
+                if float(pValue) <= 0.000001: ## not dealing with smaller p values as yet
+                    if float(LL) >= 23.92:# or float(LL) <= -23.92:
+                        kw_list.append(['', term, str(freqTest), '%.2f' % propTest, str(freqRef2), '%.2f' % propRef, float(LL), pValue])
+                          
+                else:
+                    if float(pValue) == 0.00001:
+                        if (float(LL) > 19.59):# or (float(LL) < -19.59):
+                            kw_list.append(['', term, str(freqTest), '%.2f' % propTest, str(freqRef2), '%.2f' % propRef, float(LL), pValue])    
+                    elif float(pValue) == 0.0001: 
+                        if (float(LL) > 15.13):# or (float(LL) < -15.13):
+                            kw_list.append(['', term, str(freqTest), '%.2f' % propTest, str(freqRef2), '%.2f' % propRef, float(LL), pValue])  
+                    elif float(pValue) == 0.001: 
+                        if (float(LL) > 10.83):# or (float(LL) < -10.83):
+                            kw_list.append(['', term, str(freqTest), '%.2f' % propTest, str(freqRef2), '%.2f' % propRef, float(LL), pValue]) 
+                    elif float(pValue) == 0.01: 
+                        if (float(LL) > 6.63):# or (float(LL) < -6.63):
+                            kw_list.append(['', term, str(freqTest), '%.2f' % propTest, str(freqRef2), '%.2f' % propRef, float(LL), pValue]) 
+                    elif float(pValue) == 0.05: 
+                        if (float(LL) > 3.84):# or (float(LL) < -3.84):
+                            kw_list.append(['', term, str(freqTest), '%.2f' % propTest, str(freqRef2), '%.2f' % propRef, float(LL), pValue]) 
+                    elif float(pValue) == 0.1: ## NB: returns all values
+                        if (float(LL) > 2.71):# or (float(LL) < -2.71):
+                            kw_list.append(['', term, str(freqTest), '%.2f' % propTest, str(freqRef2), '%.2f' % propRef, float(LL), pValue]) 
 
         ## sort by K value (descending)
         kw_list.sort(key=operator.itemgetter(6), reverse=True) ## reverse=TRUE for descending order
         
-        #return kw_list[0:1500] ## NB: Interface doesn't return first list item
+        #return kw_list[0:1500] 
         return kw_list[0:4999]
 
                                             
