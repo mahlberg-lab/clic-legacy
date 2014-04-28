@@ -120,14 +120,16 @@
             jsonUrl = '/keywords/' + params; // from the app
         }
 
-//        $.ajax({
-//            url: jsonUrl,
-//            type: 'GET',
-//            dataType: 'json',
-//            success: function (data) {
-
                 $('#tableContainer').html('<table class="table table-striped table-hover dataTable no-footer uonDatatable" id="dataTableKeywords"></table>');
                 var oTable = $('#dataTableKeywords').dataTable({
+
+                    "ajax": {
+                        "url": jsonUrl,
+                        "dataSrc": "keywords",
+                        "error": function (xhr, error, thrown) {
+                            alert( 'Sorry. Failed to load data. Please try again.' );
+                        }
+                    },
 
                     "fnDrawCallback": function ( oSettings ) {
                         /* Need to redo the counters if filtered or sorted */
@@ -139,11 +141,6 @@
                             }
                         }
                     },
-                    // Using dataTable Ajax method directly
-                    "sAjaxSource": jsonUrl,
-                    "sAjaxDataProp": "keywords",
-                    // via own ajax call
-//                    "aaData": data.keywords,
 
                     "aoColumns": [
                         { "sTitle": "No" },
@@ -178,16 +175,6 @@
                     // duplicate controls iflp
                     "sDom": '<"toolbar"iTf>rt<"toolbar"if>'
                 });
-//                oTable.fnSort([[6, 'desc'] ]); //sort on K desc - Rein now sorts JSON
-
-
-//            },
-//            error: function (e) {
-//                //called when there is an error
-//                console.log(e.message);
-//                alert("error retrieving JSON");
-//            }
-//        });
 
     });
 </script>
