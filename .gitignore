@@ -4,6 +4,8 @@
 *Store*.bdb
 *.data
 *.data_*
+indexes_OLD
+stores_OLD
 
 # Python compiled/optimized files
 *.py[co]
