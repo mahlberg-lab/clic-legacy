@@ -540,9 +540,9 @@ $(function () {
                 containerHtml += $('#allNtcDiv').wrap('<p/>').parent().html();
             }
 
-
             $('#booksTestMaterial').html(containerHtml);
-            $('#booksReferenceMaterial').html(containerHtml);
+            var refHtml = containerHtml.replace(/testCollection/g, "refCollection");
+            $('#booksReferenceMaterial').html(refHtml);
             $('#booksModalTestMaterial').modal('hide');
         }
 
