@@ -1,8 +1,10 @@
 [
-    "dickens",
+    ["dickens",
+        "All Dickens (15 novels)", [3835807, 1348611, 2487196]],
     [
         [
             "BH",
+            "Bleak House",
             [
                 354362,
                 138453,
@@ -80,6 +82,7 @@
         ],
         [
             "BR",
+            "Barnaby Rudge",
             [
                 254127,
                 82931,
@@ -172,6 +175,7 @@
         ],
         [
             "DC",
+            "David Copperfield",
             [
                 356233,
                 113501,
@@ -246,6 +250,7 @@
         ],
         [
             "DS",
+            "Dombey and Son",
             [
                 356405,
                 107613,
@@ -318,6 +323,7 @@
         ],
         [
             "ED",
+            "The Mystery of Edwin Drood",
             [
                 94126,
                 39872,
@@ -351,6 +357,7 @@
         ],
         [
             "GE",
+            "Great Expectations",
             [
                 185199,
                 52124,
@@ -420,6 +427,7 @@
         ],
         [
             "HT",
+            "Hard Times",
             [
                 103486,
                 44519,
@@ -467,6 +475,7 @@
         ],
         [
             "ld",
+            "Little Dorrit",
             [
                 338384,
                 119848,
@@ -547,6 +556,7 @@
         ],
         [
             "MC",
+            "Martin Chuzzlewit",
             [
                 335750,
                 128968,
@@ -611,6 +621,7 @@
         ],
         [
             "NN",
+            "Nicholas Nickleby",
             [
                 321378,
                 124724,
@@ -686,6 +697,7 @@
         ],
         [
             "OCS",
+            "The Old Curiosity Shop",
             [
                 217447,
                 62674,
@@ -769,6 +781,7 @@
         ],
         [
             "OMF",
+            "Our Mutual Friend",
             [
                 326116,
                 148904,
@@ -847,6 +860,7 @@
         ],
         [
             "OT",
+            "Oliver Twist",
             [
                 157020,
                 52117,
@@ -910,6 +924,7 @@
         ],
         [
             "PP",
+            "Pickwick Papers",
             [
                 299674,
                 88457,
@@ -977,6 +992,7 @@
         ],
         [
             "TTC",
+            "A Tale of Two Cities",
             [
                 136100,
                 43906,
@@ -1028,6 +1044,235 @@
                 124833,
                 129234,
                 133871
+            ]
+        ]
+    ],
+    ["NTC",
+        "All 19thC (29 Non-Dickens novels)", [3553963, 888485, 2665478]],
+    [
+        [
+            "sybil",
+            "Sybil, or the two nations",
+            [
+                147585,
+                36896,
+                110689
+            ]
+        ],
+        [
+            "Jekyll",
+            "The Strange Case of Dr Jekyll and Mr Hide",
+            [
+                26686,
+                6671,
+                20015
+            ]
+        ],
+        [
+            "vanity",
+            "Vanity Fair",
+            [
+                337752,
+                84438,
+                253314
+            ]
+        ],
+        [
+            "Pomp",
+            "The Last Days of Pompeii",
+            [
+                145381,
+                36345,
+                109036
+            ]
+        ],
+        [
+            "Deronda",
+            "Daniel Deronda",
+            [
+                285981,
+                71495,
+                214486
+            ]
+        ],
+        [
+            "basker",
+            "The Hound of the Baskervilles",
+            [
+                42034,
+                10508,
+                31526
+            ]
+        ],
+        [
+            "pride",
+            "Pride and Prejudice",
+            [
+                103342,
+                25835,
+                77507
+            ]
+        ],
+        [
+            "Tess",
+            "Tess of the D'Urbervilles",
+            [
+                151849,
+                37962,
+                113887
+            ]
+        ],
+        [
+            "cran",
+            "Cranford",
+            [
+                74732,
+                18683,
+                56049
+            ]
+        ],
+        [
+            "dorian",
+            "The Picture of Dorian Gray",
+            [
+                55786,
+                13946,
+                41840
+            ]
+        ],
+        [
+            "mary",
+            "Mary Barton",
+            [
+                78532,
+                13453,
+                65079
+            ]
+        ],
+        [
+            "Jude",
+            "Jude the Obscure",
+            [
+                123881,
+                30970,
+                92911
+            ]
+        ],
+        [
+            "AgnesG",
+            "Agnes Grey",
+            [
+                67660,
+                16915,
+                50745
+            ]
+        ],
+        [
+            "Antoni",
+            "Antonina, or the Fall of Rome",
+            [
+                179520,
+                44880,
+                134640
+            ]
+        ],
+        [
+            "arma",
+            "Armadale",
+            [
+                295249,
+                73812,
+                221437
+            ]
+        ],
+        [
+            "dracula",
+            "Dracula",
+            [
+                154504,
+                38626,
+                115878
+            ]
+        ],
+        [
+            "LadyAud",
+            "Lady Audley's Secret",
+            [
+                142209,
+                35552,
+                106657
+            ]
+        ],
+        [
+            "mill",
+            "The Mill on the Foss",
+            [
+                200677,
+                50169,
+                150508
+            ]
+        ],
+        [
+            "wh",
+            "Wuthering Heights",
+            [
+                106654,
+                26663,
+                79991
+            ]
+        ],
+        [
+            "NorthS",
+            "North and South",
+            [
+                147885,
+                36971,
+                110914
+            ]
+        ],
+        [
+            "Prof",
+            "The Professor",
+            [
+                88408,
+                22102,
+                66306
+            ]
+        ],
+        [
+            "wwhite",
+            "The Woman in White",
+            [
+                241380,
+                60345,
+                181035
+            ]
+        ],
+        [
+            "native",
+            "The Return of the Native",
+            [
+                122728,
+                30682,
+                92046
+            ]
+        ],
+        [
+            "alli",
+            "The Small House at Allington",
+            [
+                234882,
+                58720,
+                176162
+            ]
+        ],
+        [
+            "frank",
+            "Frankenstein",
+            [
+                77197,
+                19299,
+                57898
             ]
         ]
     ]
