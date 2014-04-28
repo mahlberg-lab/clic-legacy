@@ -203,7 +203,7 @@ div#booksModal.modal .allChkLabel {
 }
 
 #booksModal .modal-dialog, #booksModalTestMaterial .modal-dialog, #booksModalRefMaterial .modal-dialog {
-    width: 950px;
+    width: 60%;
 }
 
 /* End Book lists & related modal */

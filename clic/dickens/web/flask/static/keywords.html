@@ -33,8 +33,10 @@
 
 <div class="container">
     <img class="pull-right" src="img/uonlogo.png">
+
     <div class="header">
         <h1 class="uonHeaderh1">CLiC</h1>
+
         <p class="hidden-xs">A corpus tool to support the analysis of literary texts</p>
     </div>
 </div>
@@ -66,139 +68,138 @@
 <div class="container">
 
 
+    <h2>Keywords Search</h2>
 
-        <h2>Keywords Search</h2>
-        <form role="search" action="keywordsResults.html" method="get">
+    <form role="search" action="keywordsResults.html" method="get">
 
 
-            <div class="col-md-4">
+        <div class="col-md-4">
 
-                <br>
-                <label class="pull-left clicSelectSmallLabel">N-gram</label>
-                <select name="testIdxGroup" class="form-control input-sm clicSelectSmall">
-                    <option value="1gram-idx">1-gram</option>
-                    <option value="2gram-idx">2-gram</option>
-                    <option selected value="3gram-idx">3-gram</option>
-                    <option value="4gram-idx">4-gram</option>
-                    <option value="5gram-idx">5-gram</option>
-                    <option value="6gram-idx">6-gram</option>
-                    <option value="7gram-idx">7-gram</option>
-                    <option value="8gram-idx">8-gram</option>
-                    <option value="9gram-idx">9-gram</option>
-                    <option value="10gram-idx">10-gram</option>
-                    <option value="11gram-idx">11-gram</option>
-                    <option value="12gram-idx">12-gram</option>
-                </select>
-                <br>
+            <br>
+            <label class="pull-left clicSelectSmallLabel">N-gram</label>
+            <select name="testIdxGroup" class="form-control input-sm clicSelectSmall">
+                <option value="1gram-idx">1-gram</option>
+                <option value="2gram-idx">2-gram</option>
+                <option selected value="3gram-idx">3-gram</option>
+                <option value="4gram-idx">4-gram</option>
+                <option value="5gram-idx">5-gram</option>
+                <option value="6gram-idx">6-gram</option>
+                <option value="7gram-idx">7-gram</option>
+                <option value="8gram-idx">8-gram</option>
+                <option value="9gram-idx">9-gram</option>
+                <option value="10gram-idx">10-gram</option>
+                <option value="11gram-idx">11-gram</option>
+                <option value="12gram-idx">12-gram</option>
+            </select>
+            <br>
 
-                <h4>Test corpus</h4>
+            <h4>Test corpus</h4>
 
-                <div id="booksTestMaterial"></div>
+            <div id="booksTestMaterial"></div>
 
-                <a data-toggle="modal" href="#booksModalTestMaterial" class="btn btn-default">Change books</a>
+            <a data-toggle="modal" href="#booksModalTestMaterial" class="btn btn-default">Change books</a>
 
-                <br><br>
-                <h5>Search within</h5>
+            <br><br>
+            <h5>Search within</h5>
 
-                <div class="radio">
-                    <label>
-                        <input type="radio" name="testIdxMod" id="testIdxMod1" value="chapter">
-                        Whole text
-                    </label>
-                </div>
-                <div class="radio">
-                    <label>
-                        <input type="radio" name="testIdxMod" id="testIdxMod2" value="quote" checked >
-                        Quotes
-                    </label>
-                </div>
-                <div class="radio">
-                    <label>
-                        <input type="radio" name="testIdxMod" id="testIdxMod3" value="non-quote">
-                        Non-quotes
-                    </label>
-                </div>
-                <div class="radio">
-                    <label>
-                        <input type="radio" name="testIdxMod" id="testIdxMod4" value="longsus">
-                        Long suspensions (5 words or more)
-                    </label>
-                </div>
-                <div class="radio">
-                    <label>
-                        <input type="radio" name="testIdxMod" id="testIdxMod5" value="shortsus">
-                        Short suspensions (4 words or less)
-                    </label>
-                </div>
+            <div class="radio">
+                <label>
+                    <input type="radio" name="testIdxMod" id="testIdxMod1" value="chapter">
+                    Whole text
+                </label>
+            </div>
+            <div class="radio">
+                <label>
+                    <input type="radio" name="testIdxMod" id="testIdxMod2" value="quote" checked>
+                    Quotes
+                </label>
+            </div>
+            <div class="radio">
+                <label>
+                    <input type="radio" name="testIdxMod" id="testIdxMod3" value="non-quote">
+                    Non-quotes
+                </label>
+            </div>
+            <div class="radio">
+                <label>
+                    <input type="radio" name="testIdxMod" id="testIdxMod4" value="longsus">
+                    Long suspensions (5 words or more)
+                </label>
+            </div>
+            <div class="radio">
+                <label>
+                    <input type="radio" name="testIdxMod" id="testIdxMod5" value="shortsus">
+                    Short suspensions (4 words or less)
+                </label>
+            </div>
+        </div>
+
+
+        <div class="col-md-4">
+
+            <br>
+            <label class="pull-left clicSelectSmallLabel">P value</label>
+            <select name="pValue" class="form-control input-sm clicSelectSmall">
+                <option>0.1</option>
+                <option>0.05</option>
+                <option>0.01</option>
+                <option>0.001</option>
+                <option>0.0001</option>
+                <option>0.00001</option>
+                <option selected>0.000001</option>
+                <option>0.0000001</option>
+                <option>0.00000001</option>
+                <option>0.000000001</option>
+                <option>0.0000000001</option>
+                <option>0.00000000001</option>
+            </select>
+            <br>
+
+            <h4>Reference corpus</h4>
+
+            <div id="booksReferenceMaterial"></div>
+
+            <a data-toggle="modal" href="#booksModalRefMaterial" class="btn btn-default">Change books</a>
+
+
+            <br><br>
+            <h5>Search within</h5>
+
+            <div class="radio">
+                <label>
+                    <input type="radio" name="refIdxMod" id="refIdxMod1" value="chapter">
+                    Whole text
+                </label>
+            </div>
+            <div class="radio">
+                <label>
+                    <input type="radio" name="refIdxMod" id="refIdxMod2" value="quote">
+                    Quotes
+                </label>
+            </div>
+            <div class="radio">
+                <label>
+                    <input type="radio" name="refIdxMod" id="refIdxMod3" value="non-quote" checked>
+                    Non-quotes
+                </label>
+            </div>
+            <div class="radio">
+                <label>
+                    <input type="radio" name="refIdxMod" id="refIdxMod4" value="longsus">
+                    Long suspensions (5 words or more)
+                </label>
+            </div>
+            <div class="radio">
+                <label>
+                    <input type="radio" name="refIdxMod" id="refIdxMod5" value="shortsus">
+                    Short suspensions (4 words or less)
+                </label>
             </div>
 
-
-            <div class="col-md-4">
-
-                <br>
-                <label class="pull-left clicSelectSmallLabel">P value</label>
-                <select name="pValue" class="form-control input-sm clicSelectSmall">
-                    <option>0.1</option>
-                    <option>0.05</option>
-                    <option>0.01</option>
-                    <option>0.001</option>
-                    <option>0.0001</option>
-                    <option>0.00001</option>
-                    <option selected>0.000001</option>
-                    <option>0.0000001</option>
-                    <option>0.00000001</option>
-                    <option>0.000000001</option>
-                    <option>0.0000000001</option>
-                    <option>0.00000000001</option>
-                </select>
-                <br>
-
-                <h4>Reference corpus</h4>
-
-                <div id="booksReferenceMaterial"></div>
-
-                <a data-toggle="modal" href="#booksModalRefMaterial" class="btn btn-default">Change books</a>
-
-
-                <br><br>
-                <h5>Search within</h5>
-
-                <div class="radio">
-                    <label>
-                        <input type="radio" name="refIdxMod" id="refIdxMod1" value="chapter">
-                        Whole text
-                    </label>
-                </div>
-                <div class="radio">
-                    <label>
-                        <input type="radio" name="refIdxMod" id="refIdxMod2" value="quote">
-                        Quotes
-                    </label>
-                </div>
-                <div class="radio">
-                    <label>
-                        <input type="radio" name="refIdxMod" id="refIdxMod3" value="non-quote" checked>
-                        Non-quotes
-                    </label>
-                </div>
-                <div class="radio">
-                    <label>
-                        <input type="radio" name="refIdxMod" id="refIdxMod4" value="longsus">
-                        Long suspensions (5 words or more)
-                    </label>
-                </div>
-                <div class="radio">
-                    <label>
-                        <input type="radio" name="refIdxMod" id="refIdxMod5" value="shortsus">
-                        Short suspensions (4 words or less)
-                    </label>
-                </div>
-
-                <button type="submit" class="btn btn-primary pull-right">Search</button>
+            <button type="submit" class="btn btn-primary pull-right">Search</button>
 
         </div>
-        </form>
-
+    </form>
 
 
     <!--  Test Material Modal -->
@@ -216,11 +217,15 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    <button id="booksModalSubmit" type="button" class="btn btn-primary">Select books</button>
+                    <button id="booksModalSubmitTestOnly" type="button" class="btn btn-primary">Test</button>
+                    <button id="booksModalSubmitTestAndRef" type="button" class="btn btn-primary">Test & Ref</button>
                 </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
 
 
     <!--  Reference Material Modal -->
@@ -240,10 +245,12 @@
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                     <button id="booksModalRefSubmit" type="button" class="btn btn-primary">Select books</button>
                 </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
-
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
 
 
 </div>
@@ -262,147 +269,204 @@
 <script src="js/clic.js"></script>
 
 <script>
-    $(function () {
-        // add Jquery here
+$(function () {
+    // add Jquery here
 
-        // Concordance search radio help text
-        $('.concordanceRadio').click(function () {
-            if ($('#wholePhrase').is(':checked')) {
-                $('#concordanceRadioSearchTermsHelp').text('eg "dense fog"');
-            } else if ($('#any').is(':checked')) {
-                $('#concordanceRadioSearchTermsHelp').text('eg "dense" OR "fog" ');
-            }
+    // Concordance search radio help text
+    $('.concordanceRadio').click(function () {
+        if ($('#wholePhrase').is(':checked')) {
+            $('#concordanceRadioSearchTermsHelp').text('eg "dense fog"');
+        } else if ($('#any').is(':checked')) {
+            $('#concordanceRadioSearchTermsHelp').text('eg "dense" OR "fog" ');
+        }
+    });
+
+    // populate initial Books text from JSON
+    $.ajax({
+        url: 'exampleJson/bookcounts.json',
+        type: 'GET',
+        dataType: 'json',
+        success: function (data) {
+            var contentTest = '<div class="checkbox"><label><input type="checkbox" class="chkDickens" name="testCollection"  value="' + data[0][0] + '" checked ><b>' + data[0][1] + '</b><br>';
+            contentTest += '(' + addCommas(data[0][2][0]) + ' words; ' + addCommas(data[0][2][1]) + ' quotes, ' + addCommas(data[0][2][2]) + ' non-quotes)</label></div>';
+            var contentRef = '<div class="checkbox"><label><input type="checkbox" class="chkDickens" name="refCollection"  value="' + data[0][0] + '" checked ><b>' + data[0][1] + '</b><br>';
+            contentRef += '(' + addCommas(data[0][2][0]) + ' words; ' + addCommas(data[0][2][1]) + ' quotes, ' + addCommas(data[0][2][2]) + ' non-quotes)</label></div>';
+            $('#booksTestMaterial').html(contentTest);
+            $('#booksReferenceMaterial').html(contentRef);
+        },
+        error: function (e) {
+            //called when there is an error
+            console.log(e.message);
+            alert("Sorry. Failed to load books data. Please try again.");
+        }
+    });
+
+
+    /*
+     ++++++++++++++++++++++++++++++++++++++
+     Books List - booksModal Test Material
+     ++++++++++++++++++++++++++++++++++++++
+     * */
+    $('#booksModalTestMaterial').on('shown.bs.modal', function (e) {
+
+        // What selections do we have on main already?
+        var dickensSelected = [];
+        if ($("#booksTestMaterial #allDickensChk").length) {
+            dickensSelected.push('dickens');
+        }
+        $("#booksTestMaterial .chkDickens").each(function () {
+            dickensSelected.push($(this).val())
         });
 
-        // populate initial Books text from JSON
+        var ntcSelected = [];
+        if ($("#booksTestMaterial #allNtcChk").length) {
+            ntcSelected.push('NTC');
+        }
+        $("#booksTestMaterial .chkNtc").each(function () {
+            ntcSelected.push($(this).val())
+        });
+
+
         $.ajax({
             url: 'exampleJson/bookcounts.json',
             type: 'GET',
             dataType: 'json',
-            success: function(data)
-            {
-                var contentTest = '<div class="checkbox"><label><input type="checkbox" name="testCollection"  value="'+data[0][0]+'" checked ><b>'+data[0][1]+'</b><br>';
-                    contentTest += '('+addCommas(data[0][2][0])+' words; '+ addCommas(data[0][2][1])+' quotes, '+ addCommas(data[0][2][2])+' non-quotes)</label></div>';
-                var contentRef = '<div class="checkbox"><label><input type="checkbox" name="refCollection"  value="'+data[0][0]+'" checked ><b>'+data[0][1]+'</b><br>';
-                    contentRef += '('+addCommas(data[0][2][0])+' words; '+ addCommas(data[0][2][1])+' quotes, '+ addCommas(data[0][2][2])+' non-quotes)</label></div>';
-                $('#booksTestMaterial').html(contentTest);
-                $('#booksReferenceMaterial').html(contentRef);
+            success: function (data) {
+                var dickensList = data[1];
+                var content = '<div class="checkbox chkBooklist" id="allDickensDiv"><label>';
+                content += '<input id="allDickensChk" type="checkbox" name="testCollection" value="' + data[0][0] + '" checked >';
+                content += '<span class="allChkLabel"><b>' + data[0][1] + '</b></span><br>';
+                content += '(' + addCommas(data[0][2][0]) + ' words; ' + addCommas(data[0][2][1]) + ' quotes, ' + addCommas(data[0][2][2]) + ' non-quotes)';
+                content += '</label></div><div id="otherChk">';
+
+                for (var x = 0; x < dickensList.length; x++) {
+                    content += '<div class="checkbox"><label>';
+                    content += '<input class="chkDickens" type="checkbox" name="testCollection" value="' + dickensList[x][0] + '" checked >';
+                    content += '<b>' + dickensList[x][1] + '</b><br>';
+                    content += '(' + addCommas(dickensList[x][2][0]) + ' words; ' + addCommas(dickensList[x][2][1]) + ' quotes, ' + addCommas(dickensList[x][2][2]) + ' non-quotes)';
+                    content += '</label></div>';
+                }
+                content += '</div>';
+                $('#booksModalCol1').html(content);
+
+                //Uncheck all initially in modal
+                $("#booksModalTestMaterial #allDickensChk").prop('checked', false);
+                $("#booksModalTestMaterial .chkDickens").prop('checked', false);
+
+
+                // Replicate DICKENS checkbox selections from main? - Jquery check if in ARRAY
+
+                // if ALL DICKENS Selected on main form
+                if ($.inArray('dickens', dickensSelected) != -1) {
+                    $("#booksModalTestMaterial #allDickensChk").prop('checked', true);
+                    $("#booksModalTestMaterial .chkDickens").prop('checked', true);
+                } else {
+                    $('#booksModalTestMaterial .chkDickens').each(function () {
+                        if ($.inArray($(this).attr('value'), dickensSelected) != -1) {
+                            $(this).prop('checked', true);
+                        } else {
+                            $(this).prop('checked', false);
+                        }
+                    });
+                }
+
+                var ntcList = data[3];
+                var content = '<div class="checkbox chkBooklist" id="allNtcDiv"><label>';
+                content += '<input id="allNtcChk" type="checkbox" name="testCollection" value="' + data[2][0] + '" checked >';
+                content += '<span class="allChkLabel"><b>' + data[2][1] + '</b></span><br>';
+                content += '(' + addCommas(data[2][2][0]) + ' words; ' + addCommas(data[2][2][1]) + ' quotes, ' + addCommas(data[2][2][2]) + ' non-quotes)';
+                content += '</label></div>';
+
+                for (var x = 0; x < ntcList.length; x++) {
+                    content += '<div class="checkbox"><label>';
+                    content += '<input class="chkNtc" type="checkbox" name="testCollection" value="' + ntcList[x][0] + '" checked >';
+                    content += '<b>' + ntcList[x][1] + '</b><br>';
+                    content += '(' + addCommas(ntcList[x][2][0]) + ' words; ' + addCommas(ntcList[x][2][1]) + ' quotes, ' + addCommas(ntcList[x][2][2]) + ' non-quotes)';
+                    content += '</label></div>';
+                }
+                $('#booksModalCol2').html(content);
+                //Uncheck all NTC initially in modal
+                $("#booksModalTestMaterial #allNtcChk").prop('checked', false);
+                $("#booksModalTestMaterial .chkNtc").prop('checked', false);
+
+                // Replicate NTC checkbox selections from main? - Jquery check if in ARRAY
+
+                // if ALL NTC Selected on main form
+                if ($.inArray('NTC', ntcSelected) != -1) {
+                    $("#booksModalTestMaterial #allNtcChk").prop('checked', true);
+                    $("#booksModalTestMaterial .chkNtc").prop('checked', true);
+                } else {
+                    $('#booksModalTestMaterial .chkNtc').each(function () {
+                        if ($.inArray($(this).attr('value'), ntcSelected) != -1) {
+                            $(this).prop('checked', true);
+                        } else {
+                            $(this).prop('checked', false);
+                        }
+                    });
+                }
+
             },
-            error: function(e)
-            {
+            error: function (e) {
                 //called when there is an error
                 console.log(e.message);
-                alert("error retrieving JSON");
+                alert("Sorry. Failed to load books data. Please try again.");
             }
         });
+    })
+
+    // All Dickens checkbox toggle within modal
+    $(document).on("click", "#allDickensChk", function (event) {
+        if (this.checked) {
+            $("#booksModalTestMaterial .chkDickens").prop('checked', true);
+        } else {
+            $("#booksModalTestMaterial .chkDickens").prop('checked', false);
+        }
+    });
 
 
-         /*
-          ++++++++++++++++++++++++++++++++++++++
-          Books List - booksModal Test Material
-          ++++++++++++++++++++++++++++++++++++++
-         * */
-        $('#booksModalTestMaterial').on('shown.bs.modal', function (e) {
-            $.ajax({
-                url: 'exampleJson/bookcounts.json',
-                type: 'GET',
-                dataType: 'json',
-                success: function(data)
-                {
-                    var dickensList = data[1];
-                    var content = '<div class="checkbox chkBooklist" id="allDickensDiv"><label>';
-                    content += '<input id="allDickensChk" type="checkbox" name="testCollection" value="'+data[0][0]+'" checked >';
-                    content += '<span class="allChkLabel"><b>'+data[0][1]+'</b></span><br>';
-                    content +=  '('+addCommas(data[0][2][0])+' words; '+addCommas(data[0][2][1])+' quotes, '+addCommas(data[0][2][2])+' non-quotes)';
-                    content += '</label></div><div id="otherChk">';
-
-                    for (var x = 0; x < dickensList.length; x++) {
-                    content +=  '<div class="checkbox"><label>';
-                    content +=  '<input class="chkDickens" type="checkbox" name="testCollection" value="'+dickensList[x][0]+'" checked >';
-                    content +=  '<b>'+dickensList[x][1] + '</b><br>';
-                    content +=  '('+addCommas(dickensList[x][2][0])+' words; '+addCommas(dickensList[x][2][1])+' quotes, '+addCommas(dickensList[x][2][2])+' non-quotes)';
-                    content += '</label></div>';
-                    }
-                    content += '</div>';
-                    $('#booksModalCol1').html(content);
-
-                    var ntcList = data[3];
-                    var content = '<div class="checkbox chkBooklist" id="allNtcDiv"><label>';
-                    content += '<input id="allNtcChk" type="checkbox" name="testCollection" value="'+data[2][0]+'" checked >';
-                    content += '<span class="allChkLabel"><b>'+data[2][1]+'</b></span><br>';
-                    content +=  '('+addCommas(data[2][2][0])+' words; '+addCommas(data[2][2][1])+' quotes, '+addCommas(data[2][2][2])+' non-quotes)';
-                    content += '</label></div>';
-
-                    for (var x = 0; x < ntcList.length; x++) {
-                        content +=  '<div class="checkbox"><label>';
-                        content +=  '<input class="chkNtc" type="checkbox" name="testCollection" value="'+ntcList[x][0]+'" checked >';
-                        content +=  '<b>'+ntcList[x][1] + '</b><br>';
-                        content +=  '('+addCommas(ntcList[x][2][0])+' words; '+addCommas(ntcList[x][2][1])+' quotes, '+addCommas(ntcList[x][2][2])+' non-quotes)';
-                        content += '</label></div>';
-                    }
-                    $('#booksModalCol2').html(content);
-                    //Uncheck all NTC initially in modal
-                    $("#booksModalTestMaterial #allNtcChk").prop('checked', false);
-                    $("#booksModalTestMaterial .chkNtc").prop('checked', false);
-
-                },
-                error: function(e)
-                {
-                    //called when there is an error
-                    console.log(e.message);
-                    alert("error retrieving JSON");
-                }
-            });
-        })
-
-        // All Dickens checkbox toggle within modal
-        $(document).on("click", "#allDickensChk", function(event){
-            if(this.checked) {
-                $("#booksModalTestMaterial .chkDickens").prop('checked', true);
-            }else{
-                $("#booksModalTestMaterial .chkDickens").prop('checked', false);
-            }
-        });
+    // All Dickens checkbox - toggle if all books selected/unselected
+    $(document).on("click", "#booksModalTestMaterial .chkDickens", function (event) {
+        if ($('#booksModalTestMaterial .chkDickens:checked').length != $('#booksModalTestMaterial .chkDickens').length) {
+            $("#booksModalTestMaterial #allDickensChk").prop('checked', false);
+        } else {
+            $("#booksModalTestMaterial #allDickensChk").prop('checked', true);
+        }
+    });
 
 
-        // All Dickens checkbox - toggle if all books selected/unselected
-        $(document).on("click", "#booksModalTestMaterial .chkDickens", function(event){
-            if ($('#booksModalTestMaterial .chkDickens:checked').length != $('#booksModalTestMaterial .chkDickens').length) {
-                $("#booksModalTestMaterial #allDickensChk").prop('checked', false);
-            } else {
-                $("#booksModalTestMaterial #allDickensChk").prop('checked', true);
-            }
-        });
+    // All NTC checkbox toggle within modal
+    $(document).on("click", "#booksModalTestMaterial #allNtcChk", function (event) {
+        if (this.checked) {
+            $("#booksModalTestMaterial .chkNtc").prop('checked', true);
+        } else {
+            $("#booksModalTestMaterial .chkNtc").prop('checked', false);
+        }
+    });
+
+    // All NTC checkbox - toggle if all books selected/unselected
+    $(document).on("click", "#booksModalTestMaterial .chkNtc", function (event) {
+        if ($('.chkNtc:checked').length != $('.chkNtc').length) {
+            $("#booksModalTestMaterial #allNtcChk").prop('checked', false);
+        } else {
+            $("#booksModalTestMaterial #allNtcChk").prop('checked', true);
+        }
+    });
 
 
-        // All NTC checkbox toggle within modal
-        $(document).on("click", "#booksModalTestMaterial #allNtcChk", function(event){
-            if(this.checked) {
-                $("#booksModalTestMaterial .chkNtc").prop('checked', true);
-            }else{
-                $("#booksModalTestMaterial .chkNtc").prop('checked', false);
-            }
-        });
+    // Return selections from modal to main
+    $(document).on("click", "#booksModalSubmitTestOnly", function (event) {
 
-        // All NTC checkbox - toggle if all books selected/unselected
-        $(document).on("click", "#booksModalTestMaterial .chkNtc", function(event){
-            if ($('.chkNtc:checked').length != $('.chkNtc').length) {
-                $("#booksModalTestMaterial #allNtcChk").prop('checked', false);
-            } else {
-                $("#booksModalTestMaterial #allNtcChk").prop('checked', true);
-            }
-        });
+        var containerHtml = '';
+        $('#booksTestMaterial').html('');
 
-
-        // Return selections from modal to main
-        $(document).on("click", "#booksModalSubmit", function(event){
-
-            var containerHtml = '';
-            $('#booksTestMaterial').html('');
+        // No selections at all?
+        if ($('#booksModalTestMaterial #allDickensChk').prop('checked') == false && $('#booksModalTestMaterial #allNtcChk').prop('checked') == false && ($('#booksModalTestMaterial .chkDickens:checked').length == 0) && ($('#booksModalTestMaterial .chkNtc:checked').length == 0)) {
+            alert('You must make a selection...');
+        } else {
 
             // Individual Dickens checked?
             if ($('#booksModalTestMaterial #allDickensChk').prop('checked') == false) {
-                if ($('#booksModalTestMaterial .chkDickens:checked').length != 0 ) {
+                if ($('#booksModalTestMaterial .chkDickens:checked').length != 0) {
                     var individualDickensCheck = true;
                     $("#booksModalTestMaterial .chkDickens:checked").each(function () {
                         containerHtml += $(this).closest(".checkbox").wrap('<p/>').parent().html(); //wrap first so we get html of container
@@ -416,7 +480,7 @@
 
             // Individual NTC checked?
             if ($('#booksModalTestMaterial #allNtcChk').prop('checked') == false) {
-                if ($('#booksModalTestMaterial .chkNtc:checked').length != 0 ) {
+                if ($('#booksModalTestMaterial .chkNtc:checked').length != 0) {
                     var individualNtcCheck = true;
                     $("#booksModalTestMaterial .chkNtc:checked").each(function () {
                         containerHtml += $(this).closest(".checkbox").wrap('<p/>').parent().html(); //wrap first so we get html of container
@@ -431,123 +495,234 @@
 
             $('#booksTestMaterial').html(containerHtml);
             $('#booksModalTestMaterial').modal('hide');
+        }
 
-        });
-
-        /*
-         ++++++++++++++++++++++++++++++++++++++
-         * END * Books List - booksModal Test Material
-         ++++++++++++++++++++++++++++++++++++++
-         * */
+    });
 
 
 
-        /*
-         ++++++++++++++++++++++++++++++++++++++
-         Books List - booksModal Reference Material
-         ++++++++++++++++++++++++++++++++++++++
-         * */
-        $('#booksModalRefMaterial').on('shown.bs.modal', function (e) {
-            $.ajax({
-                url: 'exampleJson/bookcounts.json',
-                type: 'GET',
-                dataType: 'json',
-                success: function(data)
-                {
-                    var dickensList = data[1];
-                    var content = '<div class="checkbox chkBooklist" id="allDickensDiv"><label>';
-                    content += '<input id="allDickensChk" type="checkbox" name="refCollection" value="'+data[0][0]+'" checked >';
-                    content += '<span class="allChkLabel"><b>'+data[0][1]+'</b></span><br>';
-                    content +=  '('+addCommas(data[0][2][0])+' words; '+addCommas(data[0][2][1])+' quotes, '+addCommas(data[0][2][2])+' non-quotes)';
-                    content += '</label></div><div id="otherChk">';
+    // Return selections from modal to main ( replicate to Reference corpus also )
+    $(document).on("click", "#booksModalSubmitTestAndRef", function (event) {
 
-                    for (var x = 0; x < dickensList.length; x++) {
-                        content +=  '<div class="checkbox"><label>';
-                        content +=  '<input class="chkDickens" type="checkbox" name="refCollection" value="'+dickensList[x][0]+'" checked >';
-                        content +=  '<b>'+dickensList[x][1] + '</b><br>';
-                        content +=  '('+addCommas(dickensList[x][2][0])+' words; '+addCommas(dickensList[x][2][1])+' quotes, '+addCommas(dickensList[x][2][2])+' non-quotes)';
-                        content += '</label></div>';
-                    }
-                    content += '</div>';
-                    $('#booksModalRefCol1').html(content);
+        var containerHtml = '';
+        $('#booksTestMaterial').html('');
 
-                    var ntcList = data[3];
-                    var content = '<div class="checkbox chkBooklist" id="allNtcDiv"><label>';
-                    content += '<input id="allNtcChk" type="checkbox" name="refCollection" value="'+data[2][0]+'" checked >';
-                    content += '<span class="allChkLabel"><b>'+data[2][1]+'</b></span><br>';
-                    content +=  '('+addCommas(data[2][2][0])+' words; '+addCommas(data[2][2][1])+' quotes, '+addCommas(data[2][2][2])+' non-quotes)';
-                    content += '</label></div>';
+        // No selections at all?
+        if ($('#booksModalTestMaterial #allDickensChk').prop('checked') == false && $('#booksModalTestMaterial #allNtcChk').prop('checked') == false && ($('#booksModalTestMaterial .chkDickens:checked').length == 0) && ($('#booksModalTestMaterial .chkNtc:checked').length == 0)) {
+            alert('You must make a selection...');
+        } else {
 
-                    for (var x = 0; x < ntcList.length; x++) {
-                        content +=  '<div class="checkbox"><label>';
-                        content +=  '<input class="chkNtc" type="checkbox" name="refCollection" value="'+ntcList[x][0]+'" checked >';
-                        content +=  '<b>'+ntcList[x][1] + '</b><br>';
-                        content +=  '('+addCommas(ntcList[x][2][0])+' words; '+addCommas(ntcList[x][2][1])+' quotes, '+addCommas(ntcList[x][2][2])+' non-quotes)';
-                        content += '</label></div>';
-                    }
-                    $('#booksModalRefCol2').html(content);
-                    //Uncheck all NTC initially in modal
-                    $("#booksModalRefMaterial #allNtcChk").prop('checked', false);
-                    $("#booksModalRefMaterial .chkNtc").prop('checked', false);
-
-                },
-                error: function(e)
-                {
-                    //called when there is an error
-                    console.log(e.message);
-                    alert("error retrieving JSON");
+            // Individual Dickens checked?
+            if ($('#booksModalTestMaterial #allDickensChk').prop('checked') == false) {
+                if ($('#booksModalTestMaterial .chkDickens:checked').length != 0) {
+                    var individualDickensCheck = true;
+                    $("#booksModalTestMaterial .chkDickens:checked").each(function () {
+                        containerHtml += $(this).closest(".checkbox").wrap('<p/>').parent().html(); //wrap first so we get html of container
+                    });
                 }
-            });
-        })
-
-        // All Dickens checkbox toggle within modal
-        $(document).on("click", "#booksModalRefMaterial #allDickensChk", function(event){
-            if(this.checked) {
-                $("#booksModalRefMaterial .chkDickens").prop('checked', true);
-            }else{
-                $("#booksModalRefMaterial .chkDickens").prop('checked', false);
+            } else {
+                // all checked
+                $('#booksModalTestMaterial #allDickensDiv').removeClass('chkBooklist');
+                containerHtml += $('#allDickensDiv').wrap('<p/>').parent().html();
             }
+
+            // Individual NTC checked?
+            if ($('#booksModalTestMaterial #allNtcChk').prop('checked') == false) {
+                if ($('#booksModalTestMaterial .chkNtc:checked').length != 0) {
+                    var individualNtcCheck = true;
+                    $("#booksModalTestMaterial .chkNtc:checked").each(function () {
+                        containerHtml += $(this).closest(".checkbox").wrap('<p/>').parent().html(); //wrap first so we get html of container
+                    });
+                }
+            } else {
+                // all checked
+                $('#booksModalTestMaterial #allNtcDiv').removeClass('chkBooklist');
+                containerHtml += $('#allNtcDiv').wrap('<p/>').parent().html();
+            }
+
+            $('#booksTestMaterial').html(containerHtml);
+            var refHtml = containerHtml.replace(/testCollection/g, "refCollection");
+            $('#booksReferenceMaterial').html(refHtml);
+            $('#booksModalTestMaterial').modal('hide');
+        }
+
+    });
+
+    /*
+     ++++++++++++++++++++++++++++++++++++++
+     * END * Books List - booksModal Test Material
+     ++++++++++++++++++++++++++++++++++++++
+     * */
+
+
+    /*
+     ++++++++++++++++++++++++++++++++++++++
+     Books List - booksModal Reference Material
+     ++++++++++++++++++++++++++++++++++++++
+     * */
+    $('#booksModalRefMaterial').on('shown.bs.modal', function (e) {
+
+        // What selections do we have on main already?
+        var dickensRefSelected = [];
+        if ($("#booksReferenceMaterial #allDickensChk").length) {
+            dickensRefSelected.push('dickens');
+        }
+        $("#booksReferenceMaterial .chkDickens").each(function () {
+            dickensRefSelected.push($(this).val())
+        });
+
+        var ntcRefSelected = [];
+        if ($("#booksReferenceMaterial #allNtcChk").length) {
+            ntcRefSelected.push('NTC');
+        }
+        $("#booksReferenceMaterial .chkNtc").each(function () {
+            ntcRefSelected.push($(this).val())
         });
 
 
-        // All Dickens checkbox - toggle if all books selected/unselected
-        $(document).on("click", ".chkDickens", function(event){
-            if ($('.chkDickens:checked').length != $('.chkDickens').length) {
+        console.log(dickensRefSelected);
+        console.log(ntcRefSelected);
+
+        $.ajax({
+            url: 'exampleJson/bookcounts.json',
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                var dickensList = data[1];
+                var content = '<div class="checkbox chkBooklist" id="allDickensDiv"><label>';
+                content += '<input id="allDickensChk" type="checkbox" name="refCollection" value="' + data[0][0] + '" checked >';
+                content += '<span class="allChkLabel"><b>' + data[0][1] + '</b></span><br>';
+                content += '(' + addCommas(data[0][2][0]) + ' words; ' + addCommas(data[0][2][1]) + ' quotes, ' + addCommas(data[0][2][2]) + ' non-quotes)';
+                content += '</label></div><div id="otherChk">';
+
+                for (var x = 0; x < dickensList.length; x++) {
+                    content += '<div class="checkbox"><label>';
+                    content += '<input class="chkDickens" type="checkbox" name="refCollection" value="' + dickensList[x][0] + '" checked >';
+                    content += '<b>' + dickensList[x][1] + '</b><br>';
+                    content += '(' + addCommas(dickensList[x][2][0]) + ' words; ' + addCommas(dickensList[x][2][1]) + ' quotes, ' + addCommas(dickensList[x][2][2]) + ' non-quotes)';
+                    content += '</label></div>';
+                }
+                content += '</div>';
+                $('#booksModalRefCol1').html(content);
+
+                //Uncheck all initially in modal
                 $("#booksModalRefMaterial #allDickensChk").prop('checked', false);
-            } else {
-                $("#booksModalRefMaterial #allDickensChk").prop('checked', true);
-            }
-        });
+                $("#booksModalRefMaterial .chkDickens").prop('checked', false);
 
 
-        // All NTC checkbox toggle within modal
-        $(document).on("click", "#booksModalRefMaterial #allNtcChk", function(event){
-            if(this.checked) {
-                $("#booksModalRefMaterial .chkNtc").prop('checked', true);
-            }else{
-                $("#booksModalRefMaterial .chkNtc").prop('checked', false);
-            }
-        });
+                // Replicate DICKENS checkbox selections from main? - Jquery check if in ARRAY
 
-        // All NTC checkbox - toggle if all books selected/unselected
-        $(document).on("click", "#booksModalRefMaterial .chkNtc", function(event){
-            if ($('.chkNtc:checked').length != $('.chkNtc').length) {
+                // if ALL DICKENS Selected on main form
+                if ($.inArray('dickens', dickensRefSelected) != -1) {
+                    $("#booksModalRefMaterial #allDickensChk").prop('checked', true);
+                    $("#booksModalRefMaterial .chkDickens").prop('checked', true);
+                } else {
+                    $('#booksModalRefMaterial .chkDickens').each(function () {
+                        if ($.inArray($(this).attr('value'), dickensRefSelected) != -1) {
+                            $(this).prop('checked', true);
+                        } else {
+                            $(this).prop('checked', false);
+                        }
+                    });
+                }
+
+                var ntcList = data[3];
+                var content = '<div class="checkbox chkBooklist" id="allNtcDiv"><label>';
+                content += '<input id="allNtcChk" type="checkbox" name="refCollection" value="' + data[2][0] + '" checked >';
+                content += '<span class="allChkLabel"><b>' + data[2][1] + '</b></span><br>';
+                content += '(' + addCommas(data[2][2][0]) + ' words; ' + addCommas(data[2][2][1]) + ' quotes, ' + addCommas(data[2][2][2]) + ' non-quotes)';
+                content += '</label></div>';
+
+                for (var x = 0; x < ntcList.length; x++) {
+                    content += '<div class="checkbox"><label>';
+                    content += '<input class="chkNtc" type="checkbox" name="refCollection" value="' + ntcList[x][0] + '" checked >';
+                    content += '<b>' + ntcList[x][1] + '</b><br>';
+                    content += '(' + addCommas(ntcList[x][2][0]) + ' words; ' + addCommas(ntcList[x][2][1]) + ' quotes, ' + addCommas(ntcList[x][2][2]) + ' non-quotes)';
+                    content += '</label></div>';
+                }
+                $('#booksModalRefCol2').html(content);
+                //Uncheck all NTC initially in modal
                 $("#booksModalRefMaterial #allNtcChk").prop('checked', false);
-            } else {
-                $("#booksModalRefMaterial #allNtcChk").prop('checked', true);
+                $("#booksModalRefMaterial .chkNtc").prop('checked', false);
+
+                // Replicate NTC checkbox selections from main? - Jquery check if in ARRAY
+
+                // if ALL NTC Selected on main form
+                if ($.inArray('NTC', ntcRefSelected) != -1) {
+                    $("#booksModalRefMaterial #allNtcChk").prop('checked', true);
+                    $("#booksModalRefMaterial .chkNtc").prop('checked', true);
+                } else {
+                    $('#booksModalRefMaterial .chkNtc').each(function () {
+                        if ($.inArray($(this).attr('value'), ntcRefSelected) != -1) {
+                            $(this).prop('checked', true);
+                        } else {
+                            $(this).prop('checked', false);
+                        }
+                    });
+                }
+
+            },
+            error: function (e) {
+                //called when there is an error
+                console.log(e.message);
+                alert("Sorry. Failed to load books data. Please try again.");
             }
         });
+    })
+
+    // All Dickens checkbox toggle within modal
+    $(document).on("click", "#booksModalRefMaterial #allDickensChk", function (event) {
+        if (this.checked) {
+            $("#booksModalRefMaterial .chkDickens").prop('checked', true);
+        } else {
+            $("#booksModalRefMaterial .chkDickens").prop('checked', false);
+        }
+    });
 
 
-        // Return selections from modal to main
-        $(document).on("click", "#booksModalRefSubmit", function(event){
+    // All Dickens checkbox - toggle if all books selected/unselected
+    $(document).on("click", ".chkDickens", function (event) {
+        if ($('.chkDickens:checked').length != $('.chkDickens').length) {
+            $("#booksModalRefMaterial #allDickensChk").prop('checked', false);
+        } else {
+            $("#booksModalRefMaterial #allDickensChk").prop('checked', true);
+        }
+    });
 
-            var containerHtmlRef = '';
-            $('#booksReferenceMaterial').html('');
+
+    // All NTC checkbox toggle within modal
+    $(document).on("click", "#booksModalRefMaterial #allNtcChk", function (event) {
+        if (this.checked) {
+            $("#booksModalRefMaterial .chkNtc").prop('checked', true);
+        } else {
+            $("#booksModalRefMaterial .chkNtc").prop('checked', false);
+        }
+    });
+
+    // All NTC checkbox - toggle if all books selected/unselected
+    $(document).on("click", "#booksModalRefMaterial .chkNtc", function (event) {
+        if ($('.chkNtc:checked').length != $('.chkNtc').length) {
+            $("#booksModalRefMaterial #allNtcChk").prop('checked', false);
+        } else {
+            $("#booksModalRefMaterial #allNtcChk").prop('checked', true);
+        }
+    });
+
+
+    // Return selections from modal to main
+    $(document).on("click", "#booksModalRefSubmit", function (event) {
+
+        var containerHtmlRef = '';
+        $('#booksReferenceMaterial').html('');
+
+        // No selections at all?
+        if ($('#booksModalRefMaterial #allDickensChk').prop('checked') == false && $('#booksModalRefMaterial #allNtcChk').prop('checked') == false && ($('#booksModalRefMaterial .chkDickens:checked').length == 0) && ($('#booksModalRefMaterial .chkNtc:checked').length == 0)) {
+            alert('You must make a selection...');
+        } else {
 
             // Individual Dickens checked?
             if ($('#booksModalRefMaterial #allDickensChk').prop('checked') == false) {
-                if ($('#booksModalRefMaterial .chkDickens:checked').length != 0 ) {
+                if ($('#booksModalRefMaterial .chkDickens:checked').length != 0) {
                     var individualDickensCheck = true;
                     $("#booksModalRefMaterial .chkDickens:checked").each(function () {
                         containerHtmlRef += $(this).closest(".checkbox").wrap('<p/>').parent().html(); //wrap first so we get html of container
@@ -561,7 +736,7 @@
 
             // Individual NTC checked?
             if ($('#booksModalRefMaterial #allNtcChk').prop('checked') == false) {
-                if ($('#booksModalRefMaterial .chkNtc:checked').length != 0 ) {
+                if ($('#booksModalRefMaterial .chkNtc:checked').length != 0) {
                     var individualNtcCheck = true;
                     $("#booksModalRefMaterial .chkNtc:checked").each(function () {
                         containerHtmlRef += $(this).closest(".checkbox").wrap('<p/>').parent().html(); //wrap first so we get html of container
@@ -575,33 +750,37 @@
 
             $('#booksReferenceMaterial').html(containerHtmlRef);
             $('#booksModalRefMaterial').modal('hide');
-
-        });
-
-        /*
-         ++++++++++++++++++++++++++++++++++++++
-         * END * Books List - booksModal Reference Material
-         ++++++++++++++++++++++++++++++++++++++
-         * */
-
-
-
-
-
+        }
 
     });
+
+    /*
+     ++++++++++++++++++++++++++++++++++++++
+     * END * Books List - booksModal Reference Material
+     ++++++++++++++++++++++++++++++++++++++
+     * */
+
+
+});
 </script>
 
 <!-- Analytics
 =================================================== -->
 <script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+            (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 
-  ga('create', 'UA-921739-26', 'nottingham.ac.uk');
-  ga('send', 'pageview');
+    ga('create', 'UA-921739-26', 'nottingham.ac.uk');
+    ga('send', 'pageview');
 
 </script>
 

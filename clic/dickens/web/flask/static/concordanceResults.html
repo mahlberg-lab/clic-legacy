@@ -77,11 +77,6 @@
 <!--container-->
 <div class="container">
 
-            <!--<div id="switchView" class="pull-left">View: <a href="#" id="kwicView">KWIC</a> | <a href="#" id="plotView">Plot</a>-->
-                <!--| <a-->
-                        <!--href="#" id="statsView">Statistics</a></div>-->
-            <!--<button id="toggleMetadata" type="button" class="btn btn-info pull-right">Toggle metadata</button></div>-->
-
             <!-- Choose view -->
             <ul class="nav nav-pills pull-right skinny clearfix">
                 <li class="active"><a href="#" id="kwicView">KWIC</a></li>
@@ -371,16 +366,11 @@ $(function () {
                 }
 
                 $('#plotTbody').html(plotContent);
-//                alert(plotContent);
-
-
-
 
             },
             error: function (e) {
                 //called when there is an error
-                console.log(e.message);
-                alert("error retrieving JSON");
+                alert("Sorry. Failed to load data. Please try again.");
             }
         });
     }
