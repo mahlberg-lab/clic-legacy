@@ -80,7 +80,7 @@ def fetchClusters(args):
 
     return {'clusters' : clusterlist}
 
-@cache.cache('concordances', expire=3600)
+#@cache.cache('concordances', expire=3600)
 def fetchConcordance(args):
 
     concordancer = Concordancer_New()

@@ -287,7 +287,7 @@ class Concordancer_New(object):
                     
                     conc_lines.append(conc_line)
                     
-                if count > 500:
+                if count > 400:
                     break
 
 
