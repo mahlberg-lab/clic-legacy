@@ -256,6 +256,10 @@ class Concordancer_New(object):
                                     count_word = count_word + int(c[2])
                                     j += 1
                                     break
+                                
+                                ## total word in chapter
+                                if j+1 == int(chapter):
+                                    chapWordCount = b[2][j][2]
                     
                     book_title = booktitle[0]   ## get book title 
                     total_word = total_word[0]     
@@ -277,7 +281,7 @@ class Concordancer_New(object):
 #                                 [para_book, sent_book, word_book, total_word]]
 
                     conc_line = [left_text, node_text, right_text,
-                                [book, book_title, chapter, para_chap, sent_chap, str(word_chap)],
+                                [book, book_title, chapter, para_chap, sent_chap, str(word_chap), str(chapWordCount)],
                                 [str(para_book), str(sent_book), str(word_book), str(total_word)]]
                     
                     
