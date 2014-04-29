@@ -47,9 +47,10 @@ class Keywords(object):
         test_idx = db.get_object(session, testIdxName)
         test_facets = test_idx.facets(session, test_results)
         ## create dictionary containing word/cluster and number of occurrences
-        test_dict = {}
-        for x in test_facets:
-            test_dict[x[0]] = x[1][2]        
+        test_dict = {x[0]: x[1][2] for x in test_facets}
+#         test_dict = {}
+#         for x in test_facets:
+#             test_dict[x[0]] = x[1][2]        
         
         # Reference results
         clauses_ref = []
@@ -66,16 +67,15 @@ class Keywords(object):
         ref_results = db.search(session, ref_query)
         ref_idx = db.get_object(session, refIdxName)
         ref_facets = ref_idx.facets(session, ref_results)
-        #ref_dict = {x[0]: x[1][2] for x in ref_facets}
-        ref_dict = {}
-        for x in ref_facets:
-            ref_dict[x[0]] = x[1][2]
+        ref_dict = {x[0]: x[1][2] for x in ref_facets}
+#         ref_dict = {}
+#         for x in ref_facets:
+#             ref_dict[x[0]] = x[1][2]
         
         ## get test and ref lengths
         ## I use total counts to calculate expected values
         testLength = sum(test_dict.values())
-        refLength = sum(ref_dict.values())
-
+        refLength = sum(ref_dict.values())        
         
         kw_list = []
         for term, freqTest in test_dict.iteritems():
