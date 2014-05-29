@@ -320,7 +320,7 @@ $(function () {
 
         var ntcSelected = [];
         if ($("#booksTestMaterial #allNtcChk").length) {
-            ntcSelected.push('NTC');
+            ntcSelected.push('ntc');
         }
         $("#booksTestMaterial .chkNtc").each(function () {
             ntcSelected.push($(this).val())
@@ -392,7 +392,7 @@ $(function () {
                 // Replicate NTC checkbox selections from main? - Jquery check if in ARRAY
 
                 // if ALL NTC Selected on main form
-                if ($.inArray('NTC', ntcSelected) != -1) {
+                if ($.inArray('ntc', ntcSelected) != -1) {
                     $("#booksModalTestMaterial #allNtcChk").prop('checked', true);
                     $("#booksModalTestMaterial .chkNtc").prop('checked', true);
                 } else {
@@ -573,7 +573,7 @@ $(function () {
 
         var ntcRefSelected = [];
         if ($("#booksReferenceMaterial #allNtcChk").length) {
-            ntcRefSelected.push('NTC');
+            ntcRefSelected.push('ntc');
         }
         $("#booksReferenceMaterial .chkNtc").each(function () {
             ntcRefSelected.push($(this).val())
@@ -648,7 +648,7 @@ $(function () {
                 // Replicate NTC checkbox selections from main? - Jquery check if in ARRAY
 
                 // if ALL NTC Selected on main form
-                if ($.inArray('NTC', ntcRefSelected) != -1) {
+                if ($.inArray('ntc', ntcRefSelected) != -1) {
                     $("#booksModalRefMaterial #allNtcChk").prop('checked', true);
                     $("#booksModalRefMaterial .chkNtc").prop('checked', true);
                 } else {
