@@ -237,3 +237,12 @@ table .nowrap {
 .tablePlot					{max-width: 900px;}
 .book 						{white-space: nowrap; width: 10%;}
 .plot 						{width: 90%; }
+
+/*About Feedback formatting*/
+.padded	{padding-top: 20px;}
+.sideHead	{text-align: left;}
+@media (max-width: 768px)
+{
+	.sideHead	{float: left; padding-right: 20px;}
+	.sideContent	{float: left;}
+}
