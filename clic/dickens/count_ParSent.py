@@ -1,4 +1,5 @@
 ## count words in books, and list titles
+## used to create booklist
 
 import os
 import re
@@ -20,13 +21,28 @@ qf = db.get_object(session, 'defaultQueryFactory')
 resultSetStore = db.get_object(session, 'resultSetStore')       
 idxStore = db.get_object(session, 'indexStore')
 
-list_books = ['BH', 'BR', 'DC', 'DS', 'ED', 'GE', 'HT', 'ld', 'MC', 'NN',
-              'OCS', 'OMF', 'OT', 'PP', 'TTC']
+list_books = ['BH', 'BR', 'DC', 'DS', 'ED', 'GE', 'HT', 'LD', 'MC', 'NN',
+              'OCS', 'OMF', 'OT', 'PP', 'TTC',
+              
+              'AgnesG', 'Antoni', 'arma', 'cran', 'Deronda', 'dracula', 'emma', 'frank', 'jane', 'Jude',
+               'LadyAud', 'mary', 'NorthS', 'persuasion', 'pride', 'sybil', 'Tess', 'basker', 'Pomp', 'mill',
+               'dorian', 'Prof', 'native', 'alli', 'Jekyll', 'wwhite', 'vanity', 'VivianG', 'wh']
 
 titles = {'BH': 'Bleak House', 'BR': 'Barnaby Rudge', 'DC': 'David Copperfield', 'DS': 'Dombey and Son',
           'ED': 'The Mystery of Edwin Drood', 'GE': 'Great Expectations', 'HT': 'Hard Times', 'ld': 'Little Dorrit', 
           'MC': 'Martin Chuzzlewit', 'NN': 'Nicholas Nickleby', 'OCS': 'The Old Curiosity Shop', 'OMF': 'Our Mutual Friend', 
-          'OT': 'Oliver Twist', 'PP': 'Pickwick Papers', 'TTC': 'A Tale of Two Cities'}
+          'OT': 'Oliver Twist', 'PP': 'Pickwick Papers', 'TTC': 'A Tale of Two Cities',
+          
+          'AgnesG': 'Agnes Grey', 'Antoni': 'Antonina, or the Fall of Rome', 'arma': 'Armadale', 'cran': 'Cranford', 
+          'Deronda': 'Daniel Deronda', 'dracula': 'Dracula', 'emma': 'Emma', 'frank': 'Frankenstein', 'jane': 'Jane Eyre',
+          'Jude': 'Jude the Obscure', 'LadyAud': 'Lady Audley\'s Secret', 'mary': 'Mary Barton', 'NorthS': 'North and South',
+          'persuasion': 'Persuasion', 'pride': 'Pride and Prejudice', 'sybil': 'Sybil, or the two nations',
+          'Tess': 'Tess of the D\'Urbervilles', 'basker': 'The Hound of the Baskervilles', 'Pomp': 'The Last Days of Pompeii', 
+          'mill': 'The Mill on the Floss', 'dorian': 'The Picture of Dorian Gray', 'Prof': 'The Professor',
+          'native': 'The Return of the Native', 'alli': 'The Small House at Allington', 
+          'Jekyll': 'The Strange Case of Dr Jekyll and Mr Hide', 'wwhite': 'The Woman in White',
+          'vanity': 'Vanity Fair', 'VivianG': 'Vivian Grey', 'wh': 'Wuthering Heights'          
+          }
 
    
 list_all_books = []
