@@ -67,11 +67,12 @@ if ('-austen' in sys.argv):
 ### index 19C material
 if ('-ntc' in sys.argv):
     geniaTxr = db.get_object(session, 'corpusTransformer')
-    indexWF = db.get_object(session, 'indexWorkflow-ntc')
-    ntcRecStore = db.get_object(session, 'ntcRecordStore') ##
-    data = '/home/aezros/Data/ntc_novels'
+    indexWF = db.get_object(session, 'indexWorkflow')
+    #data = '/home/aezros/cheshire3/dbs/dickens/data/dickens_novels'
+    #data = '/home/aezros/Data/ntc_novelsTEST'
+    data = '/cheshire3/clic/dbs/dickens/data/ntc_novels'
     df.load(session, data)
-    ntcRecStore.begin_storing(session) ##?
+    recStore.begin_storing(session)
     db.begin_indexing(session) 
     errorCount= 0
     for i, d in enumerate(df, start=1):
@@ -83,7 +84,7 @@ if ('-ntc' in sys.argv):
                                     'Record {0} created'.format(i)
                                     )
             rec2 = xmlp.process_document(session, genia)
-            ntcRecStore.create_record(session, rec2) ##?
+            recStore.create_record(session, rec2)
             session.logger.log_info(session,
                                     'Record {0} stored'.format(i)
                                     )
