@@ -31,11 +31,18 @@ class Keywords(object):
         session = self.session
         db = self.db
 
+#         Dickens_vol = ['BH', 'BR', 'DC',
+#                         'DS', 'ED', 'GE', 'HT', 'LD', 'MC', 'NN',
+#                         'OCS', 'OMF', 'OT', 'PP', 'TTC']
+
         # Test results
         clauses = []
         for testMaterial in testMaterials:
+            #testMatIdx = 'book-idx'#
             if testMaterial in ['dickens', 'ntc']:
                 testMatIdx = 'subCorpus-idx'
+#                 for book in Dickens_vol:#
+#                     clauses.append('c3.{0} = "{1}"'.format(testMatIdx, book)) 
             else:
                 testMatIdx = 'book-idx'
             clauses.append('c3.{0} = "{1}"'.format(testMatIdx, testMaterial))
@@ -55,8 +62,11 @@ class Keywords(object):
         # Reference results
         clauses_ref = []
         for refMaterial in refMaterials:
+            #refMatIdx = 'book-idx'
             if refMaterial in ['dickens', 'ntc']:
                 refMatIdx = 'subCorpus-idx'
+#                 for book in Dickens_vol:#
+#                     clauses_ref.append('c3.{0} = "{1}"'.format(refMatIdx, book)) 
             else:
                 refMatIdx = 'book-idx'
             clauses_ref.append('c3.{0} = "{1}"'.format(refMatIdx, refMaterial))
@@ -76,7 +86,7 @@ class Keywords(object):
         ## I use total counts to calculate expected values
         testLength = sum(test_dict.values())
         refLength = sum(ref_dict.values())        
-        
+       
         kw_list = []
         for term, freqTest in test_dict.iteritems():
             if freqTest > 1:

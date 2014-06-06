@@ -43,16 +43,16 @@ class Concordancer_New(object):
         wordWindow = 10    
     
         
-        Dickens_vol = ['BH', 'BR', 'DC',
-                        'DS', 'ED', 'GE', 'HT', 'LD', 'MC', 'NN',
-                        'OCS', 'OMF', 'OT', 'PP', 'TTC']
+#         Dickens_vol = ['BH', 'BR', 'DC',
+#                         'DS', 'ED', 'GE', 'HT', 'LD', 'MC', 'NN',
+#                         'OCS', 'OMF', 'OT', 'PP', 'TTC']
         books = []
         for Material in Materials:
             MatIdx = 'book-idx'
-            if Material in ['dickens']:
-                for book in Dickens_vol:
-                    books.append('c3.{0} = "{1}"'.format(MatIdx, book))  
-            elif Material in ['ntc']:
+            #if Material in ['dickens']:
+                #for book in Dickens_vol:
+                    #books.append('c3.{0} = "{1}"'.format(MatIdx, book))  
+            if Material in ['dickens', 'ntc']:
                 MatIdx_Vol = 'subCorpus-idx'
                 books.append('c3.{0} = "{1}"'.format(MatIdx_Vol, Material))
             else:
