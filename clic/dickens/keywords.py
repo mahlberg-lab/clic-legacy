@@ -138,28 +138,44 @@ class Keywords(object):
                 dec_Test = '%.2f' % freqTest
                 dec_Ref = '%.2f' % freqRef
                 propTest = (float(dec_Test)/testLength) * 100
-                propRef = (float(dec_Ref)/refLength) * 100
-               
-    
-                if float(pValue) <= 0.000001: ## not dealing with smaller p values as yet
-                    if float(LL) >= 23.92:# or float(LL) <= -23.92:
+                propRef = (float(dec_Ref)/refLength) * 100                
+              
+                
+                if float(pValue) == 0.000001:                     
+                    if float(LL) >= 23.93:# or float(LL) <= -23.93: ## We only deal with positive LL values
                         kw_list.append(['', term, str(freqTest), '%.2f' % propTest, str(freqRef2), '%.2f' % propRef, float(LL), pValue])
                           
                 else:
+                    if float(pValue) == 0.0000001:
+                        if float(LL) >= 28.38:
+                            kw_list.append(['', term, str(freqTest), '%.2f' % propTest, str(freqRef2), '%.2f' % propRef, float(LL), pValue])
+                    if float(pValue) == 0.00000001:
+                        if float(LL) >= 32.85:
+                            kw_list.append(['', term, str(freqTest), '%.2f' % propTest, str(freqRef2), '%.2f' % propRef, float(LL), pValue])
+                    if float(pValue) == 0.000000001:
+                        if float(LL) >= 37.33:
+                            kw_list.append(['', term, str(freqTest), '%.2f' % propTest, str(freqRef2), '%.2f' % propRef, float(LL), pValue])
+                    if float(pValue) == 0.0000000001:
+                        if float(LL) >= 41.83:
+                            kw_list.append(['', term, str(freqTest), '%.2f' % propTest, str(freqRef2), '%.2f' % propRef, float(LL), pValue])
+                    if float(pValue) == 0.00000000001:
+                        if float(LL) >= 46.33:
+                            kw_list.append(['', term, str(freqTest), '%.2f' % propTest, str(freqRef2), '%.2f' % propRef, float(LL), pValue])
+                    
                     if float(pValue) == 0.00001:
-                        if (float(LL) > 19.59):# or (float(LL) < -19.59):
+                        if (float(LL) > 19.52):# or (float(LL) < -19.52):
                             kw_list.append(['', term, str(freqTest), '%.2f' % propTest, str(freqRef2), '%.2f' % propRef, float(LL), pValue])    
                     elif float(pValue) == 0.0001: 
-                        if (float(LL) > 15.13):# or (float(LL) < -15.13):
+                        if (float(LL) > 15.14):# or (float(LL) < -15.14):
                             kw_list.append(['', term, str(freqTest), '%.2f' % propTest, str(freqRef2), '%.2f' % propRef, float(LL), pValue])  
                     elif float(pValue) == 0.001: 
                         if (float(LL) > 10.83):# or (float(LL) < -10.83):
                             kw_list.append(['', term, str(freqTest), '%.2f' % propTest, str(freqRef2), '%.2f' % propRef, float(LL), pValue]) 
                     elif float(pValue) == 0.01: 
-                        if (float(LL) > 6.63):# or (float(LL) < -6.63):
+                        if (float(LL) > 6.64):# or (float(LL) < -6.64):
                             kw_list.append(['', term, str(freqTest), '%.2f' % propTest, str(freqRef2), '%.2f' % propRef, float(LL), pValue]) 
                     elif float(pValue) == 0.05: 
-                        if (float(LL) > 3.84):# or (float(LL) < -3.84):
+                        if (float(LL) > 3.85):# or (float(LL) < -3.85):
                             kw_list.append(['', term, str(freqTest), '%.2f' % propTest, str(freqRef2), '%.2f' % propRef, float(LL), pValue]) 
                     elif float(pValue) == 0.1: ## NB: returns all values
                         if (float(LL) > 2.71):# or (float(LL) < -2.71):
