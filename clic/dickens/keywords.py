@@ -1,7 +1,4 @@
-
-
 import os
-import re
 from math import log1p
 import operator
 
@@ -27,22 +24,14 @@ class Keywords(object):
         self.logger = self.db.get_object(self.session, 'keywordLogger')
         
     def list_keywords(self, testIdxName, testMaterials, refIdxName, refMaterials, pValue):
-        #self.logger.log(10, 'CREATING KEYWORDS FOR RS: {0} in {1}, compared to {2} in {3}'.format(testIdxName, testMaterials, refIdxName, refMaterials)) 
+        #self.logger.log(10, 'CREATING KEYWORDS FOR RS: {0} in {1}, compared to {2} in {3}'.format(testIdxName, testMaterials, refIdxName, refMaterials, pValue)) 
         session = self.session
         db = self.db
 
-#         Dickens_vol = ['BH', 'BR', 'DC',
-#                         'DS', 'ED', 'GE', 'HT', 'LD', 'MC', 'NN',
-#                         'OCS', 'OMF', 'OT', 'PP', 'TTC']
-
-        # Test results
         clauses = []
         for testMaterial in testMaterials:
-            #testMatIdx = 'book-idx'#
             if testMaterial in ['dickens', 'ntc']:
                 testMatIdx = 'subCorpus-idx'
-#                 for book in Dickens_vol:#
-#                     clauses.append('c3.{0} = "{1}"'.format(testMatIdx, book)) 
             else:
                 testMatIdx = 'book-idx'
             clauses.append('c3.{0} = "{1}"'.format(testMatIdx, testMaterial))
@@ -53,20 +42,15 @@ class Keywords(object):
         test_results = db.search(session, test_query)
         test_idx = db.get_object(session, testIdxName)
         test_facets = test_idx.facets(session, test_results)
+        
         ## create dictionary containing word/cluster and number of occurrences
         test_dict = {x[0]: x[1][2] for x in test_facets}
-#         test_dict = {}
-#         for x in test_facets:
-#             test_dict[x[0]] = x[1][2]        
         
         # Reference results
         clauses_ref = []
         for refMaterial in refMaterials:
-            #refMatIdx = 'book-idx'
             if refMaterial in ['dickens', 'ntc']:
                 refMatIdx = 'subCorpus-idx'
-#                 for book in Dickens_vol:#
-#                     clauses_ref.append('c3.{0} = "{1}"'.format(refMatIdx, book)) 
             else:
                 refMatIdx = 'book-idx'
             clauses_ref.append('c3.{0} = "{1}"'.format(refMatIdx, refMaterial))
@@ -78,9 +62,6 @@ class Keywords(object):
         ref_idx = db.get_object(session, refIdxName)
         ref_facets = ref_idx.facets(session, ref_results)
         ref_dict = {x[0]: x[1][2] for x in ref_facets}
-#         ref_dict = {}
-#         for x in ref_facets:
-#             ref_dict[x[0]] = x[1][2]
         
         ## get test and ref lengths
         ## I use total counts to calculate expected values
@@ -183,8 +164,7 @@ class Keywords(object):
 
         ## sort by K value (descending)
         kw_list.sort(key=operator.itemgetter(6), reverse=True) ## reverse=TRUE for descending order
-        
-        #return kw_list[0:1500] 
+
         return kw_list[0:4999]
 
                                             

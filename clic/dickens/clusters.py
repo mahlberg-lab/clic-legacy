@@ -1,5 +1,4 @@
 import os
-import re
 import operator
 
 from cheshire3.document import StringDocument
