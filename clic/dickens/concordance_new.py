@@ -73,7 +73,7 @@ class Concordancer_New(object):
                 for m in i.proxInfo: 
                     count += 1
                     
-                    if count > 500:
+                    if count > 1000:
                         break
                     else:
                      
