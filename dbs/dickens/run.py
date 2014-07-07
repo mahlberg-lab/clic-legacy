@@ -68,7 +68,8 @@ if ('-austen' in sys.argv):
 if ('-ntc' in sys.argv):
     geniaTxr = db.get_object(session, 'corpusTransformer')
     indexWF = db.get_object(session, 'indexWorkflow')
-    data = '/home/aezros/cheshire3/dbs/dickens/data/dickens_novels'
+    #data = '/home/aezros/cheshire3/dbs/dickens/data/dickens_novels'
+    data = '/home/aezros/Data/ntc_novels'
     df.load(session, data)
     recStore.begin_storing(session)
     db.begin_indexing(session) 
@@ -103,7 +104,6 @@ if ('-load' in sys.argv):
     geniaTxr = db.get_object(session, 'corpusTransformer')
     indexWF = db.get_object(session, 'indexWorkflow')
     #data = '/home/aezros/cheshire3/dbs/dickens/data/dickens_novels'
-    data = '/home/aezros/Data/dickens_novels'
     df.load(session, data)
     recStore.begin_storing(session)
     db.begin_indexing(session) 
