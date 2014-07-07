@@ -25,7 +25,7 @@ class Concordancer_New(object):
         self.qf = self.db.get_object(self.session, 'defaultQueryFactory')
         self.resultSetStore = self.db.get_object(self.session, 'resultSetStore')        
         self.idxStore = self.db.get_object(self.session, 'indexStore')
-        self.logger = self.db.get_object(self.session, 'concordanceLogger')      
+        #self.logger = self.db.get_object(self.session, 'concordanceLogger')      
        
     ## main concordance method
     ## create a list of lists containing each three contexts left - node -right, 
