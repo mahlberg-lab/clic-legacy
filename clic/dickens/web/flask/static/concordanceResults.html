@@ -88,7 +88,7 @@
 
     <div id="concordanceWrap">
 
-        <!--<p>Searched for <b>hands</b> within <b>Whole Text</b> in <b>Bleak House</b>.</p>-->
+        <p id="searchedFor"></p>
 
         <table width="100%" class="table table-striped table-hover dataTable no-footer uonDatatable"
                id="dataTableConcordance">
@@ -237,6 +237,40 @@ $(function () {
 // Get URL params
     var params = location.search;
     var host = window.location.hostname;
+    var totalNumberOfHits = 0;
+
+    var searchTerms = params.slice(params.indexOf("terms=") + 6);
+    searchTerms = decodeURI(searchTerms.slice(0, searchTerms.indexOf("&")));
+
+    var testIdxMod = params.slice(params.indexOf("testIdxMod=") + 11);
+
+    var searchSpace = "";
+
+    switch(testIdxMod) {
+        case "quote":
+            searchSpace = "quotes";
+            break;
+
+        case "non-quote":
+            searchSpace = "non-quotes";
+            break;
+
+        case "longsus":
+            searchSpace = "long suspensions";
+            break;
+
+        case "shortsus":
+            searchSpace = "short suspensions";
+            break;
+
+        default:
+            searchSpace = "whole text";
+            break;
+    }
+
+    $("#searchedFor").html("Searched for <b>" + searchTerms + "</b> within <b>" + searchSpace + "</b>.");
+
+    console.log(searchSpace);
 
     if (host == 'dev.webapps.nottingham.ac.uk') {
         jsonUrl = 'exampleJson/concordancesPlotTest.json';
@@ -249,6 +283,7 @@ $(function () {
         type: 'GET',
         dataType: 'json',
         success: function (data) {
+	    totalNumberOfHits = data.concordances[0];
 
             // start timer
             var start = (new Date).getTime();
@@ -267,7 +302,8 @@ $(function () {
                 for (var s = 0; s < data.concordances[x][0].length; s++) {
                     wordsLhs += data.concordances[x][0][s] + ' ';
                 }
-                content += '<td class="left nowrap" align="right">' + wordsLhs + '</td>';
+
+                content += '<td class="left nowrap" align="right"><span>' + wordsLhs + '</span></td>';
 
                 // node
                 for (var s = 0; s < data.concordances[x][1].length; s++) {
@@ -307,6 +343,7 @@ $(function () {
 
                 // counter on column0, recounts when filter see http://www.datatables.net/release-datatables/examples/api/counter_column.html
                 "fnDrawCallback": function (oSettings) {
+
                     var that = this;
 
                     /* Need to redo the counters if filtered or sorted */
@@ -316,6 +353,9 @@ $(function () {
                         });
                     }
                 },
+		"fnInfoCallback": function (oSettings, iStart, iEnd, iMax, iTotal, sPre) {
+			return iStart + " to " + iEnd + " of " + totalNumberOfHits + " entries";
+		},
                 "bFilter": true,
                 "bSort": true,
                 "bPaginate": false,
@@ -417,6 +457,7 @@ $(function () {
         },
         error: function (e) {
             //called when there is an error
+            console.log(e);
             alert("Sorry. Failed to load data. Please try again.");
         }
     });
