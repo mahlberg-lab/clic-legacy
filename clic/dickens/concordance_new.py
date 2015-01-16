@@ -1,17 +1,39 @@
+import json
 import os
+import os.path as path
 
+from cheshire3.baseObjects import Session
 from cheshire3.document import StringDocument
 from cheshire3.internal import cheshire3Root
 from cheshire3.server import SimpleServer
-from cheshire3.baseObjects import Session
 
-import json
 
-wd = os.getcwd()
+#### LOAD METADATA ####
+# load the metadata about chapters, word counts, etc. 
+# from each individual book in the corpus
+# 1. get the directory of the present file (stored in __file__)
+# 2. open the 'booklist' file which contains the data we want
+# 3. convert it to json
+# 
+# For each book in the corpus there is the following information listed in booklist:
+# 
+#     book id - e.g. "BH"
+#     book title - "Bleak House"
+#     number of chapters in book
+#     total number of paragraphs
+#     total number of sentences
+#     total number of words
+# 
+# Then for each chapter within the book booklist:
+# 
+#     number of paragraphs
+#     number of sentences
+#     number of words
 
-## get metadata: Information about chapters, word counts etc. from each individual book
-booklist_r = open(''.join(wd + '/clic/dickens/booklist'), 'r')
-booklist = json.load(booklist_r)
+BASE_DIR = path.dirname(__file__)
+raw_booklist = open(path.join(BASE_DIR, 'booklist'), 'r')
+booklist = json.load(raw_booklist)
+
 
 class Concordancer_New(object):
     
