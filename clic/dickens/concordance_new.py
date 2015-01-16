@@ -127,12 +127,12 @@ class Concordancer_New(object):
                             chapter_tree = rec.process_xpath(session, '//*[@eid="%d"]/following::w[%d+1]/ancestor-or-self::div' % (e_q, w_q))                         
                                
                             ## counts words preceding sentence   
-                            prec_s_tree = chapter_tree[0].process_xpath(session, '//div//s[@sid="%s"]/preceding::s/descendant::w' % sentence_tree[0].get('sid'))
+                            prec_s_tree = chapter_tree[0].process_xpath(session, '/div/p/s[@sid="%s"]/preceding::s/descendant::w' % sentence_tree[0].get('sid'))
                             prec_s_wcount = len(prec_s_tree)
         
                             ## count words within sentence
                             count_s = 0                        
-                            for word in chapter_tree[0].process_xpath(session, '//div//s[@sid="%s"]/descendant::w' % sentence_tree[0].get('sid')):
+                            for word in chapter_tree[0].process_xpath(session, '/div/p/s[@sid="%s"]/descendant::w' % sentence_tree[0].get('sid')):
                                 if not word.get('o') == search_term[0].get('o'):
                                     count_s += 1
                                 else:
@@ -153,18 +153,18 @@ class Concordancer_New(object):
                     except:
                         rightOnset = None
                              
-                    ch_words = len(rec.process_xpath(session, '//div/descendant::w')) ## move to level for each record (chapter) ?                      
+                    ch_words = len(rec.process_xpath(session, '/div/descendant::w')) ## move to level for each record (chapter) ?                      
                     rightOffset = min(rightOnset + wordWindow, rightOnset + (ch_words - rightOnset) + 1 )
                           
                     left_text = []   
                     for l in range(leftOnset, nodeOnset):
                         try:
-                            left_n_pr = rec.process_xpath(session, '//div/descendant::w[%d]/preceding-sibling::n[1]' % l)[0].text
+                            left_n_pr = rec.process_xpath(session, '/div/descendant::w[%d]/preceding-sibling::n[1]' % l)[0].text
                         except:
                             left_n_pr = ''  
-                        left_w = rec.process_xpath(session, '//div/descendant::w[%d]' % l)[0].text
+                        left_w = rec.process_xpath(session, '/div/descendant::w[%d]' % l)[0].text
                         try: 
-                            left_n_fo = rec.process_xpath(session, '//div/descendant::w[%d]/following-sibling::n[1]' % l)[0].text   
+                            left_n_fo = rec.process_xpath(session, '/div/descendant::w[%d]/following-sibling::n[1]' % l)[0].text   
                         except:
                             left_n_fo = ''                 
                         left_text.append(''.join(left_n_pr + left_w + left_n_fo))
@@ -173,12 +173,12 @@ class Concordancer_New(object):
                     node_text = [] 
                     for n in range(nodeOnset, rightOnset):
                         try:
-                            node_n_pr = rec.process_xpath(session, '//div/descendant::w[%d]/preceding-sibling::n[1]' % n)[0].text     
+                            node_n_pr = rec.process_xpath(session, '/div/descendant::w[%d]/preceding-sibling::n[1]' % n)[0].text     
                         except:
                             node_n_pr = ''             
-                        node_w = rec.process_xpath(session, '//div/descendant::w[%d]' % n)[0].text
+                        node_w = rec.process_xpath(session, '/div/descendant::w[%d]' % n)[0].text
                         try:
-                            node_n_fo = rec.process_xpath(session, '//div/descendant::w[%d]/following-sibling::n[1]' % n)[0].text
+                            node_n_fo = rec.process_xpath(session, '/div/descendant::w[%d]/following-sibling::n[1]' % n)[0].text
                         except:
                             node_n_fo
                         node_text.append(''.join(node_n_pr + node_w + node_n_fo))
@@ -186,21 +186,21 @@ class Concordancer_New(object):
                     right_text = [] 
                     for r in range(rightOnset, rightOffset): 
                         try:
-                            right_n_pr = rec.process_xpath(session, '//div/descendant::w[%d]/preceding-sibling::n[1]' % r)[0].text
+                            right_n_pr = rec.process_xpath(session, '/div/descendant::w[%d]/preceding-sibling::n[1]' % r)[0].text
                         except:
                             right_n_pr = ''                        
-                        right_w = rec.process_xpath(session, '//div/descendant::w[%d]' % r)[0].text
+                        right_w = rec.process_xpath(session, '/div/descendant::w[%d]' % r)[0].text
                         try:
-                            right_n_fo = rec.process_xpath(session, '//div/descendant::w[%d]/following-sibling::n[1]' % r)[0].text
+                            right_n_fo = rec.process_xpath(session, '/div/descendant::w[%d]/following-sibling::n[1]' % r)[0].text
                         except:
                             right_n_fo = ''
                         right_text.append(''.join(right_n_pr + right_w + right_n_fo))
                         
                     ### 
-                    book = rec.process_xpath(session, '//div')[0].get('book')
-                    chapter = rec.process_xpath(session, '//div')[0].get('num')
-                    para_chap = rec.process_xpath(session, '//div//descendant::w[%d+1]/ancestor-or-self::p' % w)[0].get('pid')
-                    sent_chap = rec.process_xpath(session, '//div//descendant::w[%d+1]/ancestor-or-self::s' % w)[0].get('sid')
+                    book = rec.process_xpath(session, '/div')[0].get('book')
+                    chapter = rec.process_xpath(session, '/div')[0].get('num')
+                    para_chap = rec.process_xpath(session, '/div/descendant::w[%d+1]/ancestor-or-self::p' % w)[0].get('pid')
+                    sent_chap = rec.process_xpath(session, '/div/descendant::w[%d+1]/ancestor-or-self::s' % w)[0].get('sid')
                     word_chap = w                 
                         
                     ## count paragraph, sentence and word in whole book
