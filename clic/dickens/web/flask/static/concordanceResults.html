@@ -240,7 +240,7 @@ $(function () {
     var totalNumberOfHits = 0;
 
     var searchTerms = params.slice(params.indexOf("terms=") + 6);
-    searchTerms = decodeURI(searchTerms.slice(0, searchTerms.indexOf("&")));
+    searchTerms = decodeURIComponent(searchTerms.slice(0, searchTerms.indexOf("&")).replace(/\+/g, ' '));
 
     var testIdxMod = params.slice(params.indexOf("testIdxMod=") + 11);
 
