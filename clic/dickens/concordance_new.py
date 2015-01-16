@@ -240,8 +240,8 @@ class Concordancer_New(object):
                         
                     conc_lines.append(conc_line)
     
-        conc_lines.insert(0, len(conc_lines))  
-        #conc_lines.insert(0, total_count)  
+        #conc_lines.insert(0, len(conc_lines))  
+        conc_lines.insert(0, total_count)  
         return conc_lines
     
                 
