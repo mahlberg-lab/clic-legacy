@@ -127,12 +127,12 @@ class Concordancer_New(object):
                             chapter_tree = rec.process_xpath(session, '//*[@eid="%d"]/following::w[%d+1]/ancestor-or-self::div' % (e_q, w_q))                         
                                
                             ## counts words preceding sentence   
-                            prec_s_tree = chapter_tree[0].process_xpath(session, '/div/p/s[@sid="%s"]/preceding::s/descendant::w' % sentence_tree[0].get('sid'))
+                            prec_s_tree = chapter_tree[0].xpath('/div/p/s[@sid="%s"]/preceding::s/descendant::w' % sentence_tree[0].get('sid'))
                             prec_s_wcount = len(prec_s_tree)
         
                             ## count words within sentence
                             count_s = 0                        
-                            for word in chapter_tree[0].process_xpath(session, '/div/p/s[@sid="%s"]/descendant::w' % sentence_tree[0].get('sid')):
+                            for word in chapter_tree[0].xpath('/div/p/s[@sid="%s"]/descendant::w' % sentence_tree[0].get('sid')):
                                 if not word.get('o') == search_term[0].get('o'):
                                     count_s += 1
                                 else:
