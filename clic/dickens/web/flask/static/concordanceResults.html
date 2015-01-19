@@ -354,7 +354,11 @@ $(function () {
                     }
                 },
 		"fnInfoCallback": function (oSettings, iStart, iEnd, iMax, iTotal, sPre) {
-			return iStart + " to " + iEnd + " of " + totalNumberOfHits + " entries";
+			if (iTotal > 0) {
+				return iStart + " to " + iEnd + " of " + totalNumberOfHits + " entries";
+			}
+
+			return "0 to 0 of 0 entries";
 		},
                 "bFilter": true,
                 "bSort": true,
