@@ -103,7 +103,7 @@ if ('-ntc' in sys.argv):
 if ('-load' in sys.argv):
     geniaTxr = db.get_object(session, 'corpusTransformer')
     indexWF = db.get_object(session, 'indexWorkflow')
-    #data = '/home/aezros/cheshire3/dbs/dickens/data/dickens_novels'
+    data = '/cheshire3/clic/dbs/dickens/data/dickens_novels'
     df.load(session, data)
     recStore.begin_storing(session)
     db.begin_indexing(session) 
