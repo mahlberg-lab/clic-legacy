@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../assets/ico/favicon.ico">
+
+    <title>CLiC 1.0</title>
+
+    <!-- Bootstrap core CSS .. -->
+    <link href="dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!--Custom CSS-->
+    <link href="css/clic.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy this line! -->
+    <!--[if lt IE 9]>
+    <script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+<div class="container">
+    <img class="pull-right" src="img/uonlogo.png">
+    <div class="header">
+        <h1 class="uonHeaderh1">CLiC</h1>
+        <p class="hidden-xs">A corpus tool to support the analysis of literary texts</p>
+    </div>
+</div>
+
+<div class="navbar navbar-inverse" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <!--<a class="navbar-brand" href="#">CLiC</a>-->
+        </div>
+        <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="index.html">Home</a></li>
+                <li><a href="concordance.html">Concordance</a></li>
+                <li><a href="keywords.html">Keywords</a></li>
+                <li><a href="clusters.html">Clusters</a></li>
+                <li><a href="about.html">About</a></li>
+            </ul>
+        </div>
+        <!--/.nav-collapse -->
+    </div>
+</div>
+
+<div class="container">
+
+    <br><br>
+
+    <div class="jumbotron">
+        <h1>CLiC</h1>
+
+        <p class="lead">CLiC 1.0 is a corpus tool designed to supports the analysis of literary texts. At present, the
+            available corpora are Dickens’s novels and a selection of novels by other 19th century authors.</p>
+
+        <p><a class="btn btn-lg btn-success" href="about.html" role="button">Learn more</a></p>
+    </div>
+
+
+</div>
+<!-- /.container -->
+
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+<script src="dist/js/bootstrap.min.js"></script>
+
+<!--Generic JS-->
+<script src="js/clic.js"></script>
+
+<script src="js/thirdparty/tablesorter/js/jquery.tablesorter.min.js"></script>
+
+<script>
+    $(function () {
+        $('table').tablesorter({
+            widgets: ['zebra', 'columns'],
+            usNumberFormat: false,
+            sortReset: true,
+            sortRestart: true
+        });
+    });
+</script>
+
+
+</body>
+</html>

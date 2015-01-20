@@ -3,12 +3,13 @@
 	<head>
 		<title>Dickens CLiC Interface</title>
 		<link href="/dickens/css/tabs.css" type="text/css" rel="stylesheet" />		
-		
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<link href="/dickens/css/ricoGrid.css" type="text/css" rel="stylesheet" />		
 
 		<link rel="stylesheet" href="/dickens/css/browse.css" type="text/css"/>
 		<link rel="stylesheet" href="/dickens/css/search.css" type="text/css"/>
 		<link rel="stylesheet" href="/dickens/css/contextmenu.css" type="text/css"/>
+<!--		<link rel="stylesheet" href="/dickens/css/cluster.css" type="text/css"/> -->
 		
 		<script type="text/javascript" src="/dickens/js/prototype.js"></script>	
 		<script type="text/javascript" src="/dickens/js/rico.js"></script>		
@@ -19,6 +20,7 @@
 		<script type="text/javascript" src="/dickens/js/view.js"></script>
 		<script type="text/javascript" src="/dickens/js/contextmenu.js"></script>
 		<script type="text/javascript" src="/dickens/js/tabs.js"></script>
+<!--		<script type="text/javascript" src="/dickens/js/cluster.js"></script> -->
 		<script type="text/javascript">
     			function loadPage() {
 				activateTabs('controlTab_');
@@ -68,11 +70,15 @@
 					<li id="c1" class="tab_selected">Browse</li>
 					<li id="c2">Search</li>
 					<li id="c3">Stats</li>
+<!--RS: add keyword and cluster tabs: need to sort out tabID - in tabs.js? -->
+					<li id="c4">Clusters</li>
+					<li id="c5">Keywords</li>
 				</ul>
 			</div>	
 
 <!-- content of tabs containined in div and in controls div -->		
-			<div>		
+			<div>
+
 <!-- browse tab -->		
 				<div id="controlTab1" class="tabCanvas tab_visible">			
 					<form id="browseform">		  
@@ -193,6 +199,7 @@
 						</div>
 					</form>			
 				</div>
+
 		
 <!-- Corpus Stats Tab -->		
 				<div id="controlTab3" class="tabCanvas">				 
@@ -214,6 +221,31 @@
 				</div>
 			</div>
 		</div>
+
+<!-- Clusters Tab -->
+<!--RS: Doesn't list books yet -->
+<!--		<div id="controlTab4" class="tabCanvas tab_visible">			
+				<form id="clusterform">		  
+				  	<span class="searchComp">Cluster List for</span> 
+				  		<div class="left">
+				      		<select name="indexSelect" id="indexSelect">
+				      	
+				      		 </select>  		   
+				   		</div>
+				   		<div class="arrows">
+				     		<input type="button" onclick="addIndex();" class="arrow" value=">"/>
+					 		<input type="button" onclick="removeIndex();" class="arrow" value="<"/>		   	 
+				   		</div>
+				   		<div id="box">
+	
+						</div>
+				  	</form>
+				  	<br />
+				  	<div class="left">
+				  		<a href="javascript:createComparison()">SHOW</a>
+				  	</div>
+					<br/>
+		</div> -->
 
 	</body>
 

@@ -22,9 +22,12 @@ class CorpusNormalizer(SimpleNormalizer):
         self.dickens = ['AN', 'BH', 'BL', 'BR', 'CC', 'CHI', 'CH', 'DC',
                         'DS', 'ED', 'GE', 'HM', 'HT', 'LD', 'MC', 'NN',
                         'OCS', 'OMF', 'OT', 'PP', 'SB', 'TTC', 'UT']
-          
+#         self.austen = ['E']
+  
     def process_string(self, session, data):
         if data in self.dickens:
             return 'dickens'
+#         elif data in self.austen:
+#             return 'austen'
         else:
             return 'ntc'

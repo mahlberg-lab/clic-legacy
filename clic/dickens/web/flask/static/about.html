@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../assets/ico/favicon.ico">
+
+    <title>About - CLiC</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!--Custom CSS-->
+    <link href="css/clic.css" rel="stylesheet">
+    
+    <!--For new About page-->
+    <link href="/bootstrap-3.1.1/font-awesome-4.0.3/css/font-awesome.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy this line! -->
+    <!--[if lt IE 9]>
+    <script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+<div class="container">
+    <img class="pull-right" src="img/uonlogo.png">
+    <div class="header">
+        <h1 class="uonHeaderh1">CLiC</h1>
+        <p class="hidden-xs">A corpus tool to support the analysis of literary texts</p>
+    </div>
+</div>
+
+<div class="navbar navbar-inverse" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <!--<a class="navbar-brand" href="#">CLiC</a>-->
+        </div>
+        <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="index.html">Concordance</a></li>
+                <li><a href="keywords.html">Keywords</a></li>
+                <li><a href="clusters.html">Clusters</a></li>
+                <li class="active"><a href="about.html">About</a></li>
+            </ul>
+        </div>
+        <!--/.nav-collapse -->
+    </div>
+</div>
+
+<div class="container">
+	<div class="row">
+	
+	<div class="col-sm-9">
+		<h2>About this prototype</h2>
+		
+		<p>The CLiC interface is work in progress. This prototype was last updated on 19/01/2015 (version 1.0.1).
+		Some searches might be a little slow and very complex searches may fail.</p>
+		<p>The following search options are known not to work yet:</p>
+		<ul>
+			<li>Searches in short suspensions</li>
+			<li>Searches in 2-gram, and n-grams from 6-gram and up until 12-gram</li>
+		</ul>
+		
+	</div>
+	
+	<div class="col-sm-3 padded">
+		<div class="sideHead">
+			<i class="fa fa-comment-o fa-4x"></i>
+			<h4>Feedback</h4>
+		</div>
+		
+		<div class="sideContent">
+		
+			<p>We are very keen to hear about:</p>
+			<ul>
+				<li>What works</li>
+				<li>What doesn't work</li>
+				<li>What you like</li>
+				<li>What you don't like</li>
+			</ul>
+		
+			<p>Please email <a href="mailto:clic@nottingham.ac.uk">clic@nottingham.ac.uk</a>.</p>	
+		</div>
+	
+	</div>
+	</div>
+
+    <div class="row">
+    <div class="col-md-9">
+        <h2>About the project</h2>
+
+        <p>CLiC 1.0.1 (Corpus Linguistics in Cheshire) is developed as part of an AHRC-funded project: “<a href="http://www.nottingham.ac.uk/CRAL/Projects/CLiC.aspx">CLiC
+            Dickens -
+            Characterisation in the representation of speech and body language from a corpus linguistic perspective</a>”. </p>
+
+        <p>The project demonstrates through
+        corpus stylistics how computer-assisted methods can be used to study literary texts and lead to new insights
+        into how readers perceive fictional characters.<br><br>CLiC specifically supports the analysis of fictional speech and
+        literary body language by enabling the user to search in particular parts of the texts, e.g. in quotes, which
+        typically contain the direct speech of fictional characters in the novels.<br><br>Initially, the texts that can be
+        searched will be Dickens’s novels and novels written by other 19th century authors.</p>
+        
+        <p>For feedback and questions please contact us on email <a href="mailto:clic@nottingham.ac.uk">clic@nottingham.ac.uk</a>.</p>
+
+    </div>
+    </div>
+
+
+</div>
+<!-- /.container -->
+
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<!--<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>-->
+<script src="js/thirdparty/DataTables1.10.0-beta.2/media/js/jquery.js"></script>
+
+<script src="dist/js/bootstrap.min.js"></script>
+
+<!--Generic JS-->
+<script src="js/clic.js"></script>
+
+<script>
+    $(function () {
+
+
+    });
+</script>
+
+<!-- Analytics
+=================================================== -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-921739-26', 'nottingham.ac.uk');
+  ga('send', 'pageview');
+
+</script>
+
+
+
+</body>
+</html>

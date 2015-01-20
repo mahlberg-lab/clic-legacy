@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../assets/ico/favicon.ico">
+
+    <title>Keywords Results - CLiC</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!--Custom CSS-->
+    <link href="css/clic.css" rel="stylesheet">
+
+    <!-- DataTables theme -->
+    <!--<link href="js/thirdparty/DataTables-1.9.4/media/css/jquery.dataTables.css" rel="stylesheet">-->
+    <link href="js/thirdparty/DataTables1.10.0-beta.2/media/css/dataTables.bootstrap.css" rel="stylesheet">
+
+    <!--Pace loading bar-->
+    <script src='js/thirdparty/pace-0.5.1/pace.min.js'></script>
+    <link href="js/thirdparty/pace-0.5.1/themes/pace-theme-loading-bar.css" rel="stylesheet"/>
+
+    <!--[if lt IE 9]>
+    <script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+
+<div class="container">
+    <img class="pull-right" src="img/uonlogo.png">
+
+    <div class="header">
+        <h1 class="uonHeaderh1">CLiC</h1>
+
+        <p class="hidden-xs">A corpus tool to support the analysis of literary texts</p>
+    </div>
+</div>
+
+<div class="navbar navbar-inverse" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <!--<a class="navbar-brand" href="#">CLiC</a>-->
+        </div>
+        <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="index.html">Concordance</a></li>
+                <li class="active"><a href="keywords.html">Keywords</a></li>
+                <li><a href="clusters.html">Clusters</a></li>
+                <li><a href="about.html">About</a></li>
+            </ul>
+        </div>
+        <!--/.nav-collapse -->
+    </div>
+</div>
+
+<!--container-->
+<div class="container">
+
+
+        <h2 class="without-pills">Keywords Results</h2>
+
+        <div id="tableContainer"></div>
+
+
+    <br><br>
+
+</div>
+</div>
+<!-- /.container -->
+
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<!--<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>-->
+<script src="js/thirdparty/DataTables1.10.0-beta.2/media/js/jquery.js"></script>
+<script src="dist/js/bootstrap.min.js"></script>
+
+
+<!--Generic JS-->
+<script src="js/clic.js"></script>
+
+<!-- datatables plugin http://www.datatables.net/ -->
+<!--<script src="js/thirdparty/DataTables-1.9.4/media/js/jquery.dataTables.min.js"></script>-->
+
+<!-- datatables plugin http://www.datatables.net/ -->
+<script src="js/thirdparty/DataTables1.10.0-beta.2/media/js/jquery.dataTables.min.js"></script>
+<script src="js/thirdparty/DataTables1.10.0-beta.2/extensions/TableTools/js/dataTables.tableTools.min.js"></script>
+<!-- datatables bootstrap js (css is above) see http://next.datatables.net/manual/styling/bootstrap -->
+<script src="js/thirdparty/DataTables1.10.0-beta.2/media/js/dataTables.bootstrap.js"></script>
+
+
+<script>
+    $(function () {
+
+        // Get URL params
+        var params = location.search;
+        var host = window.location.hostname;
+
+        if (host == 'dev.webapps.nottingham.ac.uk') {
+            jsonUrl = 'exampleJson/keywords_GE_quotes.json';
+        } else {
+            jsonUrl = '/keywords/' + params; // from the app
+        }
+
+                $('#tableContainer').html('<table class="table table-striped table-hover dataTable no-footer uonDatatable" id="dataTableKeywords"></table>');
+                var oTable = $('#dataTableKeywords').dataTable({
+
+                    "ajax": {
+                        "url": jsonUrl,
+                        "dataSrc": "keywords",
+                        "error": function (xhr, error, thrown) {
+                            alert( 'Sorry. Failed to load data. Please try again.' );
+                        }
+                    },
+
+                    "fnDrawCallback": function ( oSettings ) {
+                        /* Need to redo the counters if filtered or sorted */
+                        if ( oSettings.bSorted || oSettings.bFiltered )
+                        {
+                            for ( var i=0, iLen=oSettings.aiDisplay.length ; i<iLen ; i++ )
+                            {
+                                $('td:eq(0)', oSettings.aoData[ oSettings.aiDisplay[i] ].nTr ).html( i+1 );
+                            }
+                        }
+                    },
+
+                    "aoColumns": [
+                        { "sTitle": "No" },
+                        { "sTitle": "n-gram" ,   "sClass": "nowrap" },
+                        { "sTitle": "Test Freq", "sClass": "nowrap" },
+                        { "sTitle": "%" },
+                        { "sTitle": "Ref Freq" , "sClass": "nowrap" },
+                        { "sTitle": "%" },
+                        { "sTitle": "K" },
+                        { "sTitle": "P" }
+                    ],
+                    "aoColumnDefs": [
+                        { "bSortable": false, "aTargets": [ 0 ] },
+                        { "bSortable": false, "aTargets": [ 0 ] },
+                        { "bSearchable": false, "aTargets": [0, 2, 3, 4, 5, 6, 7] }
+                    ],
+
+                    "bDeferRender": true,
+                    "bPaginate": false,
+                    "bSort": true,
+                    "bFilter": true,
+
+                    "oTableTools": {
+                        "aButtons": [ "csv", "print" ],
+                        "sSwfPath": "js/thirdparty/DataTables1.10.0-beta.2/extensions/TableTools/swf/copy_csv_xls.swf"
+                    },
+
+                    // change phrase on search box
+                    "oLanguage": {
+                        "sSearch": "Filter n-gram:"
+                    },
+                    // duplicate controls iflp
+                    "sDom": '<"toolbar"iTf>rt<"toolbar"if>'
+                });
+
+    });
+</script>
+
+<!-- Analytics
+=================================================== -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-921739-26', 'nottingham.ac.uk');
+  ga('send', 'pageview');
+
+</script>
+
+
+</body>
+</html>

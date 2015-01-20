@@ -228,7 +228,7 @@
 			</source>
 			<options>
 				<setting type="longSize">4</setting>
-				<setting type="termIds">1</setting>
+				<setting type="vectors">1</setting>
 				<setting type="freqList">rec occ</setting>
 			</options>
 		</subConfig>
@@ -249,7 +249,7 @@
 			</source>
 			<options>
 				<setting type="longSize">4</setting>
-				<setting type="termIds">1</setting>
+				<setting type="vectors">1</setting>
 				<setting type="freqList">rec occ</setting>
 			</options>
 		</subConfig>
@@ -270,7 +270,7 @@
 			</source>
 			<options>
 				<setting type="longSize">4</setting>
-				<setting type="termIds">1</setting>
+				<setting type="vectors">1</setting>
 				<setting type="freqList">rec occ</setting>
 			</options>
 		</subConfig>
@@ -333,7 +333,7 @@
 			</source>
 			<options>
 				<setting type="longSize">4</setting>
-				<setting type="termIds">1</setting>
+				<setting type="vectors">1</setting>
 				<setting type="freqList">rec occ</setting>
 			</options>
 		</subConfig>
@@ -362,7 +362,7 @@
 			</source>
 			<options>
 				<setting type="longSize">4</setting>
-				<setting type="termIds">1</setting>
+				<setting type="vectors">1</setting>
 				<setting type="freqList">rec occ</setting>
 			</options>
 		</subConfig>
@@ -391,13 +391,11 @@
 			</source>
 			<options>
 				<setting type="longSize">4</setting>
-				<setting type="termIds">1</setting>
+				<setting type="vectors">1</setting>
 				<setting type="freqList">rec occ</setting>
 			</options>
 		</subConfig>
-		
-		
-		
+				
 		
 		
 		
@@ -461,7 +459,7 @@
 			</source>
 			<options>
 				<setting type="longSize">4</setting>
-				<setting type="termIds">1</setting>
+				<setting type="vectors">1</setting>
 				<setting type="freqList">rec occ</setting>
 			</options>
 		</subConfig>
@@ -490,7 +488,7 @@
 			</source>
 			<options>
 				<setting type="longSize">4</setting>
-				<setting type="termIds">1</setting>
+				<setting type="vectors">1</setting>
 				<setting type="freqList">rec occ</setting>
 			</options>
 		</subConfig>
@@ -519,7 +517,7 @@
 			</source>
 			<options>
 				<setting type="longSize">4</setting>
-				<setting type="termIds">1</setting>
+				<setting type="vectors">1</setting>
 				<setting type="freqList">rec occ</setting>
 			</options>
 		</subConfig>
@@ -585,7 +583,7 @@
 			</source>
 			<options>
 				<setting type="longSize">4</setting>
-				<setting type="termIds">1</setting>
+				<setting type="vectors">1</setting>
 				<setting type="freqList">rec occ</setting>
 			</options>
 		</subConfig>
@@ -614,7 +612,7 @@
 			</source>
 			<options>
 				<setting type="longSize">4</setting>
-				<setting type="termIds">1</setting>
+				<setting type="vectors">1</setting>
 				<setting type="freqList">rec occ</setting>
 			</options>
 		</subConfig>
@@ -643,7 +641,7 @@
 			</source>
 			<options>
 				<setting type="longSize">4</setting>
-				<setting type="termIds">1</setting>
+				<setting type="vectors">1</setting>
 				<setting type="freqList">rec occ</setting>
 			</options>
 		</subConfig>
@@ -696,6 +694,9 @@
 					<object type="tokenMerger" ref="SimpleTokenMerger"/>
 				</process>
 			</source>
+			<options>
+				<setting type="longSize">4</setting>
+			</options>
 		</subConfig>
 		
 		<subConfig type="index" id="novel-idx">
@@ -720,6 +721,9 @@
 					<object type="normalizer" ref="CaseNormalizer"/>
 				</process>
 			</source>
+			<options>
+				<setting type="longSize">4</setting>
+			</options>
 		</subConfig>
 
 
@@ -728,7 +732,7 @@
 			<paths>
 				<object type="indexStore" ref="indexStore"/>
 			</paths>
-			<source>
+			<source mode="data">
 				<xpath ref="bookXPath"/>
 				<process>
 					<object type="extractor" ref="SimpleExtractor"/>
@@ -737,8 +741,22 @@
 					<object type="normalizer" ref="SubCorpusNormalizer"/>
 				</process>
 			</source>
+			<source mode="=|all|any|exact|within">
+				<!-- Separate processing for query. Don't run query through
+				     the SubCorpusNormalizer otherwise "dickens" -> "ntc"
+				     because "dickens is not a book in the dickens corpus.
+			    -->
+				<process>
+					<object type="extractor" ref="SimpleExtractor"/>
+					<object type="tokenizer" ref="SimpleTokenizer"/>
+					<object type="tokenMerger" ref="SimpleTokenMerger"/>
+				</process>
+			</source>
+			<options>
+				<setting type="longSize">4</setting>
+			</options>
 		</subConfig>
-		
+
 
 	</subConfigs>
 </config>

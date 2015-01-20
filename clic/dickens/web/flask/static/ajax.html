@@ -1,0 +1,86 @@
+<html>
+<title>Form for demo</title>
+
+<head>
+	<script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
+<script src="http://jashkenas.github.io/underscore/underscore-min.js"></script>
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+<script src="/js/json_parse.js"></script>
+<script src="/js/clic.js"></script>
+<style>
+
+table{
+	width:75%;
+	margin:1em auto;
+}
+td, th {
+  width: auto;
+  height: 2rem;
+  border: 1px solid #ccc;
+  text-align: center;
+}
+th {
+  background: lightblue;
+  border-color: white;
+}
+body {
+  padding: 1rem;
+}
+
+
+</style>
+</head>
+
+<body>
+
+ <div class="container">
+   <h1>Prototype clic interface</h1>
+<div class=" row col-xs-8 col-md-offset-1">
+ <div id="keywords">
+               <p> Loading keywords </p>
+                <script id="tmpl-keywords" type="text/template">
+                    <table id="tablesorter">
+                    <thead>
+					<tr><th>
+						Keyword
+					</th>
+					<th>Test Frequency</th>
+					<th>Ref Frequency</th>
+					<th>Log likelihood</th>
+					</tr>
+					</thead>
+					<tbody>
+                    <% for (var i = 0; i < dataItems.length; i++) { %>
+                      <% var keyword = dataItems[i]; %>
+                      <tr>
+                        <td><%= keyword[0] %></td>
+                        <td><%= keyword[1] %></td>
+                        <td><%= keyword[2] %></td>
+                        <td><%= keyword[3] %></td>
+                      </tr>
+                    <% } %>
+                    </tbody>
+                 <table>
+
+                </script>
+
+ </div>
+</div>
+
+</div>
+<!-- Latest compiled and minified JavaScript -->
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+<script>
+
+$.get("/ajax-keywords?testIdxGroup=3gram-idx&testIdxMod=quote&testCollection=GE&refIdxMod=non-quote&refCollection=OMF",function(data){
+	
+	console.log(data);
+	data = JSON.parse(data);
+	console.log(data["dataItems"]);
+
+        jsonHandler.processor(data,"keywords");	
+});
+</script>
+</body>
+</html>

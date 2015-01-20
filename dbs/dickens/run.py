@@ -63,35 +63,73 @@ if ('-austen' in sys.argv):
         i = i+1           
     austenRecStore.commit_storing(session)                
     db.commit_indexing(session)
-    
 
-if ('-load' in sys.argv):
+### index 19C material
+if ('-ntc' in sys.argv):
     geniaTxr = db.get_object(session, 'corpusTransformer')
     indexWF = db.get_object(session, 'indexWorkflow')
-    data = '/home/aezros/cheshire3/dbs/dickens/data/dickens_novels'
+    #data = '/home/aezros/cheshire3/dbs/dickens/data/dickens_novels'
+    data = '/home/aezros/Data/ntc_novels'
     df.load(session, data)
     recStore.begin_storing(session)
     db.begin_indexing(session) 
-    i = 1
     errorCount= 0
-    for d in df :
-        print i,
+    for i, d in enumerate(df, start=1):
         doc = ampPreP.process_document(session, d)
-        try :
+        try:
             rec = xmlp.process_document(session, doc)
             genia = geniaTxr.process_record(session, rec)
-            print 'rec created'
+            session.logger.log_info(session,
+                                    'Record {0} created'.format(i)
+                                    )
             rec2 = xmlp.process_document(session, genia)
             recStore.create_record(session, rec2)
-            print 'rec stored'
+            session.logger.log_info(session,
+                                    'Record {0} stored'.format(i)
+                                    )
             db.add_record(session, rec2)
             indexWF.process(session, rec2)
-        except:
-            print 'Error'
+        except Exception as e:
+            session.logger.log_error(session, str(e))
             errorCount += 1
             traceback.print_exc(file=sys.stdout)
-        i += 1
-    print errorCount
+    session.logger.log_info(session,
+                            'Finished with {0} errors'.format(errorCount)
+                            )
+    recStore.commit_storing(session)
+    db.commit_indexing(session)
+
+## index Dickens material
+if ('-load' in sys.argv):
+    geniaTxr = db.get_object(session, 'corpusTransformer')
+    indexWF = db.get_object(session, 'indexWorkflow')
+    data = '/cheshire3/clic/dbs/dickens/data/dickens_novels'
+    df.load(session, data)
+    recStore.begin_storing(session)
+    db.begin_indexing(session) 
+    errorCount= 0
+    for i, d in enumerate(df, start=1):
+        doc = ampPreP.process_document(session, d)
+        try:
+            rec = xmlp.process_document(session, doc)
+            genia = geniaTxr.process_record(session, rec)
+            session.logger.log_info(session,
+                                    'Record {0} created'.format(i)
+                                    )
+            rec2 = xmlp.process_document(session, genia)
+            recStore.create_record(session, rec2)
+            session.logger.log_info(session,
+                                    'Record {0} stored'.format(i)
+                                    )
+            db.add_record(session, rec2)
+            indexWF.process(session, rec2)
+        except Exception as e:
+            session.logger.log_error(session, str(e))
+            errorCount += 1
+            traceback.print_exc(file=sys.stdout)
+    session.logger.log_info(session,
+                            'Finished with {0} errors'.format(errorCount)
+                            )
     recStore.commit_storing(session)
     db.commit_indexing(session)
 
@@ -100,17 +138,15 @@ if ('-addIndex' in sys.argv):
     idx = db.get_object(session, 'longsus-5gram-idx')
     recStore = db.get_object(session, 'recordStore')
     idx.begin_indexing(session)
-    i = 1
-    print recStore.id
-    print idx.id
+    session.logger.log_debug(session, recStore.id)
+    session.logger.log_debug(session, idx.id)
 #    recStore = [recStore.fetch_record(session, '96')]
-    for rec in recStore:
+    for i, rec in enumerate(recStore, start=1):
+        session.logger.log_info(session, str(i))
         try:
-            print i
-            i += 1
             idx.index_record(session, rec)
-        except:
-            print 'Error'
+        except Exception as e:
+            session.logger.log_error(session, str(e))
             traceback.print_exc(file=sys.stdout)
     idx.commit_indexing(session)
 
@@ -118,11 +154,12 @@ if ('-addIndex' in sys.argv):
 if ('-loadAll' in sys.argv):
     geniaTxr = db.get_object(session, 'corpusTransformer')
     indexWF = db.get_object(session, 'indexWorkflow')
-    df.load(session)
+    data = '/home/aezros/Data'
+    df.load(session, data)
     recStore.begin_storing(session)
     db.begin_indexing(session) 
 
-    for d in df :
+    for d in df:
         doc = ampPreP.process_document(session, d)
         try:
             rec = xmlp.process_document(session, doc)
@@ -132,8 +169,8 @@ if ('-loadAll' in sys.argv):
             recStore.create_record(session, rec2)
             db.add_record(session, rec2)
             indexWF.process(session, rec2)
-        except:
-            print 'Error'
+        except Exception as e:
+            session.logger.log_error(session, str(e))
             traceback.print_exc(file=sys.stdout)
 
     recStore.commit_storing(session)
@@ -143,14 +180,12 @@ if ('-loadAll' in sys.argv):
 if ('-indexAll' in sys.argv):
     indexWF = db.get_object(session, 'indexWorkflow')
     db.begin_indexing(session)
-    i = 1
-    for rec in recStore:
+    for i, rec in enumerate(recStore, start=1):
+        session.logger.log_info(session, str(i))
         try:
             indexWF.process(session, rec)
-            print i
-            i += 1
-        except:
-            print 'Error'
+        except Exception as e:
+            session.logger.log_error(session, str(e))
     db.commit_indexing(session)
 
 
@@ -161,8 +196,8 @@ if ('-index' in sys.argv):
         rec = recStore.fetch_record(session, '%d' % i)
         try:
             indexWF.process(session, rec)
-        except:
-            print 'Error'
+        except Exception as e:
+            session.logger.log_error(session, str(e))
 
     db.commit_indexing(session)
 
@@ -180,14 +215,14 @@ if ('-stru' in sys.argv):
         doc = ampPreP.process_document(session, d)
         try:
             rec = xmlp.process_document(session, doc)
-            print rec
+            session.logger.log_debug(session, rec)
             genia = geniaTxr.process_record(session, rec)
             rec2 = xmlp.process_document(session, genia)
             recStore.create_record(session, rec2)
             db.add_record(session, rec2)
             idx.index_record(session, rec2)
-        except:
-            print 'Error'
+        except Exception as e:
+            session.logger.log_error(session, str(e))
             traceback.print_exc(file=sys.stdout)
     recStore.commit_storing(session)
     idx.commit_indexing(session)
@@ -206,14 +241,14 @@ if ('-cont' in sys.argv):
         doc = ampPreP.process_document(session, d)
         try:
             rec = xmlp.process_document(session, doc)
-            print rec
+            session.logger.log_debug(session, rec)
             genia = geniaTxr.process_record(session, rec)
             rec2 = xmlp.process_document(session, genia)
             recStore.create_record(session, rec2)
             db.add_record(session, rec2)
             idx.index_record(session, rec2)
-        except:
-            print 'Error'
+        except Exception as e:
+            session.logger.log_error(session, str(e))
             traceback.print_exc(file=sys.stdout)
     recStore.commit_storing(session)
     idx.commit_indexing(session)

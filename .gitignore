@@ -4,6 +4,8 @@
 *Store*.bdb
 *.data
 *.data_*
+indexes_OLD
+stores_OLD
 
 # Python compiled/optimized files
 *.py[co]
@@ -11,7 +13,7 @@
 # Python packaging/distribution
 *.egg
 *.egg-info
-dist
+#dist
 build
 eggs
 parts
@@ -32,3 +34,13 @@ PyZ3950_parsetab.*
 
 # O/S file buffers
 *~
+
+# Database config file template 
+/dbs/dickens/config.xml
+
+# Log files
+/dbs/dickens/logs/*.log
+
+#phpstorm
+
+.idea
