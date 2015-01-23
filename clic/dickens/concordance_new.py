@@ -48,39 +48,43 @@ class Concordancer_New(object):
         self.resultSetStore = self.db.get_object(self.session, 'resultSetStore')        
         self.idxStore = self.db.get_object(self.session, 'indexStore')
         #self.logger = self.db.get_object(self.session, 'concordanceLogger')      
+
        
-    ## main concordance method
-    ## create a list of lists containing each three contexts left - node -right, 
-    ## and a list within those contexts containing each word. Add two separate lists containing metadata information:
-    ## [ [left context - word 1, word 2, etc.], [node - word 1, word 2, etc], [right context - word 1, etc], 
-    ##   [chapter metadata], [book metadata]
-    ## ], 
-    ## etc.
     def create_concordance(self, terms, idxName, Materials, selectWords): 
+        """
+        main concordance method
+        create a list of lists containing each three contexts left - node -right, 
+        and a list within those contexts containing each word. Add two separate lists containing metadata information:
+        [ [left context - word 1, word 2, etc.], [node - word 1, word 2, etc], [right context - word 1, etc], 
+        [chapter metadata], [book metadata]
+        ], 
+        etc.
+        """ 
         ##self.logger.log(10, 'CREATING CONCORDANCE FOR RS: {0} in {1} - {2}'.format(terms, idxName, Materials)) 
-        session = self.session
-        db = self.db
-        qf = self.qf        
+
+	#TODO change the variable names of the function itself (Materials, etc.)
         
         conc_lines = [] # return concordance lines in list
-        wordWindow = 10 # wordWindow is set to 10 by default - on both sides of node
+        word_window = 10 # word_window is set to 10 by default - on both sides of node
     
-        books = []
-        for Material in Materials:
+        subcorpus = []
+        for corpus in Materials:
             MatIdx = 'book-idx'
-            if Material in ['dickens', 'ntc']:
+            if corpus in ['dickens', 'ntc']:
                 MatIdx_Vol = 'subCorpus-idx'
-                books.append('c3.{0} = "{1}"'.format(MatIdx_Vol, Material))
+                subcorpus.append('c3.{0} = "{1}"'.format(MatIdx_Vol, corpus))
             else:
-                books.append('c3.{0} = "{1}"'.format(MatIdx, Material)) 
+                subcorpus.append('c3.{0} = "{1}"'.format(MatIdx, corpus)) 
             
         ## search whole phrase or individual words?
         if selectWords == "whole":
-            nodeLength = len(terms.split(' '))
-            terms = [terms]  
+            # for historic purposes: number_of_search_terms was originally nodeLength
+            number_of_search_terms = len(terms.split())
+            terms = [terms]
         else:
-            nodeLength = 1
-            terms = terms.split(' ')
+            #FIXME is this correct in case of an AND search?
+            number_of_search_terms = 1
+            terms = terms.split()
         
         ## define search term
         term_clauses = []
@@ -89,24 +93,48 @@ class Concordancer_New(object):
         
         ## conduct database search
         ## note: /proxInfo needed to search individual books
-        query = qf.get_query(session, ' or '.join(books) + ' and/proxInfo ' + ' or '.join(term_clauses))         
-        rs = db.search(session, query) 
+        query = self.qf.get_query(self.session, ' or '.join(subcorpus) + ' and/proxInfo ' + ' or '.join(term_clauses))         
+        result_set = self.db.search(self.session, query) 
     
         ## get total number of hits (not yet used in interface)  
         total_count = 0        
-        if len(rs) > 0:   
-            for i in rs:                
-                total_count = total_count + len(i.proxInfo)   
+        if len(result_set) > 0:   
+            for result in result_set:                
+                total_count = total_count + len(result.proxInfo)   
         
         ## search through each record (chapter) and identify location of search term(s)
-        if len(rs) > 0:            
-            count = 0 ## count hits
-            for i in rs:
+        if len(result_set) > 0:            
+            count = 0 
+            for result in result_set:
                  
                 ## get xml record 
-                rec = i.fetch_record(session)
-                  
-                for m in i.proxInfo: 
+                rec = result.fetch_record(self.session)
+                
+                # Each time a search term is found in a document 
+                # (each match) is described in terms of a proxInfo.
+                #
+		# It is insufficiently clear what proxInfo is.
+                # It takes the form of three nested lists:
+                #
+                # [[[0, 169, 1033, 15292]], 
+                #  [[0, 171, 1045, 15292]], etc. ]
+                #
+                # We currently assume the following values:
+                #
+                # * the second item in the deepest list (169, 171) 
+                #   is the id of the <w> (word) node 
+                # * the first item is the id of the root element from
+                #   which to start counting to find the word node
+                #   for instance, 0 for a chapter view (because the chapter 
+                #   is the root element), but 151 for a search in quotes
+                #   text.
+                # * the third element is the exact character (spaces, and
+                #   and punctuation (stored in <n> (non-word) nodes
+                #   at which the search term starts
+                # * the fourth element is the total amount of characters
+                #   in the document?
+
+                for match in result.proxInfo: 
                     count += 1
                       
                     if count > 1000: ## current search limit: 1000
@@ -114,17 +142,17 @@ class Concordancer_New(object):
                     else:
                        
                         if idxName in ['chapter-idx']:    
-                            w = m[0][1]                                          
+                            word_id = match[0][1]                                          
                        
                         elif idxName in ['quote-idx', 'non-quote-idx', 'longsus-idx', 'shortsus-idx']:  
-                            (e_q, w_q) = (m[0][0], m[0][1])                    
+                            eid, word_id = match[0][0], match[0][1]                    
                                 
                             ## locate search term in xml
-                            search_term = rec.process_xpath(session, '//*[@eid="%d"]/following::w[%d+1]' % (e_q, w_q)) 
+                            search_term = rec.process_xpath(self.session, '//*[@eid="%d"]/following::w[%d+1]' % (eid, word_id)) 
         
                             ## get xml of sentence
-                            sentence_tree = rec.process_xpath(session, '//*[@eid="%d"]/following::w[%d+1]/ancestor-or-self::s' % (e_q, w_q))    
-                            chapter_tree = rec.process_xpath(session, '//*[@eid="%d"]/following::w[%d+1]/ancestor-or-self::div' % (e_q, w_q))                         
+                            sentence_tree = rec.process_xpath(self.session, '//*[@eid="%d"]/following::w[%d+1]/ancestor-or-self::s' % (eid, word_id))    
+                            chapter_tree = rec.process_xpath(self.session, '//*[@eid="%d"]/following::w[%d+1]/ancestor-or-self::div' % (eid, word_id))  
                                
                             ## counts words preceding sentence   
                             prec_s_tree = chapter_tree[0].xpath('/div/p/s[@sid="%s"]/preceding::s/descendant::w' % sentence_tree[0].get('sid'))
@@ -139,32 +167,33 @@ class Concordancer_New(object):
                                     break
         
                             ## word number within chapter is adding word count in preceding sentence and word count in current sentence
-                            wcount = prec_s_wcount + count_s                                            
-                            w = wcount                
+                            wcount = prec_s_wcount + count_s
+			    #FIXME `w = wcount` dynamically reassigns a value to `w`
+                            #that is already a value, namely the one refactored to `word_id`
+                            word_id = wcount                
         
                         
                     ## Define leftOnset as w - 10, then get all w and n between that and node
-                    wordWindow = int(wordWindow)
-                    leftOnset = max(1, w-wordWindow+1) ## we operate with word position, not list position (word 1 = 0 position in list)
-                    nodeOnset = w+1
-                    nodeOffset = w+nodeLength
+                    leftOnset = max(1, word_id - word_window + 1) ## we operate with word position, not list position (word 1 = 0 position in list)
+                    nodeOnset = word_id + 1
+                    nodeOffset = word_id + number_of_search_terms
                     try:
                         rightOnset = nodeOffset + 1
                     except:
                         rightOnset = None
                              
-                    ch_words = len(rec.process_xpath(session, '/div/descendant::w')) ## move to level for each record (chapter) ?                      
-                    rightOffset = min(rightOnset + wordWindow, rightOnset + (ch_words - rightOnset) + 1 )
+                    ch_words = len(rec.process_xpath(self.session, '/div/descendant::w')) ## move to level for each record (chapter) ?                      
+                    rightOffset = min(rightOnset + word_window, rightOnset + (ch_words - rightOnset) + 1 )
                           
                     left_text = []   
                     for l in range(leftOnset, nodeOnset):
                         try:
-                            left_n_pr = rec.process_xpath(session, '/div/descendant::w[%d]/preceding-sibling::n[1]' % l)[0].text
+                            left_n_pr = rec.process_xpath(self.session, '/div/descendant::w[%d]/preceding-sibling::n[1]' % l)[0].text
                         except:
                             left_n_pr = ''  
-                        left_w = rec.process_xpath(session, '/div/descendant::w[%d]' % l)[0].text
+                        left_w = rec.process_xpath(self.session, '/div/descendant::w[%d]' % l)[0].text
                         try: 
-                            left_n_fo = rec.process_xpath(session, '/div/descendant::w[%d]/following-sibling::n[1]' % l)[0].text   
+                            left_n_fo = rec.process_xpath(self.session, '/div/descendant::w[%d]/following-sibling::n[1]' % l)[0].text   
                         except:
                             left_n_fo = ''                 
                         left_text.append(''.join(left_n_pr + left_w + left_n_fo))
@@ -173,12 +202,12 @@ class Concordancer_New(object):
                     node_text = [] 
                     for n in range(nodeOnset, rightOnset):
                         try:
-                            node_n_pr = rec.process_xpath(session, '/div/descendant::w[%d]/preceding-sibling::n[1]' % n)[0].text     
+                            node_n_pr = rec.process_xpath(self.session, '/div/descendant::w[%d]/preceding-sibling::n[1]' % n)[0].text     
                         except:
                             node_n_pr = ''             
-                        node_w = rec.process_xpath(session, '/div/descendant::w[%d]' % n)[0].text
+                        node_w = rec.process_xpath(self.session, '/div/descendant::w[%d]' % n)[0].text
                         try:
-                            node_n_fo = rec.process_xpath(session, '/div/descendant::w[%d]/following-sibling::n[1]' % n)[0].text
+                            node_n_fo = rec.process_xpath(self.session, '/div/descendant::w[%d]/following-sibling::n[1]' % n)[0].text
                         except:
                             node_n_fo
                         node_text.append(''.join(node_n_pr + node_w + node_n_fo))
@@ -186,22 +215,22 @@ class Concordancer_New(object):
                     right_text = [] 
                     for r in range(rightOnset, rightOffset): 
                         try:
-                            right_n_pr = rec.process_xpath(session, '/div/descendant::w[%d]/preceding-sibling::n[1]' % r)[0].text
+                            right_n_pr = rec.process_xpath(self.session, '/div/descendant::w[%d]/preceding-sibling::n[1]' % r)[0].text
                         except:
                             right_n_pr = ''                        
-                        right_w = rec.process_xpath(session, '/div/descendant::w[%d]' % r)[0].text
+                        right_w = rec.process_xpath(self.session, '/div/descendant::w[%d]' % r)[0].text
                         try:
-                            right_n_fo = rec.process_xpath(session, '/div/descendant::w[%d]/following-sibling::n[1]' % r)[0].text
+                            right_n_fo = rec.process_xpath(self.session, '/div/descendant::w[%d]/following-sibling::n[1]' % r)[0].text
                         except:
                             right_n_fo = ''
                         right_text.append(''.join(right_n_pr + right_w + right_n_fo))
                         
                     ### 
-                    book = rec.process_xpath(session, '/div')[0].get('book')
-                    chapter = rec.process_xpath(session, '/div')[0].get('num')
-                    para_chap = rec.process_xpath(session, '/div/descendant::w[%d+1]/ancestor-or-self::p' % w)[0].get('pid')
-                    sent_chap = rec.process_xpath(session, '/div/descendant::w[%d+1]/ancestor-or-self::s' % w)[0].get('sid')
-                    word_chap = w                 
+                    book = rec.process_xpath(self.session, '/div')[0].get('book')
+                    chapter = rec.process_xpath(self.session, '/div')[0].get('num')
+                    para_chap = rec.process_xpath(self.session, '/div/descendant::w[%d+1]/ancestor-or-self::p' % word_id)[0].get('pid')
+                    sent_chap = rec.process_xpath(self.session, '/div/descendant::w[%d+1]/ancestor-or-self::s' % word_id)[0].get('sid')
+                    word_chap = word_id                 
                         
                     ## count paragraph, sentence and word in whole book
                     count_para = 0
@@ -232,7 +261,7 @@ class Concordancer_New(object):
                     para_book = count_para + int(para_chap)       
                     sent_book = count_sent + int(sent_chap)  
                     word_book = count_word + int(word_chap)                     
-   
+
                     conc_line = [left_text, node_text, right_text,
                                 [book, book_title, chapter, para_chap, sent_chap, str(word_chap), str(chapWordCount)],
                                 [str(para_book), str(sent_book), str(word_book), str(total_word)]]
@@ -243,15 +272,3 @@ class Concordancer_New(object):
         #conc_lines.insert(0, len(conc_lines))  
         conc_lines.insert(0, total_count)  
         return conc_lines
-    
-                
-
-                            
-            
-
-
-
-
-        
-        
-        
