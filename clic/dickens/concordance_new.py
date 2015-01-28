@@ -49,26 +49,18 @@ class Concordancer_New(object):
         #self.logger = self.db.get_object(self.session, 'concordanceLogger')
 
 
-    def create_concordance(self, terms, idxName, Materials, selectWords):
+    def build_and_run_query(self, terms, idxName, Materials, selectWords):
         """
-        main concordance method
-        create a list of lists containing each three contexts left - node -right,
-        and a list within those contexts containing each word. Add two separate lists containing metadata information:
-        [ [left context - word 1, word 2, etc.], [node - word 1, word 2, etc], [right context - word 1, etc],
-        [chapter metadata], [book metadata]
-        ],
-        etc.
+        Builds a cheshire query and runs it.
+
+        Its output is a tuple of which the first element is a resultset and
+        the second element is number of search terms in the query.
         """
-        ##self.logger.log(10, 'CREATING CONCORDANCE FOR RS: {0} in {1} - {2}'.format(terms, idxName, Materials))
-
-	#TODO change the variable names of the function itself (Materials, etc.)
-
-        conc_lines = [] # return concordance lines in list
-        word_window = 10 # word_window is set to 10 by default - on both sides of node
-
+        
         subcorpus = []
         for corpus in Materials:
             MatIdx = 'book-idx'
+            # ntc is 19th century?
             if corpus in ['dickens', 'ntc']:
                 MatIdx_Vol = 'subCorpus-idx'
                 subcorpus.append('c3.{0} = "{1}"'.format(MatIdx_Vol, corpus))
@@ -95,9 +87,35 @@ class Concordancer_New(object):
         query = self.qf.get_query(self.session, ' or '.join(subcorpus) + ' and/proxInfo ' + ' or '.join(term_clauses))
         result_set = self.db.search(self.session, query)
 
+        return result_set, number_of_search_terms
+
+
+    def create_concordance(self, terms, idxName, Materials, selectWords):
+        """
+        main concordance method
+        create a list of lists containing each three contexts left - node -right,
+        and a list within those contexts containing each word. 
+        Add two separate lists containing metadata information:
+        [ 
+        [left context - word 1, word 2, etc.], 
+        [node - word 1, word 2, etc], 
+        [right context - word 1, etc],
+        [chapter metadata], 
+        [book metadata]
+        ],
+        etc.
+        """
+        ##self.logger.log(10, 'CREATING CONCORDANCE FOR RS: {0} in {1} - {2}'.format(terms, idxName, Materials))
+
+	    #TODO change the variable names of the function itself (Materials -> selection, etc.)
+
+        conc_lines = [] # return concordance lines in list
+        word_window = 10 # word_window is set to 10 by default - on both sides of node
+        result_set, number_of_search_terms = self.build_and_run_query(terms, idxName, Materials, selectWords)
+
         ## get total number of hits (not yet used in interface)
         total_count = 0
-        if len(result_set) > 0:
+        if len(result_set) > 0: #FIXME What does cheshire return if there are no results? None? or [] ?
             for result in result_set:
                 total_count = total_count + len(result.proxInfo)
 
@@ -112,7 +130,7 @@ class Concordancer_New(object):
                 # Each time a search term is found in a document
                 # (each match) is described in terms of a proxInfo.
                 #
-		# It is insufficiently clear what proxInfo is.
+		        # It is insufficiently clear what proxInfo is.
                 # It takes the form of three nested lists:
                 #
                 # [[[0, 169, 1033, 15292]],
@@ -136,9 +154,12 @@ class Concordancer_New(object):
                 for match in result.proxInfo:
                     count += 1
 
+                    #FIXME will this code be run if there are more than 1000 results? will it not break out of the for loop?
+                    #or will it break out of the if loop
+
                     if count > 1000: ## current search limit: 1000
                         break
-                    else:
+                    else: #FIXME while this code be run if there are more than 1000 results? will it not break out of the for loop?
 
                         if idxName in ['chapter-idx']:
                             word_id = match[0][1]
@@ -167,7 +188,7 @@ class Concordancer_New(object):
 
                             ## word number within chapter is adding word count in preceding sentence and word count in current sentence
                             wcount = prec_s_wcount + count_s
-			    #FIXME `w = wcount` dynamically reassigns a value to `w`
+            			    #FIXME `w = wcount` dynamically reassigns a value to `w`
                             #that is already a value, namely the one refactored to `word_id`
                             word_id = wcount
 
