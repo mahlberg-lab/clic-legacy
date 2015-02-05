@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta content="text/html; charset=UTF-8" http-equiv="content-type" />
+  <title>Test Suite</title>
+</head>
+<body>
+<table id="suiteTable" cellpadding="1" cellspacing="1" border="1" class="selenium"><tbody>
+<tr><td><b>Test Suite</b></td></tr>
+<tr><td><a href="fog concordance - in all dickens - whole phrase">fog concordance - in all dickens - whole phrase</a></td></tr>
+<tr><td><a href="fog concordance - in all dickens - any">fog concordance - in all dickens - any</a></td></tr>
+<tr><td><a href="maybe in all dickens - whole phrase - quotes">maybe in all dickens - whole phrase - quotes</a></td></tr>
+<tr><td><a href="FAILS could should - in all dickens - any - whole text">FAILS maybe why - in all dickens - any - quotes</a></td></tr>
+<tr><td><a href="FAILS the in bleak house non-quotes whole phrase">FAILS the in bleak house non-quotes whole phrase</a></td></tr>
+<tr><td><a href="FAILS you in non-dickens non-quotes whole phrase">FAILS you in non-dickens non-quotes whole phrase</a></td></tr>
+<tr><td><a href="FAILS could should - in all dickens - any - whole text">FAILS could should - in all dickens - any - whole text</a></td></tr>
+</tbody></table>
+</body>
+</html>
