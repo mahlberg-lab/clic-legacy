@@ -4,12 +4,12 @@
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="selenium.base" href="http://clic.nottingham.ac.uk/" />
-<title>FAILS you in non-dickens non-quotes whole phrase</title>
+<title>the in bleak house non-quotes whole phrase</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">FAILS you in non-dickens non-quotes whole phrase</td></tr>
+<tr><td rowspan="1" colspan="3">the in bleak house non-quotes whole phrase</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
@@ -20,11 +20,6 @@
 	<td>clickAndWait</td>
 	<td>link=Concordance</td>
 	<td></td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>id=concordanceSearch</td>
-	<td>you</td>
 </tr>
 <tr>
 	<td>click</td>
@@ -38,18 +33,23 @@
 </tr>
 <tr>
 	<td>click</td>
-	<td>id=allNtcChk</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
 	<td>id=allDickensChk</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>css=button.close</td>
+	<td>css=#otherChk &gt; div.checkbox &gt; label &gt; input[name=&quot;testCollection&quot;]</td>
 	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=booksModalSubmit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=concordanceSearch</td>
+	<td>the</td>
 </tr>
 <tr>
 	<td>clickAndWait</td>

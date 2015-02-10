@@ -4,12 +4,12 @@
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="selenium.base" href="http://clic.nottingham.ac.uk/" />
-<title>FAILS maybe why - in all dickens - any - quotes</title>
+<title>you in non-dickens non-quotes whole phrase</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">FAILS maybe why - in all dickens - any - quotes</td></tr>
+<tr><td rowspan="1" colspan="3">you in non-dickens non-quotes whole phrase</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
@@ -24,11 +24,31 @@
 <tr>
 	<td>type</td>
 	<td>id=concordanceSearch</td>
-	<td>maybe why</td>
+	<td>you</td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>id=testIdxMod2</td>
+	<td>id=testIdxMod3</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Change books</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=allNtcChk</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=allDickensChk</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=button.close</td>
 	<td></td>
 </tr>
 <tr>
@@ -37,9 +57,9 @@
 	<td></td>
 </tr>
 <tr>
+	<td>verifyTextNotPresent</td>
 	<td></td>
-	<td></td>
-	<td></td>
+	<td>Sorry. Failed to load data. Please try again.</td>
 </tr>
 
 </tbody></table>

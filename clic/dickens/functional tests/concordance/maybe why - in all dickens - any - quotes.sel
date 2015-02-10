@@ -4,12 +4,12 @@
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="selenium.base" href="http://clic.nottingham.ac.uk/" />
-<title>FAILS could should - in all dickens - any - whole text</title>
+<title>maybe why - in all dickens - any - quotes</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">FAILS could should - in all dickens - any - whole text</td></tr>
+<tr><td rowspan="1" colspan="3">maybe why - in all dickens - any - quotes</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
@@ -24,11 +24,11 @@
 <tr>
 	<td>type</td>
 	<td>id=concordanceSearch</td>
-	<td>could should</td>
+	<td>maybe why</td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>id=any</td>
+	<td>id=testIdxMod2</td>
 	<td></td>
 </tr>
 <tr>
@@ -37,19 +37,9 @@
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
-	<td>css=#sizzle-1422464805938 &gt; img</td>
 	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>css=div.gradient-black-transparent.transition</td>
 	<td></td>
-</tr>
-<tr>
-	<td>verifyTextNotPresent</td>
 	<td></td>
-	<td>Sorry. Failed to load data. Please try again.</td>
 </tr>
 
 </tbody></table>
