@@ -11,7 +11,7 @@ from cheshire3.server import SimpleServer
 # load the metadata about chapters, word counts, etc.
 # from each individual book in the corpus
 # 1. get the directory of the present file (stored in __file__)
-# 2. open the 'booklist' file which contains the data we want
+# 2. open the 'booklist.json' file which contains the data we want
 # 3. convert it to json
 #
 # For each book in the corpus there is the following information listed in booklist:
@@ -30,7 +30,7 @@ from cheshire3.server import SimpleServer
 #     number of words
 
 BASE_DIR = os.path.dirname(__file__)
-raw_booklist = open(os.path.join(BASE_DIR, 'booklist'), 'r')
+raw_booklist = open(os.path.join(BASE_DIR, 'booklist.json'), 'r')
 booklist = json.load(raw_booklist)
 
 
