@@ -1,6 +1,7 @@
 from __future__ import absolute_import  ## help python find modules within clic package (see John H email 09.04.2014)
 from flask import Flask
 import json
+import urllib
 
 app = Flask(__name__,static_url_path='')
 
@@ -11,6 +12,7 @@ from beaker.util import parse_cache_config_options
 from clic.dickens.keywords import Keywords
 from clic.dickens.clusters import Clusters
 from clic.dickens.concordance_new import Concordancer_New
+from clic.dickens.chapter_repository import Chapter_Repository
 
 from flask import request
 from flask import render_template
@@ -38,6 +40,10 @@ def keywords():
 #     args = request.args
 #     #return json.dumps(fetchKeywords(args))
 
+@app.route('/ping/')
+def ping():
+    return 'Pong'
+
 @app.route('/clusters/', methods=['GET'])
 def clusters():
     args = request.args    
@@ -51,6 +57,12 @@ def concordances():
     concordances_result = fetchConcordance(args)
     concordances = json.dumps(concordances_result)
     return concordances
+    
+@app.route('/chapter/<book>/<int:number>/')
+def chapterView(number, book):
+    chapterRepository = Chapter_Repository()
+    chapter_raw = chapterRepository.get_chapter(number, book)
+    return chapter_raw
 
 #@cache.cache('keywords', expire=3600) ## expires after 3600 secs
 def fetchKeywords(args):
