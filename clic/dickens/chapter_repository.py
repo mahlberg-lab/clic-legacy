@@ -26,7 +26,7 @@ class Chapter_Repository(object):
         result_set = self.db.search(self.session, query)
         chapter_ptr = result_set[chapter_number - 1]
         chapter = chapter_ptr.fetch_record(self.session)
-        transformer = self.db.get_object(self.session, 'article-Txr')
+        transformer = self.db.get_object(self.session, 'chapterView-Txr')
         raw = transformer.process_record(self.session, chapter).get_raw(self.session)
         return raw
         
