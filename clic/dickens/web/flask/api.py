@@ -25,6 +25,10 @@ cache_opts = {
 
 cache = CacheManager(**parse_cache_config_options(cache_opts))
 
+@app.route('/', methods=['GET'])
+def index():
+    return render_template("concordance-form.html")
+
 @app.route('/keywords/', methods=['GET'])
 def keywords():
     ## get search specifications (args):
@@ -33,16 +37,6 @@ def keywords():
     keyword_result = fetchKeywords(args) # get list of keywords 
     keywords = json.dumps(keyword_result) # return keyword list as json
     return keywords
-
-## ajax route: not in use here
-# @app.route('/ajax-keywords',methods=['GET'])
-# def ajax_keyords():
-#     args = request.args
-#     #return json.dumps(fetchKeywords(args))
-
-@app.route('/ping/')
-def ping():
-    return 'Pong'
 
 @app.route('/clusters/', methods=['GET'])
 def clusters():
@@ -66,7 +60,6 @@ def chapterView(number, book):
 
 #@cache.cache('keywords', expire=3600) ## expires after 3600 secs
 def fetchKeywords(args):
-
     keyworder = Keywords()
     args = processArgs(args, 'keywords')
     keywords = keyworder.list_keywords(args[0], args[1], args[2], args[3], args[4])
@@ -74,7 +67,6 @@ def fetchKeywords(args):
 
 #@cache.cache('clusters', expire=3600)
 def fetchClusters(args):
-
     cluster = Clusters()    
     args = processArgs(args, 'clusters') 
     clusterlist = cluster.list_clusters(args[0], args[1])
@@ -82,7 +74,6 @@ def fetchClusters(args):
 
 #@cache.cache('concordances', expire=3600)
 def fetchConcordance(args):
-
     concordancer = Concordancer_New()
     args = processArgs(args, 'concordances')
     concordances = concordancer.create_concordance(args[0], args[1], args[2], args[3])
