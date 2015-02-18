@@ -1,0 +1,10 @@
+{% extends "layout/default.html" %}
+
+{% block title %}
+    Chapter {{ super() }}
+{% endblock %}
+
+{% block body %}
+	<h2>{{ book_title }}</h2>
+    {{ content|safe }}
+{% endblock %}
