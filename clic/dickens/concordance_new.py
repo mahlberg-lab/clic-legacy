@@ -130,7 +130,7 @@ class Concordancer_New(object):
                 # Each time a search term is found in a document
                 # (each match) is described in terms of a proxInfo.
                 #
-		        # It is insufficiently clear what proxInfo is.
+                # It is insufficiently clear what proxInfo is.
                 # It takes the form of three nested lists:
                 #
                 # [[[0, 169, 1033, 15292]],
@@ -188,7 +188,7 @@ class Concordancer_New(object):
 
                             ## word number within chapter is adding word count in preceding sentence and word count in current sentence
                             wcount = prec_s_wcount + count_s
-            			    #FIXME `w = wcount` dynamically reassigns a value to `w`
+                            #FIXME `w = wcount` dynamically reassigns a value to `w`
                             #that is already a value, namely the one refactored to `word_id`
                             word_id = wcount
 
