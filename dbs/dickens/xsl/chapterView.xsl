@@ -9,7 +9,7 @@
 
 
 	<xsl:template match="/">
-		<xsl:apply-templates select="//div"/>  
+		<xsl:apply-templates />  
 	</xsl:template>
 
 
@@ -17,12 +17,15 @@
 		
 		<div class="chapterDiv">
 			<span><xsl:text>ID: </xsl:text><xsl:value-of select="@book"/><xsl:text>.</xsl:text><xsl:value-of select="@num"/></span>
-			<h3>Chapter <xsl:value-of select="@num"/></h3>
+			<!--<h3>Chapter <xsl:value-of select="@num"/></h3>-->
 			<xsl:apply-templates/>
 		</div>
 		
 	</xsl:template>
 
+	<xsl:template match="title">
+		<h3><xsl:value-of select="text()" /></h3>
+	</xsl:template>
 
 	<xsl:template match="p">
 		<p>		

@@ -55,8 +55,8 @@ def concordances():
 @app.route('/chapter/<book>/<int:number>/')
 def chapterView(number, book):
     chapterRepository = Chapter_Repository()
-    chapter_raw = chapterRepository.get_chapter(number, book)
-    return render_template("chapterview.html", content=chapter_raw)
+    chapter, book_title = chapterRepository.get_chapter(number, book)
+    return render_template("chapterview.html", (content=chapter, book_title=book_title))
 
 #@cache.cache('keywords', expire=3600) ## expires after 3600 secs
 def fetchKeywords(args):
