@@ -1,0 +1,9 @@
+{% extends "layout/default.html" %}
+
+{% block title %}
+    Chapter {{ super() }}
+{% endblock %}
+
+{% block body %}
+    {{ content|safe }}
+{% endblock %}

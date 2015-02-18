@@ -153,6 +153,10 @@
 <script>
 $(function () {
 
+	$('#dataTableConcordance tbody').on( 'click', 'tr', function () {
+        window.location = $(this).data('url');
+    } );
+
     $('#plotWrap').hide();
 
     // custom sort functions see http://www.datatables.net/release-datatables/examples/basic_init/multi_col_sort.html
@@ -294,8 +298,9 @@ $(function () {
                 var wordsLhs = '';
                 var wordsRhs = '';
                 var node = '';
+                var chapterViewUrl = '/chapter/' + data.concordances[x][3][0] + '/' + data.concordances[x][3][2] + '/';
 
-                content += '<tr>';
+                content += '<tr class="clickable_row" data-url="' + chapterViewUrl + '">';
                 // counter
                 content += '<td>' + x + '</td>';
                 // words left
