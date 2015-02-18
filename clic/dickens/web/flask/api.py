@@ -56,7 +56,7 @@ def concordances():
 def chapterView(number, book):
     chapterRepository = Chapter_Repository()
     chapter, book_title = chapterRepository.get_chapter(number, book)
-    return render_template("chapterview.html", (content=chapter, book_title=book_title))
+    return render_template("chapter-view.html", content=chapter, book_title=book_title)
 
 #@cache.cache('keywords', expire=3600) ## expires after 3600 secs
 def fetchKeywords(args):
