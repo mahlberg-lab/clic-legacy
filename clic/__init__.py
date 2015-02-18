@@ -2,4 +2,4 @@
 
 __name__ = "clic"
 __package__ = "clic"
-__all__ = ['deploy', 'dickens', 'setuptools', 'stats']
+__all__ = ['stats', 'web']
