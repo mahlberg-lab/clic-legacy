@@ -9,6 +9,10 @@ h1.uonHeaderh1 {
     margin-top: 10px;
 }
 
+.navbar {
+  border-radius: 0;
+}
+
 .navbar-inverse {
     background-color: #003366;
     border-color: #003366;

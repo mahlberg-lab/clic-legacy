@@ -5,9 +5,9 @@
 {% endblock %}
 
 {% block body %}
-    <h2>Concordance Search</h2>
+    <h2 class="with-pills">Concordance Search</h2>
 
-    <form role="search" action="concordanceResults.html" method="get">
+    <form role="search" action="/concordances/" method="get">
         <div class="col-md-4"><h4>Books</h4>
 
             <div id="booksMain"></div>
@@ -100,8 +100,7 @@
 
 {% block scripts %}
   {{ super() }}
-  <script src="{{ url_for('static', filename='js/clic.js') }}"></script>
-
+  
   <script>
   $(function () {
       // add Jquery here

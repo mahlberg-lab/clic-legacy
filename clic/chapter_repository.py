@@ -10,7 +10,7 @@ BASE_DIR = os.path.dirname(__file__)
 raw_booklist = open(os.path.join(BASE_DIR, 'booklist.json'), 'r')
 booklist = json.load(raw_booklist)
 
-class Chapter_Repository(object):
+class ChapterRepository(object):
 
     def __init__(self):
         self.session = Session()
