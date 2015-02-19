@@ -5,7 +5,7 @@
 
 # Use the absolute path to the directory that stores the data.
 # This can differ per deployment
-DATA_DIRECTORY = ""
+# DATA_DIRECTORY = ""
 
 
 ### For the web app itself
