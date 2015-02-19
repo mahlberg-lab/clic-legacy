@@ -8,6 +8,8 @@ The requirements in the production.txt, testing.txt and dev.txt files import the
 
 To install these requirements, run a `pip install` for the respective file. For instance, to install the development dependencies, run:
 
-     pip install dev.txt
+     pip install -r dev.txt
 
-Note to devs: the requirements are specified with an exact release number.
+The flag `-r` allows one to point at a file that contains the dependencies. 
+
+Note to devs: the requirements are specified with an exact release number. Any new dependencies that are manually installed should be added to the requirements. This is not needed for dependencies of dependencies. 
