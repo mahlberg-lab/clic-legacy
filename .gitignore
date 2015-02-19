@@ -10,7 +10,7 @@ stores_OLD
 # Python compiled/optimized files
 *.py[co]
 __pycache__
-.cache
+*.cache
 
 # Python packaging/distribution
 *.egg

@@ -1,3 +1,4 @@
-selenium
-ipython
+-r testing.txt
 
+ipython==2.4.1
+lxml==3.4.1
