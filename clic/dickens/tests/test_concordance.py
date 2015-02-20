@@ -61,10 +61,8 @@ class PhraseSearchOneTerm(unittest.TestCase):
         # WS has 33 (because it includes fog-bank)
         fog = self.create_concordance(Materials=["BH"])
         self.assertEqual(len(fog) - correction, 32)
-
-    @unittest.skip("NTC not indexed yet?")
+    
     def test_specific_corpus(self):
-        #FIXME
         fog = self.create_concordance(Materials=["ntc"])
         self.assertEqual(len(fog) - correction, 88)
 
@@ -112,8 +110,26 @@ class PhraseSearchOneTermLongSus(unittest.TestCase):
     pass
 
 
-class OrSearchMultipleTerms:
-    pass
+class OrSearchMultipleTerms(unittest.TestCase):
+    
+    def setUp(self):
+        self.concordance = Concordancer_New()
+    
+    
+    def test_create_concordance(self):
+        fog = self.concordance.create_concordance(terms="dense fog", 
+                                             idxName="chapter-idx", 
+                                             Materials=["dickens"], 
+                                             selectWords="any")
+
+        # the only the thing that changes is the order of the terms
+        # which should not affect the results
+        dense = self.concordance.create_concordance(terms="fog dense", 
+                                             idxName="chapter-idx", 
+                                             Materials=["dickens"], 
+                                             selectWords="any")
+        
+        self.assertEqual(fog, dense)
 
 
 class PhraseSearchMultipleTerms(unittest.TestCase):
