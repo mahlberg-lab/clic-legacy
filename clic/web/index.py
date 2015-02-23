@@ -1,5 +1,5 @@
 from __future__ import absolute_import  ## help python find modules within clic package (see John H email 09.04.2014)
-from flask import Flask, render_template
+from flask import Flask, render_template, url_for, redirect, request
 from clic.web.api import api
 
 app = Flask(__name__, static_url_path='')
@@ -12,14 +12,35 @@ Application routes
 '''
 @app.route('/', methods=['GET'])
 def index():
-    return render_template("concordance-form.html")
+    return redirect(url_for('concordances')) # current home page. may change
 
 @app.route('/concordances/', methods=['GET'])
 def concordances():
-    return render_template("concordance-results.html")
+    if 'terms' in request.args.keys(): # form was submitted
+        return render_template("concordance-results.html")
+    else:
+        return render_template("concordance-form.html")
+
+@app.route('/keywords/', methods=['GET'])
+def keywords():
+    if 'testIdxGroup' in request.args.keys(): # form was submitted
+        return render_template("keywords-results.html")
+    else:
+        return render_template("keywords-form.html")
+
+@app.route('/clusters/', methods=['GET'])
+def clusters():
+    if 'testIdxGroup' in request.args.keys(): # form was submitted
+        return render_template("clusters-results.html")
+    else:
+        return render_template("clusters-form.html")
 
 @app.route('/chapter/<book>/<int:number>/')
 def chapterView(number, book):
     chapter_repository = ChapterRepository()
     chapter_raw = chapter_repository.get_chapter(number, book)
     return render_template("chapter-view.html", content=chapter_raw)
+
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template('page-not-found.html'), 404
