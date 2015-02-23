@@ -1,5 +1,7 @@
 {% extends "layout/default.html" %}
 
+{% set active_page = 'concordances' %}
+
 {% block title %}
     Concordance Search {{ super() }}
 {% endblock %}
@@ -7,7 +9,7 @@
 {% block body %}
     <h2 class="with-pills">Concordance Search</h2>
 
-    <form role="search" action="/concordances/" method="get">
+    <form role="search" action="{{ url_for('concordances') }}" method="get">
         <div class="col-md-4"><h4>Books</h4>
 
             <div id="booksMain"></div>
@@ -116,7 +118,7 @@
 
       // populate initial Books text from JSON
       $.ajax({
-          url: 'exampleJson/bookcounts.json',
+          url: '/exampleJson/bookcounts.json',
           type: 'GET',
           dataType: 'json',
           success: function (data) {
@@ -152,7 +154,7 @@
           });
 
           $.ajax({
-              url: 'exampleJson/bookcounts.json',
+              url: '/exampleJson/bookcounts.json',
               type: 'GET',
               dataType: 'json',
               success: function (data) {
