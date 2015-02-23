@@ -244,7 +244,7 @@ table .nowrap {
 .plot 						{width: 90%; }
 
 /*About Feedback formatting*/
-.padded	{padding-top: 20px;}
+.padded	{}
 .sideHead	{text-align: left;}
 @media (max-width: 768px)
 {
