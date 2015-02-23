@@ -7,11 +7,10 @@
 {% endblock %}
 
 {% block body %}
-  <h2>Keywords Search</h2>
+  <h2 class="without-pills">Keywords Search</h2>
 
-  <form role="search" action="{{ url_for('keywords') }}" method="get">
+  <form role="search" action="{{ url_for('keywords') }}" method="get" class="row">
       <div class="col-md-4">
-          <br>
           <label class="pull-left clicSelectSmallLabel">n-gram</label>
           <select name="testIdxGroup" class="form-control input-sm clicSelectSmall">
               <option value="1gram-idx">1-gram</option>
@@ -27,7 +26,6 @@
               <option value="11gram-idx">11-gram</option>
               <option value="12gram-idx">12-gram</option>
           </select>
-          <br>
 
           <h4>Test corpus</h4>
 
@@ -71,7 +69,6 @@
       </div>
 
       <div class="col-md-4">
-          <br>
           <label class="pull-left clicSelectSmallLabel">p-value</label>
           <select name="pValue" class="form-control input-sm clicSelectSmall">
               <option>0.1</option>
@@ -87,7 +84,6 @@
               <option>0.0000000001</option>
               <option>0.00000000001</option>
           </select>
-          <br>
 
           <h4>Reference corpus</h4>
 

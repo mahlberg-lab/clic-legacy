@@ -7,16 +7,16 @@
 {% endblock %}
 
 {% block body %}
-    <h2 class="with-pills">Concordance Search</h2>
+    <h2 class="without-pills">Concordance Search</h2>
 
-    <form role="search" action="{{ url_for('concordances') }}" method="get">
-        <div class="col-md-4"><h4>Books</h4>
+    <form role="search" action="{{ url_for('concordances') }}" method="get" class="row">
+        <div class="col-md-4">
+            <h4>Books</h4>
 
             <div id="booksMain"></div>
 
             <a data-toggle="modal" href="#booksModal" class="btn btn-default">Change books</a>
         </div>
-
 
         <div class="col-md-4"><h4>Search</h4>
 
