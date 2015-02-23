@@ -35,6 +35,11 @@ def clusters():
     else:
         return render_template("clusters-form.html")
 
+@app.route('/about/', methods=['GET'])
+def about():
+    return render_template("about.html")
+
+
 @app.route('/chapter/<book>/<int:number>/')
 def chapterView(number, book):
     chapter_repository = ChapterRepository()
