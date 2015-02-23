@@ -1,194 +1,116 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="shortcut icon" href="../../assets/ico/favicon.ico">
+{% extends "layout/default.html" %}
 
-    <title>Clusters Search - CLiC</title>
+{% set active_page = 'clusters' %}
 
-    <!-- Bootstrap core CSS -->
-    <link href="dist/css/bootstrap.min.css" rel="stylesheet">
+{% block title %}
+    Clusters Search {{ super() }}
+{% endblock %}
 
-    <!--Custom CSS-->
-    <link href="css/clic.css" rel="stylesheet">
+{% block body %}
+  <h2 class="without-pills">Clusters Search</h2>
 
-    <!--tablesorter-->
-    <link href="js/thirdparty/tablesorter/css/theme.default.css" rel="stylesheet">
+  <form role="search" action="{{ url_for('clusters') }}" method="get" class="row">
 
-    <!--[if lt IE 9]>
-    <script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+      <div class="col-md-4">
+          <label class="pull-left clicSelectSmallLabel">Cluster</label>
+          <select name="testIdxGroup" class="form-control input-sm clicSelectSmall">
+              <option value="1gram-idx">1-gram</option>
+              <option value="2gram-idx">2-gram</option>
+              <option selected value="3gram-idx">3-gram</option>
+              <option value="4gram-idx">4-gram</option>
+              <option value="5gram-idx">5-gram</option>
+              <option value="6gram-idx">6-gram</option>
+              <option value="7gram-idx">7-gram</option>
+              <option value="8gram-idx">8-gram</option>
+              <option value="9gram-idx">9-gram</option>
+              <option value="10gram-idx">10-gram</option>
+              <option value="11gram-idx">11-gram</option>
+              <option value="12gram-idx">12-gram</option>
+          </select>
 
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-</head>
+          <h4>Books</h4>
 
-<body>
+          <div id="booksMain"></div>
 
-<div class="container">
-    <img class="pull-right" src="img/uonlogo.png">
+          <a data-toggle="modal" href="#booksModal" class="btn btn-default">Change books</a>
 
-    <div class="header">
-        <h1 class="uonHeaderh1">CLiC</h1>
-
-        <p class="hidden-xs">A corpus tool to support the analysis of literary texts</p>
-    </div>
-</div>
-
-<div class="navbar navbar-inverse" role="navigation">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <!--<a class="navbar-brand" href="#">CLiC</a>-->
-        </div>
-        <div class="collapse navbar-collapse">
-            <ul class="nav navbar-nav">
-                <li><a href="index.html">Concordance</a></li>
-                <li><a href="keywords.html">Keywords</a></li>
-                <li class="active"><a href="clusters.html">Clusters</a></li>
-                <li><a href="about.html">About</a></li>
-            </ul>
-        </div>
-        <!--/.nav-collapse -->
-    </div>
-</div>
-
-<!--container-->
-<div class="container">
-
-    <h2>Clusters Search</h2>
-
-    <form role="search" action="clustersResults.html" method="get">
+      </div>
 
 
-        <div class="col-md-4">
+      <div class="col-md-4">
 
-            <br>
-            <label class="pull-left clicSelectSmallLabel">Cluster</label>
-            <select name="testIdxGroup" class="form-control input-sm clicSelectSmall">
-                <option value="1gram-idx">1-gram</option>
-                <option value="2gram-idx">2-gram</option>
-                <option selected value="3gram-idx">3-gram</option>
-                <option value="4gram-idx">4-gram</option>
-                <option value="5gram-idx">5-gram</option>
-                <option value="6gram-idx">6-gram</option>
-                <option value="7gram-idx">7-gram</option>
-                <option value="8gram-idx">8-gram</option>
-                <option value="9gram-idx">9-gram</option>
-                <option value="10gram-idx">10-gram</option>
-                <option value="11gram-idx">11-gram</option>
-                <option value="12gram-idx">12-gram</option>
-            </select>
-            <br>
+          <h5>Search within</h5>
 
-            <h4>Books</h4>
+          <div class="radio">
+              <label>
+                  <input type="radio" name="testIdxMod" id="testIdxMod1" value="chapter">
+                  Whole text
+              </label>
+          </div>
+          <div class="radio">
+              <label>
+                  <input type="radio" name="testIdxMod" id="testIdxMod2" value="quote" checked>
+                  Quotes
+              </label>
+          </div>
+          <div class="radio">
+              <label>
+                  <input type="radio" name="testIdxMod" id="testIdxMod3" value="non-quote">
+                  Non-quotes
+              </label>
+          </div>
+          <div class="radio">
+              <label>
+                  <input type="radio" name="testIdxMod" id="testIdxMod4" value="longsus">
+                  Long suspensions (5 words or more)
+              </label>
+          </div>
+          <div class="radio">
+              <label>
+                  <input type="radio" name="testIdxMod" id="testIdxMod5" value="shortsus">
+                  Short suspensions (4 words or less)
+              </label>
+          </div>
 
-            <div id="booksMain"></div>
+          <button type="submit" class="btn btn-primary">Search</button>
 
-            <a data-toggle="modal" href="#booksModal" class="btn btn-default">Change books</a>
-
-        </div>
-
-
-        <div class="col-md-4">
-
-            <br>
-            <h5>Search within</h5>
-
-            <div class="radio">
-                <label>
-                    <input type="radio" name="testIdxMod" id="testIdxMod1" value="chapter">
-                    Whole text
-                </label>
-            </div>
-            <div class="radio">
-                <label>
-                    <input type="radio" name="testIdxMod" id="testIdxMod2" value="quote" checked>
-                    Quotes
-                </label>
-            </div>
-            <div class="radio">
-                <label>
-                    <input type="radio" name="testIdxMod" id="testIdxMod3" value="non-quote">
-                    Non-quotes
-                </label>
-            </div>
-            <div class="radio">
-                <label>
-                    <input type="radio" name="testIdxMod" id="testIdxMod4" value="longsus">
-                    Long suspensions (5 words or more)
-                </label>
-            </div>
-            <div class="radio">
-                <label>
-                    <input type="radio" name="testIdxMod" id="testIdxMod5" value="shortsus">
-                    Short suspensions (4 words or less)
-                </label>
-            </div>
-
-            <button type="submit" class="btn btn-primary">Search</button>
-
-        </div>
-    </form>
+      </div>
+  </form>
 
 
-    <!-- Modal -->
-    <div class="modal" id="booksModal">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">Choose Books</h4>
-                </div>
-                <div class="modal-body">
-                    <div id="booksModalCol1" class="col-md-6"></div>
-                    <div id="booksModalCol2" class="col-md-6"></div>
-                    <div class="clearfix"></div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    <button id="booksModalSubmit" type="button" class="btn btn-primary">Select books</button>
-                </div>
-            </div>
-            <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-    </div>
-    <!-- /.modal -->
+  <!-- Modal -->
+  <div class="modal" id="booksModal">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                  <h4 class="modal-title">Choose Books</h4>
+              </div>
+              <div class="modal-body">
+                  <div id="booksModalCol1" class="col-md-6"></div>
+                  <div id="booksModalCol2" class="col-md-6"></div>
+                  <div class="clearfix"></div>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                  <button id="booksModalSubmit" type="button" class="btn btn-primary">Select books</button>
+              </div>
+          </div>
+          <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+  </div>
+  <!-- /.modal -->
+{% endblock %}
 
-</div>
-</div>
-<!-- /.container -->
-
-
-<!-- Bootstrap core JavaScript
-================================================== -->
-<!-- Placed at the end of the document so the pages load faster -->
-<!--<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>-->
-<script src="js/thirdparty/DataTables1.10.0-beta.2/media/js/jquery.js"></script>
-<script src="dist/js/bootstrap.min.js"></script>
-
-<!--Generic JS-->
-<script src="js/clic.js"></script>
-
-<script>
+{% block scripts %}
+  {{ super() }}
+  
+  <script>
     $(function () {
-        // add Jquery here
-
         // populate initial Books text from JSON
         $.ajax({
-            url: 'exampleJson/bookcounts.json',
+            url: '/exampleJson/bookcounts.json',
             type: 'GET',
             dataType: 'json',
             success: function (data) {
@@ -389,37 +311,10 @@
                     containerHtml += $('#allNtcDiv').wrap('<p/>').parent().html();
                 }
 
-
                 $('#booksMain').html(containerHtml);
                 $('#booksModal').modal('hide');
-
             }
-
         });
-
     });
 </script>
-
-<!-- Analytics
-=================================================== -->
-<script>
-    (function (i, s, o, g, r, a, m) {
-        i['GoogleAnalyticsObject'] = r;
-        i[r] = i[r] || function () {
-            (i[r].q = i[r].q || []).push(arguments)
-        }, i[r].l = 1 * new Date();
-        a = s.createElement(o),
-                m = s.getElementsByTagName(o)[0];
-        a.async = 1;
-        a.src = g;
-        m.parentNode.insertBefore(a, m)
-    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
-
-    ga('create', 'UA-921739-26', 'nottingham.ac.uk');
-    ga('send', 'pageview');
-
-</script>
-
-
-</body>
-</html>
+{% endblock %}
