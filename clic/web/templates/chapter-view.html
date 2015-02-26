@@ -1,0 +1,12 @@
+{% extends "layout/default.html" %}
+
+{% set active_page = 'concordance' %}
+
+{% block title %}
+    Chapter {{ super() }}
+{% endblock %}
+
+{% block body %}
+	<h2>{{ book_title }}</h2>
+    {{ content|safe }}
+{% endblock %}

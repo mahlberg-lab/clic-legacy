@@ -1,2 +1,0 @@
-cheshire3 [web,sql] >= 1.1.0c4
--e git+https://github.com/bloomonkey/mod-python-wsgi@develop#egg=modpythonwsgi
