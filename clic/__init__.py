@@ -2,4 +2,4 @@
 
 __name__ = "clic"
 __package__ = "clic"
-__all__ = ['stats', 'web']
+__all__ = ['stats', 'web', 'normalizer']
