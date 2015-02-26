@@ -43,8 +43,9 @@ def about():
 @app.route('/chapter/<book>/<int:number>/')
 def chapterView(number, book):
     chapter_repository = ChapterRepository()
-    chapter_raw = chapter_repository.get_chapter(number, book)
-    return render_template("chapter-view.html", content=chapter_raw)
+    chapter, book_title = chapter_repository.get_chapter(number, book)
+    return render_template("chapter-view.html", content=chapter, book_title=book_title)
+
 
 @app.errorhandler(404)
 def page_not_found(error):
