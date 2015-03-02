@@ -133,6 +133,13 @@ Concordance results
 End Concordance results
 */
 
+/*
+Chapter view
+*/
+
+.highlight {
+    background-color: yellow;
+}
 
 /*
 Keywords results

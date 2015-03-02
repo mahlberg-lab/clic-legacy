@@ -39,12 +39,12 @@ def clusters():
 def about():
     return render_template("about.html")
 
-
 @app.route('/chapter/<book>/<int:number>/')
-def chapterView(number, book):
+@app.route('/chapter/<book>/<int:number>/<search_term>/')
+def chapterView(number, book, search_term = None):
     chapter_repository = ChapterRepository()
     chapter, book_title = chapter_repository.get_chapter(number, book)
-    return render_template("chapter-view.html", content=chapter, book_title=book_title)
+    return render_template("chapter-view.html", content=chapter, book_title=book_title, search_term=search_term)
 
 
 @app.errorhandler(404)
