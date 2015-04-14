@@ -10,14 +10,3 @@
 	<h2>{{ book_title }}</h2>
     {{ content|safe }}
 {% endblock %}
-
-{% block scripts %}
-	<script type="text/javascript" src="{{ url_for('static', filename='js/thirdparty/jQuery-Plugins/jquery.highlight.js') }}"></script>
-
-	<script type="text/javascript">
-		$(function() {
-			var searchTerm = decodeURIComponent("{{ search_term }}".replace(/\+/g, ' '));
-			$("p").highlight(searchTerm);
-		});
-	</script>
-{% endblock %}
