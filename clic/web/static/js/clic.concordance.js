@@ -133,7 +133,7 @@
                 var wordsLhs = '';
                 var wordsRhs = '';
                 var node = '';
-                var chapterViewUrl = '/chapter/' + data.concordances[x][3][0] + '/' + data.concordances[x][3][2] + '/' + this.searchTerms + '/';
+                var chapterViewUrl = '/chapter/' + data.concordances[x][3][0] + '/' + data.concordances[x][3][2] + '/' + data.concordances[x][3][4] + '/#concordance';
 
                 content += '<tr class="clickable_row" data-url="' + chapterViewUrl + '">';
                 // counter

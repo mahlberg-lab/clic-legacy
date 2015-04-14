@@ -2,11 +2,10 @@
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 
-	
+	<xsl:param name="sid" select="''" />
+
 	<xsl:variable name="upper">ABCDEFGHIJKLMNOPQRSTUVWXYZ</xsl:variable>
 	<xsl:variable name="lower">abcedfghijklmnopqrstuvwxyz</xsl:variable>
-	
-
 
 	<xsl:template match="/">
 		<xsl:apply-templates />  
@@ -18,7 +17,7 @@
 		<div class="chapterDiv">
 			<span><xsl:text>ID: </xsl:text><xsl:value-of select="@book"/><xsl:text>.</xsl:text><xsl:value-of select="@num"/></span>
 			<!--<h3>Chapter <xsl:value-of select="@num"/></h3>-->
-			<xsl:apply-templates/>
+			<xsl:apply-templates />
 		</div>
 		
 	</xsl:template>
@@ -36,18 +35,33 @@
 		</p>
 	</xsl:template>
 
-
 	<xsl:template match="s">
 		<xsl:choose>
 			<xsl:when test="preceding-sibling::s"><xsl:text> </xsl:text></xsl:when>
 		</xsl:choose>
-		<xsl:apply-templates select="toks"/>
+		<xsl:choose>
+			<xsl:when test="@sid = $sid">
+				<span class="highlight">
+					<a id="concordance">
+						<xsl:comment>This comment prevents the anchor tag from being rendered incorrectly. I know, right?</xsl:comment>
+					</a>
+					<xsl:apply-templates />
+				</span>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:apply-templates />
+			</xsl:otherwise>
+		</xsl:choose>
 	</xsl:template>
 
 
-	<xsl:template match="w">
-		<xsl:apply-templates/>		
+	<xsl:template match="txt">
+		<xsl:apply-templates />		
 	</xsl:template>
 
+
+	<xsl:template match="*">
+		<!-- Suppress output of an unmatched nodes -->
+	</xsl:template>
 
 </xsl:stylesheet>

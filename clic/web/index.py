@@ -40,11 +40,16 @@ def about():
     return render_template("about.html")
 
 @app.route('/chapter/<book>/<int:number>/')
-@app.route('/chapter/<book>/<int:number>/<search_term>/')
-def chapterView(number, book, search_term = None):
+@app.route('/chapter/<book>/<int:number>/<int:sid>/')
+def chapterView(number, book, sid = None):
     chapter_repository = ChapterRepository()
-    chapter, book_title = chapter_repository.get_chapter(number, book)
-    return render_template("chapter-view.html", content=chapter, book_title=book_title, search_term=search_term)
+
+    if sid is None:
+        chapter, book_title = chapter_repository.get_chapter(number, book)
+    else:
+        chapter, book_title = chapter_repository.get_chapter_with_highlighted_sentence(number, book, sid)
+
+    return render_template("chapter-view.html", content=chapter, book_title=book_title)
 
 
 @app.errorhandler(404)
