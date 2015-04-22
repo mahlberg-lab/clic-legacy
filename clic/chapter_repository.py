@@ -50,13 +50,19 @@ class ChapterRepository(object):
         chapter = chapter_ptr.fetch_record(self.session)
         return chapter.get_dom(self.session)
 
-    def get_chapter_with_highlighted_sentence(self, chapter_number, book, sid):
+    def get_chapter_with_highlighted_search_term(self, chapter_number, book, wid, search_term):
         raw_chapter = self.get_raw_chapter(chapter_number, book)
         xslt_doc = etree.parse('/cheshire3/clic/dbs/dickens/xsl/chapterView.xsl')
         transformer = etree.XSLT(xslt_doc)
-        transformed_chapter = transformer(raw_chapter, sid="'%s'" % sid)
+
+        terms = search_term.split(' ')
+
+        transformed_chapter = transformer(raw_chapter, wid="'%s'" % wid, numberOfSearchTerms="%s" % len(terms))
         book_title = self.get_book_title(book)
 
         return etree.tostring(transformed_chapter), book_title
+
+
+
 
 

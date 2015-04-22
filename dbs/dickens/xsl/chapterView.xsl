@@ -2,7 +2,8 @@
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 
-	<xsl:param name="sid" select="''" />
+	<xsl:param name="wid" select="''" />
+	<xsl:param name="numberOfSearchTerms" select="'1'" />
 
 	<xsl:variable name="upper">ABCDEFGHIJKLMNOPQRSTUVWXYZ</xsl:variable>
 	<xsl:variable name="lower">abcedfghijklmnopqrstuvwxyz</xsl:variable>
@@ -39,12 +40,23 @@
 		<xsl:choose>
 			<xsl:when test="preceding-sibling::s"><xsl:text> </xsl:text></xsl:when>
 		</xsl:choose>
+
+		<xsl:apply-templates />
+	</xsl:template>
+
+	<xsl:template match="toks">
+		<xsl:apply-templates />
+	</xsl:template>
+
+	<xsl:template match="w">
+		<xsl:if test="count(preceding::w) = $wid">
+			<a id="concordance">
+				<xsl:comment>This comment intentionally left blank</xsl:comment>
+			</a>
+		</xsl:if>
 		<xsl:choose>
-			<xsl:when test="@sid = $sid">
+			<xsl:when test="count(preceding::w) &gt;= $wid and count(preceding::w) &lt; ($wid + $numberOfSearchTerms)">
 				<span class="highlight">
-					<a id="concordance">
-						<xsl:comment>This comment prevents the anchor tag from being rendered incorrectly. I know, right?</xsl:comment>
-					</a>
 					<xsl:apply-templates />
 				</span>
 			</xsl:when>
@@ -55,9 +67,13 @@
 	</xsl:template>
 
 
-	<xsl:template match="txt">
-		<xsl:apply-templates />		
+	<xsl:template match="n">
+		<xsl:apply-templates />
 	</xsl:template>
+
+	<!--<xsl:template match="txt">
+		<xsl:apply-templates />		
+	</xsl:template>-->
 
 
 	<xsl:template match="*">
