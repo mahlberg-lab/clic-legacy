@@ -68,7 +68,16 @@
 
 
 	<xsl:template match="n">
-		<xsl:apply-templates />
+		<xsl:choose>
+			<xsl:when test="count(preceding::w) &gt;= $wid and count(preceding::w) &lt; ($wid + $numberOfSearchTerms)">
+				<span class="highlight">
+					<xsl:apply-templates />
+				</span>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:apply-templates />
+			</xsl:otherwise>
+		</xsl:choose>
 	</xsl:template>
 
 	<!--<xsl:template match="txt">
