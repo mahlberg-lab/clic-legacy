@@ -1,7 +1,7 @@
 import unittest
 from functools import partial
 
-from clic.dickens.concordance_new import Concordancer_New
+from clic.concordance import Concordance
 
 """
 Currently, the results from the concordance view look like this
@@ -33,7 +33,7 @@ Currently, the results from the concordance view look like this
   ['2', '9', '169', '354362']],                           # paragraph, sentence, word, ???
 ...
 
-Because the list of results also contains an element that 
+Because the list of results also contains an element that
 is not a hit (the first element, namely the total count).
 We need to manually correct each result list
 with this element this should be fixed by using a dictionary.
@@ -44,24 +44,24 @@ correction = 1
 class PhraseSearchOneTerm(unittest.TestCase):
 
     def setUp(self):
-        concordance = Concordancer_New()
-        self.create_concordance = partial(concordance.create_concordance, 
-                                             terms="fog", 
-                                             idxName="chapter-idx", 
-                                             Materials=["dickens"], 
+        concordance = Concordance()
+        self.create_concordance = partial(concordance.create_concordance,
+                                             terms="fog",
+                                             idxName="chapter-idx",
+                                             Materials=["dickens"],
                                              selectWords="whole")
 
     def test_basic_query(self):
         # WordSmith (WS) has 96 because it includes compound nouns
         fog = self.create_concordance()
-        self.assertEqual(len(fog) - correction, 94)  
+        self.assertEqual(len(fog) - correction, 94)
         #TODO test whether the lines match with what one would expect
 
     def test_specific_book(self):
         # WS has 33 (because it includes fog-bank)
         fog = self.create_concordance(Materials=["BH"])
         self.assertEqual(len(fog) - correction, 32)
-    
+
     def test_specific_corpus(self):
         fog = self.create_concordance(Materials=["ntc"])
         self.assertEqual(len(fog) - correction, 88)
@@ -89,7 +89,7 @@ class PhraseSearchOneTerm(unittest.TestCase):
         self.assertEqual(len(fog) - correction, 1)
 
     def test_long_sus(self):
-        fog = self.create_concordance(idxName="longsus-idx", 
+        fog = self.create_concordance(idxName="longsus-idx",
                                       Materials="BH")
         self.assertEqual(len(fog) - correction, 0)
 
@@ -100,8 +100,8 @@ class PhraseSearchOneTermQuotes(unittest.TestCase):
 
 class PhraseSearchOneTermNonQuotes(unittest.TestCase):
     pass
-    
-    
+
+
 class PhraseSearchOneTermShortSus(unittest.TestCase):
     pass
 
@@ -111,51 +111,51 @@ class PhraseSearchOneTermLongSus(unittest.TestCase):
 
 
 class OrSearchMultipleTerms(unittest.TestCase):
-    
+
     def setUp(self):
-        self.concordance = Concordancer_New()
-    
-    
+        self.concordance = Concordance()
+
+
     def test_create_concordance(self):
-        fog = self.concordance.create_concordance(terms="dense fog", 
-                                             idxName="chapter-idx", 
-                                             Materials=["dickens"], 
+        fog = self.concordance.create_concordance(terms="dense fog",
+                                             idxName="chapter-idx",
+                                             Materials=["dickens"],
                                              selectWords="any")
 
         # the only the thing that changes is the order of the terms
         # which should not affect the results
-        dense = self.concordance.create_concordance(terms="fog dense", 
-                                             idxName="chapter-idx", 
-                                             Materials=["dickens"], 
+        dense = self.concordance.create_concordance(terms="fog dense",
+                                             idxName="chapter-idx",
+                                             Materials=["dickens"],
                                              selectWords="any")
-        
+
         self.assertEqual(fog, dense)
 
 
 class PhraseSearchMultipleTerms(unittest.TestCase):
 
     def test_create_concordance(self):
-        concordance = Concordancer_New()
-        fog = concordance.create_concordance(terms="dense fog", 
-                                             idxName="chapter-idx", 
-                                             Materials=["dickens"], 
+        concordance = Concordance()
+        fog = concordance.create_concordance(terms="dense fog",
+                                             idxName="chapter-idx",
+                                             Materials=["dickens"],
                                              selectWords="whole")
 
-        assert len(fog) - correction == 3 
+        assert len(fog) - correction == 3
 
 
 class PhraseSearchOneTermQuoteIndex(unittest.TestCase):
 
     def test_create_concordance(self):
         """
-        This is another naive test focusing on searching in quotes 
+        This is another naive test focusing on searching in quotes
 
         It also uses a hard-coded example
         """
-        concordance = Concordancer_New()
-        maybe = concordance.create_concordance(terms="maybe", 
-                                             idxName="quote-idx", 
-                                             Materials=["dickens"], 
+        concordance = Concordance()
+        maybe = concordance.create_concordance(terms="maybe",
+                                             idxName="quote-idx",
+                                             Materials=["dickens"],
                                              selectWords="whole")
 
         assert len(maybe) - correction == 45 # 45 hits + one variable total_count in the list
