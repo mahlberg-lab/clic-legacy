@@ -15,21 +15,25 @@ from cheshire3.server import SimpleServer
 from cheshire3.internal import cheshire3Root
 from cheshire3.document import StringDocument
 
-session = Session()
+from settings.settings import DATA_DIRECTORY
 
+try:
+    assert DATA_DIRECTORY
+except:
+    raise ImportError("You have not specified the project-wide settings.\
+		       Please do so in settings.py.")
+    
+
+# Launch a Cheshire session
+session = Session()
 serverConfig = os.path.join(cheshire3Root, 'configs', 'serverConfig.xml')
 serv = SimpleServer(session, serverConfig)
-
 db = serv.get_object(session, 'db_dickens')
 session.database = 'db_dickens'
-
 qf = db.get_object(session, 'defaultQueryFactory')
 df = db.get_object(session, 'SimpleDocumentFactory')
-
 concStore = db.get_object(session, 'concordanceStore')
-
 authStore = db.get_object(session, 'authStore')
-
 recStore = db.get_object(session, 'recordStore')
 ampPreP = db.get_object(session, 'AmpPreParser')
 xmlp = db.get_object(session, 'LxmlParser')
@@ -39,7 +43,7 @@ if ('-austen' in sys.argv):
     geniaTxr = db.get_object(session, 'corpusTransformer')
     indexWF = db.get_object(session, 'indexWorkflow-austen')
     austenRecStore = db.get_object(session, 'austenRecordStore')
-    data = '/home/aezros/cheshire3/dbs/dickens/data/austen'
+    data = DATA_DIRECTORY + 'austen'
     df.load(session, data)
     print df
     austenRecStore.begin_storing(session)
@@ -68,8 +72,7 @@ if ('-austen' in sys.argv):
 if ('-ntc' in sys.argv):
     geniaTxr = db.get_object(session, 'corpusTransformer')
     indexWF = db.get_object(session, 'indexWorkflow')
-    #data = '/home/aezros/cheshire3/dbs/dickens/data/dickens_novels'
-    data = '/home/aezros/Data/ntc_novels'
+    data = DATA_DIRECTORY + 'ntc_novels'
     df.load(session, data)
     recStore.begin_storing(session)
     db.begin_indexing(session) 
@@ -103,7 +106,7 @@ if ('-ntc' in sys.argv):
 if ('-load' in sys.argv):
     geniaTxr = db.get_object(session, 'corpusTransformer')
     indexWF = db.get_object(session, 'indexWorkflow')
-    data = '/cheshire3/clic/dbs/dickens/data/dickens_novels'
+    data = DATA_DIRECTORY + 'dickens_novels'
     df.load(session, data)
     recStore.begin_storing(session)
     db.begin_indexing(session) 
@@ -154,7 +157,7 @@ if ('-addIndex' in sys.argv):
 if ('-loadAll' in sys.argv):
     geniaTxr = db.get_object(session, 'corpusTransformer')
     indexWF = db.get_object(session, 'indexWorkflow')
-    data = '/home/aezros/Data'
+    data = DATA_DIRECTORY
     df.load(session, data)
     recStore.begin_storing(session)
     db.begin_indexing(session) 
