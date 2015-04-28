@@ -10,6 +10,7 @@
 #
 # * handle quotes etc.
 # * if the search terms are more complex, how do you then do count their len()?
+# * handle quotes etc.
 # * doing pagination
 # * adding query builder
 # * highlighting in a form if a word is frequent and it will thus take some time
