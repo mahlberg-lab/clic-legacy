@@ -11,6 +11,7 @@ stores_OLD
 *.py[co]
 __pycache__
 *.cache
+.ropeproject
 
 # Python packaging/distribution
 *.egg
