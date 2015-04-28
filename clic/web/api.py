@@ -11,7 +11,7 @@ from beaker.util import parse_cache_config_options
 
 from clic.keywords import Keywords
 from clic.clusters import Clusters
-from clic.concordance_new import Concordancer_New
+from clic.concordance import Concordance
 from clic.chapter_repository import ChapterRepository
 
 cache_opts = {
@@ -22,7 +22,7 @@ cache_opts = {
 
 cache = CacheManager(**parse_cache_config_options(cache_opts))
 
-''' 
+'''
 API endpoints
 '''
 @api.route('/keywords/', methods=['GET'])
@@ -30,20 +30,20 @@ def keywords():
     ## get search specifications (args):
     args = request.args
     ## put keywords into json:
-    keyword_result = fetchKeywords(args) # get list of keywords 
+    keyword_result = fetchKeywords(args) # get list of keywords
     keywords = json.dumps(keyword_result) # return keyword list as json
     return keywords
 
 @api.route('/clusters/', methods=['GET'])
 def clusters():
-    args = request.args    
-    clusters_result = fetchClusters(args)    
+    args = request.args
+    clusters_result = fetchClusters(args)
     clusters = json.dumps(clusters_result)
     return clusters
 
 @api.route('/concordances/', methods=['GET'])
 def concordances():
-    args = request.args  
+    args = request.args
     concordances_result = fetchConcordance(args)
     concordances = json.dumps(concordances_result)
     return concordances
@@ -57,60 +57,60 @@ def fetchKeywords(args):
 
 @cache.cache('clusters', expire=3600)
 def fetchClusters(args):
-    cluster = Clusters()    
-    args = processArgs(args, 'clusters') 
+    cluster = Clusters()
+    args = processArgs(args, 'clusters')
     clusterlist = cluster.list_clusters(args[0], args[1])
     return {'clusters' : clusterlist}
 
 @cache.cache('concordances', expire=3600)
 def fetchConcordance(args):
-    concordancer = Concordancer_New()
+    concordancer = Concordance()
     args = processArgs(args, 'concordances')
     concordances = concordancer.create_concordance(args[0], args[1], args[2], args[3])
     return {'concordances' : concordances}
 
 def processArgs(args, method):
-   
+
     methodArgs = []
-    
+
     if method == 'clusters':
         if not str(args["testIdxMod"]) == 'chapter':
             testMod = str(args["testIdxMod"])
-            Group = str(args['testIdxGroup']) 
+            Group = str(args['testIdxGroup'])
             testIdxName = "{0}-{1}".format(testMod, Group)
         else:
             testMod = ''
-            Group = str(args['testIdxGroup']) 
+            Group = str(args['testIdxGroup'])
             testIdxName = "{0}".format(Group)
 
         methodArgs.insert(0, testIdxName)
         book_collection = args.getlist('testCollection') ## args is a multiDictionary: use .getlist() to access individual books
         methodArgs.insert(1, book_collection)
-        
+
 
     if method == 'keywords':
-        Group = str(args['testIdxGroup']) 
+        Group = str(args['testIdxGroup'])
         if not str(args["testIdxMod"]) == 'chapter':
-            testMod = str(args["testIdxMod"])            
+            testMod = str(args["testIdxMod"])
             testIdxName = "{0}-{1}".format(testMod, Group)
         else:
             testMod = ''
             testIdxName = "{0}".format(Group)
 
         methodArgs.insert(0, testIdxName)
-        book_collection = args.getlist('testCollection') 
+        book_collection = args.getlist('testCollection')
         methodArgs.insert(1, book_collection) ## test corpus
 
-        refbook_collection = args.getlist('refCollection') 
+        refbook_collection = args.getlist('refCollection')
         if not str(args["refIdxMod"]) == 'chapter':
-            refMod = str(args['refIdxMod'])            
+            refMod = str(args['refIdxMod'])
             refIdxName = "{0}-{1}".format(refMod, Group)
         else:
             refMod = ''
             refIdxName = "{0}".format(Group)
 
         pValue = str(args['pValue'])
-        
+
         methodArgs.insert(2, refIdxName)
         methodArgs.insert(3, refbook_collection) ## ref corpus
         methodArgs.insert(4, pValue)
@@ -125,9 +125,9 @@ def processArgs(args, method):
 
         methodArgs.insert(0, str(args['terms']))
         methodArgs.insert(1, testIdxName)
-        #methodArgs.insert(2, wordWindow) 
-        methodArgs.insert(2, book_collection)    
-        methodArgs.insert(3, select_words)  
+        #methodArgs.insert(2, wordWindow)
+        methodArgs.insert(2, book_collection)
+        methodArgs.insert(3, select_words)
 
 
     return methodArgs
