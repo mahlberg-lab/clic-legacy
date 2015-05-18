@@ -1,0 +1,43 @@
+#TODO
+* what is the book index? what is in there?
+* make a querybuilder and a class that you can easily import in a notebook
+ and that avoids repeating all the cheshire stuff, also it should have the helper
+ functions you are always using to get easy results
+ 
+ query = QueryBuilder(term, index)
+ session = CheshireQuery.get_session()
+ result = CheshireQuery(query)
+ result.count_total()
+ 
+ class Concordance(CheshireQuery):
+    
+ concordance = Concordance(query)
+ concordance.totext()
+ concordance.tojson()
+ concordance.tofile()
+ concordance.count_total()
+ 
+ * check cheshire's .toCQL function
+ 
+
+* Try to really understand what proxinfo does in a chapter-idx. 
+  - how close should the terms be found?
+  - what is the unit in which is searched? is it the chapter?
+* Check all these searches with a txt concordance (rather than a webpage)
+  - for instance, check the 'not' search
+* Is it possible to do set operations on a ResultSet?
+  - That would allow: get term 1, get term 2, merge ResultSets, sort them
+  - Is it possible to substract one ResultSet from another?
+* Check whether the package on which cheshire depends has a QueryBuilder or QueryComposer
+* What module does cheshire use to parse CQL queries? What useful error messages can it give?
+* What's the difference between
+  - c3.subcorpus-idx ALL "dickens"
+  - c3.subcorpus-idx ANY "dickens"
+* How do you use placeholders in cheshire queries? For instance,
+  - retrieve all cases where `$1` is found in index-A and `$1` is found in index-B
+* Learn more about the subcorpus-idx
+* Why does proxInfo sometimes have 4 four values and sometimes only 3?
+* I am having a hard time grasping how indeces are combined...
+  - when a chapter and a sentence index are combined, for instance, which one of the two is dominant?
+  - is it the first one being called? or the last one?
+  - or does cheshire merge them? If so, how? If so, what about duplicate documents?
