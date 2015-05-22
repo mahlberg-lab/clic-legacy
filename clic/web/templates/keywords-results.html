@@ -6,7 +6,7 @@
   {{ super() }}
 
   <link href="/js/thirdparty/DataTables1.10.0-beta.2/media/css/dataTables.bootstrap.css" rel="stylesheet">
-  <link href="/js/thirdparty/pace-0.5.1/themes/pace-theme-loading-bar.css" rel="stylesheet"/>
+  <link href="/js/thirdparty/pace-0.5.1/themes/pace-theme-center-circle-uon.css" rel="stylesheet"/>
 {% endblock %}
 
 {% block title %}
@@ -16,7 +16,9 @@
 {% block body %}
   <h2 class="without-pills">Keywords Results</h2>
 
-  <div id="tableContainer"></div>
+  <div id="resultsWrap">
+    <div id="tableContainer"></div>
+  </div>
 {% endblock %}
 
 {% block scripts %}
@@ -31,6 +33,7 @@
 
   <script>
     $(function () {
+        $('#resultsWrap').hide();
 
         // Get URL params
         var params = location.search;
@@ -58,6 +61,9 @@
                         $('td:eq(0)', oSettings.aoData[ oSettings.aiDisplay[i] ].nTr ).html( i+1 );
                     }
                 }
+
+                $('#resultsWrap').show();
+                Pace.stop();
             },
 
             "aoColumns": [
