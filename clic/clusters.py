@@ -54,7 +54,7 @@ class Clusters(object):
 
         cluster_list.sort(key=operator.itemgetter(2), reverse=True)
 
-        if len(cluster_list) <= 5000:
+        if len(cluster_list) <= 3001:
             return cluster_list
         else:
-            return cluster_list[0:4999]
+            return cluster_list[0:3000]
