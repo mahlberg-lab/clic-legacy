@@ -24,14 +24,37 @@ def concordances():
 @app.route('/keywords/', methods=['GET'])
 def keywords():
     if 'testIdxGroup' in request.args.keys(): # form was submitted
-        return render_template("keywords-results.html")
+
+        # get parameters for redirecting to the concordance page
+        IdxGroup = request.args.get('testIdxGroup')
+        testCollection = request.args.get('testCollection')
+        testIdxMod = request.args.get('testIdxMod')
+        selectWords = "whole"
+
+        return render_template("keywords-results.html",
+                               IdxGroup=IdxGroup,
+                               testCollection=testCollection,
+                               testIdxMod=testIdxMod,
+                               selectWords=selectWords)
+
     else:
         return render_template("keywords-form.html")
 
 @app.route('/clusters/', methods=['GET'])
 def clusters():
     if 'testIdxGroup' in request.args.keys(): # form was submitted
-        return render_template("clusters-results.html")
+
+        # get parameters for redirecting to the concordance page
+        IdxGroup = request.args.get('testIdxGroup')
+        testCollection = request.args.get('testCollection')
+        testIdxMod = request.args.get('testIdxMod')
+        selectWords = "whole"
+
+        return render_template("clusters-results.html",
+                               IdxGroup=IdxGroup,
+                               testCollection=testCollection,
+                               testIdxMod=testIdxMod,
+                               selectWords=selectWords)
     else:
         return render_template("clusters-form.html")
 
