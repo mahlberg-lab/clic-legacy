@@ -39,6 +39,10 @@ def clusters():
 def about():
     return render_template("about.html")
 
+@app.route('/documentation/', methods=['GET'])
+def documentation():
+    return render_template("documentation.html")
+
 @app.route('/chapter/<book>/<int:number>/')
 @app.route('/chapter/<book>/<int:number>/<int:word_index>/<search_term>/')
 def chapterView(number, book, word_index = None, search_term = None):

@@ -1,26 +1,20 @@
 {% extends "layout/default.html" %}
 
-{% set active_page = 'about' %}
+{% set active_page = 'documentation' %}
 
 {% block title %}
-    About {{ super() }}
+    Documentation {{ super() }}
 {% endblock %}
 
 {% block body %}
   <div class="row">
       <div class="col-sm-9">
-          <h2 class="without-pills">About this prototype</h2>
+          <h2 class="without-pills">Definitions</h2>
           
-          <p>The CLiC interface is work in progress. This prototype was last updated on 22/05/2015 (version 1.0.4).
-          This update makes it possible to click on one of the rows in the concordance to retrieve the text it was
-          found in. Also it speeds up certain searches considerably. Other searches might still be a slow 
-          and very complex searches may fail.</p>
-          
-          <p>The following search options are in full development:</p>
-          <ul>
-              <li>Searches in short suspensions</li>
-              <li>Searches in 1-grams and 2-grams.</li>
-          </ul>
+          <img class="banner" src="/img/definition.png">
+
+
+
       </div>
     
       <div class="col-sm-3 padded">
@@ -43,6 +37,7 @@
       </div>
   </div>
 
+<!--
   <div class="row">
       <div class="col-md-9">
           <h2>About the project</h2>
@@ -57,6 +52,7 @@
 
       </div>
   </div>
+-->
 {% endblock %}
 
 {% block scripts %}
