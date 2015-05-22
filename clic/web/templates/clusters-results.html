@@ -94,6 +94,27 @@
               // duplicate controls iflp
               "sDom": '<iTf>rt<if>'
           });
+
+
+         // this is a quick, tmp solution, we should use awesome-slugify and a template filter instead
+        function slugify(text)
+            {
+            return text.toString().toLowerCase()
+                .replace(/\s+/g, '+')           // Replace spaces with +
+            }    
+            //    .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
+            //    .replace(/\-\-+/g, '-')         // Replace multiple - with single -
+            //    .replace(/^-+/, '')             // Trim - from start of text
+            //    .replace(/-+$/, '');            // Trim - from end of text
+            //}
+
+          $('#dataTableClusters tbody').on('click', 'tr', function () {
+              var data = oTable.fnGetData(this);
+              var term = data[1]
+              var slug = slugify(term)
+              window.location.href = '/concordances/?terms=' + slug + "&testCollection={{testCollection}}&testIdxMod={{testIdxMod}}&selectWords={{selectWords}}";
+          });
       });
+
   </script>
 {% endblock %}
