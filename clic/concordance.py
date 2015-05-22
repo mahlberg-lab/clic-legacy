@@ -34,7 +34,7 @@ raw_booklist = open(os.path.join(BASE_DIR, 'booklist.json'), 'r')
 booklist = json.load(raw_booklist)
 
 
-class Concordancer_New(object):
+class Concordance(object):
 
     def __init__(self):
         self.session = Session()
@@ -56,7 +56,7 @@ class Concordancer_New(object):
         Its output is a tuple of which the first element is a resultset and
         the second element is number of search terms in the query.
         """
-        
+
         subcorpus = []
         for corpus in Materials:
             MatIdx = 'book-idx'
@@ -94,13 +94,13 @@ class Concordancer_New(object):
         """
         main concordance method
         create a list of lists containing each three contexts left - node -right,
-        and a list within those contexts containing each word. 
+        and a list within those contexts containing each word.
         Add two separate lists containing metadata information:
-        [ 
-        [left context - word 1, word 2, etc.], 
-        [node - word 1, word 2, etc], 
+        [
+        [left context - word 1, word 2, etc.],
+        [node - word 1, word 2, etc],
         [right context - word 1, etc],
-        [chapter metadata], 
+        [chapter metadata],
         [book metadata]
         ],
         etc.

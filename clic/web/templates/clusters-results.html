@@ -6,7 +6,7 @@
   {{ super() }}
 
   <link href="/js/thirdparty/DataTables1.10.0-beta.2/media/css/dataTables.bootstrap.css" rel="stylesheet">
-  <link href="/js/thirdparty/pace-0.5.1/themes/pace-theme-loading-bar.css" rel="stylesheet"/>
+  <link href="/js/thirdparty/pace-0.5.1/themes/pace-theme-center-circle-uon.css" rel="stylesheet"/>
 {% endblock %}
 
 {% block title %}
@@ -16,7 +16,9 @@
 {% block body %}
   <h2 class="without-pills">Clusters Results</h2>
 
-  <div id="tableContainer"></div>
+  <div id="resultsWrap">
+    <div id="tableContainer"></div>
+  </div>
 {% endblock %}
 
 {% block scripts %}
@@ -31,6 +33,8 @@
 
   <script>
       $(function () {
+
+          $('#resultsWrap').hide();
 
           // Get URL params
           var params = location.search;
@@ -67,6 +71,11 @@
                   }
               },
 
+              "fnInitComplete": function () {
+                $('#resultsWrap').show();
+                Pace.stop();
+              },
+
               "bDeferRender": true,
               "bPaginate": false,
               "bLengthChange": false,
@@ -87,6 +96,27 @@
               // duplicate controls iflp
               "sDom": '<iTf>rt<if>'
           });
+
+
+         // this is a quick, tmp solution, we should use awesome-slugify and a template filter instead
+        function slugify(text)
+            {
+            return text.toString().toLowerCase()
+                .replace(/\s+/g, '+')           // Replace spaces with +
+            }    
+            //    .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
+            //    .replace(/\-\-+/g, '-')         // Replace multiple - with single -
+            //    .replace(/^-+/, '')             // Trim - from start of text
+            //    .replace(/-+$/, '');            // Trim - from end of text
+            //}
+
+          $('#dataTableClusters tbody').on('click', 'tr', function () {
+              var data = oTable.fnGetData(this);
+              var term = data[1]
+              var slug = slugify(term)
+              window.location.href = '/concordances/?terms=' + slug + "&testCollection={{testCollection}}&testIdxMod={{testIdxMod}}&selectWords={{selectWords}}";
+          });
       });
+
   </script>
 {% endblock %}
