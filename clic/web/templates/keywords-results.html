@@ -61,7 +61,9 @@
                         $('td:eq(0)', oSettings.aoData[ oSettings.aiDisplay[i] ].nTr ).html( i+1 );
                     }
                 }
+            },
 
+            "fnInitComplete": function () {
                 $('#resultsWrap').show();
                 Pace.stop();
             },

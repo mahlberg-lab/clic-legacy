@@ -69,9 +69,11 @@
                           $('td:eq(0)', oSettings.aoData[ oSettings.aiDisplay[i] ].nTr ).html( i+1 );
                       }
                   }
+              },
 
-                  $('#resultsWrap').show();
-                  Pace.stop();
+              "fnInitComplete": function () {
+                $('#resultsWrap').show();
+                Pace.stop();
               },
 
               "bDeferRender": true,
