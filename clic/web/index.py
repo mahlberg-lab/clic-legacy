@@ -1,7 +1,7 @@
 from __future__ import absolute_import  ## help python find modules within clic package (see John H email 09.04.2014)
 from flask import Flask, render_template, url_for, redirect, request
 
-from clic.web.api import api, fetchClusters
+from clic.web.api import api, fetchClusters, fetchKeywords
 from clic.chapter_repository import ChapterRepository
 
 app = Flask(__name__, static_url_path='')
@@ -59,11 +59,15 @@ def keywords():
         testIdxMod = request.args.get('testIdxMod')
         selectWords = "whole"
 
+        args = request.args
+        keywords_result = fetchKeywords(args)
+
         return render_template("keywords-results.html",
                                IdxGroup=IdxGroup,
                                testCollection=testCollection,
                                testIdxMod=testIdxMod,
-                               selectWords=selectWords)
+                               selectWords=selectWords,
+                               keywords=keywords_result)
 
     else:
         return render_template("keywords-form.html")
@@ -113,5 +117,5 @@ def chapterView(number, book, word_index = None, search_term = None):
     return render_template("chapter-view.html", content=chapter, book_title=book_title)
 
 # TODO delete?
-# if __name__ == '__main__':
-#    app.run()
+#if __name__ == '__main__':
+#   app.run()
