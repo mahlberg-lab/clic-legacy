@@ -8,10 +8,10 @@ app = Flask(__name__, static_url_path='')
 app.register_blueprint(api, url_prefix='/api')
 
 #TODO delete:
-# from flask_debugtoolbar import DebugToolbarExtension
-# app.debug = True
-# app.config["SECRET_KEY"] = "jadajajada"
-# toolbar = DebugToolbarExtension(app)
+from flask_debugtoolbar import DebugToolbarExtension
+app.debug = True
+app.config["SECRET_KEY"] = "jadajajada"
+toolbar = DebugToolbarExtension(app)
 
 '''
 Application routes
@@ -106,7 +106,7 @@ def clusters():
 #==============================================================================
 @app.route('/chapter/<book>/<int:number>/')
 @app.route('/chapter/<book>/<int:number>/<int:word_index>/<search_term>/')
-def chapterView(number, book, word_index = None, search_term = None):
+def chapterView(number, book, word_index=None, search_term=None):
     chapter_repository = ChapterRepository()
 
     if word_index is None:
@@ -116,6 +116,34 @@ def chapterView(number, book, word_index = None, search_term = None):
 
     return render_template("chapter-view.html", content=chapter, book_title=book_title)
 
+#==============================================================================
+# Subsets
+#==============================================================================
+@app.route('/subsets/')
+@app.route('/subsets/<book>/<subset>/')
+def subsets(book=None, subset=None):
+    """
+    * Know what book to generate suspensions for
+    * Take the suspensions for a book out of a text file OR out of cheshire
+    * Render the suspensions in a datatable
+    """
+    # TODO check data input
+    
+    if book:
+        import os    
+        BASE_DIR = os.path.dirname(__file__)
+        filename = "../textfiles/{0}/{1}_{0}.txt".format(subset, book)
+        with open(os.path.join(BASE_DIR, filename)) as the_file:
+            result = the_file.readlines()
+        
+        return render_template("subsets-results.html", 
+                               book=book, 
+                               subset=subset, 
+                               result=result)
+    
+    else:
+        return render_template("subsets-form.html")
+
 # TODO delete?
-#if __name__ == '__main__':
-#   app.run()
+if __name__ == '__main__':
+    app.run()
