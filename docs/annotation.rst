@@ -4,6 +4,8 @@ Install the necessary python packages::
 
 This installs: SQLAlchemy, Flask-SQLAlchemy, Mako, alembic, Flask-Script, Flask-Migrate
 
-Set up a postgres database:
+Set up a postgres database::
 
+    createdb --password annotation_dev
+    ALTER USER jdejoode PASSWORD 'my_postgres_password';
 
