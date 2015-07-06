@@ -1,8 +1,12 @@
 from __future__ import absolute_import  ## help python find modules within clic package (see John H email 09.04.2014)
+import os
+
 from flask import Flask, render_template, url_for, redirect, request
+from werkzeug import secure_filename
 
 from clic.web.api import api, fetchClusters, fetchKeywords
 from clic.chapter_repository import ChapterRepository
+from forms import SubsetForm, BOOKS, SUBSETS
 
 app = Flask(__name__, static_url_path='')
 app.register_blueprint(api, url_prefix='/api')
@@ -32,13 +36,9 @@ def about():
 def documentation():
     return render_template("documentation.html")
 
-@app.errorhandler(404)
-def page_not_found(error):
-    return render_template('page-not-found.html'), 404
-
 #==============================================================================
 # Concordances
-#==============================================================================
+#========================================request.method == 'POST' and ======================================
 @app.route('/concordances/', methods=['GET'])
 def concordances():
     if 'terms' in request.args.keys(): # form was submitted
@@ -119,30 +119,50 @@ def chapterView(number, book, word_index=None, search_term=None):
 #==============================================================================
 # Subsets
 #==============================================================================
-@app.route('/subsets/')
-@app.route('/subsets/<book>/<subset>/')
-def subsets(book=None, subset=None):
-    """
-    * Know what book to generate suspensions for
-    * Take the suspensions for a book out of a text file OR out of cheshire
-    * Render the suspensions in a datatable
-    """
-    # TODO check data input
-    
-    if book:
-        import os    
+@app.route('/subsets/', methods=["GET", "POST"])
+def subsets():
+    form = SubsetForm()
+
+    if form.validate_on_submit():
+        book = form.book.data
+        subset = form.subset.data
+        return redirect(url_for('subsets_display', 
+                                book=book,
+                                subset=subset))
+        
+    return render_template("subsets-form.html", form=form)
+
+
+@app.route('/subsets/<book>/<subset>/', methods=["GET", "POST"])
+def subsets_display(book=None, subset=None):
+        
+    if book and subset:
+        book = secure_filename(book)
+        subset = secure_filename(subset)
+        
+        if book not in BOOKS:
+            return redirect(url_for('page_not_found'))
+            
+        if subset not in SUBSETS:
+            return redirect(url_for('page_not_found'))
+            
         BASE_DIR = os.path.dirname(__file__)
         filename = "../textfiles/{0}/{1}_{0}.txt".format(subset, book)
-        with open(os.path.join(BASE_DIR, filename)) as the_file:
+        with open(os.path.join(BASE_DIR, filename), 'r') as the_file:
             result = the_file.readlines()
         
         return render_template("subsets-results.html", 
                                book=book, 
                                subset=subset, 
-                               result=result)
+                               result=result,
+                               )
     
     else:
-        return render_template("subsets-form.html")
+        return redirect(url_for('subsets'))
+
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template('page-not-found.html'), 404
 
 # TODO delete?
 if __name__ == '__main__':

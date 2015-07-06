@@ -48,3 +48,5 @@ PyZ3950_parsetab.*
 #phpstorm
 
 .idea
+
+clic/textfiles/
