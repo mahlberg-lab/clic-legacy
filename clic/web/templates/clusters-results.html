@@ -10,14 +10,30 @@
 {% endblock %}
 
 {% block title %}
-    Concordance Search {{ super() }}
+    Clusters {{ super() }}
 {% endblock %}
 
 {% block body %}
   <h2 class="without-pills">Clusters Results</h2>
 
   <div id="resultsWrap">
-    <div id="tableContainer"></div>
+    <div id="tableContainer">
+    <table style="width: 0px; cursor:pointer" aria-describedby="dataTableClusters_info" class="table table-striped table-hover dataTable no-footer uonDatatable" id="dataTableClusters">
+        <thead>
+            <tr role="row">
+                <th aria-label="No" style="width: 0px;" colspan="1" rowspan="1" class="sorting_asc">No</th>
+                <th aria-label="n-gram: activate to sort column ascending" style="width: 0px;" colspan="1" rowspan="1" aria-controls="dataTableClusters" tabindex="0" class="sorting">n-gram</th>
+                <th aria-label="Freq: activate to sort column ascending" style="width: 0px;" colspan="1" rowspan="1" aria-controls="dataTableClusters" tabindex="0" class="sorting">Freq</th>
+                <th aria-label="%: activate to sort column ascending" style="width: 0px;" colspan="1" rowspan="1" aria-controls="dataTableClusters" tabindex="0" class="sorting">%</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for cluster in clusters %}
+            <tr class="{{ loop.cycle('odd', 'even') }}"><td class="sorting_1">{{ loop.index }}</td><td>{{ cluster[1] }}</td><td>{{ cluster[2] }}</td><td>{{ cluster[3] }}</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    </div>
   </div>
 {% endblock %}
 
@@ -30,28 +46,11 @@
   <script src="/js/thirdparty/DataTables1.10.0-beta.2/extensions/TableTools/js/dataTables.tableTools.min.js"></script>
   <!-- datatables bootstrap js (css is above) see http://next.datatables.net/manual/styling/bootstrap -->
   <script src="/js/thirdparty/DataTables1.10.0-beta.2/media/js/dataTables.bootstrap.js"></script>
-
+ 
   <script>
       $(function () {
 
-          $('#resultsWrap').hide();
-
-          // Get URL params
-          var params = location.search;
-          var host = window.location.hostname;
-
-          jsonUrl = '/api/clusters/' + params; // from the app
-
-          $('#tableContainer').html('<table class="table table-striped table-hover dataTable no-footer uonDatatable" id="dataTableClusters"></table>');
           var oTable = $('#dataTableClusters').dataTable({
-
-              "ajax": {
-                  "url": jsonUrl,
-                  "dataSrc": "clusters",
-                  "error": function (xhr, error, thrown) {
-                      alert( 'Sorry. Failed to load data. Please try again.' );
-                  }
-              },
 
               "aoColumns": [
                   { "sTitle": "No" },
@@ -60,24 +59,18 @@
                   { "sTitle": "%" }
               ],
 
-              "fnDrawCallback": function ( oSettings ) {
-                  /* Need to redo the counters if filtered or sorted */
-                  if ( oSettings.bSorted || oSettings.bFiltered )
-                  {
-                      for ( var i=0, iLen=oSettings.aiDisplay.length ; i<iLen ; i++ )
-                      {
-                          $('td:eq(0)', oSettings.aoData[ oSettings.aiDisplay[i] ].nTr ).html( i+1 );
-                      }
-                  }
-              },
-
               "fnInitComplete": function () {
                 $('#resultsWrap').show();
                 Pace.stop();
               },
 
               "bDeferRender": true,
-              "bPaginate": false,
+              "bPaginate": false, 
+              <!--  I think it makes more sense to use pseudo-pagination: -->
+              <!-- "bPaginate": true, -->
+              <!-- "aLengthMenu": [[5, 10, 15, 25, 50, 100, -1], [5, 10, 15, 25, 50, 100, "All"]], -->
+              <!-- "iDisplayLength" : 50, -->
+
               "bLengthChange": false,
               "bFilter": true,
               "bSort": true,
@@ -119,4 +112,5 @@
       });
 
   </script>
+
 {% endblock %}
