@@ -12,10 +12,10 @@ app = Flask(__name__, static_url_path='')
 app.register_blueprint(api, url_prefix='/api')
 
 #TODO delete:
-from flask_debugtoolbar import DebugToolbarExtension
-app.debug = True
-app.config["SECRET_KEY"] = "jadajajada"
-toolbar = DebugToolbarExtension(app)
+# from flask_debugtoolbar import DebugToolbarExtension
+# app.debug = True
+# app.config["SECRET_KEY"] = "jadajajada"
+# toolbar = DebugToolbarExtension(app)
 
 '''
 Application routes
@@ -119,24 +119,33 @@ def chapterView(number, book, word_index=None, search_term=None):
 #==============================================================================
 # Subsets
 #==============================================================================
-@app.route('/subsets/', methods=["GET", "POST"])
+@app.route('/subsets/', methods=["GET"])
 def subsets():
-    form = SubsetForm()
+    """
+    This is a quick and dirty method to display the subsets in our db.
+    It now uses GET parameters, but should probably use POST parameters 
+    ideally. 
+    The basic design for POST parameters was almost ready but there were a
+    few issues.
+    """    
+    
+    
+    book = request.args.get('book')
+    subset = request.args.get('subset')
 
-    if form.validate_on_submit():
-        book = form.book.data
-        subset = form.subset.data
+    if book and subset:
         return redirect(url_for('subsets_display', 
                                 book=book,
                                 subset=subset))
         
-    return render_template("subsets-form.html", form=form)
+    return render_template("subsets-form.html")
 
 
 @app.route('/subsets/<book>/<subset>/', methods=["GET", "POST"])
 def subsets_display(book=None, subset=None):
         
     if book and subset:
+        # make sure they are not malicious names
         book = secure_filename(book)
         subset = secure_filename(subset)
         

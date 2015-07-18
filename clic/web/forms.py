@@ -14,7 +14,9 @@ SUBSETS = ["quotes",
            "all_suspensions",
            "short_suspensions",
            "long_suspensions",
-           "extended_quotes"]
+           "extended_quotes",
+           "non_suspended_narration",
+           "embedded_quotes",]
            
 SUBSETS_RADIO = [("quotes","Quotes"),
            ("non_quotes","Non-quotes"),
