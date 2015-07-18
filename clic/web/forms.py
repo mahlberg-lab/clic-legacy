@@ -5,26 +5,26 @@ Created on Fri Jul  3 10:09:45 2015
 @author: jdejoode
 """
 
-from flask_wtf import Form
-from wtforms import StringField, RadioField
-from wtforms.validators import DataRequired, ValidationError
+# from flask_wtf import Form
+# from wtforms import StringField, RadioField
+# from wtforms.validators import DataRequired, ValidationError
 
-SUBSETS = ["quotes", 
-           "non_quotes", 
+SUBSETS = ["quotes",
+           "non_quotes",
            "all_suspensions",
            "short_suspensions",
            "long_suspensions",
            "extended_quotes",
            "non_suspended_narration",
            "embedded_quotes",]
-           
+
 SUBSETS_RADIO = [("quotes","Quotes"),
            ("non_quotes","Non-quotes"),
            ("all_suspensions","All suspensions (both short and long)"),
            ("short_suspensions","Short suspensions (4 words or less)"),
            ("long_suspensions","Long suspensions (5 words or more)"),
-           ("extended_quotes","Extended quotes")]           
-           
+           ("extended_quotes","Extended quotes")]
+
 BOOKS = {u'AgnesG': u'Agnes Grey',
  u'Antoni': u'Antonina, or the Fall of Rome',
  u'BH': u'Bleak House',
@@ -161,14 +161,14 @@ MORE_ALTERNATIVE_BOOKS = {u'A Tale of Two Cities': u'TTC',
  u'Wuthering Heights': u'wh'}
 
 
-class SubsetForm(Form):
-    book = StringField('book', validators=[DataRequired()])
-    subset = RadioField('subset', choices=SUBSETS_RADIO, validators=[DataRequired()])
-    
-    def validate_subset(form, field):
-        if field.data not in SUBSETS:
-            raise ValidationError('The subset you selected is invalid.')
-            
-    def validate_book(form, field):
-        if field.data not in BOOKS:
-            raise ValidationError('The book you selected is invalid.')
+# class SubsetForm(Form):
+#     book = StringField('book', validators=[DataRequired()])
+#     subset = RadioField('subset', choices=SUBSETS_RADIO, validators=[DataRequired()])
+#
+#     def validate_subset(form, field):
+#         if field.data not in SUBSETS:
+#             raise ValidationError('The subset you selected is invalid.')
+#
+#     def validate_book(form, field):
+#         if field.data not in BOOKS:
+#             raise ValidationError('The book you selected is invalid.')

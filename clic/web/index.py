@@ -6,7 +6,7 @@ from werkzeug import secure_filename
 
 from clic.web.api import api, fetchClusters, fetchKeywords
 from clic.chapter_repository import ChapterRepository
-from forms import SubsetForm, BOOKS, SUBSETS
+from clic.web.forms import SubsetForm, BOOKS, SUBSETS
 
 app = Flask(__name__, static_url_path='')
 app.register_blueprint(api, url_prefix='/api')
