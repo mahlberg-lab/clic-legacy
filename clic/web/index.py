@@ -38,7 +38,7 @@ def documentation():
 
 #==============================================================================
 # Concordances
-#========================================request.method == 'POST' and ======================================
+#==============================================================================
 @app.route('/concordances/', methods=['GET'])
 def concordances():
     if 'terms' in request.args.keys(): # form was submitted
@@ -82,12 +82,12 @@ def clusters():
         IdxGroup = request.args.get('testIdxGroup')
         # FIXME this might not work when dealing with only a few books,
         # rather than an entire subcorpus, in that case better use:
-        # collection = args.getlist('testCollection') ## args is a 
+        # collection = args.getlist('testCollection') ## args is a
         ## multiDictionary: use .getlist() to access individual books
         testCollection = request.args.get('testCollection')
         testIdxMod = request.args.get('testIdxMod')
         selectWords = "whole"
-        
+
         args = request.args
         clusters_result = fetchClusters(args)
 
@@ -123,49 +123,49 @@ def chapterView(number, book, word_index=None, search_term=None):
 def subsets():
     """
     This is a quick and dirty method to display the subsets in our db.
-    It now uses GET parameters, but should probably use POST parameters 
-    ideally. 
+    It now uses GET parameters, but should probably use POST parameters
+    ideally.
     The basic design for POST parameters was almost ready but there were a
     few issues.
-    """    
-    
-    
+    """
+
+
     book = request.args.get('book')
     subset = request.args.get('subset')
 
     if book and subset:
-        return redirect(url_for('subsets_display', 
+        return redirect(url_for('subsets_display',
                                 book=book,
                                 subset=subset))
-        
+
     return render_template("subsets-form.html")
 
 
 @app.route('/subsets/<book>/<subset>/', methods=["GET", "POST"])
 def subsets_display(book=None, subset=None):
-        
+
     if book and subset:
         # make sure they are not malicious names
         book = secure_filename(book)
         subset = secure_filename(subset)
-        
+
         if book not in BOOKS:
             return redirect(url_for('page_not_found'))
-            
+
         if subset not in SUBSETS:
             return redirect(url_for('page_not_found'))
-            
+
         BASE_DIR = os.path.dirname(__file__)
         filename = "../textfiles/{0}/{1}_{0}.txt".format(subset, book)
         with open(os.path.join(BASE_DIR, filename), 'r') as the_file:
             result = the_file.readlines()
-        
-        return render_template("subsets-results.html", 
-                               book=book, 
-                               subset=subset, 
+
+        return render_template("subsets-results.html",
+                               book=book,
+                               subset=subset,
                                result=result,
                                )
-    
+
     else:
         return redirect(url_for('subsets'))
 
