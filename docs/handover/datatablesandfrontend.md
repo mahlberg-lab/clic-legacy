@@ -34,6 +34,8 @@ init: function() {
     ....
 ```
 
+These plugins would have to be extended/altered to work within the framework of multiple search patterns via the kwikgrouper functionality. I forsee that you'd need some sort of master controller that brought into existance _patterns_ of some kind. Each pattern would then be responsible for the datatables and plot views that made up it's results.
+
 Loading Bar
 ===========
 
