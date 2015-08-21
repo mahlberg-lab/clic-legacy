@@ -112,3 +112,9 @@ fi
 ```
 
 The servers each contain two folders that have the site code in. One is a bare git repository. This is the one that gets pushed to by the above script. The other is a normal respository (and the one that gets served by the uwsgi). The bare repository contains a post-update hook that ensures changes pushed to the bare repository are pushed onwards to the served repository. We rely on the emperor process to detect file changes and restart the application.
+
+The above setup requires that we have 3 servers so that files get put in the right places. The script requires a path to the bare repository as well as the live server hostname (which it prefixes dev or test based on the branch name)
+
+You'll notice we do not push to live via this technique though it should be possible and is probably the way we should do it because...
+
+We use the alternative which ssh'ing onto the live server and doing a git pull in the website directory. This should pull doing any changes to the master branch which is just fine because we use git-flow and only tested and approved changes occur in that branch.
