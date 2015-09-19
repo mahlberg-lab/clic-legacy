@@ -6,16 +6,17 @@ from werkzeug import secure_filename
 
 from clic.web.api import api, fetchClusters, fetchKeywords
 from clic.chapter_repository import ChapterRepository
+from clic.kwicgrouper import KWICgrouper, concordance_for_line_by_line_file
 from clic.web.forms import BOOKS, SUBSETS
 
 app = Flask(__name__, static_url_path='')
 app.register_blueprint(api, url_prefix='/api')
 
 #TODO delete:
-# from flask_debugtoolbar import DebugToolbarExtension
-# app.debug = True
-# app.config["SECRET_KEY"] = "jadajajada"
-# toolbar = DebugToolbarExtension(app)
+from flask_debugtoolbar import DebugToolbarExtension
+app.debug = True
+app.config["SECRET_KEY"] = "jadajajada"
+toolbar = DebugToolbarExtension(app)
 
 '''
 Application routes
@@ -176,7 +177,45 @@ def subsets_display(book=None, subset=None):
 
 @app.route('/patterns/', methods=["GET"])
 def patterns():
-    return render_template("patterns.html")
+    
+    if not 'term' in request.args.keys():
+        return render_template("patterns-form.html")
+    
+    else:
+        
+        # MAKE DRY
+        book = request.args.get('book')
+        subset = request.args.get('subset')
+        term = request.args.get('term')
+        local_args = dict(request.args)
+
+        kwic_filter = {}
+        for key,value in local_args.iteritems():
+            if key == "subset" or key == "book" or key == "term":
+                pass
+            elif value[0]:
+                kwic_filter[key] = value
+        
+        if book and subset:
+            # make sure they are not malicious names
+            book = secure_filename(book)
+            subset = secure_filename(subset)
+    
+            if book not in BOOKS:
+                return redirect(url_for('page_not_found'))
+    
+            if subset not in SUBSETS:
+                return redirect(url_for('page_not_found'))
+    
+            BASE_DIR = os.path.dirname(__file__)
+            filename = "../textfiles/{0}/{1}_{0}.txt".format(subset, book)               
+            concordance = concordance_for_line_by_line_file(os.path.join(BASE_DIR, filename), term)
+            # should not be done here            
+            if not concordance:
+                return render_template("patterns-results.html", textframe="This term does not occur in the document you selected.")
+            kwicgrouper = KWICgrouper(concordance)
+            textframe = kwicgrouper.filter_textframe(kwic_filter)
+            return render_template("patterns-results.html", textframe=textframe.to_html(classes=["table", "table-striped", "table-hover", "dataTable", "no-footer", "uonDatatable"]))
 
 
 @app.errorhandler(404)
