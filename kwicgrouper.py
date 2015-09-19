@@ -232,11 +232,9 @@ class KWICgrouper(object):
         end_string = ']'
         
         for val in kwdict:
-            print val
             if val in self.KWICSPOTS:
                 a_string = """(self.textframe.{0}.isin({1}))""".format(val, kwdict[val])
                 individual_strings.append(a_string)
-                print a_string
             elif val == 'sort_by':
                 end_string = """].sort({0})""".format(kwdict[val])
                 
