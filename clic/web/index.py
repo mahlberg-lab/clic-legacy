@@ -169,6 +169,16 @@ def subsets_display(book=None, subset=None):
     else:
         return redirect(url_for('subsets'))
 
+
+#==============================================================================
+# KWICgrouper
+#==============================================================================
+
+@app.route('/patterns/', methods=["GET"])
+def patterns():
+    return render_template("patterns.html")
+
+
 @app.errorhandler(404)
 def page_not_found(error):
     return render_template('page-not-found.html'), 404
