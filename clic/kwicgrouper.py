@@ -239,6 +239,10 @@ class KWICgrouper(object):
                 end_string = """].sort({0})""".format(kwdict[val])
                 
         query = begin_string + ' & '.join(individual_strings) + end_string
+        
+        # if there are no specific filters, just return a simple concordance
+        if query == "self.textframe[]":
+            query = "self.textframe"
         return eval(query)
 
     def args_to_dict(self,
