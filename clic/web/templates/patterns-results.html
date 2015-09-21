@@ -7,12 +7,20 @@
 {% endblock %}
 
 {% block body %}
+    {#
     <form action="/patterns/" method=get class="formm-inline formm-horizontal">
+    #}
 
     <h3 class="without-pills">Results:</h2>
 
-    {{ local_args }}
     {{ textframe | safe }}
+
+    <h3 class="without-pills">Test:</h2>
+
+    {{ local_args }}
+
+    
+        {#
 
     <div class="form-group">
         <label>
@@ -297,6 +305,9 @@
         </div>  
   
      </form>  
+
+    #}
+
 {% endblock %}
 
 {% block scripts %}

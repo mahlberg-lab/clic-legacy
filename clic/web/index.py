@@ -194,7 +194,12 @@ def patterns():
             if key == "subset" or key == "book" or key == "term":
                 pass
             elif value[0]:
-                kwic_filter[key] = value
+                # the values are in the first el of the list
+                # 'L2': [u'a']
+                values = value[0]
+                values = values.split(",")
+                values = [value.strip() for value in values]
+                kwic_filter[key] = values
         
         if book and subset:
             # make sure they are not malicious names
@@ -215,7 +220,9 @@ def patterns():
                 return render_template("patterns-results.html", textframe="This term does not occur in the document you selected.")
             kwicgrouper = KWICgrouper(concordance)
             textframe = kwicgrouper.filter_textframe(kwic_filter)
-            return render_template("patterns-results.html", textframe=textframe.to_html(classes=["table", "table-striped", "table-hover", "dataTable", "no-footer", "uonDatatable"]))
+            return render_template("patterns-results.html", textframe=textframe.to_html(classes=["table", "table-striped", "table-hover", "dataTable", "no-footer", "uonDatatable"],
+                                                                                        index=False),
+                                   local_args=kwic_filter)
 
 
 @app.errorhandler(404)
