@@ -3,6 +3,7 @@ import os
 
 from flask import Flask, render_template, url_for, redirect, request
 from werkzeug import secure_filename
+import pandas as pd
 
 from clic.web.api import api, fetchClusters, fetchKeywords
 from clic.chapter_repository import ChapterRepository
@@ -220,9 +221,16 @@ def patterns():
                 return render_template("patterns-results.html", textframe="This term does not occur in the document you selected.")
             kwicgrouper = KWICgrouper(concordance)
             textframe = kwicgrouper.filter_textframe(kwic_filter)
+            collocation_table = textframe.apply(pd.Series.value_counts, axis=0) 
+            collocation_table["Sum"] = collocation_table.sum(axis=1)  
+            collocation_table["Left Sum"] = collocation_table[["L5","L4","L3","L2","L1"]].sum(axis=1)  
+            collocation_table["Right Sum"] = collocation_table[["R5","R4","R3","R2","R1"]].sum(axis=1)
+            
             return render_template("patterns-results.html", textframe=textframe.to_html(classes=["table", "table-striped", "table-hover", "dataTable", "no-footer", "uonDatatable"],
                                                                                         index=False),
-                                   local_args=kwic_filter)
+                                   local_args=kwic_filter,
+                                   collocation_table = collocation_table.fillna("").to_html(classes=["table", "table-striped", "table-hover", "dataTable", "no-footer", "uonDatatable"],
+                                                                                 ))
 
 
 @app.errorhandler(404)
