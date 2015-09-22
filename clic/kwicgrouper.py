@@ -243,7 +243,7 @@ class KWICgrouper(object):
         # if there are no specific filters, just return a simple concordance
         if query == "self.textframe[]":
             query = "self.textframe"
-        # this is an obvious security risk, running client generated code
+        # hmm
         return eval(query)
 
     def args_to_dict(self,

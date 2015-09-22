@@ -221,16 +221,52 @@ def patterns():
                 return render_template("patterns-results.html", textframe="This term does not occur in the document you selected.")
             kwicgrouper = KWICgrouper(concordance)
             textframe = kwicgrouper.filter_textframe(kwic_filter)
+            
             collocation_table = textframe.apply(pd.Series.value_counts, axis=0) 
             collocation_table["Sum"] = collocation_table.sum(axis=1)  
             collocation_table["Left Sum"] = collocation_table[["L5","L4","L3","L2","L1"]].sum(axis=1)  
             collocation_table["Right Sum"] = collocation_table[["R5","R4","R3","R2","R1"]].sum(axis=1)
+
+            pd.set_option('display.max_colwidth', 1000)
+            
+            # replicate the index so that it is accessible from a row-level apply function
+            # http://stackoverflow.com/questions/20035518/insert-a-link-inside-a-pandas-table
+            collocation_table["collocate"] = collocation_table.index
+            
+            # function that can be applied
+            def linkify(row, position, term=None, book=None, subset=None):
+                """
+                The purpose is to make links in the dataframe.to_html() output clickable.
+                
+                # http://stackoverflow.com/a/26614921
+                """
+                if pd.notnull(row[position]):
+                    return """<a href="/patterns/?{0}={1}&term={2}&book={4}&subset={5}">{3}</a>""".format(position, 
+                                                                                      row["collocate"], 
+                                                                                      term,  
+                                                                                      int(row[position]),
+                                                                                      book,
+                                                                                      subset
+                                                                                     )
+            
+            # http://localhost:5000/patterns/?L5=&L4=&L3=&L2=&L1=&term=voice&R1=&R2=&R3=&R4=&R5=&subset=long_suspensions&book=BH
+            
+            def linkify_process(df, term):
+                """
+                """
+                for itm in "L5 L4 L3 L2 L1 R1 R2 R3 R4 R5".split():
+                    df[itm] = df.apply(linkify, args=([itm, term, book, subset]), axis=1)
+                return df
+            
+            linkify_process(collocation_table, term)             
+            del collocation_table["collocate"]
             
             return render_template("patterns-results.html", textframe=textframe.to_html(classes=["table", "table-striped", "table-hover", "dataTable", "no-footer", "uonDatatable"],
                                                                                         index=False),
                                    local_args=kwic_filter,
                                    collocation_table = collocation_table.fillna("").to_html(classes=["table", "table-striped", "table-hover", "dataTable", "no-footer", "uonDatatable"],
-                                                                                 ))
+                                                                                            bold_rows=False,
+                                                                                 ).replace("&lt;", "<").replace("&gt;", ">"))
 
 
 @app.errorhandler(404)
