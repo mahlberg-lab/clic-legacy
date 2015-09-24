@@ -18,8 +18,12 @@
 
 {% block body %}
 
+    {# <p>{{ subsetname }} in {{ bookname }}</p> #}
+
     <h3 class="without-pills">Results:</h2>
-    {{ textframe | safe }}
+     
+    {{ textframe.to_html(classes=["table", "table-striped", "table-hover", "dataTable", "no-footer", "uonDatatable", 'my_class" id = "dataTablePattern'],
+                                                                                        index=False) | safe }}
 
     <h3 class="without-pills">Collocations:</h2>
     {{ collocation_table | safe }}
@@ -43,16 +47,20 @@
   <script src="/js/thirdparty/DataTables1.10.0-beta.2/media/js/dataTables.bootstrap.js"></script>
 
   <script>
-  $(function () {
+  $(function() {
 
+          // this is not working yet
           // Setup - add a text input to each footer cell
-          $('#dataTablePattern tfoot th').each( function () {
-          var title = $('#dataTablePattern thead th').eq( $(this).index() ).text();
-          $(this).html( '<input type="text" placeholder="'+title+'" />' );
-          } );
+          // $('#dataTablePattern tfoot th').each( function () {
+          // var title = $('#dataTablePattern thead th').eq( $(this).index() ).text();
+          // $(this).html( '<input type="text" placeholder="'+title+'" />' );
+          // } );
+
+          // $('table').dataTable();
+
 
           var oTable = $('#dataTablePattern').dataTable({
-
+          
               "aoColumns": [
                   { "sTitle": "L5" },
                   { "sTitle": "L4" },
@@ -99,12 +107,63 @@
               },
               // duplicate controls iflp
               // http://legacy.datatables.net/usage/options#sDom
-              "sDom": '<iT>rt<f>',
+              // to enable filter, add f in between last <>
+              "sDom": '<iT>rt<>',
               // "sDom": '<iTf>rt<flp>'
               // "sDom": 'iTrtlfip'
               
           });
-    });
+
+
+
+          var oTable = $('#dataTableCollocation').dataTable({
+
+              // not sure why, but if this is aoColumns as above, the datatable is not loaded
+              "boColumns": [
+                  { "sTitle": "L5" },
+                  { "sTitle": "L4" },
+                  { "sTitle": "L3" },
+                  { "sTitle": "L2" },
+                  { "sTitle": "L1" },
+                  { "sTitle": "term" },
+                  { "sTitle": "R1" },
+                  { "sTitle": "R2" },
+                  { "sTitle": "R3" },
+                  { "sTitle": "R4" },
+                  { "sTitle": "R5" },
+                  { "sTitle": "Sum" },
+                  { "sTitle": "Left Sum" },
+                  { "sTitle": "Right Sum" },
+              ],
+
+              "bDeferRender": true,
+              "bPaginate": false, 
+              "bLengthChange": false,
+              "bFilter": true,
+              "bSort": true,
+              "aoColumnDefs": [
+                  { "bSortable": false, "aTargets": [ 6 ] },
+                  { "bSearchable": false, "aTargets": [ 6 ] }
+              ],
+
+              // default sorting on L1
+              "order": [[ 12, "desc" ]],
+
+              "oTableTools": {
+                  // other options: copy, excel, pdf  
+                  "aButtons": [ "csv", "print" ],
+                  "sSwfPath": "/js/thirdparty/DataTables1.10.0-beta.2/extensions/TableTools/swf/copy_csv_xls.swf"
+              },
+
+              // duplicate controls iflp
+              // T gives some fancy stuff here
+              "sDom": '<iT>rt<>',
+
+          });
+
+
+
+  });
   </script>
 
 {% endblock %}

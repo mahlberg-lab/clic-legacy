@@ -187,7 +187,7 @@ def patterns():
         # MAKE DRY
         book = request.args.get('book')
         subset = request.args.get('subset')
-        term = request.args.get('term')
+        term = request.args.get('term').strip()
         local_args = dict(request.args)
 
         kwic_filter = {}
@@ -218,7 +218,7 @@ def patterns():
             concordance = concordance_for_line_by_line_file(os.path.join(BASE_DIR, filename), term)
             # should not be done here            
             if not concordance:
-                return render_template("patterns-results.html", textframe="This term does not occur in the document you selected.")
+                return render_template("patterns-noresults.html", message="This term does not occur in the document you selected.")
             kwicgrouper = KWICgrouper(concordance)
             textframe = kwicgrouper.filter_textframe(kwic_filter)
             
@@ -253,22 +253,37 @@ def patterns():
             
             def linkify_process(df, term, book, subset):
                 """
+                Linkifies every column from L5-R5
                 """
                 for itm in "L5 L4 L3 L2 L1 R1 R2 R3 R4 R5".split():
                     df[itm] = df.apply(linkify, args=([itm, term, book, subset]), axis=1)
                 return df
             
+            
+            
             linkify_process(collocation_table, term, book, subset)             
             del collocation_table["collocate"]
+            
+                        
+            # collocation_table = collocation_table[collocation_table.index != ""]
+            
+            collocation_table = collocation_table.fillna("").to_html(classes=["table", "table-striped", "table-hover", "dataTable", "no-footer", "uonDatatable", 'my_class" id = "dataTableCollocation'],
+                                                                                            bold_rows=False,
+                                                                                 ).replace("&lt;", "<").replace("&gt;", ">")
+            
+            
+            bookname = book
+            subsetname = subset.replace("_", " ").capitalize()
+            
             # this bit is a hack:
             # classes = 'my_class" id = "my_id'
             # http://stackoverflow.com/questions/15079118/js-datatables-from-pandas
-            return render_template("patterns-results.html", textframe=textframe.to_html(classes=["table", "table-striped", "table-hover", "dataTable", "no-footer", "uonDatatable", 'my_class" id = "dataTablePattern'],
-                                                                                        index=False),
-                                   local_args=kwic_filter,
-                                   collocation_table = collocation_table.fillna("").to_html(classes=["table", "table-striped", "table-hover", "dataTable", "no-footer", "uonDatatable"],
-                                                                                            bold_rows=False,
-                                                                                 ).replace("&lt;", "<").replace("&gt;", ">"))
+            return render_template("patterns-results.html", 
+                                   textframe=textframe,
+                                   # local_args=kwic_filter,
+                                   collocation_table=collocation_table,
+                                   bookname=bookname,
+                                   subsetname=subsetname)
 
 
 @app.errorhandler(404)
