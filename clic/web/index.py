@@ -251,17 +251,19 @@ def patterns():
             
             # http://localhost:5000/patterns/?L5=&L4=&L3=&L2=&L1=&term=voice&R1=&R2=&R3=&R4=&R5=&subset=long_suspensions&book=BH
             
-            def linkify_process(df, term):
+            def linkify_process(df, term, book, subset):
                 """
                 """
                 for itm in "L5 L4 L3 L2 L1 R1 R2 R3 R4 R5".split():
                     df[itm] = df.apply(linkify, args=([itm, term, book, subset]), axis=1)
                 return df
             
-            linkify_process(collocation_table, term)             
+            linkify_process(collocation_table, term, book, subset)             
             del collocation_table["collocate"]
-            
-            return render_template("patterns-results.html", textframe=textframe.to_html(classes=["table", "table-striped", "table-hover", "dataTable", "no-footer", "uonDatatable"],
+            # this bit is a hack:
+            # classes = 'my_class" id = "my_id'
+            # http://stackoverflow.com/questions/15079118/js-datatables-from-pandas
+            return render_template("patterns-results.html", textframe=textframe.to_html(classes=["table", "table-striped", "table-hover", "dataTable", "no-footer", "uonDatatable", 'my_class" id = "dataTablePattern'],
                                                                                         index=False),
                                    local_args=kwic_filter,
                                    collocation_table = collocation_table.fillna("").to_html(classes=["table", "table-striped", "table-hover", "dataTable", "no-footer", "uonDatatable"],
