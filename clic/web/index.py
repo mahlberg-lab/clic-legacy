@@ -218,7 +218,7 @@ def patterns():
             concordance = concordance_for_line_by_line_file(os.path.join(BASE_DIR, filename), term)
             # should not be done here            
             if not concordance:
-                return render_template("patterns-noresults.html", message="This term does not occur in the document you selected.")
+                return render_template("patterns-noresults.html")
             kwicgrouper = KWICgrouper(concordance)
             textframe = kwicgrouper.filter_textframe(kwic_filter)
             

@@ -98,19 +98,22 @@ class Concordance(object):
             print line 
        
     def list_concordance(self): 
-        if self.word_boundaries:
-            hits = re.finditer(r"\b{}\b".format(self.term), self.text)
-        else: 
-            hits = re.finditer(r"{}".format(self.term), self.text)
-        lines = []
-        for hit in hits:
-            start = hit.start()
-            end = hit.end()
-            left = self.text[start-self.length:start]
-            term = self.text[start:end]
-            right = self.text[start+len(self.term):start+len(self.term)+self.length]
-            lines.append([left, term, right])
-        return lines
+
+        # check if the term is not ""
+        if self.term:            
+            if self.word_boundaries:
+                hits = re.finditer(r"\b{}\b".format(self.term), self.text)
+            else: 
+                hits = re.finditer(r"{}".format(self.term), self.text)
+            lines = []
+            for hit in hits:
+                start = hit.start()
+                end = hit.end()
+                left = self.text[start-self.length:start]
+                term = self.text[start:end]
+                right = self.text[start+len(self.term):start+len(self.term)+self.length]
+                lines.append([left, term, right])
+            return lines
 
 
 def concordance_for_line_by_line_file(input_file, term):
