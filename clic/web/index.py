@@ -265,7 +265,7 @@ def patterns():
             del collocation_table["collocate"]
             
                         
-            # collocation_table = collocation_table[collocation_table.index != ""]
+            collocation_table = collocation_table[collocation_table.index != ""]
             
             collocation_table = collocation_table.fillna("").to_html(classes=["table", "table-striped", "table-hover", "dataTable", "no-footer", "uonDatatable", 'my_class" id = "dataTableCollocation'],
                                                                                             bold_rows=False,
