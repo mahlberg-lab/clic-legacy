@@ -9,6 +9,10 @@
 {% block body %}
     <form action="/patterns/" method=get class="formm-inline formm-horizontal">
 
+
+    <div class="container-fixed"> 
+    <div class="row">
+    <div class="col-xs-5">
     <h3 class="without-pills">Define a pattern:</h2>
 
 
@@ -68,6 +72,46 @@
         </label>
     </div>
 
+    </div> <!-- end of the left column -->
+
+
+    <div class="col-xs-7">
+    <h3>Explanation</h3>
+
+    Enter a <b>term</b> on the left. Then define a pattern using the following principles:
+
+    <ul>
+        <li>L1 is the first word to the left of the term, L2 is the second word to the left, R1 is the first word to the right, etc.</li>
+        <li>Not all fields need to be used (the only field that is required is the term)</li>
+        <li>Patterns can be comma separated (*a, the, an*) in which case they are OR searches</li>
+        <li>	The term is the main search term. It can be a phrase (*as if*) or a simple search term (*voice*).</li>        
+        <li>At present, punctuation is stripped out.</li>
+    </ul>
+
+    The result (if the pattern occurs) is twofold:
+
+    <ol>
+        <li><b>A concordance</b> in which each column is a word. It can be sorted on different columns by clicking on the column header.</li>
+        <li><b>A collocation table</b> that can be sorted and has clickable cells.</li>
+
+        <ul>
+            <li>If one clicks a cell any pattern defined in other positions is discarded in favour of the new pattern. </li>
+        </ul>
+    </ol>
+
+    For instance, if one searches for <i>after</i> in Bleak House’s long suspensions, the results show that it is regularly followed by <i>a</i>. Clicking on <i>a</i> in R1 in the collocation table shows interesting time indications in the novel that would be hard to extract with simple searches.</li>
+
+
+    
+    </div> <!-- end of the doc column -->
+
+
+    </div> <!-- end of the row -->
+
+
+
+
+    <div class="clearfix">
 
     <h3 class="without-pills">Choose a subset:</h3>
 
@@ -290,11 +334,16 @@
         <div class="clearfix"></div>
         </div>
         <div class="modal-footer">
-        <button type="submit" class="btn btn-primary pull-right">Display subset</button>
+        <button type="submit" class="btn btn-primary pull-right" style="float:left !important">Extract pattern</button>
         </div>
+        </div>  
+
         </div>  
   
      </form>  
+    </div> <!-- end of the container -->
+
+
 {% endblock %}
 
 {% block scripts %}
