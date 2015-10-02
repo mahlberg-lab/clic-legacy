@@ -7,7 +7,7 @@ from os import environ
 
 # Use the absolute path to the directory that stores the data.
 # This can differ per deployment
-DATA_DIRECTORY = "/cheshire3/clic/dbs/dickens/data/"
+DATA_DIRECTORY = "/home/vagrant/code/clic-project/clic/dbs/dickens/data/"
 
 #TODO: make the cache settings imported in api.py
 CACHE_DIR = ""
