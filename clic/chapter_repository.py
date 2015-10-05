@@ -22,10 +22,10 @@ class ChapterRepository(object):
                              )
         self.db = self.serv.get_object(self.session, self.session.database)
         self.qf = self.db.get_object(self.session, 'defaultQueryFactory')
-        
+
     def get_book_title(self, book):
         """Gets the title of a book from the json file booklist.json
-        
+
         book -- string - the book id/accronym e.g. BH
         """
         for b in booklist:
@@ -35,8 +35,8 @@ class ChapterRepository(object):
         return book_title
 
     def get_chapter(self, chapter_number, book):
-        """Returns transformed XML for given chapter & book 
-        
+        """Returns transformed XML for given chapter & book
+
         chapter_number -- integer
         book -- string - the book id/accronym e.g. BH
         """
@@ -48,12 +48,12 @@ class ChapterRepository(object):
         formatted_chapter = transformer.process_record(self.session, chapter).get_raw(self.session)
 
         book_title = self.get_book_title(book)
-        
+
         return formatted_chapter, book_title
 
     def get_raw_chapter(self, chapter_number, book):
         """ Returns raw chapter XML for given chapter & book
-        
+
         chapter_number -- integer
         book -- string - the book id/accronym e.g. BH
         """
@@ -66,19 +66,20 @@ class ChapterRepository(object):
     def get_chapter_with_highlighted_search_term(self, chapter_number, book, wid, search_term):
         """ Returns transformed XML for given chapter & book with the search
         highlighted.
-        
+
         We create the transformer directly so that we can pass extra parameters
-        to it at runtime. In this case the search term. 
-        
+        to it at runtime. In this case the search term.
+
         chapter_number -- integer
         book -- string - the book id/accronym e.g. BH
         wid -- integer - word index
         search_term -- string - term to highlight
         """
         raw_chapter = self.get_raw_chapter(chapter_number, book)
-        
+
         """load our chapter xslt directly as a transformer"""
-        xslt_doc = etree.parse('/cheshire3/clic/dbs/dickens/xsl/chapterView.xsl')
+        # FIXME this is hard-coded
+        xslt_doc = etree.parse('/home/jdejoode/code/clic-project/clic/dbs/dickens/xsl/chapterView.xsl')
         transformer = etree.XSLT(xslt_doc)
 
         terms = search_term.split(' ')
