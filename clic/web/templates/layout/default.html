@@ -9,7 +9,7 @@
     <link rel="shortcut icon" href="http://www.nottingham.ac.uk/favicon.ico">
 
     <title>{% block title %} | CLiC{% endblock %}</title>
-
+ 
     {% block stylesheets %}
     <!-- Bootstrap core CSS -->
     <link href="{{ url_for('static', filename='dist/css/bootstrap.min.css') }}" rel="stylesheet">
@@ -20,10 +20,24 @@
 
 <body>
 
-<div class="container">
-    <img class="pull-right hidden-xs" src="{{ url_for('static', filename='img/uonlogo.png') }}" />
-    <img style="padding-top: 1em" class="pull-right hidden-xs" src="{{ url_for('static', filename='img/AHRC10th_horiz_small_RGB.png') }}" />
+<!-- http://stackoverflow.com/a/18602200 
+Undoes the center alignment when the device is too small
+-->
+<style>
+   @media all and (max-width: 700px) {
+      .img-no-center {
+         display: block !important; 
+         float:left !important;
+         margin-left: 0px !important;
+         margin-right: 0px !important;
+      }
+   }
+</style>
 
+
+
+
+<div class="container">
     <div class="header">
         <h1 class="uonHeaderh1">CLiC</h1>
 
@@ -63,6 +77,22 @@
 </div>
 <!-- /.container -->
 
+<!-- logos -->
+<div class="footer">
+    <div class="container" style="border-top:1px solid #ccc; margin-top:10em">
+        <div class="row">    
+            <div class="col-md-4 col-xs-12 col-sm-4">
+                <img style="padding-top: 1em; display: block; float:left; margin-left:-12px" class="img-no-center" src="{{ url_for('static', filename='img/university_of_birmingham_small.jpg') }}" />
+            </div>
+            <div class="col-md-4 col-xs-12 col-sm-4">
+                <img style="padding-top: 0.2em; display: block; margin: 0 auto; float:none" class="img-no-center" src="{{ url_for('static', filename='img/AHRC10th_horiz_small_RGB.png') }}" />
+            </div>
+            <div class="col-md-4 col-xs-12 col-sm-4">
+                    <img style="display: block; margin: 0 auto; float:right; margin-right:-22px" class="img-no-center"  src="{{ url_for('static', filename='img/uonlogo.png') }}" />
+                </div>
+        </div>
+    </div>
+</div>
 
 <!-- Bootstrap core JavaScript
 ================================================== -->
