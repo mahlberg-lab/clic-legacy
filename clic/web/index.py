@@ -1,7 +1,7 @@
-from __future__ import absolute_import  ## help python find modules within clic package (see John H email 09.04.2014)
-import os
+from __future__ import absolute_import
 
 from flask import Flask, render_template, url_for, redirect, request
+import os
 from werkzeug import secure_filename
 
 from clic.web.api import api, fetchClusters, fetchKeywords
@@ -11,11 +11,6 @@ from clic.web.forms import BOOKS, SUBSETS
 app = Flask(__name__, static_url_path='')
 app.register_blueprint(api, url_prefix='/api')
 
-#TODO delete:
-# from flask_debugtoolbar import DebugToolbarExtension
-# app.debug = True
-# app.config["SECRET_KEY"] = "jadajajada"
-# toolbar = DebugToolbarExtension(app)
 
 '''
 Application routes
@@ -181,6 +176,9 @@ def subsets_display(book=None, subset=None):
 def page_not_found(error):
     return render_template('page-not-found.html'), 404
 
-# TODO delete?
 if __name__ == '__main__':
+    from flask_debugtoolbar import DebugToolbarExtension
+    app.debug = True
+    app.config["SECRET_KEY"] = "jadajajada"
+    toolbar = DebugToolbarExtension(app)
     app.run()
