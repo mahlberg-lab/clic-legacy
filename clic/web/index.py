@@ -30,11 +30,19 @@ def index():
 
 @app.route('/about/', methods=['GET'])
 def about():
-    return render_template("about.html")
+    return render_template("info/about.html")
 
 @app.route('/documentation/', methods=['GET'])
 def documentation():
-    return render_template("documentation.html")
+    return render_template("info/documentation.html")
+
+@app.route('/releases/', methods=['GET'])
+def releases():
+    return render_template("info/releases.html")
+
+@app.route('/blog/', methods=['GET'])
+def blog():
+    return render_template("info/blog.html")
 
 #==============================================================================
 # Concordances

@@ -1,0 +1,22 @@
+{% extends "layout/default.html" %}
+
+{% set active_page = 'blog' %}
+
+{% block title %}
+    News and Blog{{ super() }}
+{% endblock %}
+
+{% block body %}
+  <div class="row">
+      <div class="col-sm-9">
+          <h2 class="without-pills">News and Blog</h2>
+          <p>Here you can read the latest news about CLiC. 
+          </p>
+      </div>
+      {% include "blocks/feedback.html" %}
+   </div>
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+{% endblock %}

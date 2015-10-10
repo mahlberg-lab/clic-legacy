@@ -86,9 +86,9 @@ Undoes the center alignment of the logos add the bottom of the page  when the de
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="trye" aria-expanded="false">About <span class="caret"></span></a>
                     <ul class="dropdown-menu">               
                         <li{% if active_page == 'about' %} class="active"{% endif %}><a href="{{ url_for('about') }}">About</a></li>
+                        <li{% if active_page == 'blog' %} class="active"{% endif %}><a href="{{ url_for('blog') }}">News and blog</a></li>
                         <li{% if active_page == 'documentation' %} class="active"{% endif %}><a href="{{ url_for('documentation') }}">Documentation</a></li>
-                        <li><a href="#">News</a></li>
-                        <li><a href="#">Releases</a></li>
+                        <li{% if active_page == 'releases' %} class="active"{% endif %}><a href="{{ url_for('releases') }}">Releases</a></li>
                     </ul>
                </li>
             </ul>
