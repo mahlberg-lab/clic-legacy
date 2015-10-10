@@ -9,7 +9,7 @@
     <link rel="shortcut icon" href="http://www.nottingham.ac.uk/favicon.ico">
 
     <title>{% block title %} | CLiC{% endblock %}</title>
- 
+    
     {% block stylesheets %}
     <!-- Bootstrap core CSS -->
     <link href="{{ url_for('static', filename='dist/css/bootstrap.min.css') }}" rel="stylesheet">
@@ -21,7 +21,7 @@
 <body>
 
 <!-- http://stackoverflow.com/a/18602200 
-Undoes the center alignment when the device is too small
+Undoes the center alignment of the logos add the bottom of the page  when the device is too small
 -->
 <style>
    @media all and (max-width: 700px) {
@@ -54,7 +54,6 @@ Undoes the center alignment when the device is too small
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <!--<a class="navbar-brand" href="#">CLiC</a>-->
         </div>
         <div class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
@@ -62,8 +61,17 @@ Undoes the center alignment when the device is too small
                 <li{% if active_page == 'keywords' %} class="active"{% endif %}><a href="{{ url_for('keywords') }}">Keywords</a></li>
                 <li{% if active_page == 'clusters' %} class="active"{% endif %}><a href="{{ url_for('clusters') }}">Clusters</a></li>
                 <li{% if active_page == 'subsets' %} class="active"{% endif %}><a href="{{ url_for('subsets') }}">Subsets</a></li>
-                <li{% if active_page == 'documentation' %} class="active"{% endif %}><a href="{{ url_for('documentation') }}">Documentation</a></li>
-                <li{% if active_page == 'about' %} class="active"{% endif %}><a href="{{ url_for('about') }}">About</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown navbar-right">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="trye" aria-expanded="false">About <span class="caret"></span></a>
+                    <ul class="dropdown-menu">               
+                        <li{% if active_page == 'about' %} class="active"{% endif %}><a href="{{ url_for('about') }}">About</a></li>
+                        <li{% if active_page == 'documentation' %} class="active"{% endif %}><a href="{{ url_for('documentation') }}">Documentation</a></li>
+                        <li><a href="#">News</a></li>
+                        <li><a href="#">Releases</a></li>
+                    </ul>
+               </li>
             </ul>
         </div>
         <!--/.nav-collapse -->
