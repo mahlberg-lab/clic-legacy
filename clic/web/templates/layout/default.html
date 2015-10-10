@@ -38,6 +38,14 @@ Undoes the center alignment of the logos add the bottom of the page  when the de
   border-radius: 0 !important;
 }
 
+.dropdown-menu > .active > a, .dropdown-menu > .active > a:hover, .dropdown-menu > .active > a:focus {
+    background-color: #036;
+}
+
+.right-nav-background {
+    background-color: #001A4D;
+    color: #FFF;
+
 </style>
 
 
@@ -68,7 +76,7 @@ Undoes the center alignment of the logos add the bottom of the page  when the de
                 <li{% if active_page == 'clusters' %} class="active"{% endif %}><a href="{{ url_for('clusters') }}">Clusters</a></li>
                 <li{% if active_page == 'subsets' %} class="active"{% endif %}><a href="{{ url_for('subsets') }}">Subsets</a></li>
             </ul>
-            <ul class="nav navbar-nav navbar-right">
+            <ul class="nav navbar-nav navbar-right right-nav-background">
                 <li class="dropdown navbar-right">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="trye" aria-expanded="false">About <span class="caret"></span></a>
                     <ul class="dropdown-menu">               
