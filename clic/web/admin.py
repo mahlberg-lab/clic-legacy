@@ -1,13 +1,14 @@
-# from __future__ import absolute_import  # help python find modules within clic package (see John H email 09.04.2014)
+from __future__ import absolute_import
 
 from flask import Flask, render_template
+from wtforms.fields import PasswordField
+
 from flask.ext.security import Security, SQLAlchemyUserDatastore, \
     UserMixin, RoleMixin, login_required
 from flask.ext.admin.contrib import sqla
 from flask_admin import Admin, BaseView, expose
 from flask_mail import Mail
 from flask_admin.contrib.sqla import ModelView
-from wtforms.fields import PasswordField
 
 from models import db, Annotation, Category, Role, User, List
 
@@ -113,4 +114,9 @@ admin.add_view(ModelView(List, db.session))
 # admin.add_view(RoleAdmin(Role, db.session))
 
 if __name__ == "__main__":
+
+    @app.before_first_request
+    def initialize_database():
+        db.create_all()
+    
     app.run()
