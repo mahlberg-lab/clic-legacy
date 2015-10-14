@@ -5,6 +5,70 @@ from sqlalchemy.orm import relationship, backref
 
 db = SQLAlchemy()
 
+# TODO
+subset_tags = db.Table('subset_tags',
+                    db.Column('subset_id', db.Integer, db.ForeignKey('subsets.id')),
+                    db.Column('tag_id', db.Integer, db.ForeignKey('tags.id')),
+                    extend_existing=True,
+                   )
+
+
+class Subset(db.Model):
+    __tablename__ = 'subsets'
+    __table_args__ = {'extend_existing': True}
+
+    id = db.Column(db.Integer, primary_key=True)
+    book = db.Column(db.String(100))  # Bleak House
+    abbr = db.Column(db.String(10))  # BH
+    kind = db.Column(db.String(100))  # quotes, non-quotes, suspensions, short-suspensions, etc.
+    corpus = db.Column(db.String(10))  # dickens or ntc
+    text = db.Column(db.String)
+
+    tags = relationship('Tag', secondary=subset_tags, backref=db.backref('subsets'))
+
+    def __init__(self, book='', abbr='', kind='', text=''):
+        self.book = book
+        self.abbr = abbr
+        self.kind = kind
+        self.text = text
+
+    def __repr__(self):
+        return "<Subset(book='%s', abbr='%s', kind='%s', text='%s')>" % (
+            self.book, self.abbr, self.kind, self.text)
+
+
+class Note(db.Model):
+    __tablename__ = 'notes'
+
+    id = db.Column(db.Integer, primary_key=True)
+    note = db.Column(db.String(5000), nullable=False)
+    subset_id = db.Column(db.Integer, db.ForeignKey('subsets.id'))
+
+    # note that the backref should be the name of this class (and not the class this relationship extends to)
+    subset = relationship('Subset', backref=db.backref('notes', order_by=id))
+
+    def __init__(self, note=''):
+        self.note = note
+
+    def __repr__(self):
+        return self.note
+
+
+class Tag(db.Model):
+    __tablename__ = 'tags'
+    __table_args__ = {'extend_existing': True}
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80), unique=True, nullable=False)  # negotiating information, politeness
+
+    def __init__(self, name=''):
+        self.name = name
+
+    def __repr__(self):
+        # return 'Tag: ' + str(self.name) + '>'
+        return self.name
+
+
 class Annotation(db.Model):
     __tablename__ = 'annotations'
 
