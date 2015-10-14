@@ -24,7 +24,7 @@ class Subset(db.Model):
     corpus = db.Column(db.String(10))  # dickens or ntc
     text = db.Column(db.String)
 
-    tags = relationship('Tag', secondary=subset_tags, backref=db.backref('subsets'))
+    # tags = relationship('Tag', secondary=subset_tags, backref=db.backref('subsets'))
 
     def __init__(self, book='', abbr='', kind='', text=''):
         self.book = book
@@ -35,6 +35,23 @@ class Subset(db.Model):
     def __repr__(self):
         return "<Subset(book='%s', abbr='%s', kind='%s', text='%s')>" % (
             self.book, self.abbr, self.kind, self.text)
+
+
+class Tag(db.Model):
+    __tablename__ = 'tags'
+    __table_args__ = {'extend_existing': True}
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80), unique=True, nullable=False)  # negotiating information, politeness
+
+    subset = relationship('Subset', secondary=subset_tags, backref=db.backref('tags'))
+
+    def __init__(self, name=''):
+        self.name = name
+
+    def __repr__(self):
+        # return 'Tag: ' + str(self.name) + '>'
+        return self.name
 
 
 class Note(db.Model):
@@ -52,21 +69,6 @@ class Note(db.Model):
 
     def __repr__(self):
         return self.note
-
-
-class Tag(db.Model):
-    __tablename__ = 'tags'
-    __table_args__ = {'extend_existing': True}
-
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(80), unique=True, nullable=False)  # negotiating information, politeness
-
-    def __init__(self, name=''):
-        self.name = name
-
-    def __repr__(self):
-        # return 'Tag: ' + str(self.name) + '>'
-        return self.name
 
 
 class Annotation(db.Model):
