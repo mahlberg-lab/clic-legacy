@@ -9,7 +9,7 @@
     <link rel="shortcut icon" href="http://www.nottingham.ac.uk/favicon.ico">
 
     <title>{% block title %} | CLiC{% endblock %}</title>
-    
+
     {% block stylesheets %}
     <!-- Bootstrap core CSS -->
     <link href="{{ url_for('static', filename='dist/css/bootstrap.min.css') }}" rel="stylesheet">
@@ -20,13 +20,13 @@
 
 <body>
 
-<!-- http://stackoverflow.com/a/18602200 
+<!-- http://stackoverflow.com/a/18602200
 Undoes the center alignment of the logos add the bottom of the page  when the device is too small
 -->
 <style>
    @media all and (max-width: 700px) {
       .img-no-center {
-         display: block !important; 
+         display: block !important;
          float:left !important;
          margin-left: 0px !important;
          margin-right: 0px !important;
@@ -84,7 +84,7 @@ Undoes the center alignment of the logos add the bottom of the page  when the de
             <ul class="nav navbar-nav navbar-right right-nav-background">
                 <li class="dropdown navbar-right">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="trye" aria-expanded="false">About <span class="caret"></span></a>
-                    <ul class="dropdown-menu">               
+                    <ul class="dropdown-menu">
                         <li{% if active_page == 'about' %} class="active"{% endif %}><a href="{{ url_for('about') }}">Introduction</a></li>
                         <li{% if active_page == 'blog' %} class="active"{% endif %}><a href="{{ url_for('blog') }}">News and blog</a></li>
                         <li{% if active_page == 'documentation' %} class="active"{% endif %}><a href="{{ url_for('documentation') }}">Documentation</a></li>
@@ -99,7 +99,9 @@ Undoes the center alignment of the logos add the bottom of the page  when the de
 
 <!--container-->
 <div class="container">
+    {% block page_body %}
     {% block body %}
+    {% endblock %}
     {% endblock %}
 </div>
 <!-- /.container -->
@@ -107,7 +109,7 @@ Undoes the center alignment of the logos add the bottom of the page  when the de
 <!-- logos -->
 <div class="footer">
     <div class="container" style="border-top:1px solid #ccc; margin-top:10em">
-        <div class="row">    
+        <div class="row">
             <div class="col-md-4 col-xs-12 col-sm-4">
                 <img style="padding-top: 1em; display: block; float:left; margin-left:-12px" class="img-no-center" src="{{ url_for('static', filename='img/university_of_birmingham_small.jpg') }}" />
             </div>
@@ -121,11 +123,16 @@ Undoes the center alignment of the logos add the bottom of the page  when the de
     </div>
 </div>
 
+
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
+{% block scripts %}
 <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
 <script src="{{ url_for('static', filename='dist/js/bootstrap.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/clic.js') }}"></script>
+{% endblock %}
+
 
 <!-- Analytics =================================================== -->
 <script>
@@ -151,10 +158,6 @@ Undoes the center alignment of the logos add the bottom of the page  when the de
 </script>
 
 
-<!--Generic JS-->
-{% block scripts %}
-<script src="{{ url_for('static', filename='js/clic.js') }}"></script>
-{% endblock %}
 
 </body>
 </html>
