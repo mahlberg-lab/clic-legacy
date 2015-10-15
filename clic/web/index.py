@@ -2,10 +2,12 @@ from __future__ import absolute_import  ## help python find modules within clic 
 from flask import Flask, render_template, url_for, redirect, request
 
 from clic.web.api import api, fetchClusters, fetchKeywords
+# from clic.web.admin import admin
 from clic.chapter_repository import ChapterRepository
 
 app = Flask(__name__, static_url_path='')
 app.register_blueprint(api, url_prefix='/api')
+# TODO app.register_blueprint(admin, url_prefx='/annotation')
 
 #TODO delete:
 # from flask_debugtoolbar import DebugToolbarExtension
@@ -82,12 +84,12 @@ def clusters():
         IdxGroup = request.args.get('testIdxGroup')
         # FIXME this might not work when dealing with only a few books,
         # rather than an entire subcorpus, in that case better use:
-        # collection = args.getlist('testCollection') ## args is a 
+        # collection = args.getlist('testCollection') ## args is a
         ## multiDictionary: use .getlist() to access individual books
         testCollection = request.args.get('testCollection')
         testIdxMod = request.args.get('testIdxMod')
         selectWords = "whole"
-        
+
         args = request.args
         clusters_result = fetchClusters(args)
 
@@ -117,5 +119,5 @@ def chapterView(number, book, word_index = None, search_term = None):
     return render_template("chapter-view.html", content=chapter, book_title=book_title)
 
 # TODO delete?
-#if __name__ == '__main__':
-#   app.run()
+if __name__ == '__main__':
+    app.run()

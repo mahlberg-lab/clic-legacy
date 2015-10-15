@@ -1,6 +1,6 @@
 from __future__ import absolute_import
 
-from flask import Flask, render_template
+from flask import Flask, render_template, Blueprint
 from wtforms.fields import PasswordField
 
 from flask.ext.security import Security, SQLAlchemyUserDatastore, \
@@ -11,6 +11,9 @@ from flask_mail import Mail
 from flask_admin.contrib.sqla import ModelView
 
 from models import db, Annotation, Category, Role, User, List, Tag, Note, Subset
+
+
+# admin = Blueprint('admin_endpoints', __name__)
 
 # app = Flask(__name__, static_url_path='')
 app = Flask('clic.web', static_url_path='')
