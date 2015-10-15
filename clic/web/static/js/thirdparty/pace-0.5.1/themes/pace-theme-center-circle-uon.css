@@ -16,11 +16,11 @@
   position: fixed;
   height: 6rem;
   width: 6rem;
-  margin: auto;
-  top: 0;
+  margin-top: 250px !important;
   left: 0;
   right: 0;
-  bottom: 0;
+  margin-bottom: 100px !important;
+  margin: auto;
 }
 
 .pace.pace-inactive .pace-progress {

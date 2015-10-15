@@ -53,7 +53,7 @@ def fetchKeywords(args):
     keyworder = Keywords()
     args = processArgs(args, 'keywords')
     keywordlist = keyworder.list_keywords(args[0], args[1], args[2], args[3], args[4])
-    return keywordlist    
+    return keywordlist
     # return {'keywords' : keywords}
 
 @cache.cache('clusters')
@@ -72,7 +72,6 @@ def fetchConcordance(args):
     return {'concordances' : concordances}
 
 def processArgs(args, method):
-
     methodArgs = []
 
     if method == 'clusters':

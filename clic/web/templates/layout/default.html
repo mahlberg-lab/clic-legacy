@@ -9,7 +9,7 @@
     <link rel="shortcut icon" href="http://www.nottingham.ac.uk/favicon.ico">
 
     <title>{% block title %} | CLiC{% endblock %}</title>
-
+    
     {% block stylesheets %}
     <!-- Bootstrap core CSS -->
     <link href="{{ url_for('static', filename='dist/css/bootstrap.min.css') }}" rel="stylesheet">
@@ -20,10 +20,43 @@
 
 <body>
 
-<div class="container">
-    <img class="pull-right hidden-xs" src="{{ url_for('static', filename='img/uonlogo.png') }}" />
-    <img style="padding-top: 1em" class="pull-right hidden-xs" src="{{ url_for('static', filename='img/AHRC10th_horiz_small_RGB.png') }}" />
+<!-- http://stackoverflow.com/a/18602200 
+Undoes the center alignment of the logos add the bottom of the page  when the device is too small
+-->
+<style>
+   @media all and (max-width: 700px) {
+      .img-no-center {
+         display: block !important; 
+         float:left !important;
+         margin-left: 0px !important;
+         margin-right: 0px !important;
+      }
+   }
 
+/* rectangular rather than rounded corners */
+* {
+  border-radius: 0 !important;
+}
+
+.dropdown-menu > .active > a, .dropdown-menu > .active > a:hover, .dropdown-menu > .active > a:focus {
+    background-color: #036;
+}
+
+.navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:hover, .navbar-inverse .navbar-nav > .open > a:focus {
+    background-color: #001A4D;
+    color: #FFF;
+
+
+.right-nav-background {
+    background-color: #001A4D;
+    color: #FFF;
+
+</style>
+
+
+
+
+<div class="container">
     <div class="header">
         <h1 class="uonHeaderh1">CLiC</h1>
 
@@ -40,15 +73,24 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <!--<a class="navbar-brand" href="#">CLiC</a>-->
         </div>
         <div class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
                 <li{% if active_page == 'concordances' %} class="active"{% endif %}><a href="{{ url_for('concordances') }}">Concordance</a></li>
                 <li{% if active_page == 'keywords' %} class="active"{% endif %}><a href="{{ url_for('keywords') }}">Keywords</a></li>
                 <li{% if active_page == 'clusters' %} class="active"{% endif %}><a href="{{ url_for('clusters') }}">Clusters</a></li>
-                <li{% if active_page == 'documentation' %} class="active"{% endif %}><a href="{{ url_for('documentation') }}">Documentation</a></li>
-                <li{% if active_page == 'about' %} class="active"{% endif %}><a href="{{ url_for('about') }}">About</a></li>
+                <li{% if active_page == 'subsets' %} class="active"{% endif %}><a href="{{ url_for('subsets') }}">Subsets</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right right-nav-background">
+                <li class="dropdown navbar-right">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="trye" aria-expanded="false">About <span class="caret"></span></a>
+                    <ul class="dropdown-menu">               
+                        <li{% if active_page == 'about' %} class="active"{% endif %}><a href="{{ url_for('about') }}">Introduction</a></li>
+                        <li{% if active_page == 'blog' %} class="active"{% endif %}><a href="{{ url_for('blog') }}">News and blog</a></li>
+                        <li{% if active_page == 'documentation' %} class="active"{% endif %}><a href="{{ url_for('documentation') }}">Documentation</a></li>
+                        <li{% if active_page == 'releases' %} class="active"{% endif %}><a href="{{ url_for('releases') }}">Releases</a></li>
+                    </ul>
+               </li>
             </ul>
         </div>
         <!--/.nav-collapse -->
@@ -62,12 +104,52 @@
 </div>
 <!-- /.container -->
 
+<!-- logos -->
+<div class="footer">
+    <div class="container" style="border-top:1px solid #ccc; margin-top:10em">
+        <div class="row">    
+            <div class="col-md-4 col-xs-12 col-sm-4">
+                <img style="padding-top: 1em; display: block; float:left; margin-left:-12px" class="img-no-center" src="{{ url_for('static', filename='img/university_of_birmingham_small.jpg') }}" />
+            </div>
+            <div class="col-md-4 col-xs-12 col-sm-4">
+                <img style="padding-top: 0.2em; display: block; margin: 0 auto; float:none" class="img-no-center" src="{{ url_for('static', filename='img/AHRC10th_horiz_small_RGB.png') }}" />
+            </div>
+            <div class="col-md-4 col-xs-12 col-sm-4">
+                    <img style="display: block; margin: 0 auto; float:right; margin-right:-22px" class="img-no-center"  src="{{ url_for('static', filename='img/uonlogo.png') }}" />
+                </div>
+        </div>
+    </div>
+</div>
 
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
 <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
 <script src="{{ url_for('static', filename='dist/js/bootstrap.min.js') }}"></script>
+
+<!-- Analytics =================================================== -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-921739-26', 'nottingham.ac.uk');
+  ga('send', 'pageview');
+
+</script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-68645501-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
 
 <!--Generic JS-->
 {% block scripts %}
