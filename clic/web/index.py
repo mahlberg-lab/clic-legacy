@@ -10,6 +10,8 @@ from flask.ext.admin.contrib import sqla
 from flask_admin import Admin, BaseView, expose, AdminIndexView
 from flask_mail import Mail
 from flask_admin.contrib.sqla import ModelView
+from flask_security import Security, SQLAlchemyUserDatastore, \
+    UserMixin, RoleMixin, login_required, current_user
 
 from clic.web.api import api, fetchClusters, fetchKeywords
 from clic.chapter_repository import ChapterRepository
@@ -198,6 +200,42 @@ def page_not_found(error):
 # User annotation of subsets using Flask_admin
 #==============================================================================
 
+# limit the access to user that can log in
+# https://github.com/flask-admin/flask-admin/issues/1049 or better:
+# https://github.com/flask-admin/flask-admin/blob/master/examples/auth/app.py
+
+# Create customized model view class
+class SecuredModelView(sqla.ModelView):
+
+    def is_accessible(self):
+        if not current_user.is_active() or not current_user.is_authenticated():
+            return False
+
+        if current_user.has_role('superuser'):
+            return True
+
+        return False
+
+    def _handle_view(self, name, **kwargs):
+        """
+        Override builtin _handle_view in order to redirect users when a view is not accessible.
+        """
+        if not self.is_accessible():
+            if current_user.is_authenticated():
+                # permission denied
+                abort(403)
+            else:
+                # login
+                return redirect(url_for('security.login', next=request.url))
+
+@security.context_processor
+def security_context_processor():
+    return dict(
+        admin_base_template=admin.base_template,
+        admin_view=admin.index_view,
+        h=admin_helpers,
+    )
+
 
 class SubsetModelView(ModelView):
     column_filters = ('book', 'abbr', 'kind', 'corpus', 'text', 'notes', 'tags')
@@ -222,6 +260,9 @@ class SubsetModelView(ModelView):
 
     page_size = 50  # the number of entries to display on the list view
 
+    def is_accessible(self):
+        return current_user.has_role('can_annotate')
+
     # def get_list_form(self):
     #     return self.scaffold_list_form(CustomFieldList)
 
@@ -243,6 +284,9 @@ class TagModelView(ModelView):
     form_excluded_columns = ['subset',]
     column_editable_list = ['name',]
 
+    def is_accessible(self):
+        return current_user.has_role('can_annotate')
+
 
 class NoteModelView(ModelView):
     action_disallowed_list = ['delete',]
@@ -251,31 +295,39 @@ class NoteModelView(ModelView):
     form_excluded_columns = ['subset',]
     column_list = ('note',)
 
+    def is_accessible(self):
+        return current_user.has_role('can_annotate')
+
+
+class UserAdmin(sqla.ModelView):
+
+    # Prevent administration of Users unless the currently logged-in user has the "admin" role
+    def is_accessible(self):
+        return current_user.has_role('superman')
+
+
+class RoleAdmin(sqla.ModelView):
+
+    # Prevent administration of Roles unless the currently logged-in user has the "admin" role
+    def is_accessible(self):
+        return current_user.has_role('superman')
+
 
 admin = Admin(
     app,
     template_mode='bootstrap3',
     index_view=AdminIndexView(
-        # brand="User annotation"
         name='Documentation',
         url='/annotation',
         template="user-annotation.html",
-        # base_template='microblog_master.html',
+        )
     )
-)
-# # admin.add_view(MyAnnotations(name="Test"))
-# admin.add_view(AnnotationModelView(Annotation, db.session))
-# admin.add_view(ModelView(Category, db.session))
-# admin.add_view(ModelView(User, db.session))
-# admin.add_view(ModelView(Role, db.session))
-# admin.add_view(ModelView(List, db.session))
+
 admin.add_view(SubsetModelView(Subset, db.session))
 admin.add_view(TagModelView(Tag, db.session))
 admin.add_view(NoteModelView(Note, db.session))
-# Add Flask-Admin views for Users and Roles
-# admin.add_view(UserAdmin(User, db.session))
-# admin.add_view(RoleAdmin(Role, db.session))
-
+admin.add_view(UserAdmin(User, db.session))
+admin.add_view(RoleAdmin(Role, db.session))
 
 if __name__ == '__main__':
 

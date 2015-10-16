@@ -5,7 +5,6 @@ from sqlalchemy.orm import relationship, backref
 
 db = SQLAlchemy()
 
-# TODO
 subset_tags = db.Table('subset_tags',
                     db.Column('subset_id', db.Integer, db.ForeignKey('subsets.id')),
                     db.Column('tag_id', db.Integer, db.ForeignKey('tags.id')),
@@ -126,6 +125,9 @@ class Role(db.Model, RoleMixin):
     name = db.Column(db.String(80), unique=True)
     description = db.Column(db.String(255))
 
+    def __repr__(self):
+        return '{}'.format(self.name)
+
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
@@ -150,7 +152,7 @@ class User(db.Model, UserMixin):
         return self.id
 
     def __unicode__(self):
-        return self.username
+        return self.email
 
 
 
