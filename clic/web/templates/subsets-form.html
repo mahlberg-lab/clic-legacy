@@ -6,7 +6,7 @@
     Subsets {{ super() }}
 {% endblock %}
 
-{% block body %}
+{% block main_body %}
     <form action="/subsets/" method=get>
     <h3 class="without-pills">Choose a subset:</h2>
 
@@ -46,13 +46,13 @@
                     Extended quotes
                 </label>
             </div>
-        
+
 
     <h3 class="without-pills" style="margin-bottom:-15px">Choose a book:</h2>
         <div class="modal-body">
         <div id="booksModalCol1" class="col-md-6">
         <div><h4>Dickens</h4></div>
-        
+
         <div id="otherChk">
         <div class="radio"><label><input class="chkDickens" type=
         "radio" name="book" value="BH" checked><b>Bleak
@@ -118,7 +118,7 @@
         </div>
         <div id="booksModalCol2" class="col-md-6">
         <div><h4>Other 19thC literature</h4></div>
-        
+
         <div class="radio"><label><input class="chkNtc" type="radio"
         name="book" value="AgnesG"><b>Agnes Grey</b><br>
         (68,197 words; 21,986 quotes, 46,211 non-quotes)</label></div>
@@ -231,8 +231,8 @@
         <div class="modal-footer">
         <button type="submit" class="btn btn-primary pull-right">Display subset</button>
         </div>
-        </div>    
-     </form>  
+        </div>
+     </form>
 {% endblock %}
 
 {% block scripts %}

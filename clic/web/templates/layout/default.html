@@ -16,6 +16,8 @@
     <!--Custom CSS-->
     <link href="{{ url_for('static', filename='css/clic.css') }}" rel="stylesheet">
     {% endblock %}
+
+
 </head>
 
 <body>
@@ -100,7 +102,7 @@ Undoes the center alignment of the logos add the bottom of the page  when the de
 <!--container-->
 <div class="container">
     {% block page_body %}
-    {% block body %}
+    {% block main_body %}
     {% endblock %}
     {% endblock %}
 </div>

@@ -6,7 +6,7 @@
     News and Blog{{ super() }}
 {% endblock %}
 
-{% block body %}
+{% block main_body %}
   <div class="row">
         <!-- Blog Entries Column -->
     <div class="col-md-8">
@@ -27,7 +27,7 @@
         <hr>
         <img class="img-responsive" src="/img/aston-webb.jpg" alt="A picture of the Aston Web building of the University of Birmingham">
         <hr>
-        <p>Originally conceived at the University of Liverpool, then further developed at the University of the Nottingham, the CLiC project now moves on to a new home: the Centre for Corpus Research of the University of Birmingham.</p> 
+        <p>Originally conceived at the University of Liverpool, then further developed at the University of the Nottingham, the CLiC project now moves on to a new home: the Centre for Corpus Research of the University of Birmingham.</p>
         <a class="btn btn-primary" href="#">Find out more<span class="glyphicon glyphicon-chevron-right"></span></a>
         <hr>
 
@@ -75,7 +75,7 @@
 
             </div>
 
-            <!-- Blog Sidebar Widgets Column --> 
+            <!-- Blog Sidebar Widgets Column -->
             <div class="col-md-4">
 
                 <!-- Blog Search Well -->

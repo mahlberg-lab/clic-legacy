@@ -13,7 +13,7 @@
     Clusters {{ super() }}
 {% endblock %}
 
-{% block body %}
+{% block main_body %}
   <h2 class="without-pills">Clusters Results</h2>
 
   <div id="resultsWrap">
@@ -46,7 +46,7 @@
   <script src="/js/thirdparty/DataTables1.10.0-beta.2/extensions/TableTools/js/dataTables.tableTools.min.js"></script>
   <!-- datatables bootstrap js (css is above) see http://next.datatables.net/manual/styling/bootstrap -->
   <script src="/js/thirdparty/DataTables1.10.0-beta.2/media/js/dataTables.bootstrap.js"></script>
- 
+
   <script>
       $(function () {
 
@@ -65,7 +65,7 @@
               },
 
               "bDeferRender": true,
-              "bPaginate": false, 
+              "bPaginate": false,
               <!--  I think it makes more sense to use pseudo-pagination: -->
               <!-- "bPaginate": true, -->
               <!-- "aLengthMenu": [[5, 10, 15, 25, 50, 100, -1], [5, 10, 15, 25, 50, 100, "All"]], -->
@@ -96,7 +96,7 @@
             {
             return text.toString().toLowerCase()
                 .replace(/\s+/g, '+')           // Replace spaces with +
-            }    
+            }
             //    .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
             //    .replace(/\-\-+/g, '-')         // Replace multiple - with single -
             //    .replace(/^-+/, '')             // Trim - from start of text

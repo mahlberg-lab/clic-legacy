@@ -6,7 +6,7 @@
     Concordance Search {{ super() }}
 {% endblock %}
 
-{% block body %}
+{% block main_body %}
     <h2 class="without-pills">Concordance Search</h2>
 
     <form role="search" action="{{ url_for('concordances') }}" method="get" class="row">
@@ -102,7 +102,7 @@
 
 {% block scripts %}
   {{ super() }}
-  
+
   <script>
   $(function () {
       // add Jquery here

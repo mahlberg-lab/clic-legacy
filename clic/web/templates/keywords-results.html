@@ -13,7 +13,7 @@
     Keywords {{ super() }}
 {% endblock %}
 
-{% block body %}
+{% block main_body %}
   <h2 class="without-pills">Keywords Results</h2>
 
   <div id="resultsWrap">
@@ -109,7 +109,7 @@
             {
             return text.toString().toLowerCase()
                 .replace(/\s+/g, '+')           // Replace spaces with +
-            }    
+            }
             //    .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
             //    .replace(/\-\-+/g, '-')         // Replace multiple - with single -
             //    .replace(/^-+/, '')             // Trim - from start of text
