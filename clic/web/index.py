@@ -7,7 +7,7 @@ from flask_admin import AdminIndexView
 from flask.ext.security import Security, SQLAlchemyUserDatastore, \
     UserMixin, RoleMixin, login_required
 from flask.ext.admin.contrib import sqla
-from flask_admin import Admin, BaseView, expose
+from flask_admin import Admin, BaseView, expose, AdminIndexView
 from flask_mail import Mail
 from flask_admin.contrib.sqla import ModelView
 
@@ -200,6 +200,12 @@ def subsets_display(book=None, subset=None):
     else:
         return redirect(url_for('subsets'))
 
+#==============================================================================
+# 404
+#==============================================================================
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template('page-not-found.html'), 404
 
 #==============================================================================
 # User annotation of subsets using Flask_admin
@@ -246,18 +252,18 @@ class SubsetModelView(ModelView):
 
 
 class TagModelView(ModelView):
-    action_disallowed_list = ['delete']
+    action_disallowed_list = ['delete',]
     form_excluded_columns = ['subset',]
-    # column_editable_list = ['tag',]
+    column_editable_list = ['name',]
 
 
 class NoteModelView(ModelView):
-    action_disallowed_list = ['delete']
+    action_disallowed_list = ['delete',]
     column_filters = ('note',)
     column_editable_list = ['note',]
     form_excluded_columns = ['subset',]
+    column_list = ('note',)
 
-from flask_admin import AdminIndexView
 
 admin = Admin(
     app,
@@ -282,14 +288,6 @@ admin.add_view(NoteModelView(Note, db.session))
 # Add Flask-Admin views for Users and Roles
 # admin.add_view(UserAdmin(User, db.session))
 # admin.add_view(RoleAdmin(Role, db.session))
-
-#==============================================================================
-# 404
-#==============================================================================
-
-@app.errorhandler(404)
-def page_not_found(error):
-    return render_template('page-not-found.html'), 404
 
 
 if __name__ == '__main__':
