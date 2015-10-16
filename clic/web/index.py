@@ -261,9 +261,13 @@ from flask_admin import AdminIndexView
 
 admin = Admin(
     app,
+    template_mode='bootstrap3',
     index_view=AdminIndexView(
-        name='Home',
-        url='/annotation'
+        # brand="User annotation"
+        name='Documentation',
+        url='/annotation',
+        template="user-annotation.html",
+        # base_template='microblog_master.html',
     )
 )
 # # admin.add_view(MyAnnotations(name="Test"))
@@ -295,7 +299,7 @@ if __name__ == '__main__':
         db.create_all()
 
     from flask_debugtoolbar import DebugToolbarExtension
-    app.debug = True
+    app.debug = False
     app.config["SECRET_KEY"] = "jadajajada"
     toolbar = DebugToolbarExtension(app)
     app.run()
