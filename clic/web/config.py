@@ -1,0 +1,13 @@
+SQLALCHEMY_DATABASE_URI = "postgresql://jdejoode:isabelle@localhost/annotation_dev"
+DEBUG = False
+# when testing = True, the login_required decorator is disabled.
+TESTING = True
+SECRET_KEY = "qdfmkqj fmqksjfdm k"
+MAIL_SERVER = 'smtp.qsdfqsdfqskjdfmlqsjdfmlkjjqsdf.com'
+MAIL_PORT = 465
+MAIL_USE_SSL = True
+MAIL_USERNAME = 'username'
+MAIL_PASSWORD = 'password'
+SECURITY_REGISTERABLE = True
+SECURITY_TRACKABLE = True
+SECURITY_RECOVERABLE = True

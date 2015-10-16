@@ -17,23 +17,10 @@ from clic.web.forms import BOOKS, SUBSETS
 from models import db, Annotation, Category, Role, User, List, Tag, Note, Subset
 
 
+# app = Flask('clic.web', static_url_path='')
 app = Flask(__name__, static_url_path='')
 app.register_blueprint(api, url_prefix='/api')
-# app = Flask('clic.web', static_url_path='')
-app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://jdejoode:isabelle@localhost/annotation_dev"
-app.config["DEBUG"] = True
-# when testing = True, the login_required decorator is disabled.
-app.config["TESTING"] = True
-app.config["SECRET_KEY"] = "qdfmkqj fmqksjfdm k"
-app.config['MAIL_SERVER'] = 'smtp.qsdfqsdfqskjdfmlqsjdfmlkjjqsdf.com'
-app.config['MAIL_PORT'] = 465
-app.config['MAIL_USE_SSL'] = True
-app.config['MAIL_USERNAME'] = 'username'
-app.config['MAIL_PASSWORD'] = 'password'
-app.config['SECURITY_REGISTERABLE'] = True
-app.config['SECURITY_TRACKABLE'] = True
-app.config['SECURITY_RECOVERABLE'] = True
-
+app.config.from_pyfile('config.py')
 mail = Mail(app)
 db.init_app(app)
 # Setup Flask-Security
@@ -297,7 +284,7 @@ if __name__ == '__main__':
         db.create_all()
 
     from flask_debugtoolbar import DebugToolbarExtension
-    app.debug = False
+    app.debug = True
     app.config["SECRET_KEY"] = "jadajajada"
     toolbar = DebugToolbarExtension(app)
     app.run()
