@@ -11,3 +11,4 @@ Flask-Script==2.0.5
 Flask-Migrate==1.4.0
 Flask-Security
 Flask-Admin
+Flask-Login==0.2.11
