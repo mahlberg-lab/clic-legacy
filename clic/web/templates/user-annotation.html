@@ -7,6 +7,24 @@
 {% endblock %}
 
 {% block body %}
+
+    {% if not current_user.is_authenticated() %}
+
+    <h3 class="without-pills">Access is restricted</h3>
+      <p>The component for user annotation is not available to the public. If you
+        want to gain access to this module in order to annotate occurrences of
+        subsets with tags and notes, please email
+        <a href="mailto:clic@contacts.bham.ac.uk?Subject=Get%20access" target="_top">the
+          CLiC team</a> to ask for a user account. If you want to set up your own
+          version of the CLiC user annotation, please visit our <a href="
+          {{url_for('releases')}}">Releases</a> page and install CLiC locally.
+      </p>
+
+      <p>If you have a user account, visit the <a href="/login">Login page</a> to access
+        you account.
+      </p>
+
+    {% else %}
     <h3 class="without-pills">Goal</h3>
       <p>This module allows you to add notes and tags to subsets so that they
         can be analysed and analysed. </p>
@@ -65,6 +83,7 @@
         contains the word <i>suspension</i>).
       </div>
       <br/>
+      {% endif %}
 {% endblock %}
 
 {% block scripts %}

@@ -12,6 +12,7 @@ from flask_mail import Mail
 from flask_admin.contrib.sqla import ModelView
 from flask_security import Security, SQLAlchemyUserDatastore, \
     UserMixin, RoleMixin, login_required, current_user
+# from flask.ext.login import LoginManager
 
 from clic.web.api import api, fetchClusters, fetchKeywords
 from clic.chapter_repository import ChapterRepository
@@ -28,6 +29,14 @@ db.init_app(app)
 # Setup Flask-Security
 user_datastore = SQLAlchemyUserDatastore(db, User, Role)
 security = Security(app, user_datastore)
+
+# login_manager = LoginManager()
+# login_manager.init_app(app)
+
+# @login_manager.user_loader
+# def load_user(user_id):
+#    return User.get(user_id)
+
 
 '''
 Application routes
@@ -228,13 +237,13 @@ class SecuredModelView(sqla.ModelView):
                 # login
                 return redirect(url_for('security.login', next=request.url))
 
-@security.context_processor
-def security_context_processor():
-    return dict(
-        admin_base_template=admin.base_template,
-        admin_view=admin.index_view,
-        h=admin_helpers,
-    )
+# @security.context_processor
+# def security_context_processor():
+#     return dict(
+#         admin_base_template=admin.base_template,
+#         admin_view=admin.index_view,
+#         h=admin_helpers,
+#     )
 
 
 class SubsetModelView(ModelView):
@@ -303,7 +312,7 @@ class UserAdmin(sqla.ModelView):
 
     # Prevent administration of Users unless the currently logged-in user has the "admin" role
     def is_accessible(self):
-        return current_user.has_role('superman')
+       return current_user.has_role('superman')
 
 
 class RoleAdmin(sqla.ModelView):
@@ -323,6 +332,11 @@ admin = Admin(
         )
     )
 
+@app.route('/test')
+@login_required
+def test():
+    return render_template('info/about.html')
+
 admin.add_view(SubsetModelView(Subset, db.session))
 admin.add_view(TagModelView(Tag, db.session))
 admin.add_view(NoteModelView(Note, db.session))
@@ -337,6 +351,5 @@ if __name__ == '__main__':
 
     from flask_debugtoolbar import DebugToolbarExtension
     app.debug = True
-    app.config["SECRET_KEY"] = "jadajajada"
     toolbar = DebugToolbarExtension(app)
     app.run()
