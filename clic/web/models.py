@@ -25,6 +25,10 @@ class Subset(db.Model):
 
     # tags = relationship('Tag', secondary=subset_tags, backref=db.backref('subsets'))
 
+    __mapper_args__ = {
+        "order_by": [abbr, kind,] # text]
+    }
+
     def __init__(self, book='', abbr='', kind='', text=''):
         self.book = book
         self.abbr = abbr
@@ -137,6 +141,10 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(255))
     active = db.Column(db.Boolean())
     confirmed_at = db.Column(db.DateTime())
+    # TODO created_on = db.Column(db.DateTime, server_default=db.func.now())
+    # TODO updated_on = db.Column(db.DateTime,
+                        #    server_default=db.func.now(),
+                        #    onupdate=db.func.now())
 
     # Trackable fields for Flask-Security
     # last_login_at = db.Column(db.DateTime)
