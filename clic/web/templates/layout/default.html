@@ -44,15 +44,6 @@ Undoes the center alignment of the logos add the bottom of the page  when the de
     background-color: #036;
 }
 
-.navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:hover, .navbar-inverse .navbar-nav > .open > a:focus {
-    background-color: #001A4D;
-    color: #FFF;
-
-
-.right-nav-background {
-    background-color: #001A4D;
-    color: #FFF;
-
 </style>
 
 
@@ -82,6 +73,7 @@ Undoes the center alignment of the logos add the bottom of the page  when the de
                 <li{% if active_page == 'keywords' %} class="active"{% endif %}><a href="{{ url_for('keywords') }}">Keywords</a></li>
                 <li{% if active_page == 'clusters' %} class="active"{% endif %}><a href="{{ url_for('clusters') }}">Clusters</a></li>
                 <li{% if active_page == 'subsets' %} class="active"{% endif %}><a href="{{ url_for('subsets') }}">Subsets</a></li>
+                <li><a href="/annotation" >User Annotation</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right right-nav-background">
                 <li class="dropdown navbar-right">
