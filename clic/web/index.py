@@ -310,14 +310,14 @@ class NoteModelView(ModelView):
 
 class UserAdmin(sqla.ModelView):
 
-    # Prevent administration of Users unless the currently logged-in user has the "admin" role
+    # Prevent administration of Users unless the currently logged-in user has the "superman" role
     def is_accessible(self):
        return current_user.has_role('superman')
 
 
 class RoleAdmin(sqla.ModelView):
 
-    # Prevent administration of Roles unless the currently logged-in user has the "admin" role
+    # Prevent administration of Roles unless the currently logged-in user has the "superman" role
     def is_accessible(self):
         return current_user.has_role('superman')
 
@@ -331,11 +331,6 @@ admin = Admin(
         template="user-annotation.html",
         )
     )
-
-@app.route('/test')
-@login_required
-def test():
-    return render_template('info/about.html')
 
 admin.add_view(SubsetModelView(Subset, db.session))
 admin.add_view(TagModelView(Tag, db.session))

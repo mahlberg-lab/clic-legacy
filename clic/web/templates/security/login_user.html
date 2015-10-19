@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>CLiC Login</title>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <link href="{{ url_for('static', filename='bootstrap/bootstrap3/css/bootstrap.min.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static', filename='bootstrap/bootstrap3/css/bootstrap-theme.min.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static', filename='admin/css/bootstrap3/admin.css') }}" rel="stylesheet">
+        <style>
+        body {
+            padding-top: 4px;
+        }
+        </style>
+  </head>
+  <body>
+    <div class="container">
+      <nav class="navbar navbar-default" role="navigation">
+      	<!-- Brand and toggle get grouped for better mobile display -->
+      	<div class="navbar-header">
+      	  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#admin-navbar-collapse">
+      	    <span class="sr-only">Toggle navigation</span>
+      	    <span class="icon-bar"></span>
+      	    <span class="icon-bar"></span>
+      	    <span class="icon-bar"></span>
+      	  </button>
+      	  {% block brand %}
+      	  <a class="navbar-brand" href="#">User annotations</a>
+      	  {% endblock %}
+      	</div>
+      	<!-- navbar content -->
+        <div class="collapse navbar-collapse" id="admin-navbar-collapse">
+                {% block main_menu %}
+                <ul class="nav navbar-nav">
+                  <li><a href="/annotation">Documentation</a></li>
+                </ul>
+                {% endblock %}
+
+                {% block menu_links %}
+                <ul class="nav navbar-nav navbar-right">
+                  <div class="nav nav-pills" style="padding-top:0.4em"><li><a href="/" class="nav nav-pills">Back to CLiC</a>
+                  </li></div>
+                </ul>
+                {% endblock %}
+
+        </div>
+      </nav>
+    </div>
+
+    <div class="container">
+    {% from "security/_macros.html" import render_field_with_errors, render_field %}
+    {% include "security/_messages.html" %}
+    <h2>Login</h2>
+    <form action="{{ url_for_security('login') }}" method="POST" name="login_user_form">
+      <div class="form-group">
+      {{ login_user_form.hidden_tag() }}
+      {{ render_field_with_errors(login_user_form.email) }}
+      {{ render_field_with_errors(login_user_form.password) }}
+      {{ render_field_with_errors(login_user_form.remember) }}
+      {{ render_field(login_user_form.next) }}
+      {{ render_field(login_user_form.submit, class="btn btn-default") }}
+      </div>
+    </form>
+    {% include "security/_menu.html" %}
+    </div>
+  </body>
+</html>
