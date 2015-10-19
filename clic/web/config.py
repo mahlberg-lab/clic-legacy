@@ -12,7 +12,7 @@ MAIL_PASSWORD = 'password'
 # SECURITY_PASSWORD_HASH = "bcrypt"
 # SECURITY_PASSWORD_SALT = "AasdsSDLKJFDasdflasdlfjhLJKHDlsdfjkhLKJ"
 # https://pythonhosted.org/Flask-Security/models.html
-SECURITY_REGISTERABLE = True
+SECURITY_REGISTERABLE = False
 SECURITY_TRACKABLE = False
 SECURITY_RECOVERABLE = False
 SECURITY_CONFIRMABLE = False  # TODO
