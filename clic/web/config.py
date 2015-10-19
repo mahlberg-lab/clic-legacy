@@ -12,6 +12,7 @@ MAIL_PASSWORD = 'password'
 # SECURITY_PASSWORD_HASH = "bcrypt"
 # SECURITY_PASSWORD_SALT = "AasdsSDLKJFDasdflasdlfjhLJKHDlsdfjkhLKJ"
 # https://pythonhosted.org/Flask-Security/models.html
+SECURITY_POST_LOGIN_VIEW = "/annotation"
 SECURITY_REGISTERABLE = False
 SECURITY_TRACKABLE = False
 SECURITY_RECOVERABLE = False
