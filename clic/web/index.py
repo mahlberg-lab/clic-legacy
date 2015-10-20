@@ -248,7 +248,7 @@ class SecuredModelView(sqla.ModelView):
 
 class SubsetModelView(ModelView):
     column_filters = ('book', 'abbr', 'kind', 'corpus', 'text', 'notes', 'tags')
-    column_searchable_list = ('text',)
+    column_searchable_list = ('abbr', 'text',)
     column_list = ('book', 'kind', 'text', 'tags', 'notes')
     # column_list = ('book', 'text',)
     # column_exclude_list = ['abbr','corpus']
