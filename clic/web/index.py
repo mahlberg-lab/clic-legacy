@@ -246,7 +246,58 @@ class SecuredModelView(sqla.ModelView):
 #     )
 
 
-class SubsetModelView(ModelView):
+from flask_admin.contrib.sqla import tools
+from sqlalchemy import or_
+
+class PhraseSearchModelView(ModelView):
+
+    # https://github.com/flask-admin/flask-admin/blob/master/flask_admin/contrib/sqla/tools.py
+    # https://github.com/flask-admin/flask-admin/blob/master/flask_admin/contrib/sqla/view.py#L804
+    # https://github.com/flask-admin/flask-admin/blob/master/flask_admin/templates/bootstrap3/admin/model/layout.html
+
+    def _apply_search(self, query, count_query, joins, count_joins, search):
+        """
+            Apply search to a query.
+        """
+        # just disable the split to make it work
+        terms = search.split(' ')
+
+        for term in terms:
+            if not term:
+                continue
+
+            stmt = tools.parse_like_term(term)
+
+            filter_stmt = []
+            count_filter_stmt = []
+
+            for field, path in self._search_fields:
+                query, joins, alias = self._apply_path_joins(query, joins, path, inner_join=False)
+
+                count_alias = None
+
+                if count_query is not None:
+                    count_query, count_joins, count_alias = self._apply_path_joins(count_query,
+                                                                                   count_joins,
+                                                                                   path,
+                                                                                   inner_join=False)
+
+                column = field if alias is None else getattr(alias, field.key)
+                filter_stmt.append(column.ilike(stmt))
+
+                if count_filter_stmt is not None:
+                    column = field if count_alias is None else getattr(count_alias, field.key)
+                    count_filter_stmt.append(column.ilike(stmt))
+
+            query = query.filter(or_(*filter_stmt))
+
+            if count_query is not None:
+                count_query = count_query.filter(or_(*count_filter_stmt))
+
+        return query, count_query, joins, count_joins
+
+
+class SubsetModelView(PhraseSearchModelView):
     column_filters = ('book', 'abbr', 'kind', 'corpus', 'text', 'notes', 'tags')
     column_searchable_list = ('abbr', 'text',)
     column_list = ('book', 'kind', 'text', 'tags', 'notes')
