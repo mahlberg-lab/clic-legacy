@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+'''
+This test suite can also be used to load the cache of frequent search options.
+'''
+
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -26,9 +30,27 @@ The following subcorpora:
 
 The following search options:
 
-- Whole phrase 
+- Whole phrase
 - Any
 
+
+The options are:
+{'corpus': ['BH', 'OT', 'dickens', 'ntc', 'all'],
+ 'search_mode': ['phrase', 'or'],
+ 'search_terms': ['dense fog', 'fog', 'the', 'we', 'he said', 'manner voice tone'],
+ 'subset': ['whole', 'quotes', 'non-quotes', 'long sus', 'short sus']}
+
+combinations = [dict(zip(options, prod)) for prod in product(*(options[option] for option in options))]
+
+[{'corpus': 'BH',
+  'search_mode': 'phrase',
+  'search_terms': 'dense fog',
+  'subset': 'whole'},
+ {'corpus': 'BH',
+  'search_mode': 'phrase',
+  'search_terms': 'fog',
+  'subset': 'whole'},
+  ...
 
 """
 
@@ -40,7 +62,7 @@ class FogInAllDickensWholePhrase(unittest.TestCase):
         self.base_url = "http://clic.nottingham.ac.uk/"
         self.verificationErrors = []
         self.accept_next_alert = True
-    
+
     def test_fog_in_all_dickens_whole_phrase(self):
         driver = self.driver
         driver.get(self.base_url)
@@ -49,17 +71,17 @@ class FogInAllDickensWholePhrase(unittest.TestCase):
         driver.find_element_by_id("concordanceSearch").send_keys("fog")
         driver.find_element_by_xpath("//button[@type='submit']").click()
         self.assertEqual("1 to 94 of 94 entries", driver.find_element_by_id("dataTableConcordance_info").text)
-    
+
     def is_element_present(self, how, what):
         try: self.driver.find_element(by=how, value=what)
         except NoSuchElementException, e: return False
         return True
-    
+
     def is_alert_present(self):
         try: self.driver.switch_to_alert()
         except NoAlertPresentException, e: return False
         return True
-    
+
     def close_alert_and_get_its_text(self):
         try:
             alert = self.driver.switch_to_alert()
@@ -70,7 +92,7 @@ class FogInAllDickensWholePhrase(unittest.TestCase):
                 alert.dismiss()
             return alert_text
         finally: self.accept_next_alert = True
-    
+
     def tearDown(self):
         self.driver.quit()
         self.assertEqual([], self.verificationErrors)
@@ -83,7 +105,7 @@ class FogInAllDickensAny(unittest.TestCase):
         self.base_url = "http://clic.nottingham.ac.uk/"
         self.verificationErrors = []
         self.accept_next_alert = True
-    
+
     def test_fog_in_all_dickens_any(self):
         driver = self.driver
         driver.get(self.base_url)
@@ -94,17 +116,17 @@ class FogInAllDickensAny(unittest.TestCase):
         driver.find_element_by_xpath("//label[2]").click()
         driver.find_element_by_xpath("//button[@type='submit']").click()
         self.assertEqual("1 to 94 of 94 entries", driver.find_element_by_id("dataTableConcordance_info").text)
-    
+
     def is_element_present(self, how, what):
         try: self.driver.find_element(by=how, value=what)
         except NoSuchElementException, e: return False
         return True
-    
+
     def is_alert_present(self):
         try: self.driver.switch_to_alert()
         except NoAlertPresentException, e: return False
         return True
-    
+
     def close_alert_and_get_its_text(self):
         try:
             alert = self.driver.switch_to_alert()
@@ -115,7 +137,7 @@ class FogInAllDickensAny(unittest.TestCase):
                 alert.dismiss()
             return alert_text
         finally: self.accept_next_alert = True
-    
+
     def tearDown(self):
         self.driver.quit()
         self.assertEqual([], self.verificationErrors)
@@ -128,7 +150,7 @@ class MaybeInAllDickensWholePhraseQuotes(unittest.TestCase):
         self.base_url = "http://clic.nottingham.ac.uk/"
         self.verificationErrors = []
         self.accept_next_alert = True
-    
+
     def test_maybe_in_all_dickens_whole_phrase_quotes(self):
         driver = self.driver
         driver.get(self.base_url)
@@ -138,17 +160,17 @@ class MaybeInAllDickensWholePhraseQuotes(unittest.TestCase):
         driver.find_element_by_id("testIdxMod2").click()
         driver.find_element_by_xpath("//button[@type='submit']").click()
         self.assertEqual("1 to 45 of 45 entries", driver.find_element_by_id("dataTableConcordance_info").text)
-    
+
     def is_element_present(self, how, what):
         try: self.driver.find_element(by=how, value=what)
         except NoSuchElementException, e: return False
         return True
-    
+
     def is_alert_present(self):
         try: self.driver.switch_to_alert()
         except NoAlertPresentException, e: return False
         return True
-    
+
     def close_alert_and_get_its_text(self):
         try:
             alert = self.driver.switch_to_alert()
@@ -159,7 +181,7 @@ class MaybeInAllDickensWholePhraseQuotes(unittest.TestCase):
                 alert.dismiss()
             return alert_text
         finally: self.accept_next_alert = True
-    
+
     def tearDown(self):
         self.driver.quit()
         self.assertEqual([], self.verificationErrors)
@@ -172,7 +194,7 @@ class MaybeWhyInAllDickensAnyQuotes(unittest.TestCase):
         self.base_url = "http://clic.nottingham.ac.uk/"
         self.verificationErrors = []
         self.accept_next_alert = True
-    
+
     def test_maybe_why_in_all_dickens_any_quotes(self):
         driver = self.driver
         driver.get(self.base_url)
@@ -187,17 +209,17 @@ class MaybeWhyInAllDickensAnyQuotes(unittest.TestCase):
         # Warning: verifyTextNotPresent may require manual changes
         #try: self.assertNotRegexpMatches(driver.find_element_by_css_selector("BODY").text, r"^[\s\S]*$")
         #except AssertionError as e: self.verificationErrors.append(str(e))
-    
+
     def is_element_present(self, how, what):
         try: self.driver.find_element(by=how, value=what)
         except NoSuchElementException, e: return False
         return True
-    
+
     def is_alert_present(self):
         try: self.driver.switch_to_alert()
         except NoAlertPresentException, e: return False
         return True
-    
+
     def close_alert_and_get_its_text(self):
         try:
             alert = self.driver.switch_to_alert()
@@ -208,7 +230,7 @@ class MaybeWhyInAllDickensAnyQuotes(unittest.TestCase):
                 alert.dismiss()
             return alert_text
         finally: self.accept_next_alert = True
-    
+
     def tearDown(self):
         self.driver.quit()
         self.assertEqual([], self.verificationErrors)
@@ -221,7 +243,7 @@ class TheInBleakHouseNonQuotesWholePhrase(unittest.TestCase):
         self.base_url = "http://clic.nottingham.ac.uk/"
         self.verificationErrors = []
         self.accept_next_alert = True
-    
+
     def test_the_in_bleak_house_non_quotes_whole_phrase(self):
         driver = self.driver
         driver.get(self.base_url)
@@ -238,17 +260,17 @@ class TheInBleakHouseNonQuotesWholePhrase(unittest.TestCase):
         # Warning: verifyTextNotPresent may require manual changes
         #try: self.assertNotRegexpMatches(driver.find_element_by_css_selector("BODY").text, r"^[\s\S]*$")
         #except AssertionError as e: self.verificationErrors.append(str(e))
-    
+
     def is_element_present(self, how, what):
         try: self.driver.find_element(by=how, value=what)
         except NoSuchElementException, e: return False
         return True
-    
+
     def is_alert_present(self):
         try: self.driver.switch_to_alert()
         except NoAlertPresentException, e: return False
         return True
-    
+
     def close_alert_and_get_its_text(self):
         try:
             alert = self.driver.switch_to_alert()
@@ -259,7 +281,7 @@ class TheInBleakHouseNonQuotesWholePhrase(unittest.TestCase):
                 alert.dismiss()
             return alert_text
         finally: self.accept_next_alert = True
-    
+
     def tearDown(self):
         self.driver.quit()
         self.assertEqual([], self.verificationErrors)
@@ -272,7 +294,7 @@ class YouInNonDickensNonQuotesWholePhrase(unittest.TestCase):
         self.base_url = "http://clic.nottingham.ac.uk/"
         self.verificationErrors = []
         self.accept_next_alert = True
-    
+
     def test_you_in_non_dickens_non_quotes_whole_phrase(self):
         driver = self.driver
         driver.get(self.base_url)
@@ -289,17 +311,17 @@ class YouInNonDickensNonQuotesWholePhrase(unittest.TestCase):
         # Warning: verifyTextNotPresent may require manual changes
         #try: self.assertNotRegexpMatches(driver.find_element_by_css_selector("BODY").text, r"^[\s\S]*$")
         #except AssertionError as e: self.verificationErrors.append(str(e))
-    
+
     def is_element_present(self, how, what):
         try: self.driver.find_element(by=how, value=what)
         except NoSuchElementException, e: return False
         return True
-    
+
     def is_alert_present(self):
         try: self.driver.switch_to_alert()
         except NoAlertPresentException, e: return False
         return True
-    
+
     def close_alert_and_get_its_text(self):
         try:
             alert = self.driver.switch_to_alert()
@@ -310,7 +332,7 @@ class YouInNonDickensNonQuotesWholePhrase(unittest.TestCase):
                 alert.dismiss()
             return alert_text
         finally: self.accept_next_alert = True
-    
+
     def tearDown(self):
         self.driver.quit()
         self.assertEqual([], self.verificationErrors)
@@ -323,7 +345,7 @@ class CouldShouldInAllDickensAnyWholeText(unittest.TestCase):
         self.base_url = "http://clic.nottingham.ac.uk/"
         self.verificationErrors = []
         self.accept_next_alert = True
-    
+
     def test_could_should_in_all_dickens_any_whole_text(self):
         driver = self.driver
         driver.get(self.base_url)
@@ -338,17 +360,17 @@ class CouldShouldInAllDickensAnyWholeText(unittest.TestCase):
         # Warning: verifyTextNotPresent may require manual changes
         #try: self.assertNotRegexpMatches(driver.find_element_by_css_selector("BODY").text, r"^[\s\S]*$")
         #except AssertionError as e: self.verificationErrors.append(str(e))
-    
+
     def is_element_present(self, how, what):
         try: self.driver.find_element(by=how, value=what)
         except NoSuchElementException, e: return False
         return True
-    
+
     def is_alert_present(self):
         try: self.driver.switch_to_alert()
         except NoAlertPresentException, e: return False
         return True
-    
+
     def close_alert_and_get_its_text(self):
         try:
             alert = self.driver.switch_to_alert()
@@ -359,7 +381,7 @@ class CouldShouldInAllDickensAnyWholeText(unittest.TestCase):
                 alert.dismiss()
             return alert_text
         finally: self.accept_next_alert = True
-    
+
     def tearDown(self):
         self.driver.quit()
         self.assertEqual([], self.verificationErrors)
