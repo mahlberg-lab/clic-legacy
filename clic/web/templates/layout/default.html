@@ -9,7 +9,7 @@
     <link rel="shortcut icon" href="http://www.nottingham.ac.uk/favicon.ico">
 
     <title>{% block title %} | CLiC{% endblock %}</title>
-    
+
     {% block stylesheets %}
     <!-- Bootstrap core CSS -->
     <link href="{{ url_for('static', filename='dist/css/bootstrap.min.css') }}" rel="stylesheet">
@@ -20,13 +20,13 @@
 
 <body>
 
-<!-- http://stackoverflow.com/a/18602200 
+<!-- http://stackoverflow.com/a/18602200
 Undoes the center alignment of the logos add the bottom of the page  when the device is too small
 -->
 <style>
    @media all and (max-width: 700px) {
       .img-no-center {
-         display: block !important; 
+         display: block !important;
          float:left !important;
          margin-left: 0px !important;
          margin-right: 0px !important;
@@ -57,6 +57,11 @@ Undoes the center alignment of the logos add the bottom of the page  when the de
 
 
 <div class="container">
+
+    <img class="pull-right hidden-xs" style="margin-top:32px" src="{{ url_for('static', filename='img/uonlogo_top.png') }}" />
+    <img style="padding-top: 0.15em; padding-right:0.3em; margin-top:32px" class="pull-right hidden-xs" src="{{ url_for('static', filename='img/AHRC10th_horiz_small_RGB_top.png') }}" />
+    <img style="padding-top: 0.25em; margin-top:32px; padding-right:0.3em;" class="pull-right hidden-xs" src="{{ url_for('static', filename='img/university_of_birmingham_small_top.jpg') }}" />
+
     <div class="header">
         <h1 class="uonHeaderh1">CLiC</h1>
 
@@ -84,7 +89,7 @@ Undoes the center alignment of the logos add the bottom of the page  when the de
             <ul class="nav navbar-nav navbar-right right-nav-background">
                 <li class="dropdown navbar-right">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="trye" aria-expanded="false">About <span class="caret"></span></a>
-                    <ul class="dropdown-menu">               
+                    <ul class="dropdown-menu">
                         <li{% if active_page == 'about' %} class="active"{% endif %}><a href="{{ url_for('about') }}">Introduction</a></li>
                         <li{% if active_page == 'blog' %} class="active"{% endif %}><a href="{{ url_for('blog') }}">News and blog</a></li>
                         <li{% if active_page == 'documentation' %} class="active"{% endif %}><a href="{{ url_for('documentation') }}">Documentation</a></li>
@@ -105,9 +110,9 @@ Undoes the center alignment of the logos add the bottom of the page  when the de
 <!-- /.container -->
 
 <!-- logos -->
-<div class="footer">
+<div class="footer hidden-sm hidden-md hidden-lg">
     <div class="container" style="border-top:1px solid #ccc; margin-top:10em">
-        <div class="row">    
+        <div class="row">
             <div class="col-md-4 col-xs-12 col-sm-4">
                 <img style="padding-top: 1em; display: block; float:left; margin-left:-12px" class="img-no-center" src="{{ url_for('static', filename='img/university_of_birmingham_small.jpg') }}" />
             </div>
