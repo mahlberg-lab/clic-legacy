@@ -1,3 +1,12 @@
+1.2
+---
+* adds a pattern module that allows advance concordance analysis (aka KWICgrouper)
+* adds documentation next to the form
+* enables sorting
+* allows for a csv export
+* generates a clickable collocation table
+* adds a basic concordance for subsets executed in the background
+
 1.1.3
 -----
 * populates Github releases page with our releases and allow users to download each release
