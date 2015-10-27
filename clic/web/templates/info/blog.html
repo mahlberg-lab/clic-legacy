@@ -1,0 +1,56 @@
+{% extends "layout/default.html" %}
+
+{% set active_page = 'blog' %}
+
+{% block title %}
+  News and Blog{{ super() }}
+{% endblock %}
+
+{% block body %}
+<div class="row">
+    <!-- Blog Entries Column -->
+    <div class="col-md-8">
+
+    <h2 class="without-pills ppage-header">
+      News and Blog
+      <small>The latest CLiC information</small>
+    </h2>
+    <!-- First Blog Post -->
+    <h2>
+        <a href="#">CLiC project moves to UoB</a>
+    </h2>
+    <p class="lead">
+        by <a href="#">Johan</a>
+    </p>
+    <p><span class="glyphicon glyphicon-time"></span> Posted on Septermber 1, 2015</p>
+    <hr>
+    <img class="img-responsive" src="/img/aston-webb.jpg" alt="A picture of the Aston Web building of the University of Birmingham">
+    <hr>
+    <p>Originally conceived at the University of Liverpool, then further developed at the University of the Nottingham, the CLiC project now moves on to a new home: the Centre for Corpus Research of the University of Birmingham.</p>
+    <a class="btn btn-primary" href="http://www.birmingham.ac.uk/clic-dickens" target="_blank">Find out more<span class="glyphicon glyphicon-chevron-right"></span></a>
+    <hr>
+
+    </div>
+
+     <!-- Blog Sidebar Widgets Column -->
+    {% include "blocks/twitter.html" %}
+    {% include "blocks/feedback.html" %}
+</div>
+
+
+    <!-- Footer -->
+    <footer>
+        <div class="row">
+            <div class="col-lg-12">
+                <p>Copyright &copy; CLiC Team 2013-The present Year</p>
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
+    </footer>
+
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+{% endblock %}

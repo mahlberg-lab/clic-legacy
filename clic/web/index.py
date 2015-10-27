@@ -1,7 +1,7 @@
-from __future__ import absolute_import  ## help python find modules within clic package (see John H email 09.04.2014)
-import os
+from __future__ import absolute_import
 
 from flask import Flask, render_template, url_for, redirect, request
+import os
 from werkzeug import secure_filename
 import pandas as pd
 
@@ -13,11 +13,6 @@ from clic.web.forms import BOOKS, SUBSETS
 app = Flask(__name__, static_url_path='')
 app.register_blueprint(api, url_prefix='/api')
 
-#TODO delete:
-from flask_debugtoolbar import DebugToolbarExtension
-app.debug = True
-app.config["SECRET_KEY"] = "jadajajada"
-toolbar = DebugToolbarExtension(app)
 
 '''
 Application routes
@@ -32,11 +27,19 @@ def index():
 
 @app.route('/about/', methods=['GET'])
 def about():
-    return render_template("about.html")
+    return render_template("info/about.html")
 
 @app.route('/documentation/', methods=['GET'])
 def documentation():
-    return render_template("documentation.html")
+    return render_template("info/documentation.html")
+
+@app.route('/releases/', methods=['GET'])
+def releases():
+    return render_template("info/releases.html")
+
+@app.route('/blog/', methods=['GET'])
+def blog():
+    return render_template("info/blog.html")
 
 #==============================================================================
 # Concordances
@@ -290,6 +293,9 @@ def patterns():
 def page_not_found(error):
     return render_template('page-not-found.html'), 404
 
-# TODO delete?
 if __name__ == '__main__':
+    from flask_debugtoolbar import DebugToolbarExtension
+    app.debug = True
+    app.config["SECRET_KEY"] = "jadajajada"
+    toolbar = DebugToolbarExtension(app)
     app.run()
