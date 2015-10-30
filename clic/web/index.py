@@ -23,7 +23,7 @@ Application routes
 #==============================================================================
 @app.route('/', methods=['GET'])
 def index():
-    return redirect(url_for('concordances')) # current home page. may change
+    return render_template("info/home.html")
 
 @app.route('/about/', methods=['GET'])
 def about():

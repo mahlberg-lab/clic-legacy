@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
+    {% block meta %}
+    {% endblock %}
     <link rel="shortcut icon" href="http://www.nottingham.ac.uk/favicon.ico">
 
     <title>{% block title %} | CLiC{% endblock %}</title>
@@ -63,7 +65,7 @@ Undoes the center alignment of the logos add the bottom of the page  when the de
     <img style="padding-top: 0.25em; margin-top:32px; padding-right:0.3em;" class="pull-right hidden-xs" src="{{ url_for('static', filename='img/university_of_birmingham_small_top.jpg') }}" />
 
     <div class="header">
-        <h1 class="uonHeaderh1">CLiC</h1>
+        <h1 class="uonHeaderh1"><a href="/" style="color:#000">CLiC</a></h1>
 
         <p class="hidden-xs">A corpus tool to support the analysis of literary texts</p>
     </div>
