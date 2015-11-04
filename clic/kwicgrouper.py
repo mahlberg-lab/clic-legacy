@@ -109,7 +109,10 @@ class Concordance(object):
             for hit in hits:
                 start = hit.start()
                 end = hit.end()
-                left = self.text[start-self.length:start]
+                if start < self.length:
+                    left = self.text[:start]
+                else: 
+                    left = self.text[start-self.length:start]
                 term = self.text[start:end]
                 right = self.text[start+len(self.term):start+len(self.term)+self.length]
                 lines.append([left, term, right])
@@ -295,7 +298,8 @@ if __name__ == "__main__":
 
     # example, change dir to have it working
     # naive test 1
-    concordance = concordance_for_line_by_line_file("/Users/johan/projects/annotation/data/annotation/output/dickens/textract/long_suspensions/ot_long_suspensions.txt", "voice")
+    concordance = concordance_for_line_by_line_file("/Users/johan/projects/annotation/data/output/DNov/textract/non_quotes/ot_non_quotes.txt", "boy")
+    for x in concordance: print x
     kwicgrouper = KWICgrouper(concordance)
     print kwicgrouper.filter_textframe({'L3':['in'], "L2":["a"]})
 
