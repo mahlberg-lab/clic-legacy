@@ -13,9 +13,11 @@ from flask_admin.contrib.sqla import ModelView
 from flask_security import Security, SQLAlchemyUserDatastore, \
     UserMixin, RoleMixin, login_required, current_user
 # from flask.ext.login import LoginManager
+import pandas as pd
 
 from clic.web.api import api, fetchClusters, fetchKeywords
 from clic.chapter_repository import ChapterRepository
+from clic.kwicgrouper import KWICgrouper, concordance_for_line_by_line_file
 from clic.web.forms import BOOKS, SUBSETS
 from models import db, Annotation, Category, Role, User, List, Tag, Note, Subset
 
@@ -47,7 +49,7 @@ Application routes
 #==============================================================================
 @app.route('/', methods=['GET'])
 def index():
-    return redirect(url_for('concordances')) # current home page. may change
+    return render_template("info/home.html")
 
 @app.route('/about/', methods=['GET'])
 def about():
@@ -201,9 +203,125 @@ def subsets_display(book=None, subset=None):
 #==============================================================================
 # 404
 #==============================================================================
+
 @app.errorhandler(404)
 def page_not_found(error):
     return render_template('page-not-found.html'), 404
+
+#==============================================================================
+# KWICgrouper
+#==============================================================================
+
+@app.route('/patterns/', methods=["GET"])
+def patterns():
+    
+    if not 'term' in request.args.keys():
+        return render_template("patterns-form.html")
+    
+    else:
+        
+        # MAKE DRY
+        book = request.args.get('book')
+        subset = request.args.get('subset')
+        term = request.args.get('term').strip()
+        local_args = dict(request.args)
+
+        kwic_filter = {}
+        for key,value in local_args.iteritems():
+            if key == "subset" or key == "book" or key == "term":
+                pass
+            elif value[0]:
+                # the values are in the first el of the list
+                # 'L2': [u'a']
+                values = value[0]
+                values = values.split(",")
+                values = [value.strip() for value in values]
+                kwic_filter[key] = values
+        
+        if book and subset:
+            # make sure they are not malicious names
+            book = secure_filename(book)
+            subset = secure_filename(subset)
+    
+            if book not in BOOKS:
+                return redirect(url_for('page_not_found'))
+    
+            if subset not in SUBSETS:
+                return redirect(url_for('page_not_found'))
+    
+            BASE_DIR = os.path.dirname(__file__)
+            filename = "../textfiles/{0}/{1}_{0}.txt".format(subset, book)               
+            concordance = concordance_for_line_by_line_file(os.path.join(BASE_DIR, filename), term)
+            # should not be done here            
+            if not concordance:
+                return render_template("patterns-noresults.html")
+            kwicgrouper = KWICgrouper(concordance)
+            textframe = kwicgrouper.filter_textframe(kwic_filter)
+            
+            collocation_table = textframe.apply(pd.Series.value_counts, axis=0) 
+            collocation_table["Sum"] = collocation_table.sum(axis=1)  
+            collocation_table["Left Sum"] = collocation_table[["L5","L4","L3","L2","L1"]].sum(axis=1)  
+            collocation_table["Right Sum"] = collocation_table[["R5","R4","R3","R2","R1"]].sum(axis=1)
+
+            pd.set_option('display.max_colwidth', 1000)
+            
+            # replicate the index so that it is accessible from a row-level apply function
+            # http://stackoverflow.com/questions/20035518/insert-a-link-inside-a-pandas-table
+            collocation_table["collocate"] = collocation_table.index
+            
+            # function that can be applied
+            def linkify(row, position, term=None, book=None, subset=None):
+                """
+                The purpose is to make links in the dataframe.to_html() output clickable.
+                
+                # http://stackoverflow.com/a/26614921
+                """
+                if pd.notnull(row[position]):
+                    return """<a href="/patterns/?{0}={1}&term={2}&book={4}&subset={5}">{3}</a>""".format(position, 
+                                                                                      row["collocate"], 
+                                                                                      term,  
+                                                                                      int(row[position]),
+                                                                                      book,
+                                                                                      subset
+                                                                                     )
+            
+            # http://localhost:5000/patterns/?L5=&L4=&L3=&L2=&L1=&term=voice&R1=&R2=&R3=&R4=&R5=&subset=long_suspensions&book=BH
+            
+            def linkify_process(df, term, book, subset):
+                """
+                Linkifies every column from L5-R5
+                """
+                for itm in "L5 L4 L3 L2 L1 R1 R2 R3 R4 R5".split():
+                    df[itm] = df.apply(linkify, args=([itm, term, book, subset]), axis=1)
+                return df
+            
+            
+            
+            linkify_process(collocation_table, term, book, subset)             
+            del collocation_table["collocate"]
+            
+                        
+            collocation_table = collocation_table[collocation_table.index != ""]
+            
+            collocation_table = collocation_table.fillna("").to_html(classes=["table", "table-striped", "table-hover", "dataTable", "no-footer", "uonDatatable", 'my_class" id = "dataTableCollocation'],
+                                                                                            bold_rows=False,
+                                                                                 ).replace("&lt;", "<").replace("&gt;", ">")
+            
+            
+            bookname = book
+            subsetname = subset.replace("_", " ").capitalize()
+            
+            # this bit is a hack:
+            # classes = 'my_class" id = "my_id'
+            # http://stackoverflow.com/questions/15079118/js-datatables-from-pandas
+            return render_template("patterns-results.html", 
+                                   textframe=textframe,
+                                   # local_args=kwic_filter,
+                                   collocation_table=collocation_table,
+                                   bookname=bookname,
+                                   subsetname=subsetname)
+
+
 
 #==============================================================================
 # User annotation of subsets using Flask_admin

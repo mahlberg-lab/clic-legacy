@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
+    {% block meta %}
+    {% endblock %}
     <link rel="shortcut icon" href="http://www.nottingham.ac.uk/favicon.ico">
 
     <title>{% block title %} | CLiC{% endblock %}</title>
@@ -50,8 +52,13 @@ Undoes the center alignment of the logos add the bottom of the page  when the de
 
 
 <div class="container">
+
+    <img class="pull-right hidden-xs" style="margin-top:32px" src="{{ url_for('static', filename='img/uonlogo_top.png') }}" />
+    <img style="padding-top: 0.15em; padding-right:0.3em; margin-top:32px" class="pull-right hidden-xs" src="{{ url_for('static', filename='img/AHRC10th_horiz_small_RGB_top.png') }}" />
+    <img style="padding-top: 0.25em; margin-top:32px; padding-right:0.3em;" class="pull-right hidden-xs" src="{{ url_for('static', filename='img/university_of_birmingham_small_top.jpg') }}" />
+
     <div class="header">
-        <h1 class="uonHeaderh1">CLiC</h1>
+        <h1 class="uonHeaderh1"><a href="/" style="color:#000">CLiC</a></h1>
 
         <p class="hidden-xs">A corpus tool to support the analysis of literary texts</p>
     </div>
@@ -73,6 +80,7 @@ Undoes the center alignment of the logos add the bottom of the page  when the de
                 <li{% if active_page == 'keywords' %} class="active"{% endif %}><a href="{{ url_for('keywords') }}">Keywords</a></li>
                 <li{% if active_page == 'clusters' %} class="active"{% endif %}><a href="{{ url_for('clusters') }}">Clusters</a></li>
                 <li{% if active_page == 'subsets' %} class="active"{% endif %}><a href="{{ url_for('subsets') }}">Subsets</a></li>
+                <li{% if active_page == 'patterns' %} class="active"{% endif %}><a href="{{ url_for('patterns') }}">Patterns</a></li>
                 <li><a href="/annotation" >User Annotation</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right right-nav-background">
@@ -101,7 +109,7 @@ Undoes the center alignment of the logos add the bottom of the page  when the de
 <!-- /.container -->
 
 <!-- logos -->
-<div class="footer">
+<div class="footer hidden-sm hidden-md hidden-lg">
     <div class="container" style="border-top:1px solid #ccc; margin-top:10em">
         <div class="row">
             <div class="col-md-4 col-xs-12 col-sm-4">
@@ -135,23 +143,10 @@ Undoes the center alignment of the logos add the bottom of the page  when the de
   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
   })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-  ga('create', 'UA-921739-26', 'nottingham.ac.uk');
-  ga('send', 'pageview');
-
-</script>
-
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
   ga('create', 'UA-68645501-1', 'auto');
   ga('send', 'pageview');
 
 </script>
-
-
 
 </body>
 </html>

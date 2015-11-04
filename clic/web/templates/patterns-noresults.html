@@ -1,0 +1,32 @@
+{% extends "layout/default.html" %}
+
+{% set active_page = 'patterns' %}
+
+
+{% block stylesheets %}
+  {{ super() }}
+
+  <link href="/js/thirdparty/DataTables1.10.0-beta.2/media/css/dataTables.bootstrap.css" rel="stylesheet">
+  <link href="/js/thirdparty/pace-0.5.1/themes/pace-theme-center-circle-uon.css" rel="stylesheet"/>
+{% endblock %}
+
+
+{% block title %}
+    Patterns {{ super() }}
+{% endblock %}
+
+
+{% block body %}
+
+    {# <p>{{ subsetname }} in {{ bookname }}</p> #}
+
+    <h3 class="without-pills">Results:</h2>
+     
+     <p>This term does not occur in the document you selected or you have defined a pattern <i>without</i> filling out the term field of the form.
+
+{% endblock %}
+
+
+{% block scripts %}
+  {{ super() }}
+{% endblock %}
