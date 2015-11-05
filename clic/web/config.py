@@ -1,5 +1,6 @@
 SQLALCHEMY_DATABASE_URI = "postgresql://jdejoode:isabelle@localhost/annotation_dev"
 DEBUG = False
+DEBUG_TB_INTERCEPT_REDIRECTS = False
 # when testing = True, the login_required decorator is disabled.
 TESTING = False
 # FIXME not very secret here
