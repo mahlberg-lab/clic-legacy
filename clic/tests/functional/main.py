@@ -57,6 +57,7 @@ urls = [ '/',
          '/about',
          '/documentation',
          '/patterns',
+         '/blog'
        ]
 
 get_urls = ['/concordances/?testCollection=dickens&terms=fog&selectWords=whole&testIdxMod=chapter',
