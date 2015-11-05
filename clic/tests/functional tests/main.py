@@ -56,6 +56,7 @@ urls = [ '/',
          '/subsets',
          '/about',
          '/documentation',
+         '/patterns',
        ]
 
 get_urls = ['/concordances/?testCollection=dickens&terms=fog&selectWords=whole&testIdxMod=chapter',
@@ -63,6 +64,7 @@ get_urls = ['/concordances/?testCollection=dickens&terms=fog&selectWords=whole&t
         '/clusters/?testIdxGroup=5gram-idx&testCollection=dickens&testIdxMod=longsus',
         '/subsets/BH/long_suspensions/',
         '/chapter/BH/1/169/fog/#concordance',
+        '/patterns/?L5=&L4=&L3=in&L2=a%2C+the&L1=&term=voice&R1=&R2=&R3=&R4=&R5=&subset=long_suspensions&book=BH',
         ]
 
 def assert_response_code_is_200(self, url):
