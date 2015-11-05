@@ -16,12 +16,12 @@
 {% endblock %}
 
 
-{% block body %}
+{% block main_body %}
 
     {# <p>{{ subsetname }} in {{ bookname }}</p> #}
 
     <h3 class="without-pills">Results:</h2>
-     
+
     {{ textframe.to_html(classes=["table", "table-striped", "table-hover", "dataTable", "no-footer", "uonDatatable", 'my_class" id = "dataTablePattern'],
                                                                                         index=False) | safe }}
 
@@ -60,7 +60,7 @@
 
 
           var oTable = $('#dataTablePattern').dataTable({
-          
+
               "aoColumns": [
                   { "sTitle": "L5" },
                   { "sTitle": "L4" },
@@ -81,7 +81,7 @@
               },
 
               "bDeferRender": true,
-              "bPaginate": false, 
+              "bPaginate": false,
               <!--  I think it makes more sense to use pseudo-pagination: -->
               <!-- "bPaginate": true, -->
               <!-- "aLengthMenu": [[5, 10, 15, 25, 50, 100, -1], [5, 10, 15, 25, 50, 100, "All"]], -->
@@ -111,7 +111,7 @@
               "sDom": '<iT>rt<>',
               // "sDom": '<iTf>rt<flp>'
               // "sDom": 'iTrtlfip'
-              
+
           });
 
 
@@ -137,7 +137,7 @@
               ],
 
               "bDeferRender": true,
-              "bPaginate": false, 
+              "bPaginate": false,
               "bLengthChange": false,
               "bFilter": true,
               "bSort": true,
@@ -150,7 +150,7 @@
               "order": [[ 12, "desc" ]],
 
               "oTableTools": {
-                  // other options: copy, excel, pdf  
+                  // other options: copy, excel, pdf
                   "aButtons": [ "csv", "print" ],
                   "sSwfPath": "/js/thirdparty/DataTables1.10.0-beta.2/extensions/TableTools/swf/copy_csv_xls.swf"
               },

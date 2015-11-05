@@ -6,11 +6,11 @@
     Subsets {{ super() }}
 {% endblock %}
 
-{% block body %}
+{% block main_body %}
     <form action="/patterns/" method=get class="formm-inline formm-horizontal">
 
 
-    <div class="container-fixed"> 
+    <div class="container-fixed">
     <div class="row">
     <div class="col-xs-5">
     <h3 class="without-pills">Define a pattern:</h2>
@@ -84,7 +84,7 @@
         <li>L1 is the first word to the left of the term, L2 is the second word to the left, R1 is the first word to the right, etc.</li>
         <li>Not all fields need to be used (the only field that is required is the term)</li>
         <li>Patterns can be comma separated (*a, the, an*) in which case they are OR searches</li>
-        <li>	The term is the main search term. It can be a phrase (*as if*) or a simple search term (*voice*).</li>        
+        <li>	The term is the main search term. It can be a phrase (*as if*) or a simple search term (*voice*).</li>
         <li>At present, punctuation is stripped out.</li>
     </ul>
 
@@ -102,7 +102,7 @@
     For instance, if one searches for <i>after</i> in Bleak House’s long suspensions, the results show that it is regularly followed by <i>a</i>. Clicking on <i>a</i> in R1 in the collocation table shows interesting time indications in the novel that would be hard to extract with simple searches.</li>
 
 
-    
+
     </div> <!-- end of the doc column -->
 
 
@@ -151,13 +151,13 @@
                     Extended quotes
                 </label>
             </div>
-        
+
 
     <h3 class="without-pills" style="margin-bottom:-15px">Choose a book:</h2>
         <div class="modal-body">
         <div id="booksModalCol1" class="col-md-6">
         <div><h4>Dickens</h4></div>
-        
+
         <div id="otherChk">
         <div class="radio"><label><input class="chkDickens" type=
         "radio" name="book" value="BH" checked><b>Bleak
@@ -223,7 +223,7 @@
         </div>
         <div id="booksModalCol2" class="col-md-6">
         <div><h4>Other 19thC literature</h4></div>
-        
+
         <div class="radio"><label><input class="chkNtc" type="radio"
         name="book" value="AgnesG"><b>Agnes Grey</b><br>
         (68,197 words; 21,986 quotes, 46,211 non-quotes)</label></div>
@@ -336,11 +336,11 @@
         <div class="modal-footer">
         <button type="submit" class="btn btn-primary pull-right" style="float:left !important">Extract pattern</button>
         </div>
-        </div>  
+        </div>
 
-        </div>  
-  
-     </form>  
+        </div>
+
+     </form>
     </div> <!-- end of the container -->
 
 
