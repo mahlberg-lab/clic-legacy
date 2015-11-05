@@ -47,13 +47,20 @@ class Tag(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), unique=True, nullable=False)  # negotiating information, politeness
 
-    subset = relationship('Subset', secondary=subset_tags, backref=db.backref('tags'))
+    subset = db.relationship('Subset', secondary=subset_tags, backref=db.backref('tags'))
+    # one to one relationship:
+    owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    owner = db.relationship("User", backref=db.backref("tags", uselist=False))
 
-    def __init__(self, name=''):
+    def __init__(self, name='', owner=''):
         self.name = name
+        self.owner = owner
 
     def __repr__(self):
         # return 'Tag: ' + str(self.name) + '>'
+        if self.owner:
+            output = str(self.owner.name) + '-' + self.name
+            return output
         return self.name
 
 
@@ -137,6 +144,7 @@ class User(db.Model, UserMixin):
     __table_args__ = {'extend_existing': True}
 
     id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(35), unique=True)
     email = db.Column(db.String(255), unique=True)
     password = db.Column(db.String(255))
     active = db.Column(db.Boolean())
