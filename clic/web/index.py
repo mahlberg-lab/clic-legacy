@@ -214,12 +214,12 @@ def page_not_found(error):
 
 @app.route('/patterns/', methods=["GET"])
 def patterns():
-    
+
     if not 'term' in request.args.keys():
         return render_template("patterns-form.html")
-    
+
     else:
-        
+
         # MAKE DRY
         book = request.args.get('book')
         subset = request.args.get('subset')
@@ -237,56 +237,56 @@ def patterns():
                 values = values.split(",")
                 values = [value.strip() for value in values]
                 kwic_filter[key] = values
-        
+
         if book and subset:
             # make sure they are not malicious names
             book = secure_filename(book)
             subset = secure_filename(subset)
-    
+
             if book not in BOOKS:
                 return redirect(url_for('page_not_found'))
-    
+
             if subset not in SUBSETS:
                 return redirect(url_for('page_not_found'))
-    
+
             BASE_DIR = os.path.dirname(__file__)
-            filename = "../textfiles/{0}/{1}_{0}.txt".format(subset, book)               
+            filename = "../textfiles/{0}/{1}_{0}.txt".format(subset, book)
             concordance = concordance_for_line_by_line_file(os.path.join(BASE_DIR, filename), term)
-            # should not be done here            
+            # should not be done here
             if not concordance:
                 return render_template("patterns-noresults.html")
             kwicgrouper = KWICgrouper(concordance)
             textframe = kwicgrouper.filter_textframe(kwic_filter)
-            
-            collocation_table = textframe.apply(pd.Series.value_counts, axis=0) 
-            collocation_table["Sum"] = collocation_table.sum(axis=1)  
-            collocation_table["Left Sum"] = collocation_table[["L5","L4","L3","L2","L1"]].sum(axis=1)  
+
+            collocation_table = textframe.apply(pd.Series.value_counts, axis=0)
+            collocation_table["Sum"] = collocation_table.sum(axis=1)
+            collocation_table["Left Sum"] = collocation_table[["L5","L4","L3","L2","L1"]].sum(axis=1)
             collocation_table["Right Sum"] = collocation_table[["R5","R4","R3","R2","R1"]].sum(axis=1)
 
             pd.set_option('display.max_colwidth', 1000)
-            
+
             # replicate the index so that it is accessible from a row-level apply function
             # http://stackoverflow.com/questions/20035518/insert-a-link-inside-a-pandas-table
             collocation_table["collocate"] = collocation_table.index
-            
+
             # function that can be applied
             def linkify(row, position, term=None, book=None, subset=None):
                 """
                 The purpose is to make links in the dataframe.to_html() output clickable.
-                
+
                 # http://stackoverflow.com/a/26614921
                 """
                 if pd.notnull(row[position]):
-                    return """<a href="/patterns/?{0}={1}&term={2}&book={4}&subset={5}">{3}</a>""".format(position, 
-                                                                                      row["collocate"], 
-                                                                                      term,  
+                    return """<a href="/patterns/?{0}={1}&term={2}&book={4}&subset={5}">{3}</a>""".format(position,
+                                                                                      row["collocate"],
+                                                                                      term,
                                                                                       int(row[position]),
                                                                                       book,
                                                                                       subset
                                                                                      )
-            
+
             # http://localhost:5000/patterns/?L5=&L4=&L3=&L2=&L1=&term=voice&R1=&R2=&R3=&R4=&R5=&subset=long_suspensions&book=BH
-            
+
             def linkify_process(df, term, book, subset):
                 """
                 Linkifies every column from L5-R5
@@ -294,27 +294,27 @@ def patterns():
                 for itm in "L5 L4 L3 L2 L1 R1 R2 R3 R4 R5".split():
                     df[itm] = df.apply(linkify, args=([itm, term, book, subset]), axis=1)
                 return df
-            
-            
-            
-            linkify_process(collocation_table, term, book, subset)             
+
+
+
+            linkify_process(collocation_table, term, book, subset)
             del collocation_table["collocate"]
-            
-                        
+
+
             collocation_table = collocation_table[collocation_table.index != ""]
-            
+
             collocation_table = collocation_table.fillna("").to_html(classes=["table", "table-striped", "table-hover", "dataTable", "no-footer", "uonDatatable", 'my_class" id = "dataTableCollocation'],
                                                                                             bold_rows=False,
                                                                                  ).replace("&lt;", "<").replace("&gt;", ">")
-            
-            
+
+
             bookname = book
             subsetname = subset.replace("_", " ").capitalize()
-            
+
             # this bit is a hack:
             # classes = 'my_class" id = "my_id'
             # http://stackoverflow.com/questions/15079118/js-datatables-from-pandas
-            return render_template("patterns-results.html", 
+            return render_template("patterns-results.html",
                                    textframe=textframe,
                                    # local_args=kwic_filter,
                                    collocation_table=collocation_table,
@@ -460,7 +460,7 @@ class SubsetModelView(PhraseSearchModelView):
 
 class TagModelView(ModelView):
     action_disallowed_list = ['delete',]
-    form_excluded_columns = ['subset',]
+    form_excluded_columns = ['subset','owner']
     column_editable_list = ['name',]
 
     def is_accessible(self):
