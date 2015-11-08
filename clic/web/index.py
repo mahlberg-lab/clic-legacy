@@ -415,8 +415,11 @@ class PhraseSearchModelView(ModelView):
         return query, count_query, joins, count_joins
 
 
+from flask_admin.contrib.sqla.filters import FilterLike
+# FilterLike(Tag.owner, 'Tag owner')
+
 class SubsetModelView(PhraseSearchModelView):
-    column_filters = ('book', 'abbr', 'kind', 'corpus', 'text', 'notes', 'tags')
+    column_filters = ('book', 'abbr', 'kind', 'corpus', 'text', 'notes', 'tags', 'tags.owner.name', 'tags.owner.email')
     column_searchable_list = ('abbr', 'text',)
     column_list = ('book', 'kind', 'text', 'tags', 'notes')
     # column_list = ('book', 'text',)
@@ -424,6 +427,7 @@ class SubsetModelView(PhraseSearchModelView):
     # column_editable_list could work with the above code included, but not great
     # column_editable_list = ['tags', 'notes']
     column_hide_backrefs = False
+    named_filter_urls = True
 
     # editing
     edit_modal = True
@@ -441,6 +445,10 @@ class SubsetModelView(PhraseSearchModelView):
 
     def is_accessible(self):
         return current_user.has_role('can_annotate')
+
+
+    # def get_query(self):
+    #     return self.session.query(self.model).filter(self.model.tags.user==current_user)
 
     # def get_list_form(self):
     #     return self.scaffold_list_form(CustomFieldList)
@@ -462,9 +470,17 @@ class TagModelView(ModelView):
     action_disallowed_list = ['delete',]
     form_excluded_columns = ['subset','owner']
     column_editable_list = ['name',]
+    named_filter_urls = True
 
     def is_accessible(self):
         return current_user.has_role('can_annotate')
+
+    # def scaffold_form(self):
+    #     form_class = super(TagModelView, self).scaffold_form()
+    #     form_class.password = PasswordField('Password')
+    #     form_class.new_password = PasswordField('New Password')
+    #     form_class.confirm = PasswordField('Confirm New Password')
+    #     return form_class
 
 
 class NoteModelView(ModelView):
@@ -473,6 +489,7 @@ class NoteModelView(ModelView):
     column_editable_list = ['note',]
     form_excluded_columns = ['subset',]
     column_list = ('note',)
+    named_filter_urls = True
 
     def is_accessible(self):
         return current_user.has_role('can_annotate')
