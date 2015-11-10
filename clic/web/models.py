@@ -50,8 +50,8 @@ class Tag(db.Model):
     subset = db.relationship('Subset', secondary=subset_tags, backref=db.backref('tags'))
     # one to one relationship:
     # FIXME should be FK AND not nullable!
-    owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    owner = db.relationship("User", backref=db.backref("tags", uselist=False))
+    owner_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    owner = db.relationship("User", backref=db.backref("tags"))
 
     def __init__(self, name='', owner=None):
         self.name = name
@@ -179,7 +179,7 @@ class User(db.Model, UserMixin):
         return self.id
 
     def __unicode__(self):
-        return self.email
+        return self.name
 
 
 

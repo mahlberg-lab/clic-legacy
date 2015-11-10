@@ -490,7 +490,7 @@ class SubsetModelView(PhraseSearchModelView):
 class TagModelView(ModelView):
     action_disallowed_list = ['delete',]
     form_excluded_columns = ['subset',]
-    column_editable_list = ['name','owner']
+    column_editable_list = ['name',]
     named_filter_urls = True
     column_filters = ['owner.name', 'name']
 
