@@ -421,7 +421,8 @@ from flask_admin.contrib.sqla.filters import FilterLike
 # FilterLike(Tag.owner, 'Tag owner')
 
 class SubsetModelView(PhraseSearchModelView):
-    column_filters = ('book', 'abbr', 'kind', 'corpus', 'text', 'notes', 'tags', 'tags.owner.name', 'tags.owner.email')
+    # 'notes.owner.name' works, but cannot be distinguished
+    column_filters = ('book', 'abbr', 'kind', 'corpus', 'text', 'notes', 'tags', 'tags.owner.name', 'tags.owner.email', )
     column_searchable_list = ('abbr', 'text',)
     column_list = ('book', 'kind', 'text', 'tags', 'notes')
     # column_list = ('book', 'text',)
@@ -490,9 +491,9 @@ class SubsetModelView(PhraseSearchModelView):
 class TagModelView(ModelView):
     action_disallowed_list = ['delete',]
     form_excluded_columns = ['subset',]
-    column_editable_list = ['name',]
+    column_editable_list = ['tag_name',]
     named_filter_urls = True
-    column_filters = ['owner.name', 'name']
+    column_filters = ['owner.name', 'tag_name']
 
     def is_accessible(self):
         return current_user.has_role('can_annotate')
@@ -513,14 +514,28 @@ class TagModelView(ModelView):
 
 class NoteModelView(ModelView):
     action_disallowed_list = ['delete',]
-    column_filters = ('note',)
     column_editable_list = ['note',]
     form_excluded_columns = ['subset',]
-    column_list = ('note',)
+    column_list = ('owner','note',)
     named_filter_urls = True
+    column_filters = ('owner.name', 'note',)
 
     def is_accessible(self):
         return current_user.has_role('can_annotate')
+
+    def create_form(self):
+        return self._use_filtered_owner(super(NoteModelView, self).create_form())
+
+    def edit_form(self, obj):
+        return self._use_filtered_owner(super(NoteModelView, self).edit_form(obj))
+
+    def _use_filtered_owner(self, form):
+        form.owner.query_factory = self._get_owner_list
+        return form
+
+    def _get_owner_list(self):
+        return self.session.query(User).filter_by(id=current_user.id).all()
+
 
 
 class UserAdmin(sqla.ModelView):
@@ -549,7 +564,7 @@ admin = Admin(
 
 admin.add_view(SubsetModelView(Subset, db.session))
 admin.add_view(TagModelView(Tag, db.session))
-# admin.add_view(NoteModelView(Note, db.session))
+admin.add_view(NoteModelView(Note, db.session))
 admin.add_view(UserAdmin(User, db.session))
 admin.add_view(RoleAdmin(Role, db.session))
 

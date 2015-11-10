@@ -45,7 +45,7 @@ class Tag(db.Model):
     __table_args__ = {'extend_existing': True}
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(80), nullable=False)  # negotiating information, politeness
+    tag_name = db.Column(db.String(80), nullable=False)  # negotiating information, politeness
 
     subset = db.relationship('Subset', secondary=subset_tags, backref=db.backref('tags'))
     # one to one relationship:
@@ -53,16 +53,16 @@ class Tag(db.Model):
     owner_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     owner = db.relationship("User", backref=db.backref("tags"))
 
-    def __init__(self, name='', owner=None):
-        self.name = name
+    def __init__(self, tag_name='', owner=None):
+        self.tag_name = tag_name
         self.owner = owner
 
     def __repr__(self):
         # return 'Tag: ' + str(self.name) + '>'
         if self.owner:
-            output = unicode(self.owner.name) + u'-' + unicode(self.name)
+            output = unicode(self.owner.name) + u'-' + unicode(self.tag_name)
             return output
-        return unicode(self.name)
+        return unicode(self.tag_name)
 
 
 class Note(db.Model):
@@ -70,15 +70,21 @@ class Note(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     note = db.Column(db.String(5000), nullable=False)
-    subset_id = db.Column(db.Integer, db.ForeignKey('subsets.id'))
 
     # note that the backref should be the name of this class (and not the class this relationship extends to)
-    subset = relationship('Subset', backref=db.backref('notes', order_by=id))
+    subset = db.relationship('Subset', backref=db.backref('notes', order_by=id))
+    subset_id = db.Column(db.Integer, db.ForeignKey('subsets.id'))
+    owner_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    owner = db.relationship("User", backref=db.backref('notes'))
 
-    def __init__(self, note=''):
+    def __init__(self, note='', owner=None):
         self.note = note
+        self.owner = owner
 
     def __repr__(self):
+        if self.owner:
+            output = unicode(self.owner.name) + u'-' + unicode(self.note)
+            return output
         return self.note
 
 
