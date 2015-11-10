@@ -45,23 +45,24 @@ class Tag(db.Model):
     __table_args__ = {'extend_existing': True}
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(80), unique=True, nullable=False)  # negotiating information, politeness
+    name = db.Column(db.String(80), nullable=False)  # negotiating information, politeness
 
     subset = db.relationship('Subset', secondary=subset_tags, backref=db.backref('tags'))
     # one to one relationship:
+    # FIXME should be FK AND not nullable!
     owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     owner = db.relationship("User", backref=db.backref("tags", uselist=False))
 
-    def __init__(self, name='', owner=''):
+    def __init__(self, name='', owner=None):
         self.name = name
         self.owner = owner
 
     def __repr__(self):
         # return 'Tag: ' + str(self.name) + '>'
         if self.owner:
-            output = str(self.owner.name) + '-' + self.name
+            output = unicode(self.owner.name) + u'-' + unicode(self.name)
             return output
-        return self.name
+        return unicode(self.name)
 
 
 class Note(db.Model):

@@ -13,6 +13,8 @@ from flask_admin.contrib.sqla import ModelView
 from flask_security import Security, SQLAlchemyUserDatastore, \
     UserMixin, RoleMixin, login_required, current_user
 # from flask.ext.login import LoginManager
+from flask_admin.form import BaseForm
+from wtforms.fields import SelectField, StringField
 import pandas as pd
 
 from clic.web.api import api, fetchClusters, fetchKeywords
@@ -432,6 +434,7 @@ class SubsetModelView(PhraseSearchModelView):
     # editing
     edit_modal = True
     form_excluded_columns = ['book', 'abbr', 'kind', 'corpus', 'text']
+    # nice but not what we are looking for:
     # inline_models = (Tag, Note)
 
     # can_view_details = True
@@ -446,6 +449,29 @@ class SubsetModelView(PhraseSearchModelView):
     def is_accessible(self):
         return current_user.has_role('can_annotate')
 
+    # def edit_form(self, obj, *args, **kwargs):
+    #
+    #     class SubsetEditForm(BaseForm):
+    #         # from flask_admin.form.fields import Select2Field
+    #         user_specific_tags =  [(tag.id, tag.name) for tag in Tag.query.filter_by(owner=current_user).all()]
+    #         tags = SelectField('Tags', choices=user_specific_tags, coerce=int)
+    #         print tags
+    #         # first_name = StringField('Username', current_user.name)
+    #
+    #     form = SubsetEditForm(obj=obj)
+    #     # return super(SubsetModelView, self).edit_form(form=form, *args, **kwargs)
+    #     return form
+
+    def edit_form(self, obj):
+        return self._use_filtered_tags(super(SubsetModelView, self).edit_form(obj))
+
+    # Logic
+    def _use_filtered_tags(self, form):
+        form.tags.query_factory = self._get_tags_list
+        return form
+
+    def _get_tags_list(self):
+        return self.session.query(Tag).filter_by(owner=current_user).all()
 
     # def get_query(self):
     #     return self.session.query(self.model).filter(self.model.tags.user==current_user)
@@ -453,34 +479,36 @@ class SubsetModelView(PhraseSearchModelView):
     # def get_list_form(self):
     #     return self.scaffold_list_form(CustomFieldList)
 
-#    def init_search( self ):
-#        r = super( SubsetModelView, self ).init_search()
-#        self._search_joins['tags'] = Tag.name
-#        return r
-
-# def edit_form(self, obj):
-#     form = model_form(models.Product, ProductEditForm)
-#    if obj.searchType:
-#            param_choices = [(x.id, x.label) for x in (obj.searchType.required_fields + obj.searchType.optional_fields)]
-#            form.params.choices=param_choices
-#        return form(obj=obj)
+    # def edit_form(self, obj):
+    #     form = model_form(models.Product, ProductEditForm)
+    #    if obj.searchType:
+    #            param_choices = [(x.id, x.label) for x in (obj.searchType.required_fields + obj.searchType.optional_fields)]
+    #            form.params.choices=param_choices
+    #        return form(obj=obj)
 
 
 class TagModelView(ModelView):
     action_disallowed_list = ['delete',]
-    form_excluded_columns = ['subset','owner']
-    column_editable_list = ['name',]
+    form_excluded_columns = ['subset',]
+    column_editable_list = ['name','owner']
     named_filter_urls = True
+    column_filters = ['owner.name', 'name']
 
     def is_accessible(self):
         return current_user.has_role('can_annotate')
 
-    # def scaffold_form(self):
-    #     form_class = super(TagModelView, self).scaffold_form()
-    #     form_class.password = PasswordField('Password')
-    #     form_class.new_password = PasswordField('New Password')
-    #     form_class.confirm = PasswordField('Confirm New Password')
-    #     return form_class
+    def create_form(self):
+        return self._use_filtered_owner(super(TagModelView, self).create_form())
+
+    def edit_form(self, obj):
+        return self._use_filtered_owner(super(TagModelView, self).edit_form(obj))
+
+    def _use_filtered_owner(self, form):
+        form.owner.query_factory = self._get_owner_list
+        return form
+
+    def _get_owner_list(self):
+        return self.session.query(User).filter_by(id=current_user.id).all()
 
 
 class NoteModelView(ModelView):
@@ -521,7 +549,7 @@ admin = Admin(
 
 admin.add_view(SubsetModelView(Subset, db.session))
 admin.add_view(TagModelView(Tag, db.session))
-admin.add_view(NoteModelView(Note, db.session))
+# admin.add_view(NoteModelView(Note, db.session))
 admin.add_view(UserAdmin(User, db.session))
 admin.add_view(RoleAdmin(Role, db.session))
 
