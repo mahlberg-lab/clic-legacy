@@ -340,7 +340,7 @@ class SecuredModelView(sqla.ModelView):
         if not current_user.is_active() or not current_user.is_authenticated():
             return False
 
-        if current_user.has_role('superuser'):
+        if current_user.has_role('superman'):
             return True
 
         return False
@@ -422,7 +422,8 @@ from flask_admin.contrib.sqla.filters import FilterLike
 
 class SubsetModelView(PhraseSearchModelView):
     # 'notes.owner.name' works, but cannot be distinguished
-    column_filters = ('book', 'abbr', 'kind', 'corpus', 'text', 'notes', 'tags', 'tags.owner.name', 'tags.owner.email', )
+    # column_filters = ('book', 'abbr', 'kind', 'corpus', 'text', 'notes', 'tags', 'tags.owner.name', 'tags.owner.email', )
+    column_filters = ('book', 'abbr', 'kind', 'text', 'notes', 'tags', 'tags.owner.name', 'tags.owner.email', )
     column_searchable_list = ('abbr', 'text',)
     column_list = ('book', 'kind', 'text', 'tags', 'notes')
     # column_list = ('book', 'text',)
