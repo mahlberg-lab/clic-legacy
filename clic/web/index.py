@@ -30,9 +30,19 @@ app.register_blueprint(api, url_prefix='/api')
 app.config.from_pyfile('config.py')
 mail = Mail(app)
 db.init_app(app)
+
 # Setup Flask-Security
+# add a custom form:
+# https://pythonhosted.org/Flask-Security/customizing.html#forms
+from flask_security.forms import RegisterForm
+from wtforms import TextField
+from wtforms.validators import Required
+
+class ExtendedRegisterForm(RegisterForm):
+    name = TextField('Name', [Required()])
+
 user_datastore = SQLAlchemyUserDatastore(db, User, Role)
-security = Security(app, user_datastore)
+security = Security(app, user_datastore, register_form=ExtendedRegisterForm)
 
 # login_manager = LoginManager()
 # login_manager.init_app(app)
@@ -449,7 +459,8 @@ class SubsetModelView(PhraseSearchModelView):
     page_size = 50  # the number of entries to display on the list view
 
     def is_accessible(self):
-        return current_user.has_role('can_annotate')
+        # return current_user.has_role('can_annotate')
+        return current_user.is_active()
 
     # def edit_form(self, obj, *args, **kwargs):
     #
@@ -497,7 +508,9 @@ class TagModelView(ModelView):
     column_filters = ['owner.name', 'tag_name']
 
     def is_accessible(self):
-        return current_user.has_role('can_annotate')
+        # return current_user.has_role('can_annotate')
+        return current_user.is_active()
+
 
     def create_form(self):
         return self._use_filtered_owner(super(TagModelView, self).create_form())
@@ -522,7 +535,8 @@ class NoteModelView(ModelView):
     column_filters = ('owner.name', 'note',)
 
     def is_accessible(self):
-        return current_user.has_role('can_annotate')
+        # return current_user.has_role('can_annotate')
+        return current_user.is_active()
 
     def create_form(self):
         return self._use_filtered_owner(super(NoteModelView, self).create_form())
