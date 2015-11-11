@@ -21,7 +21,7 @@ from clic.web.api import api, fetchClusters, fetchKeywords
 from clic.chapter_repository import ChapterRepository
 from clic.kwicgrouper import KWICgrouper, concordance_for_line_by_line_file
 from clic.web.forms import BOOKS, SUBSETS
-from models import db, Annotation, Category, Role, User, List, Tag, Note, Subset
+from clic.web.models import db, Annotation, Category, Role, User, List, Tag, Note, Subset
 
 
 # app = Flask('clic.web', static_url_path='')
