@@ -18,9 +18,9 @@ SUBSETS = [
 'short_suspensions',
 'long_suspensions',
 'non_quotes',
-'embedded_quotes',
-'extended_quotes',
-'non_suspended_narration',
+# 'embedded_quotes',
+# 'extended_quotes',
+# 'non_suspended_narration',
 # quotes_without_extended_quotes,
 ]
 
