@@ -10,6 +10,7 @@ from flask.ext.admin.contrib import sqla
 from flask_admin import Admin, BaseView, expose, AdminIndexView
 from flask_mail import Mail
 from flask_admin.contrib.sqla import ModelView
+from flask.ext.admin.contrib.sqla.view import func
 from flask_security import Security, SQLAlchemyUserDatastore, \
     UserMixin, RoleMixin, login_required, current_user
 # from flask.ext.login import LoginManager
@@ -505,12 +506,20 @@ class TagModelView(ModelView):
     form_excluded_columns = ['subset',]
     column_editable_list = ['tag_name',]
     named_filter_urls = True
-    column_filters = ['owner.name', 'tag_name']
+    # column_filters = ['owner.name', 'tag_name']
+    column_filters = ['tag_name']
 
     def is_accessible(self):
         # return current_user.has_role('can_annotate')
         return current_user.is_active()
 
+    # http://stackoverflow.com/a/30741433/2115409
+    def get_query(self):
+       return self.session.query(self.model).filter(self.model.owner == current_user)
+
+    # http://stackoverflow.com/a/26351005/2115409
+    def get_count_query(self):
+        return self.session.query(func.count('*')).filter(self.model.owner==current_user)
 
     def create_form(self):
         return self._use_filtered_owner(super(TagModelView, self).create_form())
@@ -537,6 +546,14 @@ class NoteModelView(ModelView):
     def is_accessible(self):
         # return current_user.has_role('can_annotate')
         return current_user.is_active()
+
+    # http://stackoverflow.com/a/30741433/2115409
+    def get_query(self):
+       return self.session.query(self.model).filter(self.model.owner == current_user)
+
+    # http://stackoverflow.com/a/26351005/2115409
+    def get_count_query(self):
+        return self.session.query(func.count('*')).filter(self.model.owner==current_user)
 
     def create_form(self):
         return self._use_filtered_owner(super(NoteModelView, self).create_form())
