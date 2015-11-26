@@ -1,7 +1,24 @@
+# -*- coding: utf-8 -*-
+
+'''
+This is the most important file for the web app. It contains the various
+routes that end users can use.
+
+For instance
+
+@app.route('/about/', methods=['GET'])
+def about():
+    return render_template("info/about.html")
+
+Where /about/ is the link.
+'''
+
 from __future__ import absolute_import
 
-from flask import Flask, render_template, url_for, redirect, request
 import os
+import pandas as pd
+
+from flask import Flask, render_template, url_for, redirect, request
 from werkzeug import secure_filename
 from flask_admin import AdminIndexView
 from flask.ext.security import Security, SQLAlchemyUserDatastore, \
@@ -16,7 +33,6 @@ from flask_security import Security, SQLAlchemyUserDatastore, \
 # from flask.ext.login import LoginManager
 from flask_admin.form import BaseForm
 from wtforms.fields import SelectField, StringField
-import pandas as pd
 
 from clic.web.api import api, fetchClusters, fetchKeywords
 from clic.chapter_repository import ChapterRepository

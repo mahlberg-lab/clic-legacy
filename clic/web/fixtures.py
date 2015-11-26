@@ -1,3 +1,15 @@
+# -*- coding: utf-8 -*-
+
+'''
+fixtures.py is a one-off script that loads textfiles into a postgres database
+using the models defined in models.py
+
+fixtures.py uses an command line argument:
+
+    PYTHONPATH=/your/path/to/clic python fixtures.py path/to/input_dir
+
+'''
+
 import json
 import os
 import sys

@@ -1,3 +1,10 @@
+# -*- coding: utf-8 -*-
+
+'''
+The basic config for the app can be found in this file. It is imported in
+index.py as part of the construction of the app variable.
+'''
+
 SQLALCHEMY_DATABASE_URI = "postgresql://clic-dickens:charles@localhost/db_annotation"
 DEBUG = False
 DEBUG_TB_INTERCEPT_REDIRECTS = False

@@ -1,3 +1,13 @@
+# -*- coding: utf-8 -*-
+
+'''
+This file is an extension of index.py. It generates the raw json API that
+the keywords, cluster, and concordances use(d).
+
+It needs to be refactored.
+'''
+
+
 from __future__ import absolute_import  ## help python find modules within clic package (see John H email 09.04.2014)
 from flask import Blueprint, request
 import json

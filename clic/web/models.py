@@ -1,3 +1,13 @@
+# -*- coding: utf-8 -*-
+
+'''
+models.py defines the SQL tables that CLiC uses. These classes
+provide a python interface to the SQL database so that you can write python
+code that automatically queries the database.
+
+This is heavily dependent on Flask-SQLAlchmey and SQLAlchemy
+'''
+
 from sqlalchemy.dialects.postgresql import JSON
 from flask.ext.security import UserMixin, RoleMixin
 from flask.ext.sqlalchemy import SQLAlchemy
