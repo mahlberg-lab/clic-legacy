@@ -33,6 +33,8 @@ from flask_security import Security, SQLAlchemyUserDatastore, \
 # from flask.ext.login import LoginManager
 from flask_admin.form import BaseForm
 from wtforms.fields import SelectField, StringField
+from flask_admin.contrib.sqla import tools
+from sqlalchemy import or_
 
 from clic.web.api import api, fetchClusters, fetchKeywords
 from clic.chapter_repository import ChapterRepository
@@ -40,8 +42,6 @@ from clic.kwicgrouper import KWICgrouper, concordance_for_line_by_line_file
 from clic.web.forms import BOOKS, SUBSETS
 from clic.web.models import db, Annotation, Category, Role, User, List, Tag, Note, Subset
 
-
-# app = Flask('clic.web', static_url_path='')
 app = Flask(__name__, static_url_path='')
 app.register_blueprint(api, url_prefix='/api')
 app.config.from_pyfile('config.py')
@@ -60,14 +60,6 @@ class ExtendedRegisterForm(RegisterForm):
 
 user_datastore = SQLAlchemyUserDatastore(db, User, Role)
 security = Security(app, user_datastore, register_form=ExtendedRegisterForm)
-
-# login_manager = LoginManager()
-# login_manager.init_app(app)
-
-# @login_manager.user_loader
-# def load_user(user_id):
-#    return User.get(user_id)
-
 
 '''
 Application routes
@@ -356,98 +348,7 @@ def patterns():
 # User annotation of subsets using Flask_admin
 #==============================================================================
 
-# limit the access to user that can log in
-# https://github.com/flask-admin/flask-admin/issues/1049 or better:
-# https://github.com/flask-admin/flask-admin/blob/master/examples/auth/app.py
-
-# Create customized model view class
-class SecuredModelView(sqla.ModelView):
-
-    def is_accessible(self):
-        if not current_user.is_active() or not current_user.is_authenticated():
-            return False
-
-        if current_user.has_role('superman'):
-            return True
-
-        return False
-
-    def _handle_view(self, name, **kwargs):
-        """
-        Override builtin _handle_view in order to redirect users when a view is not accessible.
-        """
-        if not self.is_accessible():
-            if current_user.is_authenticated():
-                # permission denied
-                abort(403)
-            else:
-                # login
-                return redirect(url_for('security.login', next=request.url))
-
-# @security.context_processor
-# def security_context_processor():
-#     return dict(
-#         admin_base_template=admin.base_template,
-#         admin_view=admin.index_view,
-#         h=admin_helpers,
-#     )
-
-
-from flask_admin.contrib.sqla import tools
-from sqlalchemy import or_
-
-class PhraseSearchModelView(ModelView):
-
-    # https://github.com/flask-admin/flask-admin/blob/master/flask_admin/contrib/sqla/tools.py
-    # https://github.com/flask-admin/flask-admin/blob/master/flask_admin/contrib/sqla/view.py#L804
-    # https://github.com/flask-admin/flask-admin/blob/master/flask_admin/templates/bootstrap3/admin/model/layout.html
-
-    def _apply_search(self, query, count_query, joins, count_joins, search):
-        """
-            Apply search to a query.
-        """
-        # just disable the split to make it work
-        terms = search.split(' ')
-
-        for term in terms:
-            if not term:
-                continue
-
-            stmt = tools.parse_like_term(term)
-
-            filter_stmt = []
-            count_filter_stmt = []
-
-            for field, path in self._search_fields:
-                query, joins, alias = self._apply_path_joins(query, joins, path, inner_join=False)
-
-                count_alias = None
-
-                if count_query is not None:
-                    count_query, count_joins, count_alias = self._apply_path_joins(count_query,
-                                                                                   count_joins,
-                                                                                   path,
-                                                                                   inner_join=False)
-
-                column = field if alias is None else getattr(alias, field.key)
-                filter_stmt.append(column.ilike(stmt))
-
-                if count_filter_stmt is not None:
-                    column = field if count_alias is None else getattr(count_alias, field.key)
-                    count_filter_stmt.append(column.ilike(stmt))
-
-            query = query.filter(or_(*filter_stmt))
-
-            if count_query is not None:
-                count_query = count_query.filter(or_(*count_filter_stmt))
-
-        return query, count_query, joins, count_joins
-
-
-from flask_admin.contrib.sqla.filters import FilterLike
-# FilterLike(Tag.owner, 'Tag owner')
-
-class SubsetModelView(PhraseSearchModelView):
+class SubsetModelView(ModelView):
     # 'notes.owner.name' works, but cannot be distinguished
     # column_filters = ('book', 'abbr', 'kind', 'corpus', 'text', 'notes', 'tags', 'tags.owner.name', 'tags.owner.email', )
     column_filters = ('book', 'abbr', 'kind', 'text', 'notes', 'tags', 'tags.owner.name', 'tags.owner.email', )
@@ -479,42 +380,15 @@ class SubsetModelView(PhraseSearchModelView):
         # return current_user.has_role('can_annotate')
         return current_user.is_active()
 
-    # def edit_form(self, obj, *args, **kwargs):
-    #
-    #     class SubsetEditForm(BaseForm):
-    #         # from flask_admin.form.fields import Select2Field
-    #         user_specific_tags =  [(tag.id, tag.name) for tag in Tag.query.filter_by(owner=current_user).all()]
-    #         tags = SelectField('Tags', choices=user_specific_tags, coerce=int)
-    #         print tags
-    #         # first_name = StringField('Username', current_user.name)
-    #
-    #     form = SubsetEditForm(obj=obj)
-    #     # return super(SubsetModelView, self).edit_form(form=form, *args, **kwargs)
-    #     return form
-
     def edit_form(self, obj):
         return self._use_filtered_tags(super(SubsetModelView, self).edit_form(obj))
 
-    # Logic
     def _use_filtered_tags(self, form):
         form.tags.query_factory = self._get_tags_list
         return form
 
     def _get_tags_list(self):
         return self.session.query(Tag).filter_by(owner=current_user).all()
-
-    # def get_query(self):
-    #     return self.session.query(self.model).filter(self.model.tags.user==current_user)
-
-    # def get_list_form(self):
-    #     return self.scaffold_list_form(CustomFieldList)
-
-    # def edit_form(self, obj):
-    #     form = model_form(models.Product, ProductEditForm)
-    #    if obj.searchType:
-    #            param_choices = [(x.id, x.label) for x in (obj.searchType.required_fields + obj.searchType.optional_fields)]
-    #            form.params.choices=param_choices
-    #        return form(obj=obj)
 
 
 class TagModelView(ModelView):
@@ -583,7 +457,6 @@ class NoteModelView(ModelView):
 
     def _get_owner_list(self):
         return self.session.query(User).filter_by(id=current_user.id).all()
-
 
 
 class UserAdmin(sqla.ModelView):
