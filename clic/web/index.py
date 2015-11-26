@@ -20,20 +20,17 @@ import pandas as pd
 
 from flask import Flask, render_template, url_for, redirect, request
 from werkzeug import secure_filename
-from flask_admin import AdminIndexView
-from flask.ext.security import Security, SQLAlchemyUserDatastore, \
-    UserMixin, RoleMixin, login_required
+
 from flask.ext.admin.contrib import sqla
 from flask_admin import Admin, BaseView, expose, AdminIndexView
-from flask_mail import Mail
 from flask_admin.contrib.sqla import ModelView
 from flask.ext.admin.contrib.sqla.view import func
+from flask_admin.form import BaseForm
+from flask_admin.contrib.sqla import tools
+from flask_mail import Mail
 from flask_security import Security, SQLAlchemyUserDatastore, \
     UserMixin, RoleMixin, login_required, current_user
-# from flask.ext.login import LoginManager
-from flask_admin.form import BaseForm
 from wtforms.fields import SelectField, StringField
-from flask_admin.contrib.sqla import tools
 from sqlalchemy import or_
 
 from clic.web.api import api, fetchClusters, fetchKeywords
