@@ -22,7 +22,7 @@ MAIL_PASSWORD = 'password'
 # https://pythonhosted.org/Flask-Security/models.html
 # https://pythonhosted.org/Flask-Security/configuration.html
 SECURITY_POST_LOGIN_VIEW = "/annotation"
-SECURITY_REGISTERABLE = True
+SECURITY_REGISTERABLE = False
 SECURITY_REGISTER_URL = "/charlesdickens"
 SECURITY_POST_REGISTER_VIEW = "/annotation"
 SECURITY_TRACKABLE = False
