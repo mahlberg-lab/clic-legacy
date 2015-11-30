@@ -377,15 +377,15 @@ class SubsetModelView(ModelView):
         # return current_user.has_role('can_annotate')
         return current_user.is_active()
 
-    def edit_form(self, obj):
-        return self._use_filtered_tags(super(SubsetModelView, self).edit_form(obj))
-
-    def _use_filtered_tags(self, form):
-        form.tags.query_factory = self._get_tags_list
-        return form
-
-    def _get_tags_list(self):
-        return self.session.query(Tag).filter_by(owner=current_user).all()
+    # def edit_form(self, obj):
+    #     return self._use_filtered_tags(super(SubsetModelView, self).edit_form(obj))
+    #
+    # def _use_filtered_tags(self, form):
+    #     form.tags.query_factory = self._get_tags_list
+    #     return form
+    #
+    # def _get_tags_list(self):
+    #     return self.session.query(Tag).filter_by(owner=current_user).all()
 
 
 class TagModelView(ModelView):
