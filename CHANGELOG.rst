@@ -1,3 +1,20 @@
+1.3
+---
+* adds a user classification and annotation module that is only accessible for users with specific credentials
+* allows users to create custom, user-specific tags and add these to subsets
+* uses a postgreSQL database to store subsets, tags, notes, users, and roles
+* documents the creation of tags, advanced filtering of subsets, phrases searches, and exporting
+* allows for user-annotated csv-exports of up to 2000 rows
+* adds advanced filtering to the subsets
+  - including filtering on book name, abbreviation, user, text, etc.
+  - using different filtering types as 'contains', 'not contains', 'in list', etc.
+* adds a quick search box and documents its functionality
+* enables sorting of subsets
+* adds pagination
+* enables user and role management
+* hedges off the user annotation from the public site
+* implements a different design to highlight that this module is not read-only
+
 1.2
 ---
 * adds a pattern module that allows advance concordance analysis (aka KWICgrouper)
