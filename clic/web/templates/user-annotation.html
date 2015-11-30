@@ -106,7 +106,10 @@
     <h3 class="without-pills">How to perform a phrase search?</h3>
           The text filter
           allows searching for phrases (for instance, <i>I don't know what I</i>).
-          No quotation marks are needed.
+          No quotation marks are needed. The interface does not recognize word boundaries and is not
+          case-sensitive, so <i>I don't know what I</i> returns subsets that contains
+          <i>I don't know what <b>I</b></i> and <i>I don't know what <b>it</b></i>. To only find cases of
+          <i>I don't know what I</i> append a space or punctuation mark to the phrase.  
 
     <h3 class="without-pills">Quick searches</h3>
       The purpose of the main search box is to allow for quick searches in the entire corpus.
