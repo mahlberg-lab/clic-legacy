@@ -495,4 +495,4 @@ if __name__ == '__main__':
     from flask_debugtoolbar import DebugToolbarExtension
     app.debug = True
     toolbar = DebugToolbarExtension(app)
-    app.run()
+    app.run(host='0.0.0.0', port=5000, debug=True)
