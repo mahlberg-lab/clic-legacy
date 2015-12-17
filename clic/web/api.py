@@ -92,7 +92,7 @@ def processArgs(args, method):
         else:
             testMod = ''
             Group = str(args['testIdxGroup'])
-            testIdxName = "{0}".format(Group)
+            testIdxName = "chapter-idx" # "{0}".format(Group)
 
         methodArgs.insert(0, testIdxName)
         book_collection = args.getlist('testCollection') ## args is a multiDictionary: use .getlist() to access individual books
