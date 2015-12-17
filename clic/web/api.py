@@ -101,7 +101,10 @@ def processArgs(args, method):
 
     if method == 'keywords':
         Group = str(args['testIdxGroup'])
-        if not str(args["testIdxMod"]) == 'chapter':
+        # fix for 1-grams in the whole text (which need chapter-idx)
+        if str(args["testIdxMod"]) == 'chapter' and Group == 'idx':
+            testIdxName = "chapter-idx"
+        elif not str(args["testIdxMod"]) == 'chapter':
             testMod = str(args["testIdxMod"])
             testIdxName = "{0}-{1}".format(testMod, Group)
         else:
@@ -113,7 +116,10 @@ def processArgs(args, method):
         methodArgs.insert(1, book_collection) ## test corpus
 
         refbook_collection = args.getlist('refCollection')
-        if not str(args["refIdxMod"]) == 'chapter':
+        # fix for 1-grams in the whole text (which need chapter-idx)
+        if str(args["refIdxMod"]) == 'chapter' and Group == 'idx':
+                refIdxName = "chapter-idx"
+        elif not str(args["refIdxMod"]) == 'chapter':
             refMod = str(args['refIdxMod'])
             refIdxName = "{0}-{1}".format(refMod, Group)
         else:
