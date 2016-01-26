@@ -1,6 +1,7 @@
 The MIT License (MIT)
 
-Copyright (c) 2015 The University of Nottingham
+Copyright (c) September 2015-2016 The University of Birmingham
+Copyright (c) October 2013-August 2015 The University of Nottingham
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
