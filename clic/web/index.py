@@ -360,7 +360,7 @@ class SubsetModelView(ModelView):
 
     # editing
     edit_modal = True
-    form_excluded_columns = ['book', 'abbr', 'kind', 'corpus', 'text', 'notes']
+    form_excluded_columns = ['book', 'abbr', 'kind', 'corpus', 'text',]
     # nice but not what we are looking for:
     # inline_models = (Tag, Note)
 
