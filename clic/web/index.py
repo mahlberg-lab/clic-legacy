@@ -482,7 +482,7 @@ admin = Admin(
 
 admin.add_view(SubsetModelView(Subset, db.session))
 admin.add_view(TagModelView(Tag, db.session))
-# admin.add_view(NoteModelView(Note, db.session))
+admin.add_view(NoteModelView(Note, db.session))
 admin.add_view(UserAdmin(User, db.session))
 admin.add_view(RoleAdmin(Role, db.session))
 
