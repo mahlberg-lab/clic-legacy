@@ -369,7 +369,7 @@ class SubsetModelView(ModelView):
     can_delete = False  # disable model deletion
     can_edit = True  # TODO disable editable fields
     can_export = True  # FIXME
-    export_max_rows = 2000
+    export_max_rows = 10000
 
     page_size = 50  # the number of entries to display on the list view
 
