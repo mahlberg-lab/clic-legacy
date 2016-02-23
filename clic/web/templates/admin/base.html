@@ -25,6 +25,13 @@
     {% endblock %}
     {% block head_tail %}
     {% endblock %}
+
+  <style>
+      .line-break-off {
+        white-space: nowrap;
+      }
+  </style>
+
   </head>
   <body>
     {% block page_body %}
@@ -53,9 +60,12 @@
           {% block menu_links %}
           <ul class="nav navbar-nav navbar-right">
             {{ layout.menu_links() }}
-            <div class="nav nav-pills" style="padding-top:0.4em"><li><a href="/" class="nav nav-pills">Back to CLiC</a>
-            </li></div>
+            <li class="nav nav-pills" style="padding-top:0.4em"><a id="line-breaks" class="nav nav-pills" href="#">Toggle line-breaks</a>
+              </li>
+            <li class="nav nav-pills" style="padding-top:0.4em"><a href="/" class="nav nav-pills">Back to CLiC</a>
+              </li>
           </ul>
+
           {% endblock %}
           {% block access_control %}
           {% endblock %}
@@ -76,7 +86,18 @@
     <script src="{{ admin_static.url(filename='vendor/jquery.min.js', v='2.1.4') }}" type="text/javascript"></script>
     <script src="{{ admin_static.url(filename='bootstrap/bootstrap3/js/bootstrap.min.js', v='3.3.5') }}" type="text/javascript"></script>
     <script src="{{ admin_static.url(filename='vendor/moment.min.js', v='2.9.0') }}" type="text/javascript"></script>
-    <script src="{{ admin_static.url(filename='vendor/select2/select2.min.js', v='3.5.2') }}" type="text/javascript"></script>
+    <script src="{{ admin_static.url(filename='vendor/select2/select2.min.js', v='3.5.2') }}" type="text/javascript"></script>]
+
+    <script>
+    $(document).ready(function () {
+    //your code here
+    $( "#line-breaks" ).click(function() {
+      $( "table" ).toggleClass( "line-break-off" );
+    });
+
+    //document.getElementById('line-breaks').onclick = nameOfFunctionToBeCalled;
+    });
+    </script>
     {% endblock %}
 
     {% block tail %}
