@@ -111,7 +111,7 @@ class Concordance(object):
                 end = hit.end()
                 if start < self.length:
                     left = self.text[:start]
-                else: 
+                else:
                     left = self.text[start-self.length:start]
                 term = self.text[start:end]
                 right = self.text[start+len(self.term):start+len(self.term)+self.length]
