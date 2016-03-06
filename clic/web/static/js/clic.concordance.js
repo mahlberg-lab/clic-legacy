@@ -245,6 +245,7 @@
             var that = this;
 
             $('#dataTableConcordance').dataTable({
+
                 // counter on column0, recounts when filter see http://www.datatables.net/release-datatables/examples/api/counter_column.html
                 fnDrawCallback: function (oSettings) {
                     var that = this;
@@ -280,6 +281,7 @@
                 // duplicate controls iflp
                 // plus add dataTools eg save
                 sDom: '<iTf>rt<if>',
+                // retrieve: true,
                 oTableTools: {
                     aButtons: [
                         "csv",

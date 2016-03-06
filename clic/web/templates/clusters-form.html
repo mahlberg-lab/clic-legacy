@@ -6,7 +6,7 @@
     Clusters Search {{ super() }}
 {% endblock %}
 
-{% block body %}
+{% block main_body %}
   <h2 class="without-pills">Clusters Search</h2>
 
   <form role="search" action="{{ url_for('clusters') }}" method="get" class="row">
@@ -14,18 +14,18 @@
       <div class="col-md-4">
           <label class="pull-left clicSelectSmallLabel">Cluster</label>
           <select name="testIdxGroup" class="form-control input-sm clicSelectSmall">
-              <option value="1gram-idx">1-gram</option>
-              <option value="2gram-idx">2-gram</option>
+              <option value="idx">1-gram</option>
+              <!-- <option value="2gram-idx">2-gram</option> -->
               <option selected value="3gram-idx">3-gram</option>
               <option value="4gram-idx">4-gram</option>
               <option value="5gram-idx">5-gram</option>
-              <option value="6gram-idx">6-gram</option>
+              <!--<option value="6gram-idx">6-gram</option>
               <option value="7gram-idx">7-gram</option>
               <option value="8gram-idx">8-gram</option>
               <option value="9gram-idx">9-gram</option>
               <option value="10gram-idx">10-gram</option>
               <option value="11gram-idx">11-gram</option>
-              <option value="12gram-idx">12-gram</option>
+              <option value="12gram-idx">12-gram</option>-->
           </select>
 
           <h4>Books</h4>
@@ -105,7 +105,7 @@
 
 {% block scripts %}
   {{ super() }}
-  
+
   <script>
     $(function () {
         // populate initial Books text from JSON

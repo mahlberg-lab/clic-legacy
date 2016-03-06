@@ -1,0 +1,240 @@
+{% extends "layout/default.html" %}
+
+{% set active_page = 'subsets' %}
+
+{% block title %}
+    Subsets {{ super() }}
+{% endblock %}
+
+{% block main_body %}
+    <form action="/subsets/" method=get>
+    <h3 class="without-pills">Choose a subset:</h2>
+
+           <div class="radio">
+                <label>
+                    <input type="radio" name="subset" id="subset" value="quotes">
+                    Quotes
+                </label>
+            </div>
+            <div class="radio">
+                <label>
+                    <input type="radio" name="subset" id="subset" value="long_suspensions" checked>
+                    Long suspensions (5 words or more)
+                </label>
+            </div>
+            <div class="radio">
+                <label>
+                    <input type="radio" name="subset" id="subset" value="short_suspensions">
+                    Short suspensions (4 words or less)
+                 </label>
+             </div>
+            <div class="radio">
+                <label>
+                    <input type="radio" name="subset" id="subset" value="all_suspensions">
+                    All suspensions (short and long)
+                 </label>
+             </div>
+           <div class="radio">
+                <label>
+                    <input type="radio" name="subset" id="subset" value="non_quotes">
+                    Non-quotes
+                </label>
+            </div>
+           <div class="radio">
+                <label>
+                    <input type="radio" name="subset" id="subset" value="extended_quotes">
+                    Extended quotes
+                </label>
+            </div>
+
+
+    <h3 class="without-pills" style="margin-bottom:-15px">Choose a book:</h2>
+        <div class="modal-body">
+        <div id="booksModalCol1" class="col-md-6">
+        <div><h4>Dickens</h4></div>
+
+        <div id="otherChk">
+        <div class="radio"><label><input class="chkDickens" type=
+        "radio" name="book" value="BH" checked><b>Bleak
+        House</b><br>
+        (354,362 words; 138,453 quotes, 215,909 non-quotes)</label></div>
+        <div class="radio"><label><input class="chkDickens" type=
+        "radio" name="book" value="BR"><b>Barnaby
+        Rudge</b><br>
+        (254,127 words; 82,931 quotes, 171,196 non-quotes)</label></div>
+        <div class="radio"><label><input class="chkDickens" type=
+        "radio" name="book" value="DC"><b>David
+        Copperfield</b><br>
+        (356,233 words; 113,501 quotes, 242,732 non-quotes)</label></div>
+        <div class="radio"><label><input class="chkDickens" type=
+        "radio" name="book" value="DS"><b>Dombey and
+        Son</b><br>
+        (356,405 words; 107,613 quotes, 248,792 non-quotes)</label></div>
+        <div class="radio"><label><input class="chkDickens" type=
+        "radio" name="book" value="ED"><b>The Mystery
+        of Edwin Drood</b><br>
+        (94,126 words; 39,872 quotes, 54,254 non-quotes)</label></div>
+        <div class="radio"><label><input class="chkDickens" type=
+        "radio" name="book" value="GE"><b>Great
+        Expectations</b><br>
+        (185,199 words; 52,124 quotes, 133,075 non-quotes)</label></div>
+        <div class="radio"><label><input class="chkDickens" type=
+        "radio" name="book" value="HT"><b>Hard
+        Times</b><br>
+        (103,486 words; 44,519 quotes, 58,967 non-quotes)</label></div>
+        <div class="radio"><label><input class="chkDickens" type=
+        "radio" name="book" value="LD"><b>Little
+        Dorrit</b><br>
+        (338,384 words; 119,848 quotes, 218,536 non-quotes)</label></div>
+        <div class="radio"><label><input class="chkDickens" type=
+        "radio" name="book" value="MC"><b>Martin
+        Chuzzlewit</b><br>
+        (335,750 words; 128,968 quotes, 206,782 non-quotes)</label></div>
+        <div class="radio"><label><input class="chkDickens" type=
+        "radio" name="book" value="NN"><b>Nicholas
+        Nickleby</b><br>
+        (321,378 words; 124,724 quotes, 196,654 non-quotes)</label></div>
+        <div class="radio"><label><input class="chkDickens" type=
+        "radio" name="book" value="OCS"><b>The Old
+        Curiosity Shop</b><br>
+        (217,447 words; 62,674 quotes, 154,773 non-quotes)</label></div>
+        <div class="radio"><label><input class="chkDickens" type=
+        "radio" name="book" value="OMF"><b>Our Mutual
+        Friend</b><br>
+        (326,116 words; 148,904 quotes, 177,212 non-quotes)</label></div>
+        <div class="radio"><label><input class="chkDickens" type=
+        "radio" name="book" value="OT"><b>Oliver
+        Twist</b><br>
+        (157,020 words; 52,117 quotes, 104,903 non-quotes)</label></div>
+        <div class="radio"><label><input class="chkDickens" type=
+        "radio" name="book" value="PP"><b>Pickwick
+        Papers</b><br>
+        (299,674 words; 88,457 quotes, 211,217 non-quotes)</label></div>
+        <div class="radio"><label><input class="chkDickens" type=
+        "radio" name="book" value="TTC"><b>A Tale of
+        Two Cities</b><br>
+        (136,100 words; 43,906 quotes, 92,194 non-quotes)</label></div>
+        </div>
+        </div>
+        <div id="booksModalCol2" class="col-md-6">
+        <div><h4>Other 19thC literature</h4></div>
+
+        <div class="radio"><label><input class="chkNtc" type="radio"
+        name="book" value="AgnesG"><b>Agnes Grey</b><br>
+        (68,197 words; 21,986 quotes, 46,211 non-quotes)</label></div>
+        <div class="radio"><label><input class="chkNtc" type="radio"
+        name="book" value="Antoni"><b>Antonina, or the
+        Fall of Rome</b><br>
+        (166,517 words; 36,508 quotes, 130,009 non-quotes)</label></div>
+        <div class="radio"><label><input class="chkNtc" type="radio"
+        name="book" value="arma"><b>Armadale</b><br>
+        (297,373 words; 124,828 quotes, 172,545 non-quotes)</label></div>
+        <div class="radio"><label><input class="chkNtc" type="radio"
+        name="book" value="cran"><b>Cranford</b><br>
+        (70,935 words; 17,928 quotes, 53,007 non-quotes)</label></div>
+        <div class="radio"><label><input class="chkNtc" type="radio"
+        name="book" value="Deronda"><b>Daniel
+        Deronda</b><br>
+        (310,984 words; 103,607 quotes, 207,377 non-quotes)</label></div>
+        <div class="radio"><label><input class="chkNtc" type="radio"
+        name="book" value="dracula"><b>Dracula</b><br>
+        (160,538 words; 52,420 quotes, 108,118 non-quotes)</label></div>
+        <div class="radio"><label><input class="chkNtc" type="radio"
+        name="book" value="emma"><b>Emma</b><br>
+        (160,312 words; 77,633 quotes, 82,679 non-quotes)</label></div>
+        <div class="radio"><label><input class="chkNtc" type="radio"
+        name="book" value="frank"><b>Frankenstein</b><br>
+        (74,984 words; 13,961 quotes, 61,023 non-quotes)</label></div>
+        <div class="radio"><label><input class="chkNtc" type="radio"
+        name="book" value="jane"><b>Jane Eyre</b><br>
+        (185,486 words; 78,034 quotes, 107,452 non-quotes)</label></div>
+        <div class="radio"><label><input class="chkNtc" type="radio"
+        name="book" value="Jude"><b>Jude the
+        Obscure</b><br>
+        (145,169 words; 56,791 quotes, 88,378 non-quotes)</label></div>
+        <div class="radio"><label><input class="chkNtc" type="radio"
+        name="book" value="LadyAud"><b>Lady Audley's
+        Secret</b><br>
+        (150,083 words; 62,190 quotes, 87,893 non-quotes)</label></div>
+        <div class="radio"><label><input class="chkNtc" type="radio"
+        name="book" value="mary"><b>Mary Barton</b><br>
+        (160,455 words; 58,886 quotes, 101,569 non-quotes)</label></div>
+        <div class="radio"><label><input class="chkNtc" type="radio"
+        name="book" value="NorthS"><b>North and
+        South</b><br>
+        (182,746 words; 75,128 quotes, 107,618 non-quotes)</label></div>
+        <div class="radio"><label><input class="chkNtc" type="radio"
+        name="book" value="persuasion"
+        ><b>Persuasion</b><br>
+        (83,225 words; 28,653 quotes, 54,572 non-quotes)</label></div>
+        <div class="radio"><label><input class="chkNtc" type="radio"
+        name="book" value="pride"><b>Pride and
+        Prejudice</b><br>
+        (121,747 words; 52,988 quotes, 68,759 non-quotes)</label></div>
+        <div class="radio"><label><input class="chkNtc" type="radio"
+        name="book" value="sybil"><b>Sybil, or the two
+        nations</b><br>
+        (157,936 words; 64,828 quotes, 93,108 non-quotes)</label></div>
+        <div class="radio"><label><input class="chkNtc" type="radio"
+        name="book" value="Tess"><b>Tess of the
+        D'Urbervilles</b><br>
+        (149,657 words; 39,244 quotes, 110,413 non-quotes)</label></div>
+        <div class="radio"><label><input class="chkNtc" type="radio"
+        name="book" value="basker"><b>The Hound of the
+        Baskervilles</b><br>
+        (59,167 words; 32,850 quotes, 26,317 non-quotes)</label></div>
+        <div class="radio"><label><input class="chkNtc" type="radio"
+        name="book" value="Pomp"><b>The Last Days of
+        Pompeii</b><br>
+        (151,309 words; 57,705 quotes, 93,604 non-quotes)</label></div>
+        <div class="radio"><label><input class="chkNtc" type="radio"
+        name="book" value="mill"><b>The Mill on the
+        Floss</b><br>
+        (207,130 words; 69,695 quotes, 137,435 non-quotes)</label></div>
+        <div class="radio"><label><input class="chkNtc" type="radio"
+        name="book" value="dorian"><b>The Picture of
+        Dorian Gray</b><br>
+        (78,702 words; 38,571 quotes, 40,131 non-quotes)</label></div>
+        <div class="radio"><label><input class="chkNtc" type="radio"
+        name="book" value="Prof"><b>The Professor</b><br>
+        (87,628 words; 22,061 quotes, 65,567 non-quotes)</label></div>
+        <div class="radio"><label><input class="chkNtc" type="radio"
+        name="book" value="native"><b>The Return of the
+        Native</b><br>
+        (141,749 words; 55,469 quotes, 86,280 non-quotes)</label></div>
+        <div class="radio"><label><input class="chkNtc" type="radio"
+        name="book" value="alli"><b>The Small House at
+        Allington</b><br>
+        (257,184 words; 90,006 quotes, 167,178 non-quotes)</label></div>
+        <div class="radio"><label><input class="chkNtc" type="radio"
+        name="book" value="Jekyll"><b>The Strange Case of
+        Dr Jekyll and Mr Hide</b><br>
+        (25,596 words; 7,322 quotes, 18,274 non-quotes)</label></div>
+        <div class="radio"><label><input class="chkNtc" type="radio"
+        name="book" value="wwhite"><b>The Woman in
+        White</b><br>
+        (246,671 words; 72,515 quotes, 174,156 non-quotes)</label></div>
+        <div class="radio"><label><input class="chkNtc" type="radio"
+        name="book" value="vanity"><b>Vanity Fair</b><br>
+        (303,137 words; 54,573 quotes, 248,564 non-quotes)</label></div>
+        <div class="radio"><label><input class="chkNtc" type="radio"
+        name="book" value="VivianG"><b>Vivian
+        Grey</b><br>
+        (191,939 words; 90,777 quotes, 101,162 non-quotes)</label></div>
+        <div class="radio"><label><input class="chkNtc" type="radio"
+        name="book" value="wh"><b>Wuthering
+        Heights</b><br>
+        (116,520 words; 49,817 quotes, 66,703 non-quotes)</label></div>
+        </div>
+        <div class="clearfix"></div>
+        </div>
+        <div class="modal-footer">
+        <button type="submit" class="btn btn-primary pull-right">Display subset</button>
+        </div>
+        </div>
+     </form>
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+{% endblock %}

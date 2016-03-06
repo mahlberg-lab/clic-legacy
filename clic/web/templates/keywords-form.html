@@ -6,28 +6,28 @@
     Keywords Search {{ super() }}
 {% endblock %}
 
-{% block body %}
+{% block main_body %}
   <h2 class="without-pills">Keywords Search</h2>
 
   <form role="search" action="{{ url_for('keywords') }}" method="get" class="row">
       <div class="col-md-4">
           <label class="pull-left clicSelectSmallLabel">n-gram</label>
           <select name="testIdxGroup" class="form-control input-sm clicSelectSmall">
-              <option value="1gram-idx">1-gram</option>
-              <option value="2gram-idx">2-gram</option>
+              <option value="idx">1-gram</option>
+              <!-- <option value="2gram-idx">2-gram</option> -->
               <option selected value="3gram-idx">3-gram</option>
               <option value="4gram-idx">4-gram</option>
               <option value="5gram-idx">5-gram</option>
-              <option value="6gram-idx">6-gram</option>
+              <!--<option value="6gram-idx">6-gram</option>
               <option value="7gram-idx">7-gram</option>
               <option value="8gram-idx">8-gram</option>
               <option value="9gram-idx">9-gram</option>
               <option value="10gram-idx">10-gram</option>
               <option value="11gram-idx">11-gram</option>
-              <option value="12gram-idx">12-gram</option>
+              <option value="12gram-idx">12-gram</option>-->
           </select>
 
-          <h4>Test corpus</h4>
+          <h4>Target corpus</h4>
 
           <div id="booksTestMaterial"></div>
 
@@ -137,7 +137,7 @@
           <div class="modal-content">
               <div class="modal-header">
                   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                  <h4 class="modal-title">Choose Books - Test corpus</h4>
+                  <h4 class="modal-title">Choose Books - Target corpus</h4>
               </div>
               <div class="modal-body">
                   <div id="booksModalCol1" class="col-md-6"></div>
@@ -146,8 +146,8 @@
               </div>
               <div class="modal-footer">
                   <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                  <button id="booksModalSubmitTestOnly" type="button" class="btn btn-primary">Test</button>
-                  <button id="booksModalSubmitTestAndRef" type="button" class="btn btn-primary">Test & Ref</button>
+                  <button id="booksModalSubmitTestOnly" type="button" class="btn btn-primary">Target</button>
+                  <button id="booksModalSubmitTestAndRef" type="button" class="btn btn-primary">Target & Ref</button>
               </div>
           </div>
           <!-- /.modal-content -->

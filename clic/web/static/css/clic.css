@@ -71,8 +71,8 @@ h2.with-pills {
 }
 
 .dataTables_wrapper > div {
-    border: 1px solid #666;
-    padding: 6px;
+    # border: 1px solid #666;
+    # padding: 6px;
     min-height: 40px;
 }
 .dataTables_filter > label {

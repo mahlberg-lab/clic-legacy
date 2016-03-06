@@ -6,17 +6,48 @@
   {{ super() }}
 
   <link href="/js/thirdparty/DataTables1.10.0-beta.2/media/css/dataTables.bootstrap.css" rel="stylesheet">
-  <link href="/js/thirdparty/pace-0.5.1/themes/pace-theme-loading-bar.css" rel="stylesheet"/>
+  <link href="/js/thirdparty/pace-0.5.1/themes/pace-theme-center-circle-uon.css" rel="stylesheet"/>
 {% endblock %}
 
 {% block title %}
-    Keywords Search {{ super() }}
+    Keywords {{ super() }}
 {% endblock %}
 
-{% block body %}
+{% block main_body %}
   <h2 class="without-pills">Keywords Results</h2>
 
-  <div id="tableContainer"></div>
+  <div id="resultsWrap">
+    <div id="tableContainer">
+       <table style="width: 0px; cursor:pointer;" aria-describedby="dataTableKeywords_info" class="table table-striped table-hover dataTable no-footer uonDatatable" id="dataTableKeywords">
+         <thead>
+            <tr role="row">
+              <th aria-label="No" style="width: 0px;" colspan="1" rowspan="1" class="sorting_asc">No</th>
+              <th aria-label="n-gram: activate to sort column ascending" style="width: 0px;" colspan="1" rowspan="1" aria-controls="dataTableKeywords" tabindex="0" class="nowrap sorting">n-gram</th>
+              <th aria-label="Target Freq: activate to sort column ascending" style="width: 0px;" colspan="1" rowspan="1" aria-controls="dataTableKeywords" tabindex="0" class="nowrap sorting">Test Freq</th>
+              <th aria-label="%: activate to sort column ascending" style="width: 0px;" colspan="1" rowspan="1" aria-controls="dataTableKeywords" tabindex="0" class="sorting">%</th>
+              <th aria-label="Ref Freq: activate to sort column ascending" style="width: 0px;" colspan="1" rowspan="1" aria-controls="dataTableKeywords" tabindex="0" class="nowrap sorting">Ref Freq</th>
+              <th aria-label="%: activate to sort column ascending" style="width: 0px;" colspan="1" rowspan="1" aria-controls="dataTableKeywords" tabindex="0" class="sorting">%</th>
+              <th aria-label="K: activate to sort column ascending" style="width: 0px;" colspan="1" rowspan="1" aria-controls="dataTableKeywords" tabindex="0" class="sorting">K</th>
+              <th aria-label="P: activate to sort column ascending" style="width: 0px;" colspan="1" rowspan="1" aria-controls="dataTableKeywords" tabindex="0" class="sorting">P</th>
+            </tr>
+         </thead>
+        <tbody>
+        {% for keyword in keywords %}
+            <tr class="{{ loop.cycle('odd', 'even') }}">
+                <td class="sorting_1">{{ loop.index }}</td>
+                <td>{{ keyword[1] }}</td>
+                <td>{{ keyword[2] }}</td>
+                <td>{{ keyword[3] }}</td>
+                <td>{{ keyword[4] }}</td>
+                <td>{{ keyword[5] }}</td>
+                <td>{{ keyword[6] }}</td>
+                <td>{{ keyword[7] }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
 {% endblock %}
 
 {% block scripts %}
@@ -32,38 +63,17 @@
   <script>
     $(function () {
 
-        // Get URL params
-        var params = location.search;
-        var host = window.location.hostname;
-
-        jsonUrl = '/api/keywords/' + params; // from the app
-
-        $('#tableContainer').html('<table class="table table-striped table-hover dataTable no-footer uonDatatable" id="dataTableKeywords"></table>');
         var oTable = $('#dataTableKeywords').dataTable({
 
-            "ajax": {
-                "url": jsonUrl,
-                "dataSrc": "keywords",
-                "error": function (xhr, error, thrown) {
-                    alert( 'Sorry. Failed to load data. Please try again.' );
-                }
-            },
-
-            "fnDrawCallback": function ( oSettings ) {
-                /* Need to redo the counters if filtered or sorted */
-                if ( oSettings.bSorted || oSettings.bFiltered )
-                {
-                    for ( var i=0, iLen=oSettings.aiDisplay.length ; i<iLen ; i++ )
-                    {
-                        $('td:eq(0)', oSettings.aoData[ oSettings.aiDisplay[i] ].nTr ).html( i+1 );
-                    }
-                }
+            "fnInitComplete": function () {
+                $('#resultsWrap').show();
+                Pace.stop();
             },
 
             "aoColumns": [
                 { "sTitle": "No" },
                 { "sTitle": "n-gram" ,   "sClass": "nowrap" },
-                { "sTitle": "Test Freq", "sClass": "nowrap" },
+                { "sTitle": "Target Freq", "sClass": "nowrap" },
                 { "sTitle": "%" },
                 { "sTitle": "Ref Freq" , "sClass": "nowrap" },
                 { "sTitle": "%" },
@@ -93,6 +103,26 @@
             // duplicate controls iflp
             "sDom": '<"toolbar"iTf>rt<"toolbar"if>'
         });
-    });
+
+         // this is a quick, tmp solution, we should use awesome-slugify and a template filter instead
+        function slugify(text)
+            {
+            return text.toString().toLowerCase()
+                .replace(/\s+/g, '+')           // Replace spaces with +
+            }
+            //    .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
+            //    .replace(/\-\-+/g, '-')         // Replace multiple - with single -
+            //    .replace(/^-+/, '')             // Trim - from start of text
+            //    .replace(/-+$/, '');            // Trim - from end of text
+            //}
+
+          $('#dataTableKeywords tbody').on('click', 'tr', function () {
+              var data = oTable.fnGetData(this);
+              var term = data[1]
+              var slug = slugify(term)
+              window.location.href = '/concordances/?terms=' + slug + "&testCollection={{testCollection}}&testIdxMod={{testIdxMod}}&selectWords={{selectWords}}";
+          });
+     });
 </script>
+
 {% endblock %}

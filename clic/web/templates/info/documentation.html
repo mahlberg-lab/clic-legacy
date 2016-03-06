@@ -1,0 +1,76 @@
+{% extends "layout/default.html" %}
+
+{% set active_page = 'documentation' %}
+
+
+
+{% block title %}
+    Definitions {{ super() }}
+{% endblock %}
+
+{% block main_body %}
+
+
+<style>
+.suspension {
+    text-decoration: underline dashed;
+    -moz-text-decoration-color: blue; /* Code for Firefox */
+    text-decoration-color: blue;
+}
+
+#square {
+    width: 10px;
+    height: 10px;
+    display: inline-block;
+    margin-right: 5px;
+    padding-top: 2px;
+}
+
+</style>
+
+
+  <div class="row">
+      <div class="col-sm-9">
+          <h2 class="without-pills">Definitions</h2>
+
+
+      <div class="well">
+        <p> Rose has been crying and is yet in distress. On her coming in, the ironmaster leaves his chair, takes her arm in his, and remains with her near the door ready to depart.</p>
+        <p> "<span style="color:red">You are taken charge of, you see,</span>" <span class="suspension">says my Lady in her weary manner,</span> "<span style="color:red">and are going away well protected. I have mentioned that you are a very good girl, and you have nothing to cry for.</span>"</p>
+        <p>"<span style="color:red">She seems after all,</span>" <span class="suspension">observes Mr. Tulkinghorn, loitering a little forward with his hands behind him,</span> "<span style="color:red">as if she were crying at going away.</span>"</p>
+      </div>
+
+      <div class="well">
+        <p><div id="square" style="background:blue"></div><b><span class="suspension">suspension</span></b> A narratorial interruption of character speech that does not end with sentence final punctuation.</p>
+        <p><div id="square" style="background:black"></div><b>non-quote</b> Any textual unit that is not a quote.</p>
+        <p><div id="square" style="background:red"></div><b>quote</b> A textual unit that starts and ends with respectively single or double quotation marks. It can represent speech, writing, or thought.</p>
+
+      </div>
+
+      </div>
+      {% include "blocks/twitter.html" %}
+      {% include "blocks/feedback.html" %}
+   </div>
+
+
+<!--
+  <div class="row">
+      <div class="col-md-9">
+          <h2>About the project</h2>
+
+          <p>CLiC (Corpus Linguistics in Cheshire) is developed as part of an AHRC-funded project: “<a href="http://www.nottingham.ac.uk/CRAL/Projects/CLiC.aspx">CLiC Dickens - Characterisation in the representation of speech and body language from a corpus linguistic perspective</a>”.</p>
+
+          <p>The project demonstrates through corpus stylistics how computer-assisted methods can be used to study literary texts and lead to new insights into how readers perceive fictional characters.</p>
+          <p>CLiC specifically supports the analysis of fictional speech and literary body language by enabling the user to search in particular parts of the texts, e.g. in quotes, which typically contain the direct speech of fictional characters in the novels.</p>
+          <p>Initially, the texts that can be searched will be Dickens’s novels and novels written by other 19th century authors.</p>
+
+          <p>For feedback and questions please contact us on email <a href="mailto:clic@nottingham.ac.uk">clic@nottingham.ac.uk</a>.</p>
+
+      </div>
+  </div>
+-->
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+{% endblock %}

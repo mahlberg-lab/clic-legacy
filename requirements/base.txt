@@ -3,4 +3,15 @@ cheshire3 [web,sql] >= 1.1.0c4
 Flask==0.10.1
 Beaker==1.6.4
 uWSGI==2.0.9
-
+Flask-SQLAlchemy==2.0
+alembic==0.7.6
+SQLAlchemy
+Mako==1.0.1
+Flask-Script==2.0.5
+Flask-Migrate==1.4.0
+Flask-Security
+# Flask-Admin
+-e git+https://github.com/flask-admin/flask-admin.git@master#egg=flask-admin
+Flask-Login==0.2.11
+flask-debugtoolbar
+nltk==3.0.5

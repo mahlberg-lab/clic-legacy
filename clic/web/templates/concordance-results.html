@@ -6,14 +6,14 @@
   {{ super() }}
 
   <link href="/js/thirdparty/DataTables1.10.0-beta.2/media/css/dataTables.bootstrap.css" rel="stylesheet">
-  <link href="/js/thirdparty/pace-0.5.1/themes/pace-theme-loading-bar.css" rel="stylesheet"/>
+  <link href="/js/thirdparty/pace-0.5.1/themes/pace-theme-center-circle-uon.css" rel="stylesheet"/>
 {% endblock %}
 
 {% block title %}
     Concordance Search {{ super() }}
 {% endblock %}
 
-{% block body %}
+{% block main_body %}
   <!-- Choose view -->
   <ul class="nav nav-pills pull-right skinny clearfix">
       <li class="active"><a href="#" id="kwicView">KWIC</a></li>
@@ -98,5 +98,8 @@
       });
   })
   ;
+  // for sorting look at datatables.concordance
+  // for the actual datatable  look as clic.concordance.js
+
   </script>
 {% endblock %}

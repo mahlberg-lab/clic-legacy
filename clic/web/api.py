@@ -1,3 +1,13 @@
+# -*- coding: utf-8 -*-
+
+'''
+This file is an extension of index.py. It generates the raw json API that
+the keywords, cluster, and concordances use(d).
+
+It needs to be refactored.
+'''
+
+
 from __future__ import absolute_import  ## help python find modules within clic package (see John H email 09.04.2014)
 from flask import Blueprint, request
 import json
@@ -48,21 +58,23 @@ def concordances():
     concordances = json.dumps(concordances_result)
     return concordances
 
-@cache.cache('keywords', expire=3600) ## expires after 3600 secs
+@cache.cache('keywords') ## no expiry
 def fetchKeywords(args):
     keyworder = Keywords()
     args = processArgs(args, 'keywords')
-    keywords = keyworder.list_keywords(args[0], args[1], args[2], args[3], args[4])
-    return {'keywords' : keywords}
+    keywordlist = keyworder.list_keywords(args[0], args[1], args[2], args[3], args[4])
+    return keywordlist
+    # return {'keywords' : keywords}
 
-@cache.cache('clusters', expire=3600)
+@cache.cache('clusters')
 def fetchClusters(args):
     cluster = Clusters()
     args = processArgs(args, 'clusters')
     clusterlist = cluster.list_clusters(args[0], args[1])
-    return {'clusters' : clusterlist}
+    return clusterlist
+    # return {'clusters' : clusterlist}
 
-@cache.cache('concordances', expire=3600)
+@cache.cache('concordances')
 def fetchConcordance(args):
     concordancer = Concordance()
     args = processArgs(args, 'concordances')
@@ -70,7 +82,6 @@ def fetchConcordance(args):
     return {'concordances' : concordances}
 
 def processArgs(args, method):
-
     methodArgs = []
 
     if method == 'clusters':
@@ -81,7 +92,7 @@ def processArgs(args, method):
         else:
             testMod = ''
             Group = str(args['testIdxGroup'])
-            testIdxName = "{0}".format(Group)
+            testIdxName = "chapter-idx" # "{0}".format(Group)
 
         methodArgs.insert(0, testIdxName)
         book_collection = args.getlist('testCollection') ## args is a multiDictionary: use .getlist() to access individual books
@@ -90,7 +101,10 @@ def processArgs(args, method):
 
     if method == 'keywords':
         Group = str(args['testIdxGroup'])
-        if not str(args["testIdxMod"]) == 'chapter':
+        # fix for 1-grams in the whole text (which need chapter-idx)
+        if str(args["testIdxMod"]) == 'chapter' and Group == 'idx':
+            testIdxName = "chapter-idx"
+        elif not str(args["testIdxMod"]) == 'chapter':
             testMod = str(args["testIdxMod"])
             testIdxName = "{0}-{1}".format(testMod, Group)
         else:
@@ -102,7 +116,10 @@ def processArgs(args, method):
         methodArgs.insert(1, book_collection) ## test corpus
 
         refbook_collection = args.getlist('refCollection')
-        if not str(args["refIdxMod"]) == 'chapter':
+        # fix for 1-grams in the whole text (which need chapter-idx)
+        if str(args["refIdxMod"]) == 'chapter' and Group == 'idx':
+                refIdxName = "chapter-idx"
+        elif not str(args["refIdxMod"]) == 'chapter':
             refMod = str(args['refIdxMod'])
             refIdxName = "{0}-{1}".format(refMod, Group)
         else:
@@ -131,4 +148,3 @@ def processArgs(args, method):
 
 
     return methodArgs
-
