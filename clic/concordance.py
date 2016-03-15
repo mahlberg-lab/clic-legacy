@@ -1,3 +1,9 @@
+# -*- coding: utf-8 -*-
+
+'''
+CLiC Concordance based on cheshire3 indexes.
+'''
+
 import json
 import os
 
@@ -35,8 +41,20 @@ booklist = json.load(raw_booklist)
 
 
 class Concordance(object):
+    '''
+    This concordance takes terms, index names, book selections, and search type
+    as input values and returns json with the search term, ten words to the left and
+    ten to the right, and location information.
+
+    This can be used in an ajax api.
+    '''
 
     def __init__(self):
+        '''
+        Set up a cheshire3 session/connection to the database. This initilisation does
+        not handle the actual search term (cf. build_and_run_query).
+        '''
+
         self.session = Session()
         self.session.database = 'db_dickens'
         self.serv = SimpleServer(self.session,
@@ -50,12 +68,12 @@ class Concordance(object):
 
 
     def build_and_run_query(self, terms, idxName, Materials, selectWords):
-        """
+        '''
         Builds a cheshire query and runs it.
 
         Its output is a tuple of which the first element is a resultset and
         the second element is number of search terms in the query.
-        """
+        '''
 
         subcorpus = []
         for corpus in Materials:

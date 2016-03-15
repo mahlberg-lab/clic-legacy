@@ -1,3 +1,9 @@
+# -*- coding: utf-8 -*-
+
+'''
+Tool to create wordlists based on the entries in an index.
+'''
+
 import os
 import operator
 
@@ -9,8 +15,29 @@ from cheshire3.baseObjects import Session
 cheshirePath = os.path.join('HOME', '/home/cheshire')
 
 class Clusters(object):
+    '''
+    Class that does all the heavy weighting. It makes the connection with
+    cheshire3, uses the input parameters (indexname and subcorpus/Materials) to
+    return a list of words and their total number of occurrences.
+
+    For instance,
+
+
+        the 98021
+        to  78465
+        ...
+
+    or
+        he said  8937
+        she said 6732
+        ...
+
+    '''
 
     def __init__(self):
+        '''
+        Set up the connection to cheshire3.
+        '''
         self.session = Session()
         self.session.database = 'db_dickens'
         self.serv = SimpleServer(self.session,
@@ -23,6 +50,12 @@ class Clusters(object):
         self.logger = self.db.get_object(self.session, 'clusterLogger') ## added to dbs/dickens/config.xml
 
     def list_clusters(self, idxName, Materials):
+        '''
+        Build a list of clusters and their occurrences.
+
+        Limit the list to the first 3000 entries.
+        '''
+
         #self.logger.log(10, 'CREATING CLUSTERS FOR RS: {0} in {1}'.format(idxName, Materials))
         session = self.session
         db = self.db

@@ -1,3 +1,11 @@
+# -*- coding: utf-8 -*-
+
+'''
+Future module to handle the construction of cheshire3 CQL queries.
+
+TODO
+'''
+
 class QueryBuilder(object):
 
     def __init__(self,

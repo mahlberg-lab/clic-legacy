@@ -1,4 +1,6 @@
-"""Corpus Linguistics in Cheshire3 (CLiC)."""
+'''
+Corpus Linguistics in Cheshire3 (CLiC).
+'''
 
 __name__ = "clic"
 __package__ = "clic"

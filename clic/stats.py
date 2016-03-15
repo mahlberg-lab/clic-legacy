@@ -1,7 +1,8 @@
-"""Corpus Statistics."""
+# -*- coding: utf-8 -*-
+
+'''Corpus Statistics.'''
 
 import math
-
 
 def zscore(nOccsCorpus, nOccsSection, sizeCorpus, sizeSection):
     "Caclulate and return z-score."

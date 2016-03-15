@@ -104,4 +104,3 @@ concordance = build_concordance_with_locations("the", 25, 1000)
 len(concordance)
 for line in concordance[:10]:
     print line
-
