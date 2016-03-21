@@ -2,8 +2,6 @@
 
 '''
 Future module to handle the construction of cheshire3 CQL queries.
-
-TODO
 '''
 
 class QueryBuilder(object):

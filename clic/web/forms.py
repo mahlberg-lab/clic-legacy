@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""
+'''
 Created on Fri Jul  3 10:09:45 2015
 
 This files contains some python objects that can be used to validate
@@ -8,7 +8,7 @@ input received via forms. On the long run it should also contains the actual for
 and their validation logic.
 
 @author: jdejoode
-"""
+'''
 
 # from flask_wtf import Form
 # from wtforms import StringField, RadioField

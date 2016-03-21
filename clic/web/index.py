@@ -170,13 +170,13 @@ def chapterView(number, book, word_index=None, search_term=None):
 #==============================================================================
 @app.route('/subsets/', methods=["GET"])
 def subsets():
-    """
+    '''
     This is a quick and dirty method to display the subsets in our db.
     It now uses GET parameters, but should probably use POST parameters
     ideally.
     The basic design for POST parameters was almost ready but there were a
     few issues.
-    """
+    '''
 
 
     book = request.args.get('book')
@@ -289,11 +289,11 @@ def patterns():
 
             # function that can be applied
             def linkify(row, position, term=None, book=None, subset=None):
-                """
+                '''
                 The purpose is to make links in the dataframe.to_html() output clickable.
 
                 # http://stackoverflow.com/a/26614921
-                """
+                '''
                 if pd.notnull(row[position]):
                     return """<a href="/patterns/?{0}={1}&term={2}&book={4}&subset={5}">{3}</a>""".format(position,
                                                                                       row["collocate"],
@@ -306,9 +306,9 @@ def patterns():
             # http://localhost:5000/patterns/?L5=&L4=&L3=&L2=&L1=&term=voice&R1=&R2=&R3=&R4=&R5=&subset=long_suspensions&book=BH
 
             def linkify_process(df, term, book, subset):
-                """
+                '''
                 Linkifies every column from L5-R5
-                """
+                '''
                 for itm in "L5 L4 L3 L2 L1 R1 R2 R3 R4 R5".split():
                     df[itm] = df.apply(linkify, args=([itm, term, book, subset]), axis=1)
                 return df

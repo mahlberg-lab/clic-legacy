@@ -1,0 +1,483 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>CLiC for administrators &mdash; CLiC Dickens 1.3 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="CLiC Dickens 1.3 documentation" href="index.html"/>
+        <link rel="next" title="CLiC for developers" href="apidoc.html"/>
+        <link rel="prev" title="CLiC for end-users" href="endusers.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> CLiC Dickens
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.3
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="endusers.html">CLiC for end-users</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">CLiC for administrators</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#installing-clic-on-your-own-server">Installing CLiC on your own server</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#step-1-install-docker-on-a-vanilla-ubuntu-server">Step 1: Install Docker on a vanilla Ubuntu server</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-2-configure-docker">Step 2: Configure Docker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#excursus-quick-docker-command-guide">Excursus: Quick Docker command guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-3-get-clic-s-docker-image">Step 3: Get CLiC&#8217;s Docker image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-4-get-the-indexes-and-stores">Step 4: Get the indexes and stores</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-5-run-the-docker-container">Step 5: Run the Docker container</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#enjoy-unless">Enjoy, unless ...</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#installing-clic-on-your-own-computer">Installing CLiC on your own computer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#releasing-a-new-version">Releasing a new version</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="apidoc.html">CLiC for developers</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">CLiC Dickens</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>CLiC for administrators</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/admin.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="clic-for-administrators">
+<h1>CLiC for administrators<a class="headerlink" href="#clic-for-administrators" title="Permalink to this headline">¶</a></h1>
+<p>For the deployment of CLiC we heavily rely on Docker. This has several benefits:
+it packages all the dependencies of CLiC together in a simple image and it makes
+a deployment much faster and possible on many different platforms.</p>
+<div class="section" id="installing-clic-on-your-own-server">
+<h2>Installing CLiC on your own server<a class="headerlink" href="#installing-clic-on-your-own-server" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="step-1-install-docker-on-a-vanilla-ubuntu-server">
+<h3>Step 1: Install Docker on a vanilla Ubuntu server<a class="headerlink" href="#step-1-install-docker-on-a-vanilla-ubuntu-server" title="Permalink to this headline">¶</a></h3>
+<div class="code bash highlight-python"><div class="highlight"><pre><span></span># Install Docker in a way that can easily be upgraded
+sudo apt-get update
+
+sudo apt-key adv --keyserver hkp://pgp.mit.edu:80 --recv-keys
+58118e89f3a912897c070adbf76221572c52609d
+
+# open the /etc/apt/sources.list.d/docker.list file in your favorite
+editor. if the file doesn’t exist, create it. and add:
+
+# this is not a command, but something that needs to be pasted in the
+file opened
+
+deb https://apt.dockerproject.org/repo ubuntu-trusty main
+
+sudo apt-get update
+
+# verify that apt is pulling from the right repository.
+
+sudo apt-cache policy docker-engine
+
+sudo apt-get install linux-image-generic-lts-trusty
+
+# you need to reboot, this can cause some issues where the firewall
+settings would not be saved, this was solved by loading the firewall
+explicitly at the restart
+
+sudo reboot
+
+sudo apt-get update
+
+sudo apt-get install docker-engine
+
+sudo docker run hello-world
+</pre></div>
+</div>
+</div>
+<div class="section" id="step-2-configure-docker">
+<h3>Step 2: Configure Docker<a class="headerlink" href="#step-2-configure-docker" title="Permalink to this headline">¶</a></h3>
+<div class="code bash highlight-python"><div class="highlight"><pre><span></span># set UFW’s forwarding policy appropriately.
+# Open /etc/default/ufw file for editing.
+sudo vimsu /etc/default/ufw
+
+# Set the DEFAULT\_FORWARD\_POLICY policy to:
+DEFAULT\_FORWARD\_POLICY=&quot;ACCEPT&quot;
+
+sudo ufw reload
+
+#TODO check if this is persistent
+
+# Allow incoming connections on the Docker port.
+$ sudo ufw allow 2375/tcp
+
+# Configure Docker to start on boot
+# DOCS SAY $ sudo systemctl enable docker
+# but I think:
+
+sudo update-rc.d docker defaults
+</pre></div>
+</div>
+</div>
+<div class="section" id="excursus-quick-docker-command-guide">
+<h3>Excursus: Quick Docker command guide<a class="headerlink" href="#excursus-quick-docker-command-guide" title="Permalink to this headline">¶</a></h3>
+<p>You might have to prepend <code class="docutils literal"><span class="pre">sudo</span></code> to the commands below, depending on your
+environment.</p>
+<div class="code bash highlight-python"><div class="highlight"><pre><span></span># is docker installed
+docker info
+
+# activate docker
+docker-machine start default
+eval &quot;$(docker-machine env default)&quot;
+
+# to find localhost ping
+docker-machine env default
+
+# to build
+cd ~/ImagesDocker/clic-docker/
+docker build -t jdejoode/clic:v0 .
+
+# list images
+docker images
+
+# run a docker image
+docker run -d -P -i -t --name apache11 jdejoode/clic:v0 docker ps
+
+# find info on container
+docker port apache11
+docker logs a5a665d32
+
+# for live updates a la Flask
+docker logs –f a6516a51sd f651
+
+# stop all docker containers
+docker stop $(docker ps -a -q)
+
+# remove them
+docker rm $(docker ps -a -\ **q**\ )
+
+# ssh into container
+docker exec -i -t fbd8112 bash
+
+# command on actual deploy is slightly different for caching and
+rounting purposes:
+# -v /path/on/host:/path/in/container
+docker run -p 80:8080 –v /tmp/cache:/tmp/cache …
+
+docker run -d -P --name clic2 -v
+/bin:/clic-project/clic/dbs/dickens/indexes jdejoode/clic:v0
+
+# to see what processes run in the container
+docker top clic0
+
+# remove untagged images
+docker rmi $(docker images \| grep &quot;^&lt;none&gt;&quot; \| awk &#39;{print $3}&#39;)
+
+# deploy
+# on macbook
+# https://docs.docker.com/docker-hub/repos/
+docker login
+docker push jdejoode/clic:latest
+
+
+# You can also bind Docker containers to specific ports using the-p flag,
+for example:
+$ docker run -d -p 80:5000 training/webapp python app.py
+</pre></div>
+</div>
+</div>
+<div class="section" id="step-3-get-clic-s-docker-image">
+<h3>Step 3: Get CLiC&#8217;s Docker image<a class="headerlink" href="#step-3-get-clic-s-docker-image" title="Permalink to this headline">¶</a></h3>
+<div class="code bash highlight-python"><div class="highlight"><pre><span></span>sudo docker login  # (you may need login details)
+sudo docker pull jdejoode/clic
+</pre></div>
+</div>
+</div>
+<div class="section" id="step-4-get-the-indexes-and-stores">
+<h3>Step 4: Get the indexes and stores<a class="headerlink" href="#step-4-get-the-indexes-and-stores" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal"><span class="pre">TODO</span></code></p>
+</div>
+<div class="section" id="step-5-run-the-docker-container">
+<h3>Step 5: Run the Docker container<a class="headerlink" href="#step-5-run-the-docker-container" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="docutils literal"><span class="pre">path-to</span></code> elements in the following snippets need to be replaced with
+the actual path to your indexes, stores, configs, and code.</p>
+<div class="code bash highlight-python"><div class="highlight"><pre><span></span>sudo docker run -d -p 80:80 -v
+/home/path-to-/indexes:/clic-project/clic/dbs/dickens/indexes -v
+/home/path-to-/stores:/clic-project/clic/dbs/dickens/stores --name
+clic jdejoode/clic:latest
+</pre></div>
+</div>
+<p>What the above command does:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Run a docker container called jdejoode/clic with the latest tag
+as the exact version</li>
+<li>The key parts are the ‘run’ and the image name
+‘jdejoode/clic:latest’</li>
+<li>The –d is used to run docker as a daemon (to keep it running,
+otherwise it only runs a single command)</li>
+<li>-p 80:80 tells the host to forward port 80 to 8080</li>
+<li>-v host:docker mounts two different folders (the indexes and the stores)
+which are essential to clic.</li>
+</ul>
+</div></blockquote>
+<p>Or if you want to be able to update and release new code, you can mount the code
+and the configs (the config file needs to be the one from clic-docker):</p>
+<div class="code bash highlight-python"><div class="highlight"><pre><span></span>docker run -d --name clic-code13 -v
+/Users/path-to-clic-code/clic:/clic-project/clic -v
+/Users/path-to-clic-indexes/indexes:/clic-project/clic/dbs/dickens/indexes -v
+/Users/path-to-clic-stores/stores:/clic-project/clic/dbs/dickens/stores -v
+/Users/path-to-clic-config/config.xml:/clic-project/clic/dbs/dickens/config.xml
+-p 80:8080 -p 5000:5000 jdejoode/clic:latest
+</pre></div>
+</div>
+</div>
+<div class="section" id="enjoy-unless">
+<h3>Enjoy, unless ...<a class="headerlink" href="#enjoy-unless" title="Permalink to this headline">¶</a></h3>
+<p>To troubleshoot the container:</p>
+<div class="code bash highlight-python"><div class="highlight"><pre><span></span># Is the container running?
+sudo docker ps
+
+# Are the right processes running on the container?
+sudo docker top clic  # (where clic is the name of the container)
+
+# Did the volumes mount correctly?
+Exec into the clic container to check manually whether the volumes are mounted
+
+# What do the logs say?
+sudo docker logs afcb70
+
+# What services are listening on what ports?
+sudo netstat –peanut
+
+# Do you get &quot;ACCEPT: iptables: No chain/target/match by that name&quot;
+sudo service docker restart
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="installing-clic-on-your-own-computer">
+<h2>Installing CLiC on your own computer<a class="headerlink" href="#installing-clic-on-your-own-computer" title="Permalink to this headline">¶</a></h2>
+<p>Because of the CLiC is released as a Docker image, you can also install CLiC on
+your own computer (Mac, Windows, or Linux) by simply installing Docker and
+following the system-specific install instructions in the Docker docs.</p>
+</div>
+<div class="section" id="releasing-a-new-version">
+<h2>Releasing a new version<a class="headerlink" href="#releasing-a-new-version" title="Permalink to this headline">¶</a></h2>
+<p>There are several steps that need to be taken for a new release.</p>
+<blockquote>
+<div><blockquote>
+<div><p>1.&nbsp;&nbsp;&nbsp;&nbsp; Prepare the release on github</p>
+<blockquote>
+<div><p>a.&nbsp;&nbsp;&nbsp;&nbsp; Update CHANGELOG.rst</p>
+<p>b.&nbsp;&nbsp;&nbsp;&nbsp; Merge branches into develop and develop into master</p>
+<p>c.&nbsp;&nbsp;   Tag master with the latest version</p>
+<p>d.&nbsp;&nbsp;&nbsp;&nbsp; Git push &amp;&amp; git push &#8211;tags</p>
+</div></blockquote>
+<p>2.&nbsp;&nbsp;&nbsp;&nbsp; Update the date in the Dockerfile (add sth random if you have too
+more than one release on a day, the purpose is to invalidate the Docker
+image cache)</p>
+<blockquote>
+<div><p>a.&nbsp;&nbsp;&nbsp;&nbsp; RUN git clone -b master
+<a class="reference external" href="https://github.com/CentreForCorpusResearch/clic.git">https://github.com/CentreForCorpusResearch/clic.git</a> &amp;&amp; echo &#8220;2015-10-23&#8221;</p>
+<p>b.&nbsp;&nbsp;&nbsp;&nbsp; Docker build –t jdejoode/clic:latest .</p>
+</div></blockquote>
+</div></blockquote>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; i.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; To check build
+on local first:</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ii.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; docker run -d
+&#8211;name clic-debug -v
+/Users/johan/Data/clic/indexes:/clic-project/clic/dbs/dickens/indexes -v
+/Users/johan/Data/clic/stores:/clic-project/clic/dbs/dickens/stores -P
+jdejoode/clic:latest&nbsp;&nbsp; # -P needs to be before image name</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   iii.&nbsp;&nbsp;&nbsp;&nbsp; on mac: docker-machine env default</p>
+<blockquote>
+<div>iv.&nbsp;&nbsp;&nbsp;&nbsp; on mac: docker port clic-debug</div></blockquote>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   v.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; then visit the
+localhost on the right port: for instance, <a class="reference external" href="http://192.168.99.100:32770/">http://192.168.99.100:32770/</a></p>
+<blockquote>
+<div><p>c.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Docker login</p>
+<p>d.&nbsp;&nbsp;&nbsp;&nbsp; Docker push jdejoode/clic:latest</p>
+</div></blockquote>
+<p>3.&nbsp;&nbsp;&nbsp;&nbsp; On the server you want to push to:</p>
+<blockquote>
+<div><p>a.&nbsp;&nbsp;&nbsp;&nbsp; Sudo docker login</p>
+<p>b.&nbsp;&nbsp;&nbsp;&nbsp; Sudo docker pull jdejoode/clic:latest</p>
+<p>c.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Sudo docker ps</p>
+<p>d.&nbsp;&nbsp;&nbsp;&nbsp; Sudo docker stop NAMEOFTHERUNNINGCONTAINER (stop the running
+container, make sure you do not lose data!)</p>
+<p>e.&nbsp;&nbsp;&nbsp;&nbsp; sudo docker run -d -p 80:8080 -v /tmp:/tmp -v
+/home/clicman/indexes:/clic-project/clic/dbs/dickens/indexes -v
+/home/clicman/stores:/clic-project/clic/dbs/dickens/stores &#8211;name clic8
+jdejoode/clic:latest</p>
+</div></blockquote>
+<p>4.&nbsp;&nbsp;&nbsp;&nbsp; Run the tests</p>
+<blockquote>
+<div>a.&nbsp;&nbsp;&nbsp;&nbsp; BASE_URL=&#8217;<a class="reference external" href="http://live/">http://live/</a>&#8216; py.test main.py&nbsp; (in
+clic/tests/functional tests/)</div></blockquote>
+</div></blockquote>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="apidoc.html" class="btn btn-neutral float-right" title="CLiC for developers" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="endusers.html" class="btn btn-neutral" title="CLiC for end-users" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, J. de Joode.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.3',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

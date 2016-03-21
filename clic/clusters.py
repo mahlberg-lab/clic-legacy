@@ -23,13 +23,17 @@ class Clusters(object):
     For instance,
 
 
-        the 98021
-        to  78465
+        ``the 98021``
+
+        ``to  78465``
+
         ...
 
     or
-        he said  8937
-        she said 6732
+        ``he said  8937``
+
+        ``she said 6732``
+
         ...
 
     '''

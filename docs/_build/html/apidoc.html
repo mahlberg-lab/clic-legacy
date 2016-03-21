@@ -1,0 +1,530 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>CLiC for developers &mdash; CLiC Dickens 1.3 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="CLiC Dickens 1.3 documentation" href="index.html"/>
+        <link rel="prev" title="CLiC for administrators" href="admin.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> CLiC Dickens
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.3
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="endusers.html">CLiC for end-users</a></li>
+<li class="toctree-l1"><a class="reference internal" href="admin.html">CLiC for administrators</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">CLiC for developers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#cheshire3">Cheshire3</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#the-data-model">The data-model</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-concordance">CLiC Concordance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-clusters">CLiC Clusters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-keywords">CLiC Keywords</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-chapter_repository">CLiC Chapter Repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-kwicgrouper">CLiC KWICgrouper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-normalizer">CLiC Normalizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-querybuilder">CLiC Query Builder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#clic-web-app">CLiC Web app</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-web.index">Index</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-web.api">API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-web.models">Models</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">CLiC Dickens</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>CLiC for developers</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/apidoc.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="clic-for-developers">
+<h1>CLiC for developers<a class="headerlink" href="#clic-for-developers" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="cheshire3">
+<h2>Cheshire3<a class="headerlink" href="#cheshire3" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="the-data-model">
+<h3>The data-model<a class="headerlink" href="#the-data-model" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
+<div class="section" id="module-concordance">
+<span id="clic-concordance"></span><h2>CLiC Concordance<a class="headerlink" href="#module-concordance" title="Permalink to this headline">¶</a></h2>
+<p>CLiC Concordance based on cheshire3 indexes.</p>
+<dl class="class">
+<dt id="concordance.Concordance">
+<em class="property">class </em><code class="descclassname">concordance.</code><code class="descname">Concordance</code><a class="reference internal" href="_modules/concordance.html#Concordance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#concordance.Concordance" title="Permalink to this definition">¶</a></dt>
+<dd><p>This concordance takes terms, index names, book selections, and search type
+as input values and returns json with the search term, ten words to the left and
+ten to the right, and location information.</p>
+<p>This can be used in an ajax api.</p>
+<dl class="method">
+<dt id="concordance.Concordance.build_and_run_query">
+<code class="descname">build_and_run_query</code><span class="sig-paren">(</span><em>terms</em>, <em>idxName</em>, <em>Materials</em>, <em>selectWords</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/concordance.html#Concordance.build_and_run_query"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#concordance.Concordance.build_and_run_query" title="Permalink to this definition">¶</a></dt>
+<dd><p>Builds a cheshire query and runs it.</p>
+<p>Its output is a tuple of which the first element is a resultset and
+the second element is number of search terms in the query.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="concordance.Concordance.create_concordance">
+<code class="descname">create_concordance</code><span class="sig-paren">(</span><em>terms</em>, <em>idxName</em>, <em>Materials</em>, <em>selectWords</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/concordance.html#Concordance.create_concordance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#concordance.Concordance.create_concordance" title="Permalink to this definition">¶</a></dt>
+<dd><p>main concordance method
+create a list of lists containing each three contexts left - node -right,
+and a list within those contexts containing each word.
+Add two separate lists containing metadata information:
+[
+[left context - word 1, word 2, etc.],
+[node - word 1, word 2, etc],
+[right context - word 1, etc],
+[chapter metadata],
+[book metadata]
+],
+etc.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-clusters">
+<span id="clic-clusters"></span><h2>CLiC Clusters<a class="headerlink" href="#module-clusters" title="Permalink to this headline">¶</a></h2>
+<p>Tool to create wordlists based on the entries in an index.</p>
+<dl class="class">
+<dt id="clusters.Clusters">
+<em class="property">class </em><code class="descclassname">clusters.</code><code class="descname">Clusters</code><a class="reference internal" href="_modules/clusters.html#Clusters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clusters.Clusters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class that does all the heavy weighting. It makes the connection with
+cheshire3, uses the input parameters (indexname and subcorpus/Materials) to
+return a list of words and their total number of occurrences.</p>
+<p>For instance,</p>
+<blockquote>
+<div><p><code class="docutils literal"><span class="pre">the</span> <span class="pre">98021</span></code></p>
+<p><code class="docutils literal"><span class="pre">to</span>&nbsp; <span class="pre">78465</span></code></p>
+<p>...</p>
+</div></blockquote>
+<dl class="docutils">
+<dt>or</dt>
+<dd><p class="first"><code class="docutils literal"><span class="pre">he</span> <span class="pre">said</span>&nbsp; <span class="pre">8937</span></code></p>
+<p><code class="docutils literal"><span class="pre">she</span> <span class="pre">said</span> <span class="pre">6732</span></code></p>
+<p class="last">...</p>
+</dd>
+</dl>
+<dl class="method">
+<dt id="clusters.Clusters.list_clusters">
+<code class="descname">list_clusters</code><span class="sig-paren">(</span><em>idxName</em>, <em>Materials</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clusters.html#Clusters.list_clusters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clusters.Clusters.list_clusters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build a list of clusters and their occurrences.</p>
+<p>Limit the list to the first 3000 entries.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-keywords">
+<span id="clic-keywords"></span><h2>CLiC Keywords<a class="headerlink" href="#module-keywords" title="Permalink to this headline">¶</a></h2>
+<p>Module to compute keywords (words that are used significantly more frequently
+in one corpus than they are in a reference corpus).</p>
+<dl class="class">
+<dt id="keywords.Keywords">
+<em class="property">class </em><code class="descclassname">keywords.</code><code class="descname">Keywords</code><a class="reference internal" href="_modules/keywords.html#Keywords"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#keywords.Keywords" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class to compute keywords based on an test index (the corpus of analysis),
+a reference index (the corpus of reference), and a P value.</p>
+<dl class="method">
+<dt id="keywords.Keywords.list_keywords">
+<code class="descname">list_keywords</code><span class="sig-paren">(</span><em>testIdxName</em>, <em>testMaterials</em>, <em>refIdxName</em>, <em>refMaterials</em>, <em>pValue</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/keywords.html#Keywords.list_keywords"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#keywords.Keywords.list_keywords" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a sorted list of keywords. Limited to the first 5000 items.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-chapter_repository">
+<span id="clic-chapter-repository"></span><h2>CLiC Chapter Repository<a class="headerlink" href="#module-chapter_repository" title="Permalink to this headline">¶</a></h2>
+<p>Display the texts available in the cheshire3 database. Also highlight specific
+items that were previously retrieved with a concordance.</p>
+<dl class="class">
+<dt id="chapter_repository.ChapterRepository">
+<em class="property">class </em><code class="descclassname">chapter_repository.</code><code class="descname">ChapterRepository</code><a class="reference internal" href="_modules/chapter_repository.html#ChapterRepository"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chapter_repository.ChapterRepository" title="Permalink to this definition">¶</a></dt>
+<dd><p>Responsible for providing access to chapter resources within Cheshire.</p>
+<dl class="method">
+<dt id="chapter_repository.ChapterRepository.get_book_title">
+<code class="descname">get_book_title</code><span class="sig-paren">(</span><em>book</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/chapter_repository.html#ChapterRepository.get_book_title"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chapter_repository.ChapterRepository.get_book_title" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the title of a book from the json file booklist.json</p>
+<p>book &#8211; string - the book id/accronym e.g. BH</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="chapter_repository.ChapterRepository.get_chapter">
+<code class="descname">get_chapter</code><span class="sig-paren">(</span><em>chapter_number</em>, <em>book</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/chapter_repository.html#ChapterRepository.get_chapter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chapter_repository.ChapterRepository.get_chapter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns transformed XML for given chapter &amp; book</p>
+<p>chapter_number &#8211; integer
+book &#8211; string - the book id/accronym e.g. BH</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="chapter_repository.ChapterRepository.get_chapter_with_highlighted_search_term">
+<code class="descname">get_chapter_with_highlighted_search_term</code><span class="sig-paren">(</span><em>chapter_number</em>, <em>book</em>, <em>wid</em>, <em>search_term</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/chapter_repository.html#ChapterRepository.get_chapter_with_highlighted_search_term"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chapter_repository.ChapterRepository.get_chapter_with_highlighted_search_term" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns transformed XML for given chapter &amp; book with the search
+highlighted.</p>
+<p>We create the transformer directly so that we can pass extra parameters
+to it at runtime. In this case the search term.</p>
+<p>chapter_number &#8211; integer
+book &#8211; string - the book id/accronym e.g. BH
+wid &#8211; integer - word index
+search_term &#8211; string - term to highlight</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="chapter_repository.ChapterRepository.get_raw_chapter">
+<code class="descname">get_raw_chapter</code><span class="sig-paren">(</span><em>chapter_number</em>, <em>book</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/chapter_repository.html#ChapterRepository.get_raw_chapter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chapter_repository.ChapterRepository.get_raw_chapter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns raw chapter XML for given chapter &amp; book</p>
+<p>chapter_number &#8211; integer
+book &#8211; string - the book id/accronym e.g. BH</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-kwicgrouper">
+<span id="clic-kwicgrouper"></span><h2>CLiC KWICgrouper<a class="headerlink" href="#module-kwicgrouper" title="Permalink to this headline">¶</a></h2>
+<p>A module to look for patterns in concordances.</p>
+<dl class="class">
+<dt id="kwicgrouper.Concordance">
+<em class="property">class </em><code class="descclassname">kwicgrouper.</code><code class="descname">Concordance</code><span class="sig-paren">(</span><em>term</em>, <em>text</em>, <em>word_boundaries=True</em>, <em>length=50</em>, <em>keep_punctuation=True</em>, <em>keep_line_breaks=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/kwicgrouper.html#Concordance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#kwicgrouper.Concordance" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>This is a simple concordance for a text file. The input text
+should a string that is cleaned, for instance:</p>
+<blockquote>
+<div>text.replace(&#8220;</div></blockquote>
+</div></blockquote>
+<p>&#8221;, &#8221; &#8221;).replace(&#8221;  &#8221;, &#8221; &#8221;)</p>
+<blockquote>
+<div><p>This function has two argument: the search term and the
+text to be searched.</p>
+<p>The length should be an integer</p>
+</div></blockquote>
+<dl class="classmethod">
+<dt id="kwicgrouper.Concordance.from_multiple_line_file">
+<em class="property">classmethod </em><code class="descname">from_multiple_line_file</code><span class="sig-paren">(</span><em>term</em>, <em>input_li</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/kwicgrouper.html#Concordance.from_multiple_line_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#kwicgrouper.Concordance.from_multiple_line_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Construct a concordance that respect line breaks (rather than one
+that treats the text as one large string)</p>
+<p>TODO</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kwicgrouper.Concordance.list_concordance">
+<code class="descname">list_concordance</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/kwicgrouper.html#Concordance.list_concordance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#kwicgrouper.Concordance.list_concordance" title="Permalink to this definition">¶</a></dt>
+<dd><p>List the actual concordance.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kwicgrouper.Concordance.print_concordance">
+<code class="descname">print_concordance</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/kwicgrouper.html#Concordance.print_concordance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#kwicgrouper.Concordance.print_concordance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print the lines of a concordance. For debugging purposes.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kwicgrouper.Concordance.single_line_conc">
+<code class="descname">single_line_conc</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/kwicgrouper.html#Concordance.single_line_conc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#kwicgrouper.Concordance.single_line_conc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build a basic concordance based on a single string of text.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="kwicgrouper.KWICgrouper">
+<em class="property">class </em><code class="descclassname">kwicgrouper.</code><code class="descname">KWICgrouper</code><span class="sig-paren">(</span><em>concordance</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/kwicgrouper.html#KWICgrouper"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#kwicgrouper.KWICgrouper" title="Permalink to this definition">¶</a></dt>
+<dd><p>This starts from a concordance and transforms it into a pandas dataframe
+(here called textframe) that has five words to the left and right of the
+search term in separate columns. These columns can then be searched for
+and sorted.</p>
+<p>Input:
+A nested list of lists looking like:</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>[</dt>
+<dd>[&#8216;sessed of that very useful appendage  a &#8216;,
+&#8216;voice&#8217;,
+&#8216;  for a much longer space of time than t&#8217;
+],</dd>
+</dl>
+<p>...</p>
+</div></blockquote>
+<p>Each pattern needs <em>its own</em> instantiation of the KWICgrouper object
+because the self.textframe variable is changed in the filter method.</p>
+<dl class="method">
+<dt id="kwicgrouper.KWICgrouper.args_to_dict">
+<code class="descname">args_to_dict</code><span class="sig-paren">(</span><em>L5=None</em>, <em>L4=None</em>, <em>L3=None</em>, <em>L2=None</em>, <em>L1=None</em>, <em>R1=None</em>, <em>R2=None</em>, <em>R3=None</em>, <em>R4=None</em>, <em>R5=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/kwicgrouper.html#KWICgrouper.args_to_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#kwicgrouper.KWICgrouper.args_to_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper function to use
+L1=&#8221;a&#8221; type of functions</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kwicgrouper.KWICgrouper.conc_to_df">
+<code class="descname">conc_to_df</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/kwicgrouper.html#KWICgrouper.conc_to_df"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#kwicgrouper.KWICgrouper.conc_to_df" title="Permalink to this definition">¶</a></dt>
+<dd><p>Turns a list of dictionaries with L1-R5 values into a dataframe
+which can be used as a kwicgrouper.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kwicgrouper.KWICgrouper.filter_textframe">
+<code class="descname">filter_textframe</code><span class="sig-paren">(</span><em>kwdict</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/kwicgrouper.html#KWICgrouper.filter_textframe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#kwicgrouper.KWICgrouper.filter_textframe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Construct a dataframe slice and selector on the fly.
+This is no longer meta-programming as it does not use the eval
+function anymore.</p>
+<p>This returns None if there is no textframe</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kwicgrouper.KWICgrouper.split_nodes">
+<code class="descname">split_nodes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/kwicgrouper.html#KWICgrouper.split_nodes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#kwicgrouper.KWICgrouper.split_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Splits the words into nodes that can be fed into a dataframe.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="kwicgrouper.clean_punkt">
+<code class="descclassname">kwicgrouper.</code><code class="descname">clean_punkt</code><span class="sig-paren">(</span><em>text</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/kwicgrouper.html#clean_punkt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#kwicgrouper.clean_punkt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete punktuation from a text.</p>
+<p>Problem: turns CAN&#8217;T into CA NT</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="kwicgrouper.clean_text">
+<code class="descclassname">kwicgrouper.</code><code class="descname">clean_text</code><span class="sig-paren">(</span><em>text</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/kwicgrouper.html#clean_text"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#kwicgrouper.clean_text" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Clean a text so that it can be used in a concordance. This includes:</dt>
+<dd><ul class="first last simple">
+<li>all text to lowercase</li>
+<li>deleting line-breaks</li>
+<li>tokenizing and detokenizing</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="kwicgrouper.concordance_for_line_by_line_file">
+<code class="descclassname">kwicgrouper.</code><code class="descname">concordance_for_line_by_line_file</code><span class="sig-paren">(</span><em>input_file</em>, <em>term</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/kwicgrouper.html#concordance_for_line_by_line_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#kwicgrouper.concordance_for_line_by_line_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes a file that has different line breaks that cannot be ignored
+(for instance a file with a list of things) and makes it into a concordance</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="kwicgrouper.old_clean_punkt">
+<code class="descclassname">kwicgrouper.</code><code class="descname">old_clean_punkt</code><span class="sig-paren">(</span><em>text</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/kwicgrouper.html#old_clean_punkt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#kwicgrouper.old_clean_punkt" title="Permalink to this definition">¶</a></dt>
+<dd><p>This ignores apostrophes and punctuation marks attached to the word
+* an alternative way would be to replace-delete the punctuation from the text</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-normalizer">
+<span id="clic-normalizer"></span><h2>CLiC Normalizer<a class="headerlink" href="#module-normalizer" title="Permalink to this headline">¶</a></h2>
+<p>Defines normalizers that can be used in the cheshire3 indexing workflow.</p>
+</div>
+<div class="section" id="module-querybuilder">
+<span id="clic-query-builder"></span><h2>CLiC Query Builder<a class="headerlink" href="#module-querybuilder" title="Permalink to this headline">¶</a></h2>
+<p>Future module to handle the construction of cheshire3 CQL queries.</p>
+</div>
+<div class="section" id="clic-web-app">
+<h2>CLiC Web app<a class="headerlink" href="#clic-web-app" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-web.index">
+<span id="index"></span><h3>Index<a class="headerlink" href="#module-web.index" title="Permalink to this headline">¶</a></h3>
+<p>This is the most important file for the web app. It contains the various
+routes that end users can use.</p>
+<p>For instance</p>
+<p>&#64;app.route(&#8216;/about/&#8217;, methods=[&#8216;GET&#8217;])
+def about():</p>
+<blockquote>
+<div>return render_template(&#8220;info/about.html&#8221;)</div></blockquote>
+<p>Where /about/ is the link.</p>
+</div>
+<div class="section" id="module-web.api">
+<span id="api"></span><h3>API<a class="headerlink" href="#module-web.api" title="Permalink to this headline">¶</a></h3>
+<p>This file is an extension of index.py. It generates the raw json API that
+the keywords, cluster, and concordances use(d).</p>
+<p>It needs to be refactored.</p>
+</div>
+<div class="section" id="module-web.models">
+<span id="models"></span><h3>Models<a class="headerlink" href="#module-web.models" title="Permalink to this headline">¶</a></h3>
+<p>models.py defines the SQL tables that CLiC uses. These classes
+provide a python interface to the SQL database so that you can write python
+code that automatically queries the database.</p>
+<p>This is heavily dependent on Flask-SQLAlchmey and SQLAlchemy</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="admin.html" class="btn btn-neutral" title="CLiC for administrators" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, J. de Joode.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.3',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -1,0 +1,289 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>clusters &mdash; CLiC Dickens 1.3 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="CLiC Dickens 1.3 documentation" href="../index.html"/>
+        <link rel="up" title="Module code" href="index.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> CLiC Dickens
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.3
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../endusers.html">CLiC for end-users</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../admin.html">CLiC for administrators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../apidoc.html">CLiC for developers</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">CLiC Dickens</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="index.html">Module code</a> &raquo;</li>
+      
+    <li>clusters</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for clusters</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Tool to create wordlists based on the entries in an index.</span>
+<span class="sd">&#39;&#39;&#39;</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">operator</span>
+
+<span class="kn">from</span> <span class="nn">cheshire3.document</span> <span class="kn">import</span> <span class="n">StringDocument</span>
+<span class="kn">from</span> <span class="nn">cheshire3.internal</span> <span class="kn">import</span> <span class="n">cheshire3Root</span>
+<span class="kn">from</span> <span class="nn">cheshire3.server</span> <span class="kn">import</span> <span class="n">SimpleServer</span>
+<span class="kn">from</span> <span class="nn">cheshire3.baseObjects</span> <span class="kn">import</span> <span class="n">Session</span>
+
+<span class="n">cheshirePath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;HOME&#39;</span><span class="p">,</span> <span class="s1">&#39;/home/cheshire&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Clusters"><a class="viewcode-back" href="../apidoc.html#clusters.Clusters">[docs]</a><span class="k">class</span> <span class="nc">Clusters</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Class that does all the heavy weighting. It makes the connection with</span>
+<span class="sd">    cheshire3, uses the input parameters (indexname and subcorpus/Materials) to</span>
+<span class="sd">    return a list of words and their total number of occurrences.</span>
+
+<span class="sd">    For instance,</span>
+
+
+<span class="sd">        ``the 98021``</span>
+
+<span class="sd">        ``to  78465``</span>
+
+<span class="sd">        ...</span>
+
+<span class="sd">    or</span>
+<span class="sd">        ``he said  8937``</span>
+
+<span class="sd">        ``she said 6732``</span>
+
+<span class="sd">        ...</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Set up the connection to cheshire3.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">session</span> <span class="o">=</span> <span class="n">Session</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">database</span> <span class="o">=</span> <span class="s1">&#39;db_dickens&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">serv</span> <span class="o">=</span> <span class="n">SimpleServer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="p">,</span>
+                            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cheshire3Root</span><span class="p">,</span> <span class="s1">&#39;configs&#39;</span><span class="p">,</span> <span class="s1">&#39;serverConfig.xml&#39;</span><span class="p">)</span>
+                            <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">db</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">serv</span><span class="o">.</span><span class="n">get_object</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">database</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">get_object</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="p">,</span> <span class="s1">&#39;defaultQueryFactory&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resultSetStore</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">get_object</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="p">,</span> <span class="s1">&#39;resultSetStore&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">idxStore</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">get_object</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="p">,</span> <span class="s1">&#39;indexStore&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">get_object</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="p">,</span> <span class="s1">&#39;clusterLogger&#39;</span><span class="p">)</span> <span class="c1">## added to dbs/dickens/config.xml</span>
+
+<div class="viewcode-block" id="Clusters.list_clusters"><a class="viewcode-back" href="../apidoc.html#clusters.Clusters.list_clusters">[docs]</a>    <span class="k">def</span> <span class="nf">list_clusters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idxName</span><span class="p">,</span> <span class="n">Materials</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Build a list of clusters and their occurrences.</span>
+
+<span class="sd">        Limit the list to the first 3000 entries.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="c1">#self.logger.log(10, &#39;CREATING CLUSTERS FOR RS: {0} in {1}&#39;.format(idxName, Materials))</span>
+        <span class="n">session</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span>
+        <span class="n">db</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span>
+
+        <span class="n">clauses</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">Material</span> <span class="ow">in</span> <span class="n">Materials</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">Material</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;dickens&#39;</span><span class="p">,</span> <span class="s1">&#39;ntc&#39;</span><span class="p">]:</span>
+                <span class="n">MatIdx</span> <span class="o">=</span> <span class="s1">&#39;subCorpus-idx&#39;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">MatIdx</span> <span class="o">=</span> <span class="s1">&#39;book-idx&#39;</span>
+            <span class="n">clauses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;c3.{0} = &quot;{1}&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">MatIdx</span><span class="p">,</span> <span class="n">Material</span><span class="p">))</span>
+
+        <span class="n">query</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qf</span><span class="o">.</span><span class="n">get_query</span><span class="p">(</span><span class="n">session</span><span class="p">,</span>
+                                       <span class="s1">&#39; or &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">clauses</span><span class="p">)</span>
+                                       <span class="p">)</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">query</span><span class="p">)</span>
+
+        <span class="n">idx</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get_object</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">idxName</span><span class="p">)</span>
+        <span class="n">facets</span> <span class="o">=</span> <span class="n">idx</span><span class="o">.</span><span class="n">facets</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">results</span><span class="p">)</span>
+        <span class="nb">dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">facets</span><span class="p">:</span>
+            <span class="nb">dict</span><span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span>
+
+        <span class="n">cluster_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">term</span><span class="p">,</span> <span class="n">freq</span> <span class="ow">in</span> <span class="nb">dict</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">freq</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">prop</span> <span class="o">=</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">freq</span><span class="p">)</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="nb">dict</span><span class="p">)))</span> <span class="o">*</span> <span class="mi">100</span>
+                <span class="n">cluster_list</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">term</span><span class="p">,</span> <span class="n">freq</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">prop</span><span class="p">)[:</span><span class="mi">5</span><span class="p">]])</span>  <span class="c1">## add empty array node at beginning (see Pete email 23.04.14)</span>
+
+        <span class="n">cluster_list</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="n">operator</span><span class="o">.</span><span class="n">itemgetter</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">reverse</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cluster_list</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">3001</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">cluster_list</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">cluster_list</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3000</span><span class="p">]</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, J. de Joode.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'1.3',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

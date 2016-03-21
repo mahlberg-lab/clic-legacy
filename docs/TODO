@@ -1,0 +1,604 @@
+
+
+ssh clicman@test
+
+ 
+
+
+restart processes:
+
+supervisorctl restart all                    
+
+
+Release the latest version
+###########################
+
+There are several steps:
+
+1.     Prepare the release on github
+
+a.     Update CHANGELOG.rst
+
+b.     Merge branches into develop and develop into master
+
+c.      Tag master with the latest version
+
+d.     Git push && git push --tags
+
+2.     Update the date in the Dockerfile (add sth random if you have too
+more than one release on a day, the purpose is to invalidate the Docker
+image cache)
+
+a.     RUN git clone -b master
+https://github.com/CentreForCorpusResearch/clic.git && echo "2015-10-23"
+
+b.     Docker build –t jdejoode/clic:latest .
+
+                                               i.         To check build
+on local first:
+
+                                              ii.         docker run -d
+--name clic-debug -v
+/Users/johan/Data/clic/indexes:/clic-project/clic/dbs/dickens/indexes -v
+/Users/johan/Data/clic/stores:/clic-project/clic/dbs/dickens/stores -P
+jdejoode/clic:latest   # -P needs to be before image name
+
+                                            iii.     on mac:
+docker-machine env default
+
+                                            iv.     on mac: docker port
+clic-debug
+
+                                              v.         then visit the
+localhost on the right port: for instance, http://192.168.99.100:32770/
+
+                                            vi.        
+
+ 
+
+c.      Docker login
+
+d.     Docker push jdejoode/clic:latest
+
+3.     On the server you want to push to:
+
+a.     Sudo docker login
+
+b.     Sudo docker pull jdejoode/clic:latest
+
+c.      Sudo docker ps
+
+d.     Sudo docker stop NAMEOFTHERUNNINGCONTAINER (stop the running
+container, make sure you do not lose data!)
+
+e.     sudo docker run -d -p 80:8080 -v /tmp:/tmp -v
+/home/clicman/indexes:/clic-project/clic/dbs/dickens/indexes -v
+/home/clicman/stores:/clic-project/clic/dbs/dickens/stores --name clic8
+jdejoode/clic:latest
+
+4.     Run the tests
+
+a.     BASE\_URL='http://live/' py.test main.py  (in
+clic/tests/functional tests/)
+
+ 
+
+Release new indexes and text files
+##################################
+
+People do need the textfiles for the subsets and the patterns to work.
+
+
+Releasing a persistent data store variant – Naïve version
+##########################################################
+
+sudo docker exec -i -t cli8 bash
+
+dropdb db\_annotation
+
+dropuser clic-dickens
+
+ 
+
+sudo -u postgres createuser -P -d -r -s clic-dickens
+
+# pw = charles
+
+createdb -O clic-dickens db\_annotation --password
+
+ 
+
+pip install ipython
+
+PYTHONPATH=/clic-project/clic ipython
+
+ 
+
+from index import app
+
+from models import db
+
+with app.app\_context():
+
+            db.create\_all()
+
+ 
+
+from models import Role, User
+
+ 
+
+superman = Role(name="superman")
+
+can\_annotate = Role(name="can\_annotate")
+
+johan = User(name="jdejoode", email="j.dejoode@bham.ac.uk",
+password="isabelle", active=True, roles=[superman, can\_annotate])
+
+ 
+
+ 
+
+with app.app\_context():
+
+db.session.add(superman)
+
+db.session.add(can\_annotate)
+
+db.session.add(johan)
+
+db.session.commit()
+
+ 
+
+ 
+
+in clic/web:
+
+PYTHONPATH=/clic-project/clic python fixtures.py ../textfiles/
+
+ 
+
+# http://www.postgresqltutorial.com/postgresql-backup-database/
+
+pg\_dump -U clic-dickens -h localhost -W -F t db\_annotation >
+/tmp/backups/db\_annotation\_only\_subsets\_no\_tags.tar
+
+ 
+
+# to restore a dump:
+
+supervisorctl restart all
+
+dropdb db\_annotation
+
+createdb -O clic-dickens db\_annotation --password
+
+pg\_restore --dbname=db\_annotation --verbose
+/tmp/backups/db\_annotation\_only\_subsets\_no\_tags.tar
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+The quick release version
+#########################
+ 
+
+Local
+
+ 
+
+ 
+
+Need to be uploaded:
+
+1. Indexes
+
+2. Stores
+
+3. Textiles
+
+4. Config.xml -> or change that in the repo and overwrite it?
+
+ 
+
+Needs to be cloned:
+
+1. Git repo
+
+ 
+
+Volumes that need to be mounted:
+
+2. Tmp for backups
+
+3. Indexes
+
+4. Stores
+
+5. Config.xml
+
+6. Clic repo
+
+7. textfiles
+
+ 
+
+ 
+
+ 
+
+docker run -d --name clic-code8 -v /tmp:/tmp -v
+/Users/johan/projects/clic/clic:/clic-project/clic -v
+/Users/johan/Data/clic/indexes:/clic-project/clic/dbs/dickens/indexes -v
+/Users/johan/Data/clic/stores:/clic-project/clic/dbs/dickens/stores -v
+/Users/johan/ImagesDocker/clic-docker/config.xml:/clic-project/clic/dbs/dickens/config.xml
+-p 80:8080 jdejoode/clic:latest
+
+ 
+
+# get the production database
+
+scp
+clicman@live:/home/clicman/backups/db\_annotation\_clean\_to\_use\_as\_a\_starting\_point.tar
+.
+
+ 
+
+# login
+
+docker exec –it clic-code7 bash
+
+ 
+
+dropdb db\_annotation
+
+createdb -O clic-dickens db\_annotation --password
+
+pg\_restore --dbname=db\_annotation --verbose
+/tmp/backups/db\_annotation\_only\_subsets\_no\_tags.tar
+
+ 
+
+#TODO the mounting of tmp does not seem to work on local!!
+
+All else is fine
+
+è  this is because of some permission issue, I think, because mounting a
+tmp folder in /Users/johan/projects/tmp works fine
+
+ 
+
+Run the flask runserver on a local machine
+
+è  open up the port when running the container: -p 5000:5000
+
+è  run /clic-project/clic/clic/web# PYTHONPATH=/clic-project/clic python
+index.py
+
+è  make sure index.py’s app.run() has:
+
+o   app.run(host='0.0.0.0', port=5000, debug=True)
+
+ 
+
+ 
+
+ 
+
+ 
+
+Tips and tricks
+###############
+ 
+
+This could be useful for CORPUS linguistics:
+
+ 
+
+FROM ubuntu
+
+CMD echo "This is a test." \| wc -
+
+ 
+
+ 
+
+#TODO
+##########
+
+? add a docker user group
+\ `https://docs.docker.com/installation/ubuntulinux/#create-a-docker-group <https://docs.docker.com/installation/ubuntulinux/#create-a-docker-group>`__\
+
+? check docker daemon security
+
+https://docs.docker.com/articles/security/#docker-daemon-attack-surface
+
+run –p 80:8080 so you do not have to use apache
+
+but does uwsgi serve the static files or apache?
+
+ 
+
+ 
+
+Migrating from user -> users… could be done:
+
+select \* into "users" from "user";
+
+GRANT ALL PRIVILEGES ON TABLE users TO "clic-dickens";
+
+ 
+
+Quicker releases could be done -> mounting clic as code at container run
+time
+
+This requires the following changes to clic:
+
+1.     uwsgi reload
+
+2.     uwsgi run as a user
+
+3.     supervisor run as a user
+
+4.     uwsgi paths should be fixed
+
+5.     add textfiles to clic once deployed (scp -r textfiles/
+clicman@test:/home/clicman/clic/clic)
+
+6.     pip install flask\_admin
+
+7.    
+
+ 
+
+ 
+
+ 
+
+psql: FATAL:  Peer authentication failed for user "clic-dickens"
+
+ 
+
+Issues
+######
+ 
+
+Firewall not persistent
+
+"Added the below to /etc/rc.local in order to reload firewall rules at
+boot
+
+ 
+
+sudo ufw reload"
+
+ 
+
+ 
+
+ 
+
+KEYWORDS AND INDEXES WORK, BUT CONCORDANCE NOT
+
+Did you mount the stores correctly?
+
+ 
+
+ 
+
+FINAL MISSING STEP:
+
+The python run.py –load does not work because it requires an active
+postgres connection. That is hard to get because
+
+1.     It should be up and running during build time
+
+2.     It should have the right permissions (not root, for instance)
+
+ 
+
+Possible relevant:
+
+https://github.com/allisson/docker-postgresql
+
+           
+
+ 
+
+ 
+
+root@4987ba60f3a9:/clic-project/clic/dbs/dickens#
+PYTHONPATH=/clic-project/clic/ python run.py -load
+
+Using the local settings (local\_settings.py)
+
+[2015-10-06 16:46:07] CRITICAL: Failed to create object of type:
+'PostgresDocumentStore'
+
+[2015-10-06 16:46:07] CRITICAL: ... while trying to build object with id
+'concordanceStore'
+
+[2015-10-06 16:46:07] CRITICAL: ... while getting it from object
+'db\_dickens'
+
+Traceback (most recent call last):
+
+  File "run.py", line 35, in <module>
+
+    concStore = db.get\_object(session, 'concordanceStore')
+
+  File
+"/usr/local/lib/python2.7/dist-packages/cheshire3/configParser.py", line
+719, in get\_object
+
+    obj = dynamic.makeObjectFromDom(session, config, self)
+
+  File "/usr/local/lib/python2.7/dist-packages/cheshire3/dynamic.py",
+line 40, in makeObjectFromDom
+
+    return buildObject(session, objectType, [topNode, parentObject])
+
+  File "/usr/local/lib/python2.7/dist-packages/cheshire3/dynamic.py",
+line 119, in buildObject
+
+    return parentClass(session, \*args)
+
+  File
+"/usr/local/lib/python2.7/dist-packages/cheshire3/sql/documentStore.py",
+line 25, in \_\_init\_\_
+
+    PostgresStore.\_\_init\_\_(self, session, node, parent)
+
+  File
+"/usr/local/lib/python2.7/dist-packages/cheshire3/sql/postgresStore.py",
+line 44, in \_\_init\_\_
+
+    self.\_verifyDatabases(session)
+
+  File
+"/usr/local/lib/python2.7/dist-packages/cheshire3/sql/sqlStore.py", line
+101, in \_verifyDatabases
+
+    rows = self.\_query(query)
+
+  File
+"/usr/local/lib/python2.7/dist-packages/cheshire3/sql/sqlStore.py", line
+115, in \_query
+
+    with self.\_connect(self.session) as cxn:
+
+  File "/usr/lib/python2.7/contextlib.py", line 17, in \_\_enter\_\_
+
+    return self.gen.next()
+
+  File
+"/usr/local/lib/python2.7/dist-packages/cheshire3/sql/postgresStore.py",
+line 103, in \_connect
+
+    e.args
+
+cheshire3.exceptions.ConfigFileException: ConfigFileException: Cannot
+connect to Postgres: 'FATAL:  role "root" does not exist\\n'
+
+ 
+
+ 
+
+Using the local settings (local\_settings.py)
+
+[2015-10-07 12:19:36] CRITICAL: Failed to create object of type:
+'PostgresDocumentStore'
+
+[2015-10-07 12:19:36] CRITICAL: ... while trying to build object with id
+'concordanceStore'
+
+[2015-10-07 12:19:36] CRITICAL: ... while getting it from object
+'db\_dickens'
+
+Traceback (most recent call last):
+
+  File "/clic-project/clic/dbs/dickens/run.py", line 35, in <module>
+
+    concStore = db.get\_object(session, 'concordanceStore')
+
+  File
+"/usr/local/lib/python2.7/dist-packages/cheshire3/configParser.py", line
+719, in get\_object
+
+    obj = dynamic.makeObjectFromDom(session, config, self)
+
+  File "/usr/local/lib/python2.7/dist-packages/cheshire3/dynamic.py",
+line 40, in makeObjectFromDom
+
+    return buildObject(session, objectType, [topNode, parentObject])
+
+  File "/usr/local/lib/python2.7/dist-packages/cheshire3/dynamic.py",
+line 119, in buildObject
+
+    return parentClass(session, \*args)
+
+  File
+"/usr/local/lib/python2.7/dist-packages/cheshire3/sql/documentStore.py",
+line 25, in \_\_init\_\_
+
+    PostgresStore.\_\_init\_\_(self, session, node, parent)
+
+  File
+"/usr/local/lib/python2.7/dist-packages/cheshire3/sql/postgresStore.py",
+line 44, in \_\_init\_\_
+
+    self.\_verifyDatabases(session)
+
+  File
+"/usr/local/lib/python2.7/dist-packages/cheshire3/sql/sqlStore.py", line
+101, in \_verifyDatabases
+
+    rows = self.\_query(query)
+
+  File
+"/usr/local/lib/python2.7/dist-packages/cheshire3/sql/sqlStore.py", line
+115, in \_query
+
+    with self.\_connect(self.session) as cxn:
+
+  File "/usr/lib/python2.7/contextlib.py", line 17, in \_\_enter\_\_
+
+    return self.gen.next()
+
+  File
+"/usr/local/lib/python2.7/dist-packages/cheshire3/sql/postgresStore.py",
+line 103, in \_connect
+
+    e.args
+
+cheshire3.exceptions.ConfigFileException: ConfigFileException: Cannot
+connect to Postgres: 'could not connect to server: Connection
+refused\\n\\tIs the server running locally and
+accepting\\n\\tconnections on Unix domain socket
+"/var/run/postgresql/.s.PGSQL.5432"?\\n'
+
+
+
+References
+##########
+ 
+
+http://docs.docker.com/
+
+http://docs.docker.com/installation/mac/
+
+http://docs.docker.com/userguide/dockerizing/
+
+http://docs.docker.com/userguide/usingdocker/
+
+http://docs.docker.com/userguide/dockerimages/
+
+http://docs.docker.com/userguide/dockerrepos/
+
+https://docs.docker.com/articles/dockerfile_best-practices/
+
+http://docs.docker.com/reference/run/
+
+http://docs.docker.com/reference/builder/
+
+http://docs.docker.com/userguide/dockerlinks/
+
+https://docs.docker.com/userguide/dockervolumes/
+
+https://docs.docker.com/userguide/dockerlinks/
+
+https://docs.docker.com/reference/builder/
+
+
+
+.. raw:: html

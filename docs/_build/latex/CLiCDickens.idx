@@ -1,0 +1,36 @@
+\indexentry{concordance (module)|hyperpage}{9}
+\indexentry{Concordance (class in concordance)|hyperpage}{9}
+\indexentry{build\_and\_run\_query() (concordance.Concordance method)|hyperpage}{9}
+\indexentry{create\_concordance() (concordance.Concordance method)|hyperpage}{9}
+\indexentry{clusters (module)|hyperpage}{9}
+\indexentry{Clusters (class in clusters)|hyperpage}{9}
+\indexentry{list\_clusters() (clusters.Clusters method)|hyperpage}{10}
+\indexentry{keywords (module)|hyperpage}{10}
+\indexentry{Keywords (class in keywords)|hyperpage}{10}
+\indexentry{list\_keywords() (keywords.Keywords method)|hyperpage}{10}
+\indexentry{chapter\_repository (module)|hyperpage}{10}
+\indexentry{ChapterRepository (class in chapter\_repository)|hyperpage}{10}
+\indexentry{get\_book\_title() (chapter\_repository.ChapterRepository method)|hyperpage}{10}
+\indexentry{get\_chapter() (chapter\_repository.ChapterRepository method)|hyperpage}{10}
+\indexentry{get\_chapter\_with\_highlighted\_search\_term() (chapter\_repository.ChapterRepository method)|hyperpage}{10}
+\indexentry{get\_raw\_chapter() (chapter\_repository.ChapterRepository method)|hyperpage}{10}
+\indexentry{kwicgrouper (module)|hyperpage}{11}
+\indexentry{Concordance (class in kwicgrouper)|hyperpage}{11}
+\indexentry{from\_multiple\_line\_file() (kwicgrouper.Concordance class method)|hyperpage}{11}
+\indexentry{list\_concordance() (kwicgrouper.Concordance method)|hyperpage}{11}
+\indexentry{print\_concordance() (kwicgrouper.Concordance method)|hyperpage}{11}
+\indexentry{single\_line\_conc() (kwicgrouper.Concordance method)|hyperpage}{11}
+\indexentry{KWICgrouper (class in kwicgrouper)|hyperpage}{11}
+\indexentry{args\_to\_dict() (kwicgrouper.KWICgrouper method)|hyperpage}{11}
+\indexentry{conc\_to\_df() (kwicgrouper.KWICgrouper method)|hyperpage}{11}
+\indexentry{filter\_textframe() (kwicgrouper.KWICgrouper method)|hyperpage}{11}
+\indexentry{split\_nodes() (kwicgrouper.KWICgrouper method)|hyperpage}{11}
+\indexentry{clean\_punkt() (in module kwicgrouper)|hyperpage}{11}
+\indexentry{clean\_text() (in module kwicgrouper)|hyperpage}{11}
+\indexentry{concordance\_for\_line\_by\_line\_file() (in module kwicgrouper)|hyperpage}{12}
+\indexentry{old\_clean\_punkt() (in module kwicgrouper)|hyperpage}{12}
+\indexentry{normalizer (module)|hyperpage}{12}
+\indexentry{querybuilder (module)|hyperpage}{12}
+\indexentry{web.index (module)|hyperpage}{12}
+\indexentry{web.api (module)|hyperpage}{12}
+\indexentry{web.models (module)|hyperpage}{12}

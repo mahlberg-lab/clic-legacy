@@ -1,0 +1,532 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>kwicgrouper &mdash; CLiC Dickens 1.3 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="CLiC Dickens 1.3 documentation" href="../index.html"/>
+        <link rel="up" title="Module code" href="index.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> CLiC Dickens
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.3
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../endusers.html">CLiC for end-users</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../admin.html">CLiC for administrators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../apidoc.html">CLiC for developers</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">CLiC Dickens</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="index.html">Module code</a> &raquo;</li>
+      
+    <li>kwicgrouper</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for kwicgrouper</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">A module to look for patterns in concordances.</span>
+<span class="sd">&#39;&#39;&#39;</span>
+
+<span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">import</span> <span class="nn">nltk</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">string</span> <span class="kn">import</span> <span class="n">punctuation</span>
+
+<div class="viewcode-block" id="clean_text"><a class="viewcode-back" href="../apidoc.html#kwicgrouper.clean_text">[docs]</a><span class="k">def</span> <span class="nf">clean_text</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Clean a text so that it can be used in a concordance. This includes:</span>
+<span class="sd">        - all text to lowercase</span>
+<span class="sd">        - deleting line-breaks</span>
+<span class="sd">        - tokenizing and detokenizing</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\r\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span>
+    <span class="n">wordlist</span> <span class="o">=</span> <span class="n">nltk</span><span class="o">.</span><span class="n">word_tokenize</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+    <span class="c1"># wordlist = text.split()</span>
+    <span class="n">clean_text</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">wordlist</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">clean_text</span></div>
+
+<div class="viewcode-block" id="clean_punkt"><a class="viewcode-back" href="../apidoc.html#kwicgrouper.clean_punkt">[docs]</a><span class="k">def</span> <span class="nf">clean_punkt</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Delete punktuation from a text.</span>
+
+<span class="sd">    Problem: turns CAN&#39;T into CA NT</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">for</span> <span class="n">punkt</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">punctuation</span><span class="p">):</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">punkt</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">text</span></div>
+
+<div class="viewcode-block" id="old_clean_punkt"><a class="viewcode-back" href="../apidoc.html#kwicgrouper.old_clean_punkt">[docs]</a><span class="k">def</span> <span class="nf">old_clean_punkt</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    This ignores apostrophes and punctuation marks attached to the word</span>
+<span class="sd">    * an alternative way would be to replace-delete the punctuation from the text</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">tokenized</span> <span class="o">=</span> <span class="n">nltk</span><span class="o">.</span><span class="n">word_tokenize</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+    <span class="n">no_punkt</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">tokenized</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">token</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">punctuation</span><span class="p">):</span>
+            <span class="k">pass</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># no_punkt.append(word.upper())</span>
+            <span class="n">no_punkt</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">no_punkt</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Concordance"><a class="viewcode-back" href="../apidoc.html#kwicgrouper.Concordance">[docs]</a><span class="k">class</span> <span class="nc">Concordance</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    This is a simple concordance for a text file. The input text</span>
+<span class="sd">    should a string that is cleaned, for instance:</span>
+
+<span class="sd">        text.replace(&quot;\n&quot;, &quot; &quot;).replace(&quot;  &quot;, &quot; &quot;)</span>
+
+<span class="sd">    This function has two argument: the search term and the</span>
+<span class="sd">    text to be searched.</span>
+
+<span class="sd">    The length should be an integer</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">term</span><span class="p">,</span>
+                 <span class="n">text</span><span class="p">,</span>
+                 <span class="n">word_boundaries</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                 <span class="n">length</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+                 <span class="n">keep_punctuation</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                 <span class="n">keep_line_breaks</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Set up the basic parameters for the concordance. These include term,</span>
+<span class="sd">        text, word_boundaries, length of the lines, and whether to keep_line_breaks.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">term</span> <span class="o">=</span> <span class="n">term</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">text</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">word_boundaries</span> <span class="o">=</span> <span class="n">word_boundaries</span>
+        <span class="k">assert</span> <span class="n">length</span> <span class="o">&lt;</span> <span class="mi">250</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="o">=</span> <span class="n">length</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">keep_line_breaks</span> <span class="o">=</span> <span class="n">keep_line_breaks</span>
+        <span class="c1"># keep_punctuation</span>
+
+<div class="viewcode-block" id="Concordance.single_line_conc"><a class="viewcode-back" href="../apidoc.html#kwicgrouper.Concordance.single_line_conc">[docs]</a>    <span class="k">def</span> <span class="nf">single_line_conc</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Build a basic concordance based on a single string of text.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">word_boundaries</span><span class="p">:</span>
+            <span class="n">hits</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">finditer</span><span class="p">(</span><span class="s2">r&quot;\b{}\b&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">term</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">hits</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">finditer</span><span class="p">(</span><span class="s2">r&quot;{}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">term</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">hit</span> <span class="ow">in</span> <span class="n">hits</span><span class="p">:</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="n">hit</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="p">[</span><span class="n">start</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">length</span><span class="p">:</span><span class="n">start</span><span class="o">+</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">term</span><span class="p">)</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">length</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">lines</span></div>
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Concordance.from_multiple_line_file"><a class="viewcode-back" href="../apidoc.html#kwicgrouper.Concordance.from_multiple_line_file">[docs]</a>    <span class="k">def</span> <span class="nf">from_multiple_line_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">term</span><span class="p">,</span> <span class="n">input_li</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Construct a concordance that respect line breaks (rather than one</span>
+<span class="sd">        that treats the text as one large string)</span>
+
+<span class="sd">        TODO</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="n">Concordance</span><span class="p">(</span><span class="n">term</span><span class="p">,</span> <span class="n">input_li</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Concordance.print_concordance"><a class="viewcode-back" href="../apidoc.html#kwicgrouper.Concordance.print_concordance">[docs]</a>    <span class="k">def</span> <span class="nf">print_concordance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Print the lines of a concordance. For debugging purposes.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">single_line_conc</span><span class="p">()</span>
+        <span class="k">print</span> <span class="s2">&quot;There are {} lines in the concordance for {}:&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">lines</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">term</span><span class="p">)</span>
+        <span class="k">print</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
+            <span class="k">print</span> <span class="n">line</span></div>
+
+<div class="viewcode-block" id="Concordance.list_concordance"><a class="viewcode-back" href="../apidoc.html#kwicgrouper.Concordance.list_concordance">[docs]</a>    <span class="k">def</span> <span class="nf">list_concordance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        List the actual concordance.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="c1"># check if the term is not &quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">term</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">word_boundaries</span><span class="p">:</span>
+                <span class="n">hits</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">finditer</span><span class="p">(</span><span class="s2">r&quot;\b{}\b&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">term</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">hits</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">finditer</span><span class="p">(</span><span class="s2">r&quot;{}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">term</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+            <span class="n">lines</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">hit</span> <span class="ow">in</span> <span class="n">hits</span><span class="p">:</span>
+                <span class="n">start</span> <span class="o">=</span> <span class="n">hit</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+                <span class="n">end</span> <span class="o">=</span> <span class="n">hit</span><span class="o">.</span><span class="n">end</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">start</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span><span class="p">:</span>
+                    <span class="n">left</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="p">[:</span><span class="n">start</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">left</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="p">[</span><span class="n">start</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">length</span><span class="p">:</span><span class="n">start</span><span class="p">]</span>
+                <span class="n">term</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="p">]</span>
+                <span class="n">right</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="p">[</span><span class="n">start</span><span class="o">+</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">term</span><span class="p">):</span><span class="n">start</span><span class="o">+</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">term</span><span class="p">)</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">length</span><span class="p">]</span>
+                <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">left</span><span class="p">,</span> <span class="n">term</span><span class="p">,</span> <span class="n">right</span><span class="p">])</span>
+            <span class="k">return</span> <span class="n">lines</span></div></div>
+
+
+<div class="viewcode-block" id="concordance_for_line_by_line_file"><a class="viewcode-back" href="../apidoc.html#kwicgrouper.concordance_for_line_by_line_file">[docs]</a><span class="k">def</span> <span class="nf">concordance_for_line_by_line_file</span><span class="p">(</span><span class="n">input_file</span><span class="p">,</span> <span class="n">term</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Takes a file that has different line breaks that cannot be ignored</span>
+<span class="sd">    (for instance a file with a list of things) and makes it into a concordance</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">input_file</span><span class="p">)</span> <span class="k">as</span> <span class="n">input_file</span><span class="p">:</span>
+        <span class="n">contents</span> <span class="o">=</span> <span class="n">input_file</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+
+    <span class="n">concordance</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">contents</span><span class="p">:</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="n">clean_punkt</span><span class="p">(</span><span class="n">clean_text</span><span class="p">(</span><span class="n">line</span><span class="p">))</span>
+        <span class="n">conc</span> <span class="o">=</span> <span class="n">Concordance</span><span class="p">(</span><span class="n">term</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span><span class="o">.</span><span class="n">list_concordance</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">conc</span><span class="p">:</span>
+            <span class="n">concordance</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">conc</span><span class="p">)</span>
+
+    <span class="n">concordance</span> <span class="o">=</span> <span class="p">[</span><span class="n">itm</span> <span class="k">for</span> <span class="n">sublist</span> <span class="ow">in</span> <span class="n">concordance</span> <span class="k">for</span> <span class="n">itm</span> <span class="ow">in</span> <span class="n">sublist</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">concordance</span></div>
+
+
+<div class="viewcode-block" id="KWICgrouper"><a class="viewcode-back" href="../apidoc.html#kwicgrouper.KWICgrouper">[docs]</a><span class="k">class</span> <span class="nc">KWICgrouper</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    This starts from a concordance and transforms it into a pandas dataframe</span>
+<span class="sd">    (here called textframe) that has five words to the left and right of the</span>
+<span class="sd">    search term in separate columns. These columns can then be searched for</span>
+<span class="sd">    and sorted.</span>
+
+<span class="sd">    Input:</span>
+<span class="sd">    A nested list of lists looking like:</span>
+<span class="sd">     [</span>
+<span class="sd">      [&#39;sessed of that very useful appendage  a &#39;,</span>
+<span class="sd">      &#39;voice&#39;,</span>
+<span class="sd">      &#39;  for a much longer space of time than t&#39;</span>
+<span class="sd">      ],</span>
+<span class="sd">     ...</span>
+
+
+<span class="sd">    Each pattern needs *its own* instantiation of the KWICgrouper object</span>
+<span class="sd">    because the self.textframe variable is changed in the filter method.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="c1"># constructor from CLIC</span>
+      <span class="c1"># * include loc info</span>
+    <span class="c1"># constructor from text concordance</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">concordance</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Input:</span>
+<span class="sd">         * a concordance with [left, term, right]</span>
+<span class="sd">         * a pattern, for instance: L2 a, term=voice</span>
+<span class="sd">         * or a number of patterns</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">concordance</span> <span class="o">=</span> <span class="n">concordance</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">KWICSPOTS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;L5&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;L4&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;L3&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;L2&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;L1&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;R1&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;R2&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;R3&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;R4&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;R5&#39;</span><span class="p">]</span>
+
+<div class="viewcode-block" id="KWICgrouper.split_nodes"><a class="viewcode-back" href="../apidoc.html#kwicgrouper.KWICgrouper.split_nodes">[docs]</a>    <span class="k">def</span> <span class="nf">split_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Splits the words into nodes that can be fed into a dataframe.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="n">lines</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">concordance</span><span class="p">:</span>
+
+            <span class="n">output_dict</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">left</span><span class="p">,</span> <span class="n">term</span><span class="p">,</span> <span class="n">right</span> <span class="o">=</span> <span class="n">line</span>
+
+            <span class="n">left_words</span> <span class="o">=</span> <span class="n">left</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="o">-</span><span class="mi">5</span><span class="p">:]</span>
+            <span class="c1"># handle cases where there are not five words</span>
+            <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">left_words</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">:</span>
+                <span class="n">left_words</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">left_words</span><span class="p">)</span> <span class="o">==</span> <span class="mi">5</span>
+            <span class="n">left_zipped</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">6</span><span class="p">),</span> <span class="nb">list</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="n">left_words</span><span class="p">)))</span>
+
+            <span class="n">right_words</span> <span class="o">=</span> <span class="n">right</span><span class="o">.</span><span class="n">split</span><span class="p">()[:</span><span class="mi">5</span><span class="p">]</span>
+            <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">right_words</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">:</span>
+                <span class="n">right_words</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">right_words</span><span class="p">)</span> <span class="o">==</span> <span class="mi">5</span>
+            <span class="n">right_zipped</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">6</span><span class="p">),</span> <span class="n">right_words</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">left_zipped</span><span class="p">:</span>
+                <span class="n">position</span> <span class="o">=</span> <span class="s2">&quot;L&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">word</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="n">output_dict</span><span class="p">[</span><span class="n">position</span><span class="p">]</span> <span class="o">=</span> <span class="n">word</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+            <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">right_zipped</span><span class="p">:</span>
+                <span class="n">position</span> <span class="o">=</span> <span class="s2">&quot;R&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">word</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="n">output_dict</span><span class="p">[</span><span class="n">position</span><span class="p">]</span> <span class="o">=</span> <span class="n">word</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+            <span class="n">output_dict</span><span class="p">[</span><span class="s2">&quot;term&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">term</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">output_dict</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">lines</span></div>
+
+<div class="viewcode-block" id="KWICgrouper.conc_to_df"><a class="viewcode-back" href="../apidoc.html#kwicgrouper.KWICgrouper.conc_to_df">[docs]</a>    <span class="k">def</span> <span class="nf">conc_to_df</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Turns a list of dictionaries with L1-R5 values into a dataframe</span>
+<span class="sd">        which can be used as a kwicgrouper.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">conc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">split_nodes</span><span class="p">()</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">conc</span><span class="p">)</span>
+        <span class="n">cols</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;L5&quot;</span><span class="p">,</span> <span class="s2">&quot;L4&quot;</span><span class="p">,</span> <span class="s2">&quot;L3&quot;</span><span class="p">,</span> <span class="s2">&quot;L2&quot;</span><span class="p">,</span> <span class="s2">&quot;L1&quot;</span><span class="p">,</span> <span class="s2">&quot;term&quot;</span><span class="p">,</span> <span class="s2">&quot;R1&quot;</span><span class="p">,</span> <span class="s2">&quot;R2&quot;</span><span class="p">,</span> <span class="s2">&quot;R3&quot;</span><span class="p">,</span> <span class="s2">&quot;R4&quot;</span><span class="p">,</span> <span class="s2">&quot;R5&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">df</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">cols</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">textframe</span> <span class="o">=</span> <span class="n">df</span>
+        <span class="k">return</span> <span class="n">df</span></div>
+
+<div class="viewcode-block" id="KWICgrouper.filter_textframe"><a class="viewcode-back" href="../apidoc.html#kwicgrouper.KWICgrouper.filter_textframe">[docs]</a>    <span class="k">def</span> <span class="nf">filter_textframe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kwdict</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Construct a dataframe slice and selector on the fly.</span>
+<span class="sd">        This is no longer meta-programming as it does not use the eval</span>
+<span class="sd">        function anymore.</span>
+
+<span class="sd">        This returns None if there is no textframe</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conc_to_df</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">textframe</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">original_textframe</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">textframe</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">kwdict</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">val</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">KWICSPOTS</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">textframe</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">textframe</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">textframe</span><span class="p">[</span><span class="n">val</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">kwdict</span><span class="p">[</span><span class="n">val</span><span class="p">])]</span>
+
+            <span class="c1"># elif val == &#39;sort_by&#39;:</span>
+            <span class="c1">#        end_string = &#39;&#39;&#39;].sort({0})&#39;&#39;&#39;.format(kwdict[val])</span>
+
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">textframe</span></div>
+
+    <span class="c1"># you could add a filter_range_textframe function or a sort_textframe function</span>
+    <span class="c1"># and pass the self.textframe</span>
+    <span class="c1"># attribute to all the different functions</span>
+
+<div class="viewcode-block" id="KWICgrouper.args_to_dict"><a class="viewcode-back" href="../apidoc.html#kwicgrouper.KWICgrouper.args_to_dict">[docs]</a>    <span class="k">def</span> <span class="nf">args_to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="c1"># term,</span>
+                 <span class="n">L5</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                 <span class="n">L4</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                 <span class="n">L3</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                 <span class="n">L2</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                 <span class="n">L1</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                 <span class="n">R1</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                 <span class="n">R2</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                 <span class="n">R3</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                 <span class="n">R4</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                 <span class="n">R5</span><span class="o">=</span><span class="bp">None</span><span class="p">,):</span>
+
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Helper function to use</span>
+<span class="sd">        L1=&quot;a&quot; type of functions</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="n">local_args</span> <span class="o">=</span> <span class="nb">locals</span><span class="p">()</span>
+        <span class="k">del</span> <span class="n">local_args</span><span class="p">[</span><span class="s2">&quot;self&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">local_args</span><span class="o">.</span><span class="n">values</span><span class="p">()</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span> <span class="o">==</span> <span class="mi">10</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">,</span> <span class="s2">&quot;You should at least choose one pattern! &quot;</span>
+
+        <span class="n">pattern</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">local_args</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">local_args</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">local_args</span><span class="p">[</span><span class="n">var</span><span class="p">]</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="k">del</span> <span class="n">pattern</span><span class="p">[</span><span class="n">var</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pattern</span><span class="p">[</span><span class="n">var</span><span class="p">],</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">pattern</span><span class="p">[</span><span class="n">var</span><span class="p">]</span> <span class="o">=</span> <span class="n">pattern</span><span class="p">[</span><span class="n">var</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">IOError</span>
+
+        <span class="k">return</span> <span class="n">pattern</span></div></div>
+
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+
+    <span class="c1"># example, change dir to have it working</span>
+    <span class="c1"># naive test 1</span>
+    <span class="n">concordance</span> <span class="o">=</span> <span class="n">concordance_for_line_by_line_file</span><span class="p">(</span><span class="s2">&quot;/Users/johan/projects/annotation/data/output/DNov/textract/non_quotes/ot_non_quotes.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;boy&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">concordance</span><span class="p">:</span> <span class="k">print</span> <span class="n">x</span>
+    <span class="n">kwicgrouper</span> <span class="o">=</span> <span class="n">KWICgrouper</span><span class="p">(</span><span class="n">concordance</span><span class="p">)</span>
+    <span class="k">print</span> <span class="n">kwicgrouper</span><span class="o">.</span><span class="n">filter_textframe</span><span class="p">({</span><span class="s1">&#39;L3&#39;</span><span class="p">:[</span><span class="s1">&#39;in&#39;</span><span class="p">],</span> <span class="s2">&quot;L2&quot;</span><span class="p">:[</span><span class="s2">&quot;a&quot;</span><span class="p">]})</span>
+
+    <span class="c1"># naive test 2</span>
+    <span class="n">concordance</span> <span class="o">=</span> <span class="n">concordance_for_line_by_line_file</span><span class="p">(</span><span class="s2">&quot;/Users/johan/projects/annotation/data/annotation/output/dickens/textract/long_suspensions/ot_long_suspensions.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;proceeds&quot;</span><span class="p">)</span>
+    <span class="n">kwicgrouper</span> <span class="o">=</span> <span class="n">KWICgrouper</span><span class="p">(</span><span class="n">concordance</span><span class="p">)</span>
+    <span class="k">print</span> <span class="n">kwicgrouper</span><span class="o">.</span><span class="n">filter_textframe</span><span class="p">({</span><span class="s1">&#39;L1&#39;</span><span class="p">:[</span><span class="s1">&#39;IdoNotExist&#39;</span><span class="p">],})</span>
+
+    <span class="c1"># naive test 3</span>
+    <span class="n">concordance</span> <span class="o">=</span> <span class="n">concordance_for_line_by_line_file</span><span class="p">(</span><span class="s2">&quot;/Users/johan/projects/annotation/data/annotation/output/dickens/textract/long_suspensions/ot_long_suspensions.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;said&quot;</span><span class="p">)</span>
+    <span class="n">kwicgrouper</span> <span class="o">=</span> <span class="n">KWICgrouper</span><span class="p">(</span><span class="n">concordance</span><span class="p">)</span>
+    <span class="k">print</span> <span class="n">kwicgrouper</span><span class="o">.</span><span class="n">filter_textframe</span><span class="p">({</span><span class="s1">&#39;R1&#39;</span><span class="p">:[</span><span class="s1">&#39;mr&#39;</span><span class="p">,</span> <span class="s1">&#39;mrs&#39;</span><span class="p">],})</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, J. de Joode.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'1.3',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
