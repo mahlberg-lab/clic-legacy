@@ -1,41 +1,23 @@
 CLiC Project
 ============
 
-Cheshire3 databases and applications for the CLiC Project.
+Web application for the CLiC Dickens project http://clic.bham.ac.uk
 
 
-How to initiate the database
-----------------------------
+How to cite the CLiC web application?
+=====================================
 
-    cp config.xml.tmpl config.xml
-    # change the paths in that file
-    # delete the postgres db if you have not configured it properly
-    # delete concStore from run.py
+Please cite CLiC as follows:
 
-    cd clic/dbs/dickens
-    cheshire3-register config.xml
-    
-    # copy the data to the folder
-    cheshire3-load data
-    
-    # create the indexes
-    python run.py -load
-    python run.py -ntc
+Johan de Joode, Catherine Smith, Rein Sikveland, Matthew B. O'Donnell. 2016. CLiC: A web application for corpus stylistics. http://clic.bham.ac.uk
 
-Debugging
----------
 
-Commands to debug the setup include:
+Docs
+====
 
-    ls ~/.cheshire3-server/configs/databases
-    rm -r clic/dbs/dickens/indexes
-    rm -r clic/dbs/dickens/stores
-    rm -r /tmp/cache
+For the docs, read the docs folder in this repository.
 
-Run
----
+License
+=======
 
-Start a web-server to make the interface available locally::
-
-    sudo su -c "uwsgi --http :8080 --wsgi-file clic/dickens/web/flask/api.py --callable app" cheshire
-    cdproject & cd clic & uwsgi --ini deploy/uwsgi/apps/index.ini &
+MIT. For more information, cf. the LICENSE.
