@@ -1,3 +1,6 @@
+[![DOI](https://zenodo.org/badge/21226/CentreForCorpusResearch/clic.svg)](https://zenodo.org/badge/latestdoi/21226/CentreForCorpusResearch/clic)
+
+
 CLiC Project
 ============
 
