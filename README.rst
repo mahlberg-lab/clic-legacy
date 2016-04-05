@@ -1,5 +1,5 @@
-[![DOI](https://zenodo.org/badge/21226/CentreForCorpusResearch/clic.svg)](https://zenodo.org/badge/latestdoi/21226/CentreForCorpusResearch/clic)
-
+.. image:: https://zenodo.org/badge/21226/CentreForCorpusResearch/clic.svg
+  :target: https://zenodo.org/badge/latestdoi/21226/CentreForCorpusResearch/clic
 
 CLiC Project
 ============
