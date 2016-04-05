@@ -12,7 +12,7 @@ How to cite the CLiC web application?
 
 Please cite CLiC as follows:
 
-Johan de Joode, Catherine Smith, Rein Sikveland, Matthew B. O'Donnell. 2016. CLiC: A web application for corpus stylistics. http://dx.doi.org/[use DOI number mentioned above, for instance: http://dx.doi.org/10.5281/zenodo.49060]
+Johan de Joode, Catherine Smith, Rein Sikveland, Matthew B. O'Donnell. 2016. CLiC: A web application for corpus stylistics. [use DOI number mentioned above, for instance: http://dx.doi.org/10.5281/zenodo.49060]
 
 
 Docs
