@@ -1,3 +1,17 @@
+1.3.1
+-----
+* adds a DOI and a citable reference
+* updates the docs 
+* fixes issues in the KWICgrouper
+* implements toggle for concordance view in User Annotation
+* boosts export function of annotation to 10000 lines
+* enable 1-gram keywords
+* adds vodcast
+* enables users to add each others tags
+* disables the registration view
+* updates docs of the User Annotation
+ 
+
 1.3
 ---
 * adds a user classification and annotation module that is only accessible for users with specific credentials
