@@ -8,34 +8,32 @@
 
 {% block main_body %}
   <div class="row">
+    <div class="container">
+
       <div class="col-sm-9">
           <h2 class="without-pills">About this prototype</h2>
 
-          <p>The CLiC interface is work in progress. The current prototype was last updated on 23/10/2015 (version 1.1.3).
+          <p>The CLiC interface is work in progress. The current prototype was last updated on 7/4/2016 (version 1.3.1).
           </p>
-          <p>
-          The previous update made it possible to navigate the different "subsets" within corpora. It also fixed the 1-gram
-          keywords and clusters.
-          Other updates made it possible to click on one of the rows in the concordance to retrieve the text it was
-          found in. They also improved the speed of certain searches considerably. Other searches might still be a slow
-          and very complex searches may fail.</p>
 
           <p>The following search options are in full development (i.e. do not work yet):</p>
           <ul>
               <li>Searches, keywords, and clusters for short suspensions</li>
               <li>2-grams and n-grams from 6 upwards</li>
               <li>Improvements of sort options.</li>
+              <li>Searches might still be a slow and very complex searches may fail.</li>
+              <li>The keyword extraction algorithm is about to be updated. The differences with the current algorithm are minor, but some caution with the current algorithm is needed.</li>
           </ul>
       </div>
 
-      {% include "blocks/feedback.html" %}
       {% include "blocks/twitter.html" %}
+  </div>
   </div>
   <div class="row">
       <div class="col-md-9">
           <h2>About the project</h2>
 
-          <p>CLiC (Corpus Linguistics in Cheshire) is developed as part of the AHRC-funded project: “<a href="http://www.birmingham.ac.uk/schools/edacs/departments/englishlanguage/research/projects/clic.aspx">CLiC Dickens - Characterisation in the representation of speech and body language from a corpus linguistic perspective</a>”  (Arts and Humanities Research Council grant reference AH/K005146/1).</p>
+          <p>CLiC (Corpus Linguistics in Context) is developed as part of the AHRC-funded project: “<a href="http://www.birmingham.ac.uk/schools/edacs/departments/englishlanguage/research/projects/clic.aspx">CLiC Dickens - Characterisation in the representation of speech and body language from a corpus linguistic perspective</a>”  (Arts and Humanities Research Council grant reference AH/K005146/1).</p>
 
           <p>The project demonstrates through corpus stylistics how computer-assisted methods can be used to study literary texts and lead to new insights into how readers perceive fictional characters.</p>
           <p>CLiC specifically supports the analysis of fictional speech and literary body language by enabling the user to search in particular parts of the texts, e.g. in quotes, which typically contain the direct speech of fictional characters in the novels.</p>
