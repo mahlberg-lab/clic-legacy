@@ -24,6 +24,8 @@ except:
 		       Please do so in settings.py.")
     
 
+print DATA_DIRECTORY
+
 # Launch a Cheshire session
 session = Session()
 serverConfig = os.path.join(cheshire3Root, 'configs', 'serverConfig.xml')
@@ -39,37 +41,8 @@ ampPreP = db.get_object(session, 'AmpPreParser')
 xmlp = db.get_object(session, 'LxmlParser')
 
 
-if ('-austen' in sys.argv):
-    geniaTxr = db.get_object(session, 'corpusTransformer')
-    indexWF = db.get_object(session, 'indexWorkflow-austen')
-    austenRecStore = db.get_object(session, 'austenRecordStore')
-    data = DATA_DIRECTORY + 'austen'
-    df.load(session, data)
-    print df
-    austenRecStore.begin_storing(session)
-    print 'recStore begun'
-    db.begin_indexing(session) 
-    print 'indexing begun'
-    i = 1
-    for d in df :
-        print i
-        doc = ampPreP.process_document(session, d)
-        try :
-            rec = xmlp.process_document(session, doc)
-            genia = geniaTxr.process_record(session, rec)
-            rec2 = xmlp.process_document(session, genia)
-            austenRecStore.create_record(session, rec2)
-            db.add_record(session, rec2)
-            indexWF.process(session, rec2)
-        except:
-            print 'Error'
-            traceback.print_exc(file=sys.stdout)
-        i = i+1           
-    austenRecStore.commit_storing(session)                
-    db.commit_indexing(session)
-
 ### index 19C material
-if ('-ntc' in sys.argv):
+if ('--ntc' in sys.argv):
     geniaTxr = db.get_object(session, 'corpusTransformer')
     indexWF = db.get_object(session, 'indexWorkflow')
     data = DATA_DIRECTORY + 'ntc_novels'
@@ -103,7 +76,7 @@ if ('-ntc' in sys.argv):
     db.commit_indexing(session)
 
 ## index Dickens material
-if ('-load' in sys.argv):
+if ('--dickens' in sys.argv):
     geniaTxr = db.get_object(session, 'corpusTransformer')
     indexWF = db.get_object(session, 'indexWorkflow')
     data = DATA_DIRECTORY + 'dickens_novels'
@@ -137,7 +110,7 @@ if ('-load' in sys.argv):
     db.commit_indexing(session)
 
 
-if ('-addIndex' in sys.argv):
+if ('--addIndex' in sys.argv):
     idx = db.get_object(session, 'longsus-5gram-idx')
     recStore = db.get_object(session, 'recordStore')
     idx.begin_indexing(session)
