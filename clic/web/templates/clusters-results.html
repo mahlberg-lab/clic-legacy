@@ -14,7 +14,10 @@
 {% endblock %}
 
 {% block main_body %}
+
   <h2 class="without-pills">Clusters Results</h2>
+
+  <p>Number of tokens: {{ total }}. Here is a list of the 1000 most frequent clusters.</p>
 
   <div id="resultsWrap">
     <div id="tableContainer">
@@ -22,14 +25,14 @@
         <thead>
             <tr role="row">
                 <th aria-label="No" style="width: 0px;" colspan="1" rowspan="1" class="sorting_asc">No</th>
-                <th aria-label="n-gram: activate to sort column ascending" style="width: 0px;" colspan="1" rowspan="1" aria-controls="dataTableClusters" tabindex="0" class="sorting">n-gram</th>
-                <th aria-label="Freq: activate to sort column ascending" style="width: 0px;" colspan="1" rowspan="1" aria-controls="dataTableClusters" tabindex="0" class="sorting">Freq</th>
+                <th aria-label="Cluster: activate to sort column ascending" style="width: 0px;" colspan="1" rowspan="1" aria-controls="dataTableClusters" tabindex="0" class="sorting">Cluster</th>
+                <th aria-label="Frequency: activate to sort column ascending" style="width: 0px;" colspan="1" rowspan="1" aria-controls="dataTableClusters" tabindex="0" class="sorting">Frequency</th>
                 <th aria-label="%: activate to sort column ascending" style="width: 0px;" colspan="1" rowspan="1" aria-controls="dataTableClusters" tabindex="0" class="sorting">%</th>
             </tr>
         </thead>
         <tbody>
-        {% for cluster in clusters %}
-            <tr class="{{ loop.cycle('odd', 'even') }}"><td class="sorting_1">{{ loop.index }}</td><td>{{ cluster[1] }}</td><td>{{ cluster[2] }}</td><td>{{ cluster[3] }}</td></tr>
+        {% for cluster in clusters.to_records() %}
+            <tr class="{{ loop.cycle('odd', 'even') }}"><td class="sorting_1">{{ loop.index }}</td><td>{{ cluster['Type'] }}</td><td>{{ cluster['Count'] }}</td><td>{{ cluster['Percentage'] }}</td></tr>
         {% endfor %}
         </tbody>
     </table>
@@ -54,8 +57,8 @@
 
               "aoColumns": [
                   { "sTitle": "No" },
-                  { "sTitle": "n-gram" },
-                  { "sTitle": "Freq" },
+                  { "sTitle": "Cluster" },
+                  { "sTitle": "Frequency" },
                   { "sTitle": "%" }
               ],
 
@@ -80,14 +83,14 @@
               ],
               // change phrase on search box
               "oLanguage": {
-                  "sSearch": "Filter n-gram:"
+                  "sSearch": "Filter clusters:"
               },
               "oTableTools": {
                   "aButtons": [ "csv", "print" ],
                   "sSwfPath": "/js/thirdparty/DataTables1.10.0-beta.2/extensions/TableTools/swf/copy_csv_xls.swf"
               },
               // duplicate controls iflp
-              "sDom": '<iTf>rt<if>'
+              "sDom": '<Tf>rt<if>'
           });
 
 

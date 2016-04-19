@@ -66,14 +66,6 @@ def fetchKeywords(args):
     return keywordlist
     # return {'keywords' : keywords}
 
-@cache.cache('clusters')
-def fetchClusters(args):
-    cluster = Clusters()
-    args = processArgs(args, 'clusters')
-    clusterlist = cluster.list_clusters(args[0], args[1])
-    return clusterlist
-    # return {'clusters' : clusterlist}
-
 @cache.cache('concordances')
 def fetchConcordance(args):
     concordancer = Concordance()
@@ -83,21 +75,6 @@ def fetchConcordance(args):
 
 def processArgs(args, method):
     methodArgs = []
-
-    if method == 'clusters':
-        if not str(args["testIdxMod"]) == 'chapter':
-            testMod = str(args["testIdxMod"])
-            Group = str(args['testIdxGroup'])
-            testIdxName = "{0}-{1}".format(testMod, Group)
-        else:
-            testMod = ''
-            Group = str(args['testIdxGroup'])
-            testIdxName = "chapter-idx" # "{0}".format(Group)
-
-        methodArgs.insert(0, testIdxName)
-        book_collection = args.getlist('testCollection') ## args is a multiDictionary: use .getlist() to access individual books
-        methodArgs.insert(1, book_collection)
-
 
     if method == 'keywords':
         Group = str(args['testIdxGroup'])

@@ -13,12 +13,12 @@
 
       <div class="col-md-4">
           <label class="pull-left clicSelectSmallLabel">Cluster</label>
-          <select name="testIdxGroup" class="form-control input-sm clicSelectSmall">
-              <option value="idx">1-gram</option>
+          <select name="cluster_length" class="form-control input-sm clicSelectSmall">
+              <option selected value="1">1-gram</option>
               <!-- <option value="2gram-idx">2-gram</option> -->
-              <option selected value="3gram-idx">3-gram</option>
-              <option value="4gram-idx">4-gram</option>
-              <option value="5gram-idx">5-gram</option>
+              <option value="3">3-gram</option>
+              <option value="4">4-gram</option>
+              <option value="5">5-gram</option>
               <!--<option value="6gram-idx">6-gram</option>
               <option value="7gram-idx">7-gram</option>
               <option value="8gram-idx">8-gram</option>
@@ -43,31 +43,31 @@
 
           <div class="radio">
               <label>
-                  <input type="radio" name="testIdxMod" id="testIdxMod1" value="chapter">
+                  <input type="radio" name="subset" id="subset1" value="">
                   Whole text
               </label>
           </div>
           <div class="radio">
               <label>
-                  <input type="radio" name="testIdxMod" id="testIdxMod2" value="quote" checked>
+                  <input type="radio" name="subset" id="subset2" value="quote" checked>
                   Quotes
               </label>
           </div>
           <div class="radio">
               <label>
-                  <input type="radio" name="testIdxMod" id="testIdxMod3" value="non-quote">
+                  <input type="radio" name="subset" id="subset3" value="non-quote">
                   Non-quotes
               </label>
           </div>
           <div class="radio">
               <label>
-                  <input type="radio" name="testIdxMod" id="testIdxMod4" value="longsus">
+                  <input type="radio" name="subset" id="subset4" value="longsus">
                   Long suspensions (5 words or more)
               </label>
           </div>
           <div class="radio">
               <label>
-                  <input type="radio" name="testIdxMod" id="testIdxMod5" value="shortsus">
+                  <input type="radio" name="subset" id="subset5" value="shortsus">
                   Short suspensions (4 words or less)
               </label>
           </div>

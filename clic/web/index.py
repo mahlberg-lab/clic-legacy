@@ -33,7 +33,8 @@ from flask_security import Security, SQLAlchemyUserDatastore, \
 from wtforms.fields import SelectField, StringField
 from sqlalchemy import or_
 
-from clic.web.api import api, fetchClusters, fetchKeywords
+from clic.wordlists import Cheshire3WordList
+from clic.web.api import api, fetchKeywords
 from clic.chapter_repository import ChapterRepository
 from clic.kwicgrouper import KWICgrouper, concordance_for_line_by_line_file
 from clic.web.forms import BOOKS, SUBSETS
@@ -124,28 +125,84 @@ def keywords():
 #==============================================================================
 # Clusters
 #==============================================================================
+
+def construct_index_name(subset, cluster_length):
+    '''
+    
+    subset = quote
+    cluster_length = 3
+    -> quote-3-gram-idx
+    ---
+    subset = 
+    cluster_length = 1 
+    -> chapter-idx
+    ---
+    subset = 
+    cluster_length = 3
+    -> 3-gram-idx 
+    ---
+    subset = quote
+    cluster_length = 1
+    -> quote-idx
+    '''
+    
+    
+    if int(cluster_length) == 1:
+        # chapter-idx
+        if not subset:
+            return 'chapter-idx'
+        # quote-idx, non-quote-idx, shortsus-idx, longsus-idx
+        return subset + '-idx'
+    
+    # 3gram-idx, quote-3gram-idx, non-quote-3gram-idx, longsus-3gram-idx
+    index_name = subset + '-' + cluster_length + 'gram' + '-idx'
+    # delete the - from the default '-3gram-idx'
+    return index_name.strip('-')
+
+    
+#TODO cache
 @app.route('/clusters/', methods=['GET'])
 def clusters():
-    if 'testIdxGroup' in request.args.keys(): # form was submitted
+    '''
+    Used to be:
+    /clusters/?testIdxGroup=3gram-idx&testCollection=dickens&testIdxMod=quote
+    
+    Now: 
+    /clusters/?cluster_length=1&testCollection=dickens&subset=
+    '''
+    
+    #FIXME width of type column 
+    #TODO let the user select the number of items he/she wants, with an option: all or complete
+    #FIXME variables names etc. in js, etc. 
+    #FIXME number of tokens is different when changing the 
+    #FIXME check if form was submitted
+    if 'subset' in request.args.keys(): # form was submitted
 
-        IdxGroup = request.args.get('testIdxGroup')
-        # FIXME this might not work when dealing with only a few books,
-        # rather than an entire subcorpus, in that case better use:
-        # collection = args.getlist('testCollection') ## args is a
-        ## multiDictionary: use .getlist() to access individual books
-        testCollection = request.args.get('testCollection')
-        testIdxMod = request.args.get('testIdxMod')
-        selectWords = "whole"
+        subset = request.args.get('subset')
+        
+        # args is a
+        # multiDictionary: use .getlist() to access individual books
+        subcorpora = request.args.getlist('testCollection')
+        if not isinstance(subcorpora, list):
+            subcorpora = subcorpora.split()
 
-        args = request.args
-        clusters_result = fetchClusters(args)
+        cluster_length = request.args.get('cluster_length')
 
+        index_name = construct_index_name(subset, cluster_length)
+        
+        clusters = Cheshire3WordList()    
+        clusters.build_wordlist(index_name, subcorpora)
+        # links are still reminisicent of earlier naming scheme
+        # testCollection is ugly
+        #FIXME delete linking if not always working
         return render_template("clusters-results.html",
-                               IdxGroup=IdxGroup,
-                               testCollection=testCollection,
-                               testIdxMod=testIdxMod,
-                               selectWords=selectWords,
-                               clusters=clusters_result)
+                               IdxGroup=cluster_length,
+                               #FIXME
+                               testCollection=subcorpora,
+                               testIdxMod=subset,
+                               selectWords="whole",
+                               clusters=clusters.wordlist.iloc[:1000], 
+                               total=clusters.total)
 
     else:
         return render_template("clusters-form.html")
