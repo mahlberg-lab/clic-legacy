@@ -2,184 +2,234 @@
 
 '''
 Module to compute keywords (words that are used significantly more frequently
-in one corpus than they are in a reference corpus).
+in one corpus than they are in a reference corpus). 
+
+The statistical measure used is
+Log Likelihood as explained by Rayson and Garside 
+(http://ucrel.lancs.ac.uk/people/paul/publications/rg_acl2000.pdf)
+
+Usage as follows:
+-----------------
+
+    analysis = pd.DataFrame([('a', 2500), ('the', 25000)], columns=('Type', 'Count'))
+    reference = pd.DataFrame([('a', 10), ('the', 10)], columns=('Type', 'Count'))
+
+    result = extract_keywords(analysis, 
+                     reference, 
+                     tokencount_analysis=20, 
+                     tokencount_reference=100, 
+                     round_values=True, 
+                     limit_rows=3)
+    result
+    
+    keywords_to_json(result)
+
+Or using text files as input:
+-----------------------------
+
+    from collections import Counter
+
+    with open('~/data/input/DNov/BH.txt') as inputfile:
+        bh = inputfile.read().split()
+        bh = Counter(bh)
+
+    with open('~/data/input/DNov/OT.txt') as inputfile:
+        ot = inputfile.read().split()
+        ot = Counter(ot)
+        
+    bh_df  = pd.DataFrame(bh.items(), columns=['Type', 'Count'])
+    ot_df  = pd.DataFrame(ot.items(), columns=['Type', 'Count'])
+
+    extract_keywords(bh_df, 
+                     ot_df, 
+                     tokencount_analysis=bh_df.Count.sum(), 
+                     tokencount_reference=ot_df.Count.sum(), 
+                     round_values=True,)
+
 '''
 
 import os
-from math import log1p
 import operator
+import pandas as pd
+import numpy as np
 
 from cheshire3.document import StringDocument
 from cheshire3.internal import cheshire3Root
 from cheshire3.server import SimpleServer
 from cheshire3.baseObjects import Session
 
-cheshirePath = os.path.join('HOME', '/home/cheshire')
 
-class Keywords(object):
+def log_likelihood(counts):
     '''
-    Class to compute keywords based on an test index (the corpus of analysis),
-    a reference index (the corpus of reference), and a P value.
+    This function uses vector calculations to compute LL values. 
+    
+    Input: dataframe that is formatted as follows:
+    
+        Type, 
+        Count_analysis, 
+        Total_analysis, 
+        Count_ref, 
+        Total_ref
+    
+    Output: dataframe that is formatted as follows:
+    
+         Type, 
+         Count_analysis, 
+         Total_analysis, 
+         Count_ref, 
+         Total_ref, 
+         Expected_count_analysis,
+         Expected_count_ref
+         LL
+         
+    Hapax legomena in the Count_analysis are not deleted and zero values in the 
+    Count_ref are not treated any differently from other values. 
+    '''
+    
+    # compute expected values
+    counts.loc[:,'Expected_count_analysis'] = counts['Total_analysis'] * (counts['Count_analysis'] + counts['Count_ref']) / (counts['Total_analysis'] + counts['Total_ref'])
+    counts.loc[:,'Expected_count_ref'] = counts['Total_ref'] * (counts['Count_analysis'] + counts['Count_ref']) / (counts['Total_analysis'] + counts['Total_ref'])
+
+    # define variables to avoid cluttering
+    a = counts['Count_analysis']
+    exp_a = counts['Expected_count_analysis']
+    b = counts['Count_ref']
+    exp_b = counts['Expected_count_ref']
+
+    # compute log likelihood
+    counts.loc[:,'LL'] = 2*((a * np.log(a/exp_a)) + (b * np.log(b/exp_b)))
+    
+    # log likelihood if count or expected count in the ref corpus are 0
+    counts.loc[(counts.Count_ref == 0) | (counts.Expected_count_ref == 0), 'LL'] = 2*((a * np.log(a/exp_a)) + (b * 0)) 
+
+    # sort the results
+    keywords = counts.sort_values('LL', ascending=False)
+    
+    return keywords
+    
+def extract_keywords(wordlist_analysis, 
+             wordlist_reference,
+             tokencount_analysis,
+             tokencount_reference,
+             p_value=0.0001,
+             exclude_underused=True,
+             freq_cut_off=5,
+             round_values=True,
+             limit_rows=False
+            ):   
+    '''
+    This is the core method for keyword extraction. It provides a number 
+    of handles to select sections of the data and/or adapt the input for the
+    formula. 
+    
+    Input = Two dataframes with columns 'Type', and 'Count' and 
+            two total tokencounts
+    
+    Output = An aligned dataframe which is sorted on the LL value and maybe filter 
+             using the following handles:
+             
+        - p_value: limits the keywords based on their converted p_value. A p_value of 0.0001
+                   will select keywords that have 0.0001 *or less* as their p_value. It is a 
+                   cut-off. One can choose one out of four values: 0.0001, 0.001, 0.01, or 0.05.
+                   If any other value is chosen, it is ignored and no filtering on p_value is done.
+        
+        - exclude_underused: if True (default) it filters the result by excluding tokens that are 
+                             statistically underused.
+                             
+        - freq_cut_off: limits the wordlist_analysis to words that have the freq_cut_off (inclusive) 
+                        as minimal frequency. 5 is a sane default for Log Likelihood. If one does not 
+                        want frequency-based filtering, set a value of 0.
+                        
+        - round_values: if True (default) it rounds the columns with expected frequencies and LL 
+                        to 2 decimals.
+        
+        - limit_rows: if a number (for instance, 100), it limits the result to the number of rows 
+                      specified. If false, rows are not limited. 
+    
+    The defaults are reasonably sane: 
+     - a token needs to occur at least 5 times in the corpus of analysis
+     - a high p-value is set
+     - no filtering of the rows takes place
+     - the underused tokens are excluded
+     - rounding is active
+
+    For more information on the algorithm, cf. log_likelihood().
+    
+    The first column contains the indeces for the original merged dataframe. It does not display
+    a rank and it should be ignored for keyword analysis (to be more precise: it displays the 
+    frequency rank of the token in the corpus of analysis).
     '''
 
-    def __init__(self):
-        '''
-        Make the connection with cheshire3.
-        '''
-        self.session = Session()
-        self.session.database = 'db_dickens'
-        self.serv = SimpleServer(self.session,
-                            os.path.join(cheshire3Root, 'configs', 'serverConfig.xml')
-                            )
-        self.db = self.serv.get_object(self.session, self.session.database)
-        self.qf = self.db.get_object(self.session, 'defaultQueryFactory')
-        self.resultSetStore = self.db.get_object(self.session, 'resultSetStore')
-        self.idxStore = self.db.get_object(self.session, 'indexStore')
-        self.logger = self.db.get_object(self.session, 'keywordLogger')
+    # select only the Type and Count columns
+    wordlist_analysis = wordlist_analysis[['Type', 'Count']]
+    wordlist_reference = wordlist_reference[['Type', 'Count']]
+    
+    # limit with a simple frequency cut-off, does not filter the corpus of reference
+    wordlist_analysis = wordlist_analysis.loc[wordlist_analysis.Count >= freq_cut_off]
 
-    def list_keywords(self, testIdxName, testMaterials, refIdxName, refMaterials, pValue):
-        '''
-        Return a sorted list of keywords. Limited to the first 5000 items.
-        '''
-        #self.logger.log(10, 'CREATING KEYWORDS FOR RS: {0} in {1}, compared to {2} in {3}'.format(testIdxName, testMaterials, refIdxName, refMaterials, pValue))
-        session = self.session
-        db = self.db
+    # merge and align the two wordlists
+    merged = wordlist_analysis.merge(wordlist_reference, on='Type', how='left', suffixes=('_analysis', '_ref')).fillna(0)
+    
+    # prepare object for computation
+    if not tokencount_analysis:
+        raise IOError, 'You did not provide a total token count for the corpus of analysis'
+    merged.loc[:,'Total_analysis'] = tokencount_analysis
+    
+    if not tokencount_reference:
+        raise IOError, 'You did not provide a total token count for the corpus of reference'
+    merged.loc[:,'Total_ref'] = tokencount_reference
+    keywords = merged.loc[:,['Type', 'Count_analysis', 'Total_analysis', 'Count_ref', 'Total_ref']]
 
-        clauses = []
-        for testMaterial in testMaterials:
-            if testMaterial in ['dickens', 'ntc']:
-                testMatIdx = 'subCorpus-idx'
-            else:
-                testMatIdx = 'book-idx'
-            clauses.append('c3.{0} = "{1}"'.format(testMatIdx, testMaterial))
+    # compute keyness
+    keywords = log_likelihood(keywords)
+    
+    # over and underused
+    keywords.loc[:,'Use'] = '0'
+    keywords.loc[keywords.Count_analysis > keywords.Expected_count_analysis, 'Use'] = '+'
+    keywords.loc[keywords.Count_analysis < keywords.Expected_count_analysis, 'Use'] = '-'
 
-        test_query = self.qf.get_query(session,
-                                       ' or '.join(clauses)
-                                       )
-        test_results = db.search(session, test_query)
-        test_idx = db.get_object(session, testIdxName)
-        test_facets = test_idx.facets(session, test_results)
-
-        ## create dictionary containing word/cluster and number of occurrences
-        test_dict = {x[0]: x[1][2] for x in test_facets}
-
-        # Reference results
-        clauses_ref = []
-        for refMaterial in refMaterials:
-            if refMaterial in ['dickens', 'ntc']:
-                refMatIdx = 'subCorpus-idx'
-            else:
-                refMatIdx = 'book-idx'
-            clauses_ref.append('c3.{0} = "{1}"'.format(refMatIdx, refMaterial))
-
-        ref_query = self.qf.get_query(session,
-                                       ' or '.join(clauses_ref)
-                                       )
-        ref_results = db.search(session, ref_query)
-        ref_idx = db.get_object(session, refIdxName)
-        ref_facets = ref_idx.facets(session, ref_results)
-        ref_dict = {x[0]: x[1][2] for x in ref_facets}
-
-        ## get test and ref lengths
-        ## I use total counts to calculate expected values
-        testLength = sum(test_dict.values())
-        refLength = sum(ref_dict.values())
-
-        kw_list = []
-        for term, freqTest in test_dict.iteritems():
-            if freqTest > 1:
-                try:
-                    ## Method 1: how many observations of a given word is found in ref corpus but not in test corpus
-                    ## Subtract number of occurrences in testIndex from number of occurrences in sentences
-                    #freqRef = float(ref_dict[term] - freqTest)
-                    ## Method 2: treat groups as mutually exclusive. NOTE: When comparing quotes with whole text the occurrences will overlap
-                    freqRef = float(ref_dict[term])
-                except KeyError:
-                    freqRef = 5.0e-324
-                else:
-                    if freqRef <= 0:
-                        freqRef = 5.0e-324
-
-                ## following Paul Ryson formula for log likelihood (http://ucrel.lancs.ac.uk/llwizard.html)
-                ## 1. Expected occurrence within corpus
-                ## 1a. Expected reference value: based on sentence index
-                ## - Get the total N from corpus 1 (reference corpus)
-                ## - Multiply by the sum of observations found in ref corpus and those found in test corpus
-                ## - Divide by the sum of total N in test corpus and reference corpus
-                expectedRef = refLength*(freqTest+freqRef)/(testLength+refLength)
-                ## 1b. Expected test value
-                ## Equivalent steps to 1a, but multiply by test N
-                expectedTest = testLength*(freqTest+freqRef)/(testLength+refLength)
-
-                ## 2. Log Likelihood
-                ## Compare actual observations with expected ocurrence for both test and ref, and add these values
-                ## Use log1p() (for natural logarithm - ln) instead of log()
-                if freqTest*log1p(freqTest/expectedTest) >= freqRef*log1p(freqRef/expectedRef):
-                    try:
-                        LL = 2*((freqTest*log1p(freqTest/expectedTest)) + (freqRef*log1p(freqRef/expectedRef)))
-                        LL = '%.2f' % LL
-                    except:
-                        LL = 909090
-                else:
-                    try:
-                        LL = -2*((freqTest*log1p(freqTest/expectedTest)) + (freqRef*log1p(freqRef/expectedRef)))
-                        LL = '%.2f' % LL
-                    except:
-                        LL = 909090
-
-                if freqRef == 5.0e-324:
-                    freqRef2 = 0
-                else:
-                    freqRef2 = int('%.0f' % freqRef)
-
-
-                dec_Test = '%.2f' % freqTest
-                dec_Ref = '%.2f' % freqRef
-                propTest = (float(dec_Test)/testLength) * 100
-                propRef = (float(dec_Ref)/refLength) * 100
-
-
-                if float(pValue) == 0.000001:
-                    if float(LL) >= 23.93:# or float(LL) <= -23.93: ## We only deal with positive LL values
-                        kw_list.append(['', term, str(freqTest), '%.2f' % propTest, str(freqRef2), '%.2f' % propRef, float(LL), pValue])
-
-                else:
-                    if float(pValue) == 0.0000001:
-                        if float(LL) >= 28.38:
-                            kw_list.append(['', term, str(freqTest), '%.2f' % propTest, str(freqRef2), '%.2f' % propRef, float(LL), pValue])
-                    if float(pValue) == 0.00000001:
-                        if float(LL) >= 32.85:
-                            kw_list.append(['', term, str(freqTest), '%.2f' % propTest, str(freqRef2), '%.2f' % propRef, float(LL), pValue])
-                    if float(pValue) == 0.000000001:
-                        if float(LL) >= 37.33:
-                            kw_list.append(['', term, str(freqTest), '%.2f' % propTest, str(freqRef2), '%.2f' % propRef, float(LL), pValue])
-                    if float(pValue) == 0.0000000001:
-                        if float(LL) >= 41.83:
-                            kw_list.append(['', term, str(freqTest), '%.2f' % propTest, str(freqRef2), '%.2f' % propRef, float(LL), pValue])
-                    if float(pValue) == 0.00000000001:
-                        if float(LL) >= 46.33:
-                            kw_list.append(['', term, str(freqTest), '%.2f' % propTest, str(freqRef2), '%.2f' % propRef, float(LL), pValue])
-
-                    if float(pValue) == 0.00001:
-                        if (float(LL) > 19.52):# or (float(LL) < -19.52):
-                            kw_list.append(['', term, str(freqTest), '%.2f' % propTest, str(freqRef2), '%.2f' % propRef, float(LL), pValue])
-                    elif float(pValue) == 0.0001:
-                        if (float(LL) > 15.14):# or (float(LL) < -15.14):
-                            kw_list.append(['', term, str(freqTest), '%.2f' % propTest, str(freqRef2), '%.2f' % propRef, float(LL), pValue])
-                    elif float(pValue) == 0.001:
-                        if (float(LL) > 10.83):# or (float(LL) < -10.83):
-                            kw_list.append(['', term, str(freqTest), '%.2f' % propTest, str(freqRef2), '%.2f' % propRef, float(LL), pValue])
-                    elif float(pValue) == 0.01:
-                        if (float(LL) > 6.64):# or (float(LL) < -6.64):
-                            kw_list.append(['', term, str(freqTest), '%.2f' % propTest, str(freqRef2), '%.2f' % propRef, float(LL), pValue])
-                    elif float(pValue) == 0.05:
-                        if (float(LL) > 3.85):# or (float(LL) < -3.85):
-                            kw_list.append(['', term, str(freqTest), '%.2f' % propTest, str(freqRef2), '%.2f' % propRef, float(LL), pValue])
-                    elif float(pValue) == 0.1: ## NB: returns all values
-                        if (float(LL) > 2.71):# or (float(LL) < -2.71):
-                            kw_list.append(['', term, str(freqTest), '%.2f' % propTest, str(freqRef2), '%.2f' % propRef, float(LL), pValue])
-
-        ## sort by K value (descending)
-        kw_list.sort(key=operator.itemgetter(6), reverse=True) ## reverse=TRUE for descending order
-
-        return kw_list[0:4999]
+    if exclude_underused:
+        keywords = keywords.loc[keywords['Use'] == '+',:]
+    
+    # translate LL value to p-value
+    keywords.loc[:,'p'] = 'p >= 0.05'
+    keywords.loc[keywords['LL'] >= 3.84,'p'] = 'p < 0.05'
+    keywords.loc[keywords['LL'] >= 6.63,'p'] = 'p < 0.01'
+    keywords.loc[keywords['LL'] >= 10.83,'p'] = 'p < 0.001'
+    keywords.loc[keywords['LL'] >= 15.13,'p'] = 'p < 0.0001'        
+    
+    # limit the keywords to the p-value
+    # if the p cut-off does not match either of the conditions, no filtering is done
+    if p_value == 0.0001:
+        keywords = keywords[keywords['LL'] >= 15.13]
+    if p_value == 0.001:
+        keywords = keywords[keywords['LL'] >= 10.83]
+    if p_value == 0.01:
+        keywords = keywords[keywords['LL'] >= 6.63]
+    if p_value == 0.05:
+        keywords = keywords[keywords['LL'] >= 3.84]
+        
+    if round_values:
+        keywords = keywords.round({'LL':2, 'Expected_count_analysis':2, 'Expected_count_ref':2})
+    
+    if limit_rows:
+        return keywords.iloc[:limit_rows]
+    
+    return keywords
+    
+def keywords_to_json(keywords):
+    '''
+    Transforms a keywords table into a json array. 
+    It is specifically tailored at the CLiC Dickens interface.
+    '''
+    keywords.loc[:,'Empty'] = ''
+    keywords = keywords[['Empty',
+                        'Type', 
+                        'Count_analysis', 
+                        'Expected_count_analysis', 
+                        'Count_ref', 
+                        'Expected_count_ref',
+                        'LL',
+                        'p',
+                        'Use']]
+    return keywords.to_json(orient='values') 

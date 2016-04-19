@@ -32,16 +32,16 @@
             </tr>
          </thead>
         <tbody>
-        {% for keyword in keywords %}
+        {% for keyword in keywords.to_records() %}
             <tr class="{{ loop.cycle('odd', 'even') }}">
                 <td class="sorting_1">{{ loop.index }}</td>
-                <td>{{ keyword[1] }}</td>
-                <td>{{ keyword[2] }}</td>
-                <td>{{ keyword[3] }}</td>
-                <td>{{ keyword[4] }}</td>
-                <td>{{ keyword[5] }}</td>
-                <td>{{ keyword[6] }}</td>
-                <td>{{ keyword[7] }}</td>
+                <td>{{ keyword['Type'] }}</td>
+                <td>{{ keyword['Count_analysis'] }}</td>
+                <td>foemp</td>
+                <td>{{ keyword['Count_ref'] }}</td>
+                <td></td>
+                <td>{{ keyword['LL'] }}</td>
+                <td>{{ keyword['p'] }}</td>
             </tr>
         {% endfor %}
         </tbody>

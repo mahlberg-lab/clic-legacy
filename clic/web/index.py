@@ -34,7 +34,8 @@ from wtforms.fields import SelectField, StringField
 from sqlalchemy import or_
 
 from clic.wordlists import Cheshire3WordList
-from clic.web.api import api, fetchKeywords
+from clic.keywords import extract_keywords
+from clic.web.api import api
 from clic.chapter_repository import ChapterRepository
 from clic.kwicgrouper import KWICgrouper, concordance_for_line_by_line_file
 from clic.web.forms import BOOKS, SUBSETS
@@ -96,31 +97,6 @@ def concordances():
     else:
         return render_template("concordance-form.html")
 
-#==============================================================================
-# Keywords
-#==============================================================================
-@app.route('/keywords/', methods=['GET'])
-def keywords():
-    if 'testIdxGroup' in request.args.keys(): # form was submitted
-
-        # get parameters for redirecting to the concordance page
-        IdxGroup = request.args.get('testIdxGroup')
-        testCollection = request.args.get('testCollection')
-        testIdxMod = request.args.get('testIdxMod')
-        selectWords = "whole"
-
-        args = request.args
-        keywords_result = fetchKeywords(args)
-
-        return render_template("keywords-results.html",
-                               IdxGroup=IdxGroup,
-                               testCollection=testCollection,
-                               testIdxMod=testIdxMod,
-                               selectWords=selectWords,
-                               keywords=keywords_result)
-
-    else:
-        return render_template("keywords-form.html")
 
 #==============================================================================
 # Clusters
@@ -176,12 +152,14 @@ def clusters():
     #FIXME variables names etc. in js, etc. 
     #FIXME number of tokens is different when changing the 
     #FIXME check if form was submitted
+    #FIXME sort
     if 'subset' in request.args.keys(): # form was submitted
 
         subset = request.args.get('subset')
         
         # args is a
         # multiDictionary: use .getlist() to access individual books
+        #TODO rename
         subcorpora = request.args.getlist('testCollection')
         if not isinstance(subcorpora, list):
             subcorpora = subcorpora.split()
@@ -206,6 +184,59 @@ def clusters():
 
     else:
         return render_template("clusters-form.html")
+
+
+#==============================================================================
+# Keywords
+#==============================================================================
+@app.route('/keywords/', methods=['GET'])
+def keywords():
+    if 'subset_analysis' in request.args.keys(): # form was submitted
+
+        cluster_length = request.args.get('cluster_length')
+
+        subset_analysis = request.args.get('subset_analysis')
+        subcorpora_analysis = request.args.getlist('testCollection')
+        if not isinstance(subcorpora_analysis, list):
+            subcorpora_analysis = subcorpora_analysis.split()
+        index_name_analysis = construct_index_name(subset_analysis, cluster_length)
+        
+        subset_reference = request.args.get('subset_reference')
+        subcorpora_reference = request.args.getlist('refCollection')
+        if not isinstance(subcorpora_reference, list):
+            subcorpora_reference = subcorpora_reference.split()
+        index_name_reference = construct_index_name(subset_reference, cluster_length)        
+    
+        wordlist_analysis = Cheshire3WordList()
+        wordlist_analysis.build_wordlist(index_name_analysis, subcorpora_analysis)
+        wordlist_analysis = wordlist_analysis.wordlist
+
+        wordlist_reference = Cheshire3WordList()
+        wordlist_reference.build_wordlist(index_name_reference, subcorpora_reference)
+        wordlist_reference = wordlist_reference.wordlist
+
+        #FIXME why would reference frequency be a float? 
+        #TODO check whether the wordlists are not truncated in the process
+        #TODO change which columns are added: display: expected*2, underused/overused, etc.
+        #TODO RENAME column headers
+        #FIXME click to search
+        #TODO plug p_value in
+        keywords = extract_keywords(wordlist_analysis,
+                                    wordlist_reference,
+                                    wordlist_analysis.Count.sum(),
+                                    wordlist_reference.Count.sum(),
+                                    limit_rows=10)
+        
+        return render_template("keywords-results.html",
+                            #    IdxGroup=IdxGroup,
+                            #    testCollection=testCollection,
+                            #    testIdxMod=testIdxMod,
+                            #    selectWords=selectWords,
+                               keywords=keywords)
+
+    else:
+        return render_template("keywords-form.html")
+
 
 #==============================================================================
 # Chapters
@@ -234,7 +265,6 @@ def subsets():
     The basic design for POST parameters was almost ready but there were a
     few issues.
     '''
-
 
     book = request.args.get('book')
     subset = request.args.get('subset')

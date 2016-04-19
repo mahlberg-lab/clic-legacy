@@ -12,12 +12,12 @@
   <form role="search" action="{{ url_for('keywords') }}" method="get" class="row">
       <div class="col-md-4">
           <label class="pull-left clicSelectSmallLabel">n-gram</label>
-          <select name="testIdxGroup" class="form-control input-sm clicSelectSmall">
-              <option value="idx">1-gram</option>
+          <select name="cluster_length" class="form-control input-sm clicSelectSmall">
+              <option selected value="1">1-gram</option>
               <!-- <option value="2gram-idx">2-gram</option> -->
-              <option selected value="3gram-idx">3-gram</option>
-              <option value="4gram-idx">4-gram</option>
-              <option value="5gram-idx">5-gram</option>
+              <option value="3">3-gram</option>
+              <option value="4">4-gram</option>
+              <option value="5">5-gram</option>
               <!--<option value="6gram-idx">6-gram</option>
               <option value="7gram-idx">7-gram</option>
               <option value="8gram-idx">8-gram</option>
@@ -38,31 +38,31 @@
 
           <div class="radio">
               <label>
-                  <input type="radio" name="testIdxMod" id="testIdxMod1" value="chapter">
+                  <input type="radio" name="subset_analysis" id="subset_analysis1" value="">
                   Whole text
               </label>
           </div>
           <div class="radio">
               <label>
-                  <input type="radio" name="testIdxMod" id="testIdxMod2" value="quote" checked>
+                  <input type="radio" name="subset_analysis" id="subset_analysis2" value="quote" checked>
                   Quotes
               </label>
           </div>
           <div class="radio">
               <label>
-                  <input type="radio" name="testIdxMod" id="testIdxMod3" value="non-quote">
+                  <input type="radio" name="subset_analysis" id="subset_analysis3" value="non-quote">
                   Non-quotes
               </label>
           </div>
           <div class="radio">
               <label>
-                  <input type="radio" name="testIdxMod" id="testIdxMod4" value="longsus">
+                  <input type="radio" name="subset_analysis" id="subset_analysis4" value="longsus">
                   Long suspensions (5 words or more)
               </label>
           </div>
           <div class="radio">
               <label>
-                  <input type="radio" name="testIdxMod" id="testIdxMod5" value="shortsus">
+                  <input type="radio" name="subset_analysis" id="subset_analysis5" value="shortsus">
                   Short suspensions (4 words or less)
               </label>
           </div>
@@ -71,18 +71,10 @@
       <div class="col-md-4">
           <label class="pull-left clicSelectSmallLabel">p-value</label>
           <select name="pValue" class="form-control input-sm clicSelectSmall">
-              <option>0.1</option>
               <option>0.05</option>
               <option>0.01</option>
               <option>0.001</option>
-              <option>0.0001</option>
-              <option>0.00001</option>
-              <option selected>0.000001</option>
-              <option>0.0000001</option>
-              <option>0.00000001</option>
-              <option>0.000000001</option>
-              <option>0.0000000001</option>
-              <option>0.00000000001</option>
+              <option selected>0.0001</option>
           </select>
 
           <h4>Reference corpus</h4>
@@ -91,37 +83,36 @@
 
           <a data-toggle="modal" href="#booksModalRefMaterial" class="btn btn-default">Change books</a>
 
-
           <br><br>
           <h5>Search within</h5>
 
           <div class="radio">
               <label>
-                  <input type="radio" name="refIdxMod" id="refIdxMod1" value="chapter">
+                  <input type="radio" name="subset_reference" id="subset_reference1" value="chapter">
                   Whole text
               </label>
           </div>
           <div class="radio">
               <label>
-                  <input type="radio" name="refIdxMod" id="refIdxMod2" value="quote">
+                  <input type="radio" name="subset_reference" id="subset_reference2" value="quote">
                   Quotes
               </label>
           </div>
           <div class="radio">
               <label>
-                  <input type="radio" name="refIdxMod" id="refIdxMod3" value="non-quote" checked>
+                  <input type="radio" name="subset_reference" id="subset_reference3" value="non-quote" checked>
                   Non-quotes
               </label>
           </div>
           <div class="radio">
               <label>
-                  <input type="radio" name="refIdxMod" id="refIdxMod4" value="longsus">
+                  <input type="radio" name="subset_reference" id="subset_reference4" value="longsus">
                   Long suspensions (5 words or more)
               </label>
           </div>
           <div class="radio">
               <label>
-                  <input type="radio" name="refIdxMod" id="refIdxMod5" value="shortsus">
+                  <input type="radio" name="subset_reference" id="subset_reference5" value="shortsus">
                   Short suspensions (4 words or less)
               </label>
           </div>
