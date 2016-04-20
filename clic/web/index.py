@@ -122,7 +122,6 @@ def construct_index_name(subset, cluster_length):
     -> quote-idx
     '''
     
-    
     if int(cluster_length) == 1:
         # chapter-idx
         if not subset:
@@ -136,52 +135,52 @@ def construct_index_name(subset, cluster_length):
     return index_name.strip('-')
 
     
+def enforce_list(sequence):
+    '''
+    Ensures the input is a list.
+    
+       If so: simply returns the list.
+       If not: turns the string into a list by splitting is on whitespace. For
+       a string without whitespace this will result in a list with a single item.
+    '''
+    if not isinstance(sequence, list):
+        sequence = sequence.split()
+    return sequence
+
 #TODO cache
 @app.route('/clusters/', methods=['GET'])
 def clusters():
     '''
-    Used to be:
-    /clusters/?testIdxGroup=3gram-idx&testCollection=dickens&testIdxMod=quote
+    /clusters/?cluster_length=1&subcorpus=dickens&subset=quote
     
-    Now: 
-    /clusters/?cluster_length=1&subcorpora=dickens&subset=
-    '''
-    #TODO sorting of df
-    #FIXME variables names etc. in js, etc. 
-    #TODO check: number of tokens is different when changing the 3-4-5grams
-    # This is because it respects text unit boundaries
+    Number of tokens is different when changing the 3-4-5-grams.
+    This is because it respects text unit boundaries.
+
     #TODO optional: let the user select the number of items he/she wants, with an option: all or complete
     #TODO form validation
+    '''
     
     # form was submitted
     if 'subset' in request.args.keys(): 
-
         subset = request.args.get('subset')
-        
         # args is a multiDictionary: use .getlist() to access individual books
-        #TODO rename
-        subcorpora = request.args.getlist('subcorpus')
-        if not isinstance(subcorpora, list):
-            subcorpora = subcorpora.split()
-
+        subcorpora = enforce_list(request.args.getlist('subcorpus'))
         cluster_length = request.args.get('cluster_length')
-
         index_name = construct_index_name(subset, cluster_length)
-        
         clusters = Cheshire3WordList()    
         clusters.build_wordlist(index_name, subcorpora)
-        # links are still reminisicent of earlier naming scheme
         #FIXME delete linking if not always working
         return render_template("clusters-results.html",
                                cluster_length=cluster_length,
                                subcorpora=subcorpora,
                                subset=subset,
                                selectWords="whole",
+                               # limit results to 1000 rows
                                clusters=clusters.wordlist.iloc[:1000], 
                                total=clusters.total)
-
-    else:
-        return render_template("clusters-form.html")
+    
+    # no form was submitted, return form
+    return render_template("clusters-form.html")
 
 
 #==============================================================================
@@ -193,25 +192,18 @@ def clusters():
 @app.route('/keywords/', methods=['GET'])
 def keywords():
     if 'subset_analysis' in request.args.keys(): # form was submitted
-
         cluster_length = request.args.get('cluster_length')
-
-        subset_analysis = request.args.get('subset_analysis')
-        subcorpora_analysis = request.args.getlist('subcorpus_analysis')
-        if not isinstance(subcorpora_analysis, list):
-            subcorpora_analysis = subcorpora_analysis.split()
-        index_name_analysis = construct_index_name(subset_analysis, cluster_length)
         
-        subset_reference = request.args.get('subset_reference')
-        subcorpora_reference = request.args.getlist('subcorpus_reference')
-        if not isinstance(subcorpora_reference, list):
-            subcorpora_reference = subcorpora_reference.split()
-        index_name_reference = construct_index_name(subset_reference, cluster_length)        
-    
+        subset_analysis = request.args.get('subset_analysis')
+        subcorpora_analysis = enforce_list(request.args.getlist('subcorpus_analysis'))
+        index_name_analysis = construct_index_name(subset_analysis, cluster_length)
         wordlist_analysis = Cheshire3WordList()
         wordlist_analysis.build_wordlist(index_name_analysis, subcorpora_analysis)
         wordlist_analysis = wordlist_analysis.wordlist
-
+                
+        subset_reference = request.args.get('subset_reference')
+        subcorpora_reference = enforce_list(request.args.getlist('subcorpus_reference'))
+        index_name_reference = construct_index_name(subset_reference, cluster_length)        
         wordlist_reference = Cheshire3WordList()
         wordlist_reference.build_wordlist(index_name_reference, subcorpora_reference)
         wordlist_reference = wordlist_reference.wordlist
@@ -229,7 +221,7 @@ def keywords():
                                     limit_rows=10)
         
         return render_template("keywords-results.html",
-                               subset=subset,
+                               subset=subset_analysis,
                                selectWords="whole",
                                subcorpora_analysis=subcorpora_analysis,
                                keywords=keywords)
