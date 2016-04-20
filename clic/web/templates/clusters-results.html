@@ -113,7 +113,7 @@
               var data = oTable.fnGetData(this);
               var term = data[1]
               var slug = slugify(term)
-              window.location.href = '/concordances/?terms=' + slug + "&testCollection={{testCollection}}&testIdxMod={{testIdxMod}}&selectWords={{selectWords}}";
+              window.location.href = '/concordances/?terms=' + slug + "&testCollection={{subcorpora}}&testIdxMod={{subset}}&selectWords={{selectWords}}";
           });
       });
 

@@ -144,23 +144,23 @@ def clusters():
     /clusters/?testIdxGroup=3gram-idx&testCollection=dickens&testIdxMod=quote
     
     Now: 
-    /clusters/?cluster_length=1&testCollection=dickens&subset=
+    /clusters/?cluster_length=1&subcorpora=dickens&subset=
     '''
-    
-    #FIXME width of type column 
-    #TODO let the user select the number of items he/she wants, with an option: all or complete
+    #TODO sorting of df
     #FIXME variables names etc. in js, etc. 
-    #FIXME number of tokens is different when changing the 
-    #FIXME check if form was submitted
-    #FIXME sort
-    if 'subset' in request.args.keys(): # form was submitted
+    #TODO check: number of tokens is different when changing the 3-4-5grams
+    # This is because it respects text unit boundaries
+    #TODO optional: let the user select the number of items he/she wants, with an option: all or complete
+    #TODO form validation
+    
+    # form was submitted
+    if 'subset' in request.args.keys(): 
 
         subset = request.args.get('subset')
         
-        # args is a
-        # multiDictionary: use .getlist() to access individual books
+        # args is a multiDictionary: use .getlist() to access individual books
         #TODO rename
-        subcorpora = request.args.getlist('testCollection')
+        subcorpora = request.args.getlist('subcorpus')
         if not isinstance(subcorpora, list):
             subcorpora = subcorpora.split()
 
@@ -171,13 +171,11 @@ def clusters():
         clusters = Cheshire3WordList()    
         clusters.build_wordlist(index_name, subcorpora)
         # links are still reminisicent of earlier naming scheme
-        # testCollection is ugly
         #FIXME delete linking if not always working
         return render_template("clusters-results.html",
-                               IdxGroup=cluster_length,
-                               #FIXME
-                               testCollection=subcorpora,
-                               testIdxMod=subset,
+                               cluster_length=cluster_length,
+                               subcorpora=subcorpora,
+                               subset=subset,
                                selectWords="whole",
                                clusters=clusters.wordlist.iloc[:1000], 
                                total=clusters.total)
@@ -189,6 +187,9 @@ def clusters():
 #==============================================================================
 # Keywords
 #==============================================================================
+#TODO cache
+#TODO number of tokens
+
 @app.route('/keywords/', methods=['GET'])
 def keywords():
     if 'subset_analysis' in request.args.keys(): # form was submitted
@@ -196,13 +197,13 @@ def keywords():
         cluster_length = request.args.get('cluster_length')
 
         subset_analysis = request.args.get('subset_analysis')
-        subcorpora_analysis = request.args.getlist('testCollection')
+        subcorpora_analysis = request.args.getlist('subcorpus_analysis')
         if not isinstance(subcorpora_analysis, list):
             subcorpora_analysis = subcorpora_analysis.split()
         index_name_analysis = construct_index_name(subset_analysis, cluster_length)
         
         subset_reference = request.args.get('subset_reference')
-        subcorpora_reference = request.args.getlist('refCollection')
+        subcorpora_reference = request.args.getlist('subcorpus_reference')
         if not isinstance(subcorpora_reference, list):
             subcorpora_reference = subcorpora_reference.split()
         index_name_reference = construct_index_name(subset_reference, cluster_length)        
@@ -228,10 +229,9 @@ def keywords():
                                     limit_rows=10)
         
         return render_template("keywords-results.html",
-                            #    IdxGroup=IdxGroup,
-                            #    testCollection=testCollection,
-                            #    testIdxMod=testIdxMod,
-                            #    selectWords=selectWords,
+                               subset=subset,
+                               selectWords="whole",
+                               subcorpora_analysis=subcorpora_analysis,
                                keywords=keywords)
 
     else:

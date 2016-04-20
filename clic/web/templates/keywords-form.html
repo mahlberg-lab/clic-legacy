@@ -194,9 +194,9 @@
               type: 'GET',
               dataType: 'json',
               success: function (data) {
-                  var contentTest = '<div class="checkbox"><label><input type="checkbox" class="chkDickens" name="testCollection"  value="' + data[0][0] + '" checked ><b>' + data[0][1] + '</b><br>';
+                  var contentTest = '<div class="checkbox"><label><input type="checkbox" class="chkDickens" name="subcorpus_analysis"  value="' + data[0][0] + '" checked ><b>' + data[0][1] + '</b><br>';
                   contentTest += '(' + addCommas(data[0][2][0]) + ' words; ' + addCommas(data[0][2][1]) + ' quotes, ' + addCommas(data[0][2][2]) + ' non-quotes)</label></div>';
-                  var contentRef = '<div class="checkbox"><label><input type="checkbox" class="chkDickens" name="refCollection"  value="' + data[0][0] + '" checked ><b>' + data[0][1] + '</b><br>';
+                  var contentRef = '<div class="checkbox"><label><input type="checkbox" class="chkDickens" name="subcorpus_reference"  value="' + data[0][0] + '" checked ><b>' + data[0][1] + '</b><br>';
                   contentRef += '(' + addCommas(data[0][2][0]) + ' words; ' + addCommas(data[0][2][1]) + ' quotes, ' + addCommas(data[0][2][2]) + ' non-quotes)</label></div>';
                   $('#booksTestMaterial').html(contentTest);
                   $('#booksReferenceMaterial').html(contentRef);
@@ -241,14 +241,14 @@
                   success: function (data) {
                       var dickensList = data[1];
                       var content = '<div class="checkbox chkBooklist" id="allDickensDiv"><label>';
-                      content += '<input id="allDickensChk" type="checkbox" name="testCollection" value="' + data[0][0] + '" checked >';
+                      content += '<input id="allDickensChk" type="checkbox" name="subcorpus_analysis" value="' + data[0][0] + '" checked >';
                       content += '<span class="allChkLabel"><b>' + data[0][1] + '</b></span><br>';
                       content += '(' + addCommas(data[0][2][0]) + ' words; ' + addCommas(data[0][2][1]) + ' quotes, ' + addCommas(data[0][2][2]) + ' non-quotes)';
                       content += '</label></div><div id="otherChk">';
 
                       for (var x = 0; x < dickensList.length; x++) {
                           content += '<div class="checkbox"><label>';
-                          content += '<input class="chkDickens" type="checkbox" name="testCollection" value="' + dickensList[x][0] + '" checked >';
+                          content += '<input class="chkDickens" type="checkbox" name="subcorpus_analysis" value="' + dickensList[x][0] + '" checked >';
                           content += '<b>' + dickensList[x][1] + '</b><br>';
                           content += '(' + addCommas(dickensList[x][2][0]) + ' words; ' + addCommas(dickensList[x][2][1]) + ' quotes, ' + addCommas(dickensList[x][2][2]) + ' non-quotes)';
                           content += '</label></div>';
@@ -279,14 +279,14 @@
 
                       var ntcList = data[3];
                       var content = '<div class="checkbox chkBooklist" id="allNtcDiv"><label>';
-                      content += '<input id="allNtcChk" type="checkbox" name="testCollection" value="' + data[2][0] + '" checked >';
+                      content += '<input id="allNtcChk" type="checkbox" name="subcorpus_analysis" value="' + data[2][0] + '" checked >';
                       content += '<span class="allChkLabel"><b>' + data[2][1] + '</b></span><br>';
                       content += '(' + addCommas(data[2][2][0]) + ' words; ' + addCommas(data[2][2][1]) + ' quotes, ' + addCommas(data[2][2][2]) + ' non-quotes)';
                       content += '</label></div>';
 
                       for (var x = 0; x < ntcList.length; x++) {
                           content += '<div class="checkbox"><label>';
-                          content += '<input class="chkNtc" type="checkbox" name="testCollection" value="' + ntcList[x][0] + '" checked >';
+                          content += '<input class="chkNtc" type="checkbox" name="subcorpus_analysis" value="' + ntcList[x][0] + '" checked >';
                           content += '<b>' + ntcList[x][1] + '</b><br>';
                           content += '(' + addCommas(ntcList[x][2][0]) + ' words; ' + addCommas(ntcList[x][2][1]) + ' quotes, ' + addCommas(ntcList[x][2][2]) + ' non-quotes)';
                           content += '</label></div>';
@@ -448,7 +448,7 @@
                   }
 
                   $('#booksTestMaterial').html(containerHtml);
-                  var refHtml = containerHtml.replace(/testCollection/g, "refCollection");
+                  var refHtml = containerHtml.replace(/subcorpus_analysis/g, "subcorpus_reference");
                   $('#booksReferenceMaterial').html(refHtml);
                   $('#booksModalTestMaterial').modal('hide');
               }
@@ -497,14 +497,14 @@
                   success: function (data) {
                       var dickensList = data[1];
                       var content = '<div class="checkbox chkBooklist" id="allDickensDiv"><label>';
-                      content += '<input id="allDickensChk" type="checkbox" name="refCollection" value="' + data[0][0] + '" checked >';
+                      content += '<input id="allDickensChk" type="checkbox" name="subcorpus_reference" value="' + data[0][0] + '" checked >';
                       content += '<span class="allChkLabel"><b>' + data[0][1] + '</b></span><br>';
                       content += '(' + addCommas(data[0][2][0]) + ' words; ' + addCommas(data[0][2][1]) + ' quotes, ' + addCommas(data[0][2][2]) + ' non-quotes)';
                       content += '</label></div><div id="otherChk">';
 
                       for (var x = 0; x < dickensList.length; x++) {
                           content += '<div class="checkbox"><label>';
-                          content += '<input class="chkDickens" type="checkbox" name="refCollection" value="' + dickensList[x][0] + '" checked >';
+                          content += '<input class="chkDickens" type="checkbox" name="subcorpus_reference" value="' + dickensList[x][0] + '" checked >';
                           content += '<b>' + dickensList[x][1] + '</b><br>';
                           content += '(' + addCommas(dickensList[x][2][0]) + ' words; ' + addCommas(dickensList[x][2][1]) + ' quotes, ' + addCommas(dickensList[x][2][2]) + ' non-quotes)';
                           content += '</label></div>';
@@ -535,14 +535,14 @@
 
                       var ntcList = data[3];
                       var content = '<div class="checkbox chkBooklist" id="allNtcDiv"><label>';
-                      content += '<input id="allNtcChk" type="checkbox" name="refCollection" value="' + data[2][0] + '" checked >';
+                      content += '<input id="allNtcChk" type="checkbox" name="subcorpus_reference" value="' + data[2][0] + '" checked >';
                       content += '<span class="allChkLabel"><b>' + data[2][1] + '</b></span><br>';
                       content += '(' + addCommas(data[2][2][0]) + ' words; ' + addCommas(data[2][2][1]) + ' quotes, ' + addCommas(data[2][2][2]) + ' non-quotes)';
                       content += '</label></div>';
 
                       for (var x = 0; x < ntcList.length; x++) {
                           content += '<div class="checkbox"><label>';
-                          content += '<input class="chkNtc" type="checkbox" name="refCollection" value="' + ntcList[x][0] + '" checked >';
+                          content += '<input class="chkNtc" type="checkbox" name="subcorpus_reference" value="' + ntcList[x][0] + '" checked >';
                           content += '<b>' + ntcList[x][1] + '</b><br>';
                           content += '(' + addCommas(ntcList[x][2][0]) + ' words; ' + addCommas(ntcList[x][2][1]) + ' quotes, ' + addCommas(ntcList[x][2][2]) + ' non-quotes)';
                           content += '</label></div>';
