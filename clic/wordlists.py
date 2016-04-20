@@ -99,7 +99,7 @@ class Cheshire3WordList(object):
         self.total = dataframe.Count.sum() 
         dataframe['Percentage'] = dataframe.Count / self.total * 100
         dataframe['Percentage'] = dataframe['Percentage'].round(decimals=2)
-        dataframe.sort('Count', ascending=False, inplace=True)
+        dataframe.sort_values(by='Count', ascending=False, inplace=True)
         dataframe['Empty'] = ''
         return dataframe
     
