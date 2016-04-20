@@ -22,14 +22,14 @@
          <thead>
             <tr role="row">
               <th aria-label="No" style="width: 0px;" colspan="1" rowspan="1" class="sorting_asc">No</th>
-              <th aria-label="n-gram: activate to sort column ascending" style="width: 0px;" colspan="1" rowspan="1" aria-controls="dataTableKeywords" tabindex="0" class="nowrap sorting">n-gram</th>
-              <th aria-label="Target Freq: activate to sort column ascending" style="width: 0px;" colspan="1" rowspan="1" aria-controls="dataTableKeywords" tabindex="0" class="nowrap sorting">Test Freq</th>
-              <th aria-label="%: activate to sort column ascending" style="width: 0px;" colspan="1" rowspan="1" aria-controls="dataTableKeywords" tabindex="0" class="sorting">%</th>
+              <th aria-label="n-gram: activate to sort column ascending" style="width: 0px;" colspan="1" rowspan="1" aria-controls="dataTableKeywords" tabindex="0" class="nowrap sorting">N-gram</th>
+              <th aria-label="Target Freq: activate to sort column ascending" style="width: 0px;" colspan="1" rowspan="1" aria-controls="dataTableKeywords" tabindex="0" class="nowrap sorting">Target Freq</th>
               <th aria-label="Ref Freq: activate to sort column ascending" style="width: 0px;" colspan="1" rowspan="1" aria-controls="dataTableKeywords" tabindex="0" class="nowrap sorting">Ref Freq</th>
-              <th aria-label="%: activate to sort column ascending" style="width: 0px;" colspan="1" rowspan="1" aria-controls="dataTableKeywords" tabindex="0" class="sorting">%</th>
-              <th aria-label="K: activate to sort column ascending" style="width: 0px;" colspan="1" rowspan="1" aria-controls="dataTableKeywords" tabindex="0" class="sorting">K</th>
+              <th aria-label="%: activate to sort column ascending" style="width: 0px;" colspan="1" rowspan="1" aria-controls="dataTableKeywords" tabindex="0" class="sorting">Expected target</th>
+              <th aria-label="%: activate to sort column ascending" style="width: 0px;" colspan="1" rowspan="1" aria-controls="dataTableKeywords" tabindex="0" class="sorting">Expected ref</th>
+              <th aria-label="LL: activate to sort column ascending" style="width: 0px;" colspan="1" rowspan="1" aria-controls="dataTableKeywords" tabindex="0" class="sorting">LL</th>
               <th aria-label="P: activate to sort column ascending" style="width: 0px;" colspan="1" rowspan="1" aria-controls="dataTableKeywords" tabindex="0" class="sorting">P</th>
-            </tr>
+              <th aria-label="Overused or underused: activate to sort column ascending" style="width: 0px;" colspan="1" rowspan="1" aria-controls="dataTableKeywords" tabindex="0" class="sorting">Overused or underused</th>            </tr>
          </thead>
         <tbody>
         {% for keyword in keywords.to_records() %}
@@ -37,11 +37,12 @@
                 <td class="sorting_1">{{ loop.index }}</td>
                 <td>{{ keyword['Type'] }}</td>
                 <td>{{ keyword['Count_analysis'] }}</td>
-                <td>foemp</td>
                 <td>{{ keyword['Count_ref'] }}</td>
-                <td></td>
+                <td>{{ keyword['Expected_count_analysis'] }}</td>
+                <td>{{ keyword['Expected_count_ref'] }}</td>
                 <td>{{ keyword['LL'] }}</td>
                 <td>{{ keyword['p'] }}</td>
+                <td>{{ keyword['Use'] }}</td>            
             </tr>
         {% endfor %}
         </tbody>
@@ -72,13 +73,14 @@
 
             "aoColumns": [
                 { "sTitle": "No" },
-                { "sTitle": "n-gram" ,   "sClass": "nowrap" },
-                { "sTitle": "Target Freq", "sClass": "nowrap" },
-                { "sTitle": "%" },
-                { "sTitle": "Ref Freq" , "sClass": "nowrap" },
-                { "sTitle": "%" },
-                { "sTitle": "K" },
-                { "sTitle": "P" }
+                { "sTitle": "N-gram" ,   "sClass": "nowrap" },
+                { "sTitle": "Target Frequency", "sClass": "nowrap" },
+                { "sTitle": "Ref Frequency" , "sClass": "nowrap" },
+                { "sTitle": "Expected target" },
+                { "sTitle": "Expected ref" },
+                { "sTitle": "LL" },
+                { "sTitle": "P" },
+                { "sTitle": "Overused or underused"}
             ],
             "aoColumnDefs": [
                 // { "bSortable": false, "aTargets": [ 0 ] },

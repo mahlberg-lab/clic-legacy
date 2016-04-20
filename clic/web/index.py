@@ -72,7 +72,6 @@ cache_opts = {
 cache = CacheManager(**parse_cache_config_options(cache_opts))
 
 
-
 '''
 Application routes
 '''
@@ -158,11 +157,11 @@ def enforce_list(sequence):
     return sequence
 
 @cache.cache('wordlists')
-def build_wordlist(index_name, subcorpora, max_rows=1000):
+def build_wordlist(index_name, subcorpora, rows_limit=1000):
     clusters = Cheshire3WordList()    
     clusters.build_wordlist(index_name, subcorpora)
-    return clusters.total, clusters.wordlist.iloc[:max_rows].to_records()
-    
+    return clusters.total, clusters.wordlist.iloc[:rows_limit].to_records()
+
 @app.route('/clusters/', methods=['GET'])
 def clusters():
     '''
@@ -207,11 +206,11 @@ def clusters():
 #==============================================================================
 # Keywords
 #==============================================================================
-#TODO cache
-#TODO number of tokens
-
 @app.route('/keywords/', methods=['GET'])
 def keywords():
+    '''
+    For the actual algorithm, cf. keywords.py.
+    '''
     if 'subset_analysis' in request.args.keys(): # form was submitted
         cluster_length = request.args.get('cluster_length')
         
@@ -229,17 +228,21 @@ def keywords():
         wordlist_reference.build_wordlist(index_name_reference, subcorpora_reference)
         wordlist_reference = wordlist_reference.wordlist
 
-        #FIXME why would reference frequency be a float? 
-        #TODO check whether the wordlists are not truncated in the process
-        #TODO change which columns are added: display: expected*2, underused/overused, etc.
-        #TODO RENAME column headers
-        #FIXME click to search
+        # print wordlist_reference.dtypes
+
         #TODO plug p_value in
+        #FIXME why would reference frequency be a float? 
+        #FIXME click to search in concordance
+        #TODO cache
+        #TODO number of tokens
+        #TODO check whether the wordlists are not truncated in the process
+        
         keywords = extract_keywords(wordlist_analysis,
                                     wordlist_reference,
                                     wordlist_analysis.Count.sum(),
                                     wordlist_reference.Count.sum(),
                                     limit_rows=10)
+        # print keywords.dtypes
         
         return render_template("keywords-results.html",
                                subset=subset_analysis,
