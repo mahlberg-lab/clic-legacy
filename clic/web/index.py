@@ -101,10 +101,8 @@ def concordances():
 #==============================================================================
 # Clusters
 #==============================================================================
-
 def construct_index_name(subset, cluster_length):
     '''
-    
     subset = quote
     cluster_length = 3
     -> quote-3-gram-idx
@@ -134,7 +132,6 @@ def construct_index_name(subset, cluster_length):
     # delete the - from the default '-3gram-idx'
     return index_name.strip('-')
 
-    
 def enforce_list(sequence):
     '''
     Ensures the input is a list.
@@ -151,13 +148,16 @@ def enforce_list(sequence):
 @app.route('/clusters/', methods=['GET'])
 def clusters():
     '''
-    /clusters/?cluster_length=1&subcorpus=dickens&subset=quote
+    Handles URLs as the following and builds a wordlist based on the GET
+    parameters.
     
-    Number of tokens is different when changing the 3-4-5-grams.
-    This is because it respects text unit boundaries.
+        /clusters/?cluster_length=1&subcorpus=dickens&subset=quote
+    
+    Number of clusters is different from the normal token count
+    in the case of 3-4-5-grams as the indexing respects text unit boundaries.
 
     #TODO optional: let the user select the number of items he/she wants, with an option: all or complete
-    #TODO form validation
+    #TODO form validation and POST rather than GET
     '''
     
     # form was submitted
@@ -169,11 +169,15 @@ def clusters():
         index_name = construct_index_name(subset, cluster_length)
         clusters = Cheshire3WordList()    
         clusters.build_wordlist(index_name, subcorpora)
-        #FIXME delete linking if not always working
+        
+        # variables to template for linking to concordance
+        subset_for_conc = subset if subset else 'chapter'
+        # this requires |safe in the template, but is it safe at this point in time?
+        subcorpora_for_conc = '&testCollection=' + '&testCollection='.join(subcorpora)
         return render_template("clusters-results.html",
                                cluster_length=cluster_length,
-                               subcorpora=subcorpora,
-                               subset=subset,
+                               subcorpora=subcorpora_for_conc,
+                               subset=subset_for_conc,
                                selectWords="whole",
                                # limit results to 1000 rows
                                clusters=clusters.wordlist.iloc[:1000], 
