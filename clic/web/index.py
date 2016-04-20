@@ -60,6 +60,19 @@ class ExtendedRegisterForm(RegisterForm):
 user_datastore = SQLAlchemyUserDatastore(db, User, Role)
 security = Security(app, user_datastore, register_form=ExtendedRegisterForm)
 
+## Use beaker to save search (cache). See documentation on http://beaker.readthedocs.org/en/latest/caching.html
+from beaker.cache import CacheManager
+from beaker.util import parse_cache_config_options
+
+cache_opts = {
+    'cache.type': 'file',
+    'cache.data_dir': '/tmp/clic_cache/data',
+    'cache.lock_dir': '/tmp/clic_cache/lock'
+}
+cache = CacheManager(**parse_cache_config_options(cache_opts))
+
+
+
 '''
 Application routes
 '''
@@ -144,7 +157,12 @@ def enforce_list(sequence):
         sequence = sequence.split()
     return sequence
 
-#TODO cache
+@cache.cache('wordlists')
+def build_wordlist(index_name, subcorpora, max_rows=1000):
+    clusters = Cheshire3WordList()    
+    clusters.build_wordlist(index_name, subcorpora)
+    return clusters.total, clusters.wordlist.iloc[:max_rows].to_records()
+    
 @app.route('/clusters/', methods=['GET'])
 def clusters():
     '''
@@ -156,7 +174,8 @@ def clusters():
     Number of clusters is different from the normal token count
     in the case of 3-4-5-grams as the indexing respects text unit boundaries.
 
-    #TODO optional: let the user select the number of items he/she wants, with an option: all or complete
+    #TODO optional: let the user select the number of items he/she wants, 
+        with an option: all or complete
     #TODO form validation and POST rather than GET
     '''
     
@@ -167,8 +186,7 @@ def clusters():
         subcorpora = enforce_list(request.args.getlist('subcorpus'))
         cluster_length = request.args.get('cluster_length')
         index_name = construct_index_name(subset, cluster_length)
-        clusters = Cheshire3WordList()    
-        clusters.build_wordlist(index_name, subcorpora)
+        total, clusters = build_wordlist(index_name, subcorpora)
         
         # variables to template for linking to concordance
         subset_for_conc = subset if subset else 'chapter'
@@ -179,9 +197,8 @@ def clusters():
                                subcorpora=subcorpora_for_conc,
                                subset=subset_for_conc,
                                selectWords="whole",
-                               # limit results to 1000 rows
-                               clusters=clusters.wordlist.iloc[:1000], 
-                               total=clusters.total)
+                               clusters=clusters, 
+                               total=total)
     
     # no form was submitted, return form
     return render_template("clusters-form.html")

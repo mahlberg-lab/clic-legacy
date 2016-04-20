@@ -32,7 +32,7 @@
             </tr>
         </thead>
         <tbody>
-        {% for cluster in clusters.to_records() %}
+        {% for cluster in clusters %}
             <tr class="{{ loop.cycle('odd', 'even') }}"><td class="sorting_1">{{ loop.index }}</td><td>{{ cluster['Type'] }}</td><td>{{ cluster['Count'] }}</td><td>{{ cluster['Percentage'] }}</td></tr>
         {% endfor %}
         </tbody>
