@@ -158,6 +158,14 @@ def enforce_list(sequence):
 
 @cache.cache('wordlists')
 def build_wordlist(index_name, subcorpora, rows_limit=None):
+    '''
+    Gets the actual wordlist/cluster list based on a Cheshire3 index name and 
+    a list of subcorpora. 
+    
+    Use rows_limit=int to set a limit to the number of rows returned. Set no 
+    limit when using the wordlist for statistical computation (as, for instance,
+    keyword extraction).
+    '''
     clusters = Cheshire3WordList()    
     clusters.build_wordlist(index_name, subcorpora)
     if rows_limit:
@@ -204,54 +212,83 @@ def clusters():
     # no form was submitted, return form
     return render_template("clusters-form.html")
 
-
 #==============================================================================
 # Keywords
 #==============================================================================
+@cache.cache('new_keywords')
+def build_keyword_list(cluster_length,
+                       subset_analysis,
+                       subcorpora_analysis,
+                       subset_reference,
+                       subcorpora_reference,
+                       p_value,
+                       limit_rows=3000,
+                       ):
+    '''
+    Helper function to enable the caching of keywords.
+    
+    It returns records as dataframes cannot be cached. 
+    '''
+    
+    index_name_analysis = construct_index_name(subset_analysis, cluster_length)     
+    wordlist_analysis = Cheshire3WordList()
+    wordlist_analysis.build_wordlist(index_name_analysis, subcorpora_analysis)
+    # collecting the total needs to precede renaming wordlist_analysis
+    total_analysis = wordlist_analysis.total
+    wordlist_analysis = wordlist_analysis.wordlist
+
+    index_name_reference = construct_index_name(subset_reference, cluster_length)        
+    wordlist_reference = Cheshire3WordList()
+    wordlist_reference.build_wordlist(index_name_reference, subcorpora_reference)
+    # collecting the total needs to precede renaming wordlist_reference
+    total_reference = wordlist_reference.total
+    wordlist_reference = wordlist_reference.wordlist
+
+    keywords = extract_keywords(wordlist_analysis,
+                                wordlist_reference,
+                                wordlist_analysis.Count.sum(),
+                                wordlist_reference.Count.sum(),
+                                limit_rows=limit_rows,
+                                p_value=p_value)
+    
+    return keywords.to_records()
+
 @app.route('/keywords/', methods=['GET'])
 def keywords():
     '''
+    This function handles the IO.
+    
     For the actual algorithm, cf. keywords.py.
+    For the building of wordlists and constructing the keywords results, cf.
+    build_keyword_list above.
     
     #TODO check whether the wordlists are not truncated in the process
+    #FIXME why would reference frequency be a float? 
+    #FIXME click to search in concordance
+    #TODO document 
+        - number of tokens
+        - only underused
+    #TODO mention variable names etc. 
     '''
     if 'subset_analysis' in request.args.keys(): # form was submitted
         cluster_length = request.args.get('cluster_length')
         p_value = float(request.args.get('p_value'))
         
-        #TODO use build_wordlist so that results are cached 
         subset_analysis = request.args.get('subset_analysis')
         subcorpora_analysis = enforce_list(request.args.getlist('subcorpus_analysis'))
-        index_name_analysis = construct_index_name(subset_analysis, cluster_length)
-        build_wordlist
         
-        
-        wordlist_analysis = Cheshire3WordList()
-        wordlist_analysis.build_wordlist(index_name_analysis, subcorpora_analysis)
-        wordlist_analysis = wordlist_analysis.wordlist
-                
         subset_reference = request.args.get('subset_reference')
         subcorpora_reference = enforce_list(request.args.getlist('subcorpus_reference'))
-        index_name_reference = construct_index_name(subset_reference, cluster_length)        
-        wordlist_reference = Cheshire3WordList()
-        wordlist_reference.build_wordlist(index_name_reference, subcorpora_reference)
-        wordlist_reference = wordlist_reference.wordlist
-
-        print wordlist_reference.dtypes
-
-        #FIXME why would reference frequency be a float? 
-        #FIXME click to search in concordance
-        #TODO cache
-        #TODO number of tokens
         
-        keywords = extract_keywords(wordlist_analysis,
-                                    wordlist_reference,
-                                    wordlist_analysis.Count.sum(),
-                                    wordlist_reference.Count.sum(),
-                                    limit_rows=3000,
-                                    p_value=p_value)
-        # print keywords.dtypes
-        
+        keywords = build_keyword_list(cluster_length,
+                                      subset_analysis,
+                                      subcorpora_analysis,
+                                      subset_reference,
+                                      subcorpora_reference,
+                                      limit_rows=3000,
+                                      p_value=p_value
+                                      )
+                    
         return render_template("keywords-results.html",
                                subset=subset_analysis,
                                selectWords="whole",

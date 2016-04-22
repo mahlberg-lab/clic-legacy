@@ -32,7 +32,7 @@
               <th aria-label="Overused or underused: activate to sort column ascending" style="width: 0px;" colspan="1" rowspan="1" aria-controls="dataTableKeywords" tabindex="0" class="sorting">Overused or underused</th>            </tr>
          </thead>
         <tbody>
-        {% for keyword in keywords.to_records() %}
+        {% for keyword in keywords %}
             <tr class="{{ loop.cycle('odd', 'even') }}">
                 <td class="sorting_1">{{ loop.index }}</td>
                 <td>{{ keyword['Type'] }}</td>
@@ -74,8 +74,8 @@
             "aoColumns": [
                 { "sTitle": "No" },
                 { "sTitle": "N-gram" ,   "sClass": "nowrap" },
-                { "sTitle": "Target Frequency", "sClass": "nowrap" },
-                { "sTitle": "Ref Frequency" , "sClass": "nowrap" },
+                { "sTitle": "Target frequency", "sClass": "nowrap" },
+                { "sTitle": "Ref frequency" , "sClass": "nowrap" },
                 { "sTitle": "Expected target" },
                 { "sTitle": "Expected ref" },
                 { "sTitle": "LL" },
