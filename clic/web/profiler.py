@@ -22,5 +22,5 @@ from werkzeug.contrib.profiler import ProfilerMiddleware
 from index import app
 
 app.config['PROFILE'] = True
-app.wsgi_app = ProfilerMiddleware(app.wsgi_app, restrictions = [30])
+app.wsgi_app = ProfilerMiddleware(app.wsgi_app, restrictions = [10], sort_by=('cumtime',))
 app.run(debug = True)
