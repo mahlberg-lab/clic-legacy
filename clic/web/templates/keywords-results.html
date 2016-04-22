@@ -15,6 +15,12 @@
 
 {% block main_body %}
   <h2 class="without-pills">Keywords Results</h2>
+  
+  <p>The corpus of analysis (the target text): {{subset_analysis}} in {{subcorpora_analysis}}.</p>
+  <p>The corpus of reference (the text you compare the target text with): {{subset_reference}} in {{subcorpora_reference}}.</p>
+  <p>The results are limited to 3000 rows. Generally there will be 
+  less results. </p>
+  <p>Only overused keywords are displayed.</p>
 
   <div id="resultsWrap">
     <div id="tableContainer">

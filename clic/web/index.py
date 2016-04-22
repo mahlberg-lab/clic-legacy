@@ -258,17 +258,13 @@ def keywords():
     '''
     This function handles the IO.
     
-    For the actual algorithm, cf. keywords.py.
+    For the actual algorithm, cf. keywords.py
     For the building of wordlists and constructing the keywords results, cf.
     build_keyword_list above.
     
-    #TODO check whether the wordlists are not truncated in the process
     #FIXME why would reference frequency be a float? 
     #FIXME click to search in concordance
-    #TODO document 
-        - number of tokens
-        - only underused
-    #TODO mention variable names etc. 
+    #TODO mention number of tokens
     '''
     if 'subset_analysis' in request.args.keys(): # form was submitted
         cluster_length = request.args.get('cluster_length')
@@ -292,7 +288,10 @@ def keywords():
         return render_template("keywords-results.html",
                                subset=subset_analysis,
                                selectWords="whole",
+                               subset_analysis=subset_analysis,
                                subcorpora_analysis=subcorpora_analysis,
+                               subset_reference=subset_reference,
+                               subcorpora_reference=subcorpora_reference,
                                keywords=keywords)
 
     return render_template("keywords-form.html")
