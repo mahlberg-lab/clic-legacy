@@ -157,10 +157,12 @@ def enforce_list(sequence):
     return sequence
 
 @cache.cache('wordlists')
-def build_wordlist(index_name, subcorpora, rows_limit=1000):
+def build_wordlist(index_name, subcorpora, rows_limit=None):
     clusters = Cheshire3WordList()    
     clusters.build_wordlist(index_name, subcorpora)
-    return clusters.total, clusters.wordlist.iloc[:rows_limit].to_records()
+    if rows_limit:
+        return clusters.total, clusters.wordlist.iloc[:rows_limit].to_records()
+    return clusters.total, clusters.wordlist.to_records()
 
 @app.route('/clusters/', methods=['GET'])
 def clusters():
@@ -174,7 +176,7 @@ def clusters():
     in the case of 3-4-5-grams as the indexing respects text unit boundaries.
 
     #TODO optional: let the user select the number of items he/she wants, 
-        with an option: all or complete
+        with an option: all / complete
     #TODO form validation and POST rather than GET
     '''
     
@@ -185,7 +187,7 @@ def clusters():
         subcorpora = enforce_list(request.args.getlist('subcorpus'))
         cluster_length = request.args.get('cluster_length')
         index_name = construct_index_name(subset, cluster_length)
-        total, clusters = build_wordlist(index_name, subcorpora)
+        total, clusters = build_wordlist(index_name, subcorpora, rows_limit=1000)
         
         # variables to template for linking to concordance
         subset_for_conc = subset if subset else 'chapter'
@@ -210,13 +212,20 @@ def clusters():
 def keywords():
     '''
     For the actual algorithm, cf. keywords.py.
+    
+    #TODO check whether the wordlists are not truncated in the process
     '''
     if 'subset_analysis' in request.args.keys(): # form was submitted
         cluster_length = request.args.get('cluster_length')
+        p_value = float(request.args.get('p_value'))
         
+        #TODO use build_wordlist so that results are cached 
         subset_analysis = request.args.get('subset_analysis')
         subcorpora_analysis = enforce_list(request.args.getlist('subcorpus_analysis'))
         index_name_analysis = construct_index_name(subset_analysis, cluster_length)
+        build_wordlist
+        
+        
         wordlist_analysis = Cheshire3WordList()
         wordlist_analysis.build_wordlist(index_name_analysis, subcorpora_analysis)
         wordlist_analysis = wordlist_analysis.wordlist
@@ -228,20 +237,19 @@ def keywords():
         wordlist_reference.build_wordlist(index_name_reference, subcorpora_reference)
         wordlist_reference = wordlist_reference.wordlist
 
-        # print wordlist_reference.dtypes
+        print wordlist_reference.dtypes
 
-        #TODO plug p_value in
         #FIXME why would reference frequency be a float? 
         #FIXME click to search in concordance
         #TODO cache
         #TODO number of tokens
-        #TODO check whether the wordlists are not truncated in the process
         
         keywords = extract_keywords(wordlist_analysis,
                                     wordlist_reference,
                                     wordlist_analysis.Count.sum(),
                                     wordlist_reference.Count.sum(),
-                                    limit_rows=10)
+                                    limit_rows=3000,
+                                    p_value=p_value)
         # print keywords.dtypes
         
         return render_template("keywords-results.html",
@@ -250,8 +258,7 @@ def keywords():
                                subcorpora_analysis=subcorpora_analysis,
                                keywords=keywords)
 
-    else:
-        return render_template("keywords-form.html")
+    return render_template("keywords-form.html")
 
 
 #==============================================================================
