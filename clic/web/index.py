@@ -144,6 +144,23 @@ def construct_index_name(subset, cluster_length):
     # delete the - from the default '-3gram-idx'
     return index_name.strip('-')
 
+def translate_subset(subset):
+    '''
+    Translates the technical name for a subset into a human readable one
+    for the frontend UI. 
+    '''
+    if subset == 'quote':
+        return 'quotes'
+    if subset == 'non-quote':
+        return 'non-quotes'
+    if subset == 'longsus':
+        return 'long suspensions'
+    if subset == 'shortsus':
+        return 'short suspensions'
+    if subset == '':
+        return 'all the subsets'
+    return subset
+
 def enforce_list(sequence):
     '''
     Ensures the input is a list.
@@ -215,7 +232,7 @@ def clusters():
 #==============================================================================
 # Keywords
 #==============================================================================
-@cache.cache('new_keywords')
+# @cache.cache('new_keywords')
 def build_keyword_list(cluster_length,
                        subset_analysis,
                        subcorpora_analysis,
@@ -227,7 +244,7 @@ def build_keyword_list(cluster_length,
     '''
     Helper function to enable the caching of keywords.
     
-    It returns records as dataframes cannot be cached. 
+    It returns records because dataframes cannot be cached. 
     '''
     
     index_name_analysis = construct_index_name(subset_analysis, cluster_length)     
@@ -251,7 +268,7 @@ def build_keyword_list(cluster_length,
                                 limit_rows=limit_rows,
                                 p_value=p_value)
     
-    return keywords.to_records()
+    return keywords.to_records(), total_analysis, total_reference
 
 @app.route('/keywords/', methods=['GET'])
 def keywords():
@@ -261,10 +278,6 @@ def keywords():
     For the actual algorithm, cf. keywords.py
     For the building of wordlists and constructing the keywords results, cf.
     build_keyword_list above.
-    
-    #FIXME why would reference frequency be a float? 
-    #FIXME click to search in concordance
-    #TODO mention number of tokens
     '''
     if 'subset_analysis' in request.args.keys(): # form was submitted
         cluster_length = request.args.get('cluster_length')
@@ -276,7 +289,7 @@ def keywords():
         subset_reference = request.args.get('subset_reference')
         subcorpora_reference = enforce_list(request.args.getlist('subcorpus_reference'))
         
-        keywords = build_keyword_list(cluster_length,
+        keywords, total_analysis, total_reference = build_keyword_list(cluster_length,
                                       subset_analysis,
                                       subcorpora_analysis,
                                       subset_reference,
@@ -284,15 +297,25 @@ def keywords():
                                       limit_rows=3000,
                                       p_value=p_value
                                       )
-                    
+        # for linking to the concordance, subset_analysis can be an empty string
+        subset = subset_analysis if subset_analysis else 'chapter'
+        subcorpora_for_conc = '&testCollection=' + '&testCollection='.join(subcorpora_analysis)
+        
         return render_template("keywords-results.html",
-                               subset=subset_analysis,
-                               selectWords="whole",
-                               subset_analysis=subset_analysis,
-                               subcorpora_analysis=subcorpora_analysis,
-                               subset_reference=subset_reference,
-                               subcorpora_reference=subcorpora_reference,
-                               keywords=keywords)
+                                subset_analysis=translate_subset(subset_analysis),
+                                subset_reference=translate_subset(subset_reference),
+                                subcorpora_analysis=', '.join(subcorpora_analysis),
+                                subcorpora_reference=', '.join(subcorpora_reference),
+                                total_analysis=total_analysis, 
+                                total_reference=total_reference,
+                                keywords=keywords,
+                                cluster_length=cluster_length,
+                                p_value=p_value,
+                                # for linking to the concordance
+                                selectWords="whole",
+                                subset=subset,
+                                subcorpora_for_conc=subcorpora_for_conc
+                               )
 
     return render_template("keywords-form.html")
 
