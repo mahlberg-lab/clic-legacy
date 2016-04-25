@@ -16,13 +16,20 @@
 {% block main_body %}
   <h2 class="without-pills">Keywords Results</h2>
   
-  <p>The corpus of analysis (the target text): {{subset_analysis|capitalize}} in {{subcorpora_analysis|upper}} containing {{ total_analysis }} {{cluster_length}}-gram clusters.
-  </p>
-  <p>The corpus of reference (the text you compare the target text with): {{subset_reference|capitalize}} in {{subcorpora_reference|upper}} containing {{total_reference}} {{cluster_length}}-gram clusters.</p>
-  <p>The results are limited to 3000 rows. Generally there will be 
-  fewer results. The cut-off p-value you set is {{ p_value }} (which has to be one of the following: 0.05, 0.01, 0.001, or 0.0001).</p>
-  <p>Only overused (positive) keywords are displayed.</p>
-
+  <dl>
+    <dt>Corpus of analysis (the target text)</dt>
+      <dd>{{subset_analysis|capitalize}} in {{subcorpora_analysis|upper}} with a total of {{ total_analysis }} clusters ({{cluster_length}}-grams).</dd>
+  </dl>
+  <dl>
+    <dt>The corpus of reference (the text you compare the target text with)</dt>
+      <dd>{{subset_reference|capitalize}} in {{subcorpora_reference|upper}} with a total of {{total_reference}} clusters ({{cluster_length}}-grams).</dd>
+  </dl>
+  <dl>
+    <dt>P-value and display</dt>
+      <dd>The cut-off p-value you set is {{ p_value }} (which has to be one of the following: 0.05, 0.01, 0.001, or 0.0001). 
+        The results are limited to 3000 rows. Generally there will be fewer results. Only overused (positive) keywords are displayed.</dd>
+  </dl>
+  
   <div id="resultsWrap">
     <div id="tableContainer">
        <table style="width: 100%; cursor:pointer;" aria-describedby="dataTableKeywords_info" class="table table-striped table-hover dataTable no-footer uonDatatable" id="dataTableKeywords">
