@@ -221,6 +221,8 @@ def clusters():
         return render_template("clusters-results.html",
                                cluster_length=cluster_length,
                                subcorpora=subcorpora_for_conc,
+                               subcorpora_for_info=', '.join(subcorpora),
+                               subset_for_info=translate_subset(subset),
                                subset=subset_for_conc,
                                selectWords="whole",
                                clusters=clusters, 
@@ -318,7 +320,6 @@ def keywords():
                                )
 
     return render_template("keywords-form.html")
-
 
 #==============================================================================
 # Chapters
