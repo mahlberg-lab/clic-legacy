@@ -59,6 +59,12 @@ from cheshire3.server import SimpleServer
 from cheshire3.baseObjects import Session
 
 
+def format_wordlist(types, counts, total=None):
+    '''
+    Helper function to convert lists with information into a dataframe.
+    '''
+    pass
+    
 def log_likelihood(counts):
     '''
     This function uses vector calculations to compute LL values. 
@@ -82,8 +88,8 @@ def log_likelihood(counts):
          Expected_count_ref
          LL
          
-    Hapax legomena in the Count_analysis are not deleted and zero values in the 
-    Count_ref are not treated any differently from other values. 
+    Hapax legomena in the Count_analysis are not deleted.
+    It is expected that Count_analysis and Expected_count_analysis are not zero. 
     '''
     
     # compute expected values
@@ -96,12 +102,16 @@ def log_likelihood(counts):
     b = counts['Count_ref']
     exp_b = counts['Expected_count_ref']
 
-    # compute log likelihood
-    counts.loc[:,'LL'] = 2*((a * np.log(a/exp_a)) + (b * np.log(b/exp_b)))
-    
     # log likelihood if count or expected count in the ref corpus are 0
-    counts.loc[(counts.Count_ref == 0) | (counts.Expected_count_ref == 0), 'LL'] = 2*((a * np.log(a/exp_a)) + (b * 0)) 
+    # the order of the LL computation is important
+    # these cases do NOT handle wordlists where the type does not occur in the corpus of analysis
+    counts.loc[(b == 0) | (exp_b == 0), 'LL'] = 2*(a * np.log(a/exp_a)) 
 
+    # compute log likelihood for normal cases
+    # do not use the following as it will overwrite the specific cases above: 
+    # counts.loc[:,'LL'] = 2*((a * np.log(a/exp_a)) + (b * np.log(b/exp_b)))
+    counts.loc[(b != 0) & (exp_b != 0), 'LL'] = 2*((a * np.log(a/exp_a)) + (b * np.log(b/exp_b)))
+    
     # sort the results
     keywords = counts.sort_values('LL', ascending=False)
     
@@ -169,6 +179,8 @@ def extract_keywords(wordlist_analysis,
 
     # merge and align the two wordlists
     merged = wordlist_analysis.merge(wordlist_reference, on='Type', how='left', suffixes=('_analysis', '_ref')).fillna(0)
+    # float64 to int64 because pandas int64 does not handle NaN
+    merged.loc[:,'Count_ref'] = merged['Count_ref'].astype(int)
     
     # prepare object for computation
     if not tokencount_analysis:
