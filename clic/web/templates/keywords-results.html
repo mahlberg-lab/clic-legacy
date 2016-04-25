@@ -16,11 +16,12 @@
 {% block main_body %}
   <h2 class="without-pills">Keywords Results</h2>
   
-  <p>The corpus of analysis (the target text): {{subset_analysis}} in {{subcorpora_analysis}}.</p>
-  <p>The corpus of reference (the text you compare the target text with): {{subset_reference}} in {{subcorpora_reference}}.</p>
+  <p>The corpus of analysis (the target text): {{subset_analysis|capitalize}} in {{subcorpora_analysis|upper}} containing {{ total_analysis }} {{cluster_length}}-gram clusters.
+  </p>
+  <p>The corpus of reference (the text you compare the target text with): {{subset_reference|capitalize}} in {{subcorpora_reference|upper}} containing {{total_reference}} {{cluster_length}}-gram clusters.</p>
   <p>The results are limited to 3000 rows. Generally there will be 
-  less results. </p>
-  <p>Only overused keywords are displayed.</p>
+  fewer results. The cut-off p-value you set is {{ p_value }} (which has to be one of the following: 0.05, 0.01, 0.001, or 0.0001).</p>
+  <p>Only overused (positive) keywords are displayed.</p>
 
   <div id="resultsWrap">
     <div id="tableContainer">
@@ -127,7 +128,7 @@
               var data = oTable.fnGetData(this);
               var term = data[1]
               var slug = slugify(term)
-              window.location.href = '/concordances/?terms=' + slug + "&testCollection={{subcorpora_analysis}}&testIdxMod={{subset}}&selectWords={{selectWords}}";
+              window.location.href = '/concordances/?terms=' + slug + "{{subcorpora_for_conc|safe}}&testIdxMod={{subset}}&selectWords={{selectWords}}";
           });
      });
 </script>
