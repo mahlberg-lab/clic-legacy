@@ -35,7 +35,7 @@
 				<setting type="vectors">1</setting>
 			</options>
 		</subConfig>
-		
+
 		<subConfig type="index" id="chapter-idx-case">
 			<objectType>cheshire3.index.ProximityIndex</objectType>
 			<paths>
@@ -64,13 +64,13 @@
 				<setting type="proxVectors">1</setting>
 				<setting type="vectors">1</setting>
 			</options>
-		</subConfig>		
+		</subConfig>
 
 		<!-- end chapter idxs -->
 
 
 		<!-- paragraph idxs -->
-		
+
 		<!-- keyword -->
 		<subConfig type="index" id="paragraph-idx">
 			<objectType>cheshire3.index.ProximityIndex</objectType>
@@ -133,15 +133,15 @@
 				<setting type="proxVectors">1</setting>
 				<setting type="vectors">1</setting>
 			</options>
-		</subConfig>		
-		
+		</subConfig>
 
-		
+
+
 		<!-- end paragraph idxs -->
-		
-		
+
+
 		<!-- sentence idxs -->
-		
+
 		<!-- keyword -->
 		<subConfig type="index" id="sentence-idx">
 			<objectType>cheshire3.index.ProximityIndex</objectType>
@@ -154,7 +154,6 @@
 					<object type="extractor" ref="TaggedTermExtractor"/>
 					<object type="tokenizer" ref="SuppliedOffsetTokenizer"/>
 					<object type="tokenMerger" ref="OffsetProxTokenMerger"/>
-<!--					<object type="normalizer" ref="WordNamedNormalizer"/>-->
 					<object type="normalizer" ref="CaseNormalizer"/>
 					<object type="normalizer" ref="PossessiveNormalizer"/>
 				</process>
@@ -176,7 +175,81 @@
 				<setting type="freqList">rec occ</setting>
 			</options>
 		</subConfig>
-		
+
+		<!-- <subConfig type="index" id="sentence-unnormalized-idx">
+			<objectType>cheshire3.index.ProximityIndex</objectType>
+			<paths>
+				<object type="indexStore" ref="indexStore"/>
+			</paths>
+			<source>
+				<xpath ref="sentenceXPath"/>
+				<process>
+					<object type="extractor" ref="TaggedTermExtractor"/>
+					<object type="tokenizer" ref="WhiteSpaceTokenizer"/>
+					<object type="tokenMerger" ref="OffsetProxTokenMerger"/>
+				</process>
+			</source>
+			 <source mode="any|all|=|exact|window"> -->
+			<!-- <source mode="data">
+				<process>
+					<object type="extractor" ref="TaggedTermExtractor"/>
+					<object type="tokenizer" ref="WhiteSpaceTokenizer"/>
+					<object type="tokenMerger" ref="OffsetProxTokenMerger"/>
+				</process>
+			</source>
+			<options>
+				<setting type="longSize">4</setting>
+				<setting type="nProxInts">3</setting>
+				<setting type="proxVectors">1</setting>
+				<setting type="vectors">1</setting>
+				<setting type="freqList">rec occ</setting>
+			</options>
+		</subConfig> -->
+
+		<subConfig type="index" id="idx-text-kwd-prox">
+      <docs>Title Keywords Index</docs>
+      <objectType>cheshire3.index.ProximityIndex</objectType>
+      <paths>
+        <object ref="indexStore" type="indexStore"/>
+      </paths>
+      <source mode="data">
+        <selector ref="sentenceXPath"/>
+        <process>
+          <object ref="ProxExtractor" type="extractor"/>
+          <object ref="RegexpFindOffsetTokenizer" type="tokenizer"/>
+          <object ref="OffsetProxTokenMerger" type="tokenMerger"/>
+          <object ref="DiacriticNormalizer" type="normalizer"/>
+          <object ref="CaseNormalizer" type="normalizer"/>
+        </process>
+      </source>
+      <options>
+	       <setting type="nProxInts">3</setting>
+         <setting type="proxVectors">1</setting>
+         <setting type="vectors">1</setting>
+      </options>
+    </subConfig>
+
+		<subConfig type="index" id="idx-text-kwd-prox-unnrml">
+      <docs>Title Keywords Index</docs>
+      <objectType>cheshire3.index.ProximityIndex</objectType>
+      <paths>
+        <object ref="indexStore" type="indexStore"/>
+      </paths>
+      <source mode="data">
+        <selector ref="sentenceXPath"/>
+        <process>
+          <object ref="ProxExtractor" type="extractor"/>
+          <object ref="MyWhitespaceTokenizer" type="tokenizer"/>
+          <object ref="OffsetProxTokenMerger" type="tokenMerger"/>
+        </process>
+      </source>
+      <options>
+         <setting type="nProxInts">3</setting>
+         <setting type="proxVectors">1</setting>
+         <setting type="vectors">1</setting>
+      </options>
+    </subConfig>
+
 		<subConfig type="index" id="sentence-idx-case">
 			<objectType>cheshire3.index.ProximityIndex</objectType>
 			<paths>
@@ -205,13 +278,13 @@
 				<setting type="proxVectors">1</setting>
 				<setting type="vectors">1</setting>
 			</options>
-		</subConfig>		
-		
-		
+		</subConfig>
+
+
 
 		<!--  ngrams -->
 
-		
+
 		<subConfig type="index" id="3gram-idx">
 			<objectType>cheshire3.index.SimpleIndex</objectType>
 			<paths>
@@ -232,7 +305,7 @@
 				<setting type="freqList">rec occ</setting>
 			</options>
 		</subConfig>
-		
+
 		<subConfig type="index" id="4gram-idx">
 			<objectType>cheshire3.index.SimpleIndex</objectType>
 			<paths>
@@ -253,7 +326,7 @@
 				<setting type="freqList">rec occ</setting>
 			</options>
 		</subConfig>
-		
+
 		<subConfig type="index" id="5gram-idx">
 			<objectType>cheshire3.index.SimpleIndex</objectType>
 			<paths>
@@ -275,7 +348,7 @@
 			</options>
 		</subConfig>
 		<!--end sentence idxs  -->
-		
+
 		<!-- Quote Index -->
 		<subConfig type="index" id="quote-idx">
 			<objectType>cheshire3.index.ProximityIndex</objectType>
@@ -308,7 +381,7 @@
 				<setting type="vectors">1</setting>
 				<setting type="freqList">rec occ</setting>
 			</options>
-		</subConfig> 
+		</subConfig>
 		<subConfig type="index" id="quote-3gram-idx">
 			<objectType>cheshire3.index.SimpleIndex</objectType>
 			<paths>
@@ -366,7 +439,7 @@
 				<setting type="freqList">rec occ</setting>
 			</options>
 		</subConfig>
-		
+
 		<subConfig type="index" id="quote-5gram-idx">
 			<objectType>cheshire3.index.SimpleIndex</objectType>
 			<paths>
@@ -395,18 +468,30 @@
 				<setting type="freqList">rec occ</setting>
 			</options>
 		</subConfig>
-				
-		
-		
-		
+
 		<!-- Non-quote Indexes -->
-		
+
+		<!--  -->
+		<subConfig type="selector" id="NOLONGERUSEDquoteExcludeSpanSelector">
+			 <objectType>clic.selector.ExcludeSpanSelector</objectType>
+			 <source>
+				 <!-- Changed form p to div so that extended quote are hopefully also deleted -->
+				 <xpath>div</xpath>  <!-- get these -->
+			 </source>
+			 <source>
+			 <xpath>qs</xpath>  <!-- start exluding from these -->
+			 <xpath>qe</xpath>  <!-- and stop excluding at these -->
+			 </source>
+		</subConfig>
+
 		<subConfig type="index" id="non-quote-idx">
 			<objectType>cheshire3.index.ProximityIndex</objectType>
 			<paths>
 				<object type="indexStore" ref="indexStore"/>
 			</paths>
 			<source>
+				<!--  Is it the right thing to do to delete the nonQuoteXPath?-->
+				<!-- <selector ref="quoteExcludeSpanSelector"/>		 -->
 				<xpath ref="nonQuoteXPath"/>
 				<process>
 					<object type="extractor" ref="TaggedTermExtractor"/>
@@ -417,8 +502,12 @@
 				</process>
 			</source>
 			<source mode="any|all|=|exact|window">
+				<!-- <selector ref="quoteExcludeSpanSelector"/>		 -->
+				<!--  Jadded --> 
+				<xpath ref="nonQuoteXPath"/>
 				<process>
-					<object type="extractor" ref="SimpleExtractor"/>
+					<object type="extractor" ref="TaggedTermExtractor"/>				
+					<!-- <object type="extractor" ref="SimpleExtractor"/> -->
 					<object type="tokenizer" ref="RegexpFindOffsetTokenizer"/>
 					<object type="tokenMerger" ref="OffsetProxTokenMerger"/>
 					<object type="normalizer" ref="CaseNormalizer"/>
@@ -432,9 +521,9 @@
 				<setting type="vectors">1</setting>
 				<setting type="freqList">rec occ</setting>
 			</options>
-		</subConfig> 
-		
-		
+		</subConfig>
+
+
 		<subConfig type="index" id="non-quote-3gram-idx">
 			<objectType>cheshire3.index.SimpleIndex</objectType>
 			<paths>
@@ -463,7 +552,7 @@
 				<setting type="freqList">rec occ</setting>
 			</options>
 		</subConfig>
-		
+
 		<subConfig type="index" id="non-quote-4gram-idx">
 			<objectType>cheshire3.index.SimpleIndex</objectType>
 			<paths>
@@ -492,7 +581,7 @@
 				<setting type="freqList">rec occ</setting>
 			</options>
 		</subConfig>
-		
+
 		<subConfig type="index" id="non-quote-5gram-idx">
 			<objectType>cheshire3.index.SimpleIndex</objectType>
 			<paths>
@@ -521,11 +610,11 @@
 				<setting type="freqList">rec occ</setting>
 			</options>
 		</subConfig>
-		
-		
-		
+
+
+
 		<!-- Suspension Indexes -->
-		
+
 		<subConfig type="index" id="longsus-idx">
 			<objectType>cheshire3.index.ProximityIndex</objectType>
 			<paths>
@@ -557,8 +646,8 @@
 				<setting type="vectors">1</setting>
 				<setting type="freqList">rec occ</setting>
 			</options>
-		</subConfig> 
-		
+		</subConfig>
+
 		<subConfig type="index" id="longsus-3gram-idx">
 			<objectType>cheshire3.index.SimpleIndex</objectType>
 			<paths>
@@ -566,7 +655,7 @@
 			</paths>
 			<source>
 				<xpath ref="longsusXPath"/>
-				<process>				
+				<process>
 					<object type="extractor" ref="SpanXPathTaggedTermExtractor"/>
 					<object type="tokenizer" ref="SuppliedOffsetTokenizer"/>
 					<object type="tokenMerger" ref="3GramTokenMerger"/>
@@ -587,7 +676,7 @@
 				<setting type="freqList">rec occ</setting>
 			</options>
 		</subConfig>
-		
+
 		<subConfig type="index" id="longsus-4gram-idx">
 			<objectType>cheshire3.index.SimpleIndex</objectType>
 			<paths>
@@ -616,7 +705,7 @@
 				<setting type="freqList">rec occ</setting>
 			</options>
 		</subConfig>
-		
+
 		<subConfig type="index" id="longsus-5gram-idx">
 			<objectType>cheshire3.index.SimpleIndex</objectType>
 			<paths>
@@ -645,8 +734,8 @@
 				<setting type="freqList">rec occ</setting>
 			</options>
 		</subConfig>
-		
-		
+
+
 		<subConfig type="index" id="shortsus-idx">
 			<objectType>cheshire3.index.ProximityIndex</objectType>
 			<paths>
@@ -676,11 +765,11 @@
 				<setting type="vectors">1</setting>
 				<setting type="freqList">rec occ</setting>
 			</options>
-		</subConfig> 
-		
+		</subConfig>
+
 		<!-- corpus level indexes -->
-		
-		
+
+
 		<subConfig type="index" id="book-idx">
 			<objectType>cheshire3.index.SimpleIndex</objectType>
 			<paths>
@@ -698,7 +787,7 @@
 				<setting type="longSize">4</setting>
 			</options>
 		</subConfig>
-		
+
 		<subConfig type="index" id="novel-idx">
 			<objectType>cheshire3.index.SimpleIndex</objectType>
 			<paths>

@@ -77,14 +77,18 @@
 					</fork>
 			</workflow>
 		</subConfig>
-		
-		
+			
 		<subConfig type="workflow" id="nonQuoteWorkflow">
 			<objectType>cheshire3.workflow.CachingWorkflow</objectType>
 			<workflow>
-				<object type="xpathProcessor" ref="nonQuoteXPath"/>
-				<object type="extractor" ref="SpanXPathTaggedTermExtractor"/>
+				  
+					<object type="xpathProcessor" ref="nonQuoteXPath"/>
+					<!-- <object type="selector" ref="quoteExcludeSpanSelector"/>		 -->
+					<!-- <selector ref="quoteExcludeSpanSelector"/> -->
+					
+					<object type="extractor" ref="SpanXPathTaggedTermExtractor"/>
 					<object type="tokenizer" ref="SuppliedOffsetTokenizer"/>
+					
 					<fork>
 						<split>
 							<object type="tokenMerger" ref="OffsetProxTokenMerger"/>					
@@ -202,8 +206,20 @@
 			</workflow>
 		</subConfig>
 
-
-
+		<!-- <subConfig type="workflow" id="sentenceUnnormalizedWorkflow">
+			<objectType>cheshire3.workflow.CachingWorkflow</objectType>
+			<workflow>
+				<object type="xpathProcessor" ref="sentenceXPath"/>
+				<object type="extractor" ref="TaggedTermExtractor"/>
+				<object type="tokenizer" ref="WhiteSpaceTokenizer"/>
+				<object type="tokenMerger" ref="OffsetProxTokenMerger"/>
+				<fork>
+					<split>
+						<object type="index" ref="sentence-unnormalized-idx"/>
+					</split>			
+				</fork>
+			</workflow>
+		</subConfig> -->
 		
 		<subConfig type="workflow" id="sentenceWorkflow">
 			<objectType>cheshire3.workflow.CachingWorkflow</objectType>
@@ -237,6 +253,9 @@
 						<log level="info">"Indexing Record "</log>
 						<object type="workflow" ref="sentenceWorkflow"/>
 					</split>
+					<!-- <split>
+						<object type="workflow" ref="sentenceUnnormalizedWorkflow"/>
+					</split> -->
 					<split>
 						<object type="workflow" ref="ngramWorkflow"/>
 					</split>
@@ -249,7 +268,7 @@
 					<split>
 						<object type="workflow" ref="quoteWorkflow"/>
 					</split>
-			  	  	<split>
+			  	<split>
 						<object type="workflow" ref="nonQuoteWorkflow"/>
 					</split>
 					<split>
