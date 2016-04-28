@@ -7,6 +7,14 @@ from clic.keywords import log_likelihood, extract_keywords
 class LogLikelihoodBasicTest(unittest.TestCase):
     '''
     Reference values calculated using http://ucrel.lancs.ac.uk/llwizard.html
+
+    For the formula, cf. 
+
+    Rayson, P. and Garside, R. (2000). Comparing corpora using frequency profiling. 
+    In proceedings of the workshop on Comparing Corpora, held in conjunction with the 38th 
+    annual meeting of the Association for Computational Linguistics (ACL 2000). 
+    1-8 October 2000, Hong Kong, pp. 1 - 6
+    Available at: http://ucrel.lancs.ac.uk/people/paul/publications/rg_acl2000.pdf
     '''
     
     def setUp(self):
