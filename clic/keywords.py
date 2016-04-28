@@ -5,8 +5,14 @@ Module to compute keywords (words that are used significantly more frequently
 in one corpus than they are in a reference corpus). 
 
 The statistical measure used is
-Log Likelihood as explained by Rayson and Garside 
-(http://ucrel.lancs.ac.uk/people/paul/publications/rg_acl2000.pdf)
+Log Likelihood as explained by Rayson and Garside: 
+
+Rayson, P. and Garside, R. (2000). Comparing corpora using frequency profiling. 
+In proceedings of the workshop on Comparing Corpora, held in conjunction with the 38th 
+annual meeting of the Association for Computational Linguistics (ACL 2000). 
+1-8 October 2000, Hong Kong, pp. 1 - 6
+Available at: http://ucrel.lancs.ac.uk/people/paul/publications/rg_acl2000.pdf
+
 
 Usage as follows:
 -----------------
