@@ -87,6 +87,10 @@ def index():
 def about():
     return render_template("info/about.html")
 
+@app.route('/definitions/', methods=['GET'])
+def definitions():
+    return render_template("info/definitions.html")
+
 @app.route('/documentation/', methods=['GET'])
 def documentation():
     return render_template("info/documentation.html")
