@@ -39,7 +39,7 @@ list_books = ['BH', 'BR', 'DC', 'DS', 'ED', 'GE', 'HT', 'LD', 'MC', 'NN',
              ]
  
 titles = {'BH': 'Bleak House', 'BR': 'Barnaby Rudge', 'DC': 'David Copperfield', 'DS': 'Dombey and Son',
-          'ED': 'The Mystery of Edwin Drood', 'GE': 'Great Expectations', 'HT': 'Hard Times', 'ld': 'Little Dorrit', 
+          'ED': 'The Mystery of Edwin Drood', 'GE': 'Great Expectations', 'HT': 'Hard Times', 'LD': 'Little Dorrit', 
           'MC': 'Martin Chuzzlewit', 'NN': 'Nicholas Nickleby', 'OCS': 'The Old Curiosity Shop', 'OMF': 'Our Mutual Friend', 
           'OT': 'Oliver Twist', 'PP': 'Pickwick Papers', 'TTC': 'A Tale of Two Cities',
            
@@ -104,10 +104,10 @@ for b in list_books:
             book_title = t[1]
             break             
        
-    within_book.append([b, book_title, [all_words, quote_words, (all_words - quote_words)], wordCumulative])
+    within_book.append([b, book_title, [all_words, quote_words, nonquote_words], wordCumulative])
         
     #break
       
 list_all_books.append(within_book)
-#print json.dumps(list_all_books)
+print json.dumps(list_all_books)
  
