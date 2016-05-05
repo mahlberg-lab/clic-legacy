@@ -1,3 +1,33 @@
+1.4
+---
+
+* Massive refactor to bring keywords to scientific standard
+  - Implements a correct Keyword Extraction Algorithm (KEA)
+  - Note: Earlier results should be distrusted
+  - Tests KEA to check results are identical to match results set by Paul Rayson
+  - Documents use and origin of the KEA
+* Refactors the clusters 
+* Updates User Interface to increase modularity and add total counts 
+  - Makes clusters and keywords tables 100% wide to fix word wrap bug
+  - Renames js and GET variables in clusters and keywords to more sane defaults
+  - Adds right values for the keywords table (use, p_value, LL)
+  - Enables sorting of keywords and clusters on rank
+  - Updates book modal dialogue with latest corpus counts
+  - Clusters and keywords now include total cluster count
+  - Implements descriptions of the corpora based on the user's input
+  - Provides a summary of the search settings before giving clusters and keywords tables
+* Starts building help pages, About -> Help
+* Fixes API code that was unreadable
+* Fixes bug that returned 1grams when 5grams were asked
+* Enables caching for keywords and clusters
+  - Updates beaker cache version to handle args
+* Fixes non-quote counts that missed non-quotes before the first quote
+  - Correct mistake (before my time) in create_bookcountsjson
+  - Update book counts now including total counts/corpus
+  - Add note about the wrong q+nq counts
+  - Adds selector with help from Rob, Cat, and Matt, but does not use it yet
+* Adds consultant to the home page
+
 1.3.1
 -----
 * adds a DOI and a citable reference
