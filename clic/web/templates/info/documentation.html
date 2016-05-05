@@ -2,32 +2,11 @@
 
 {% set active_page = 'documentation' %}
 
-
-
 {% block title %}
-    Definitions {{ super() }}
+    Documentation {{ super() }}
 {% endblock %}
 
 {% block main_body %}
-
-
-<style>
-.suspension {
-    text-decoration: underline dashed;
-    -moz-text-decoration-color: blue; /* Code for Firefox */
-    text-decoration-color: blue;
-}
-
-#square {
-    width: 10px;
-    height: 10px;
-    display: inline-block;
-    margin-right: 5px;
-    padding-top: 2px;
-}
-
-</style>
-
 
   <div class="row">
       <div class="col-sm-9">
@@ -36,21 +15,29 @@
           <p>NB: The current total cluster counts of quotes and non-quotes do not add up to
           the total cluster counts in the whole text. This is a known issue on which we are working.
 		  </p>
+		  <p>This documentation is a work in progress. All suggestions are welcome. 
+		  </p>
 
 		  <h3>Keywords</h3>
 
+		  <p>The keywords page allows you to compare to corpora and two subsets with each other in order to find 
+    		 the clusters that are statisically significantly more frequently used in a corpus.
+		  </p>
+
+ 
           The keyword extraction formula is taken from 
 
-          <p>
+          <p style="padding-left:2em">
           Rayson, P. and Garside, R. (2000). Comparing corpora using frequency profiling. 
           In proceedings of the workshop on Comparing Corpora, held in conjunction with the 38th 
           annual meeting of the Association for Computational Linguistics (ACL 2000). 
-          1-8 October 2000, Hong Kong, pp. 1 - 6
-          Available at: http://ucrel.lancs.ac.uk/people/paul/publications/rg_acl2000.pdf
+          1-8 October 2000, Hong Kong, pp. 1-6.
+          Available <a href="http://ucrel.lancs.ac.uk/people/paul/publications/rg_acl2000.pdf">here</a>.
           </p>
 
 		  The total count used in this formula is the total cluster count (which is not the 
-          same as the total token count.
+          same as the total token count. 
+		
 
 
       </div>
