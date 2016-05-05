@@ -35,7 +35,7 @@ session.database = 'db_dickens'
 qf = db.get_object(session, 'defaultQueryFactory')
 df = db.get_object(session, 'SimpleDocumentFactory')
 concStore = db.get_object(session, 'concordanceStore')
-authStore = db.get_object(session, 'authStore')
+# authStore = db.get_object(session, 'authStore')
 recStore = db.get_object(session, 'recordStore')
 ampPreP = db.get_object(session, 'AmpPreParser')
 xmlp = db.get_object(session, 'LxmlParser')
@@ -111,7 +111,7 @@ if ('--dickens' in sys.argv):
 
 
 if ('--addIndex' in sys.argv):
-    idx = db.get_object(session, 'longsus-5gram-idx')
+    idx = db.get_object(session, 'idx-text-kwd-prox-unnrml')
     recStore = db.get_object(session, 'recordStore')
     idx.begin_indexing(session)
     session.logger.log_debug(session, recStore.id)
