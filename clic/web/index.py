@@ -213,8 +213,12 @@ def clusters():
         subcorpora = enforce_list(request.args.getlist('subcorpus'))
         cluster_length = request.args.get('cluster_length')
         index_name = construct_index_name(subset, cluster_length)
-        total, clusters = build_wordlist(index_name, subcorpora, rows_limit=1000)
-        
+        try:
+            total, clusters = build_wordlist(index_name, subcorpora, rows_limit=1000)
+    
+        except: 
+            total, clusters = None, None
+
         # variables to template for linking to concordance
         subset_for_conc = subset if subset else 'chapter'
         # this requires |safe in the template, but is it safe at this point in time?
