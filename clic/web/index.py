@@ -79,10 +79,6 @@ Application routes
 #==============================================================================
 # Home, about, docs, 404
 #==============================================================================
-@app.route('/', methods=['GET'])
-def index():
-    return render_template("info/home.html")
-
 @app.route('/about/', methods=['GET'])
 def about():
     return render_template("info/about.html")
@@ -106,6 +102,7 @@ def blog():
 #==============================================================================
 # Concordances
 #==============================================================================
+@app.route('/', methods=['GET'])
 @app.route('/concordances/', methods=['GET'])
 def concordances():
     if 'terms' in request.args.keys(): # form was submitted
