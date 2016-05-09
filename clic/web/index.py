@@ -239,7 +239,7 @@ def clusters():
 #==============================================================================
 # Keywords
 #==============================================================================
-# @cache.cache('new_keywords')
+@cache.cache('new_keywords')
 def build_keyword_list(cluster_length,
                        subset_analysis,
                        subcorpora_analysis,
