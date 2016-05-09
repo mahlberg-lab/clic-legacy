@@ -2,15 +2,17 @@
 
 {% set active_page = 'about' %}
 
+{% block meta %}
+    <meta name="Description" content="The CLiC Dickens project demonstrates through corpus stylistics how computer-assisted methods can be used to study literary texts and lead to new insights into how readers perceive fictional characters." />
+{% endblock %}
+
 {% block title %}
     About {{ super() }}
 {% endblock %}
 
 {% block main_body %}
-  <div class="row">
-    <div class="container">
-
-      <div class="col-sm-9">
+<div class="container">
+      <div class="col-sm-8">
           <h2 class="without-pills">About this prototype</h2>
 
           <p>The CLiC interface is work in progress. The current prototype was last updated on 5/5/2016 (version 1.4).
@@ -24,12 +26,12 @@
               <li>Searches might still be slow and very complex searches may fail</li>
           </ul>
       </div>
-
-      {% include "blocks/twitter.html" %}
-  </div>
-  </div>
-  <div class="row">
-      <div class="col-md-9">
+      <div class="col-sm-4 pull-right">
+        <div class="sideHead well">
+          <a class="twitter-timeline" data-dnt="true" href="https://twitter.com/CLiC_Dickens" data-widget-id="660152697799245824">Tweets by @CLiC_Dickens</a>
+        </div>
+      </div>
+      <div class="col-md-8">
           <h2>About the project</h2>
 
           <p>CLiC (Corpus Linguistics in Context) is developed as part of the AHRC-funded project: “<a href="http://www.birmingham.ac.uk/schools/edacs/departments/englishlanguage/research/projects/clic.aspx">CLiC Dickens - Characterisation in the representation of speech and body language from a corpus linguistic perspective</a>”  (Arts and Humanities Research Council grant reference AH/K005146/1).</p>
@@ -38,14 +40,50 @@
           <p>CLiC specifically supports the analysis of fictional speech and literary body language by enabling the user to search in particular parts of the texts, e.g. in quotes, which typically contain the direct speech of fictional characters in the novels.</p>
           <p>Initially, the texts that can be searched will be Dickens’s novels and novels written by other 19th century authors.</p>
           <p>For feedback and questions please contact us on email <a href="mailto:clic@contacts.birmingham.ac.uk">clic@contacts.birmingham.ac.uk</a>.</p>
-      </div>
+        <p>The&nbsp;CLiC Dickens&nbsp;project demonstrates through corpus stylistics how computer-assisted methods can be used to study literary texts and lead to new insights into how readers perceive fictional characters.&nbsp; As part of the project we are developing tool CLiC (Corpus Linguistics in Cheshire), designed specifically for the analysis of literary texts.</p>
+        <p>CLiC started at the <a href="http://www.nottingham.ac.uk/research/groups/cral/projects/clic.aspx" class="sys_16">University of Nottingham in 2013</a> and has moved to the University of Birmingham.</p>
 
-      {% include "blocks/feedback.html" %}
+
+  <!-- <h2>Upcoming events</h2> -->
+  <!-- <p>29 October 2015:&nbsp; <a title="Using CLiC to study literature" href="http://birmingham.ac.uk/schools/edacs/departments/englishlanguage/events/2015/de-joode-corpus-workshop.aspx" class="sys_0 sys_t1491559"><strong>Using CLiC to study literature</strong></a> (Johan de Joode)</p> -->
+  <!-- <p>12 November&nbsp; 2015:&nbsp; <a title="Advanced CLiC - User-defined annotation" href="http://birmingham.ac.uk/schools/edacs/departments/englishlanguage/events/2015/de-joode-advanced-corpus-workshop.aspx" class="sys_0 sys_t1491559"><strong>Advanced CLiC &ndash; User-defined annotation</strong></a> (Johan de Joode)</p> -->
+  <!-- <p>16 November 2015: <a href="http://www.aqa.org.uk/professional-development/course-details?meta_E=SENGAlevelEnglishWorkshopCorpuslinguisticmethods" class="sys_16"><b>Using corpus linguistic methods in the classroom: A one-day workshop for A level teachers</b></a></p> -->
+  <h2>Project Team</h2>
+  <ul>
+  <li><a title="Professor Michaela Mahlberg" href="http://birmingham.ac.uk/staff/profiles/elal/mahlberg-michaela.aspx" class="sys_0 sys_t1491564">Professor Michaela Mahlberg</a> (PI), University of Birmingham</li>
+  <li><a href="http://www.nottingham.ac.uk/research/groups/cral/people/peter.stockwell" class="sys_16">Professor Peter Stockwell</a> (CI), University of Nottingham</li>
+  <li><a title="Dr Johan de Joode" href="http://birmingham.ac.uk/staff/profiles/elal/de-joode-johan.aspx" class="sys_0 sys_t1491564">Dr Johan de Joode</a> (Research Fellow), University of Birmingham</li>
+  </ul>
+  <h3>Consultants</h3>
+  <ul>
+  <li><a href="https://library.stanford.edu/people/azaroth" class="sys_16">Dr Robert Sanderson</a>, Stanford University</li>
+  <li><a href="http://www.birmingham.ac.uk/staff/profiles/tr/smith-catherine.aspx" class="sys_16">Dr Catherine Smith</a>, University of Birmingham</li>
+  </ul>
+  <h3>Advisory panel</h3>
+  <ul>
+  <li><a href="http://www.as.uni-heidelberg.de/personen/Busse/" class="sys_16">Professor Beatrix Busse</a>, University of Heidelberg</li>
+  <li><a href="http://is.cuni.cz/webapps/whois2/osoba/1844822518733052/?lang=en" class="sys_16">Dr Anna Cermakova</a>, Charles University, Prague</li>
+  <li><a href="http://www.uniba.it/docenti/gatto-maristella" class="sys_16">Dr Maristella Gatto</a>, University of Bari&nbsp;</li>
+  <li><a href="http://www.sheffield.ac.uk/english/people/gavins" class="sys_16">Dr Joanna Gavins</a>, University of Sheffield</li>
+  <li><a href="https://www.nottingham.ac.uk/education/people/marcello.giovanelli" class="sys_16">Dr Marcello Giovanelli</a>, Chair of Examiners for a leading awarding body</li>
+  <li><a href="http://www.liv.ac.uk/english/staff/victorina-gonzalez-diaz" class="sys_16">Dr Victorina Gonzalez-Diaz</a>, University of Liverpool&nbsp;</li>
+  <li><a href="https://pure.royalholloway.ac.uk/portal/en/persons/juliet-john(cb3df345-a531-4c67-baa7-615fb1ecab70).html" class="sys_16">Professor Juliet John</a>, Royal Holloway University of London&nbsp;</li>
+  <li><a href="http://www.cardiff.ac.uk/people/view/142032-knight-dawn" class="sys_16">Dr Dawn Knight</a>, Cardiff University&nbsp;</li>
+  <li><a href="http://www.hud.ac.uk/ourstaff/profile/index.php?staffid=9" class="sys_16">Professor Dan McIntyre</a>, University of Huddersfield</li>
+  <li><a href="http://www.ling.lancs.ac.uk/profiles/mick-short" class="sys_16">Professor Mick Short</a>, University of Lancaster&nbsp;</li>
+  <li><a title="Paul Thompson" href="http://birmingham.ac.uk/staff/profiles/elal/thompson-paul.aspx" class="sys_0 sys_t1491564">Dr Paul Thompson</a>, University of Birmingham</li>
+  <li>Danica Zedan,&nbsp;NATE&nbsp;(National Association for the Teaching of English)</li>
+  </ul>
+
+  <p class="intro">Arts and Humanities Research Council grant reference AH/K005146/1</p>
+  </br>
   </div>
-
+</div>
 
 {% endblock %}
 
 {% block scripts %}
   {{ super() }}
+            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+
 {% endblock %}
