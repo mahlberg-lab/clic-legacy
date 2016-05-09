@@ -296,7 +296,8 @@ def keywords():
         subset_reference = request.args.get('subset_reference')
         subcorpora_reference = enforce_list(request.args.getlist('subcorpus_reference'))
         
-        keywords, total_analysis, total_reference = build_keyword_list(cluster_length,
+        try:
+            keywords, total_analysis, total_reference = build_keyword_list(cluster_length,
                                       subset_analysis,
                                       subcorpora_analysis,
                                       subset_reference,
@@ -304,6 +305,9 @@ def keywords():
                                       limit_rows=3000,
                                       p_value=p_value
                                       )
+        except:
+            keywords, total_analysis, total_reference = None, None, None
+            
         # for linking to the concordance, subset_analysis can be an empty string
         subset = subset_analysis if subset_analysis else 'chapter'
         subcorpora_for_conc = '&testCollection=' + '&testCollection='.join(subcorpora_analysis)
