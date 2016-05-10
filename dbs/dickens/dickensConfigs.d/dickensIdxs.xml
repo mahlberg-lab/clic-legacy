@@ -735,7 +735,7 @@
 			</options>
 		</subConfig>
 
-
+		<!-- SHORT suspensions  -->
 		<subConfig type="index" id="shortsus-idx">
 			<objectType>cheshire3.index.ProximityIndex</objectType>
 			<paths>
@@ -769,9 +769,66 @@
 			</options>
 		</subConfig>
 
+		<subConfig type="index" id="shortsus-3gram-idx">
+			<objectType>cheshire3.index.SimpleIndex</objectType>
+			<paths>
+				<object type="indexStore" ref="indexStore"/>
+			</paths>
+			<source>
+				<xpath ref="shortsusXPath"/>
+				<process>
+					<object type="extractor" ref="SpanXPathTaggedTermExtractor"/>
+					<object type="tokenizer" ref="SuppliedOffsetTokenizer"/>
+					<object type="tokenMerger" ref="3GramTokenMerger"/>
+					<object type="normalizer" ref="CaseNormalizer"/>
+				</process>
+			</source>
+			<source mode="any|all|=|exact|window">
+				<process>
+					<object type="extractor" ref="SimpleExtractor"/>
+					<object type="tokenizer" ref="RegexpSubTokenizer"/>
+					<object type="tokenMerger" ref="3GramTokenMerger"/>
+					<object type="normalizer" ref="CaseNormalizer"/>
+				</process>
+			</source>
+			<options>
+				<setting type="longSize">4</setting>
+				<setting type="vectors">1</setting>
+				<setting type="freqList">rec occ</setting>
+			</options>
+		</subConfig>
+
+		<subConfig type="index" id="shortsus-4gram-idx">
+			<objectType>cheshire3.index.SimpleIndex</objectType>
+			<paths>
+				<object type="indexStore" ref="indexStore"/>
+			</paths>
+			<source>
+				<xpath ref="shortsusXPath"/>
+				<process>
+					<object type="extractor" ref="SpanXPathTaggedTermExtractor"/>
+					<object type="tokenizer" ref="SuppliedOffsetTokenizer"/>
+					<object type="tokenMerger" ref="4GramTokenMerger"/>
+					<object type="normalizer" ref="CaseNormalizer"/>
+				</process>
+			</source>
+			<source mode="any|all|=|exact|window">
+				<process>
+					<object type="extractor" ref="SimpleExtractor"/>
+					<object type="tokenizer" ref="RegexpSubTokenizer"/>
+					<object type="tokenMerger" ref="4GramTokenMerger"/>
+					<object type="normalizer" ref="CaseNormalizer"/>
+				</process>
+			</source>
+			<options>
+				<setting type="longSize">4</setting>
+				<setting type="vectors">1</setting>
+				<setting type="freqList">rec occ</setting>
+			</options>
+		</subConfig>
+
+
 		<!-- corpus level indexes -->
-
-
 		<subConfig type="index" id="book-idx">
 			<objectType>cheshire3.index.SimpleIndex</objectType>
 			<paths>
