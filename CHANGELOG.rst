@@ -27,6 +27,8 @@
   - Add note about the wrong q+nq counts
   - Adds selector with help from Rob, Cat, and Matt, but does not use it yet
 * Adds consultant to the home page
+* Implements concordance searches in short suspensions
+* Implements 3 and 4 grams in short suspensions (both keywords and clusters)
 
 1.3.1
 -----
