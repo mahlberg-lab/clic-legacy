@@ -744,18 +744,20 @@
 			<source>
 				<xpath ref="shortsusXPath"/>
 				<process>
-					<object type="extractor" ref="TaggedTermExtractor"/>
+					<object type="extractor" ref="SpanXPathTaggedTermExtractor"/>
 					<object type="tokenizer" ref="SuppliedOffsetTokenizer"/>
-					<object type="tokenMerger" ref="5GramTokenMerger"/>
+					<object type="tokenMerger" ref="OffsetProxTokenMerger"/>
 					<object type="normalizer" ref="CaseNormalizer"/>
+					<object type="normalizer" ref="PossessiveNormalizer"/>				
 				</process>
 			</source>
 			<source mode="any|all|=|exact|window">
 				<process>
 					<object type="extractor" ref="SimpleExtractor"/>
-					<object type="tokenizer" ref="RegexpSubTokenizer"/>
-					<object type="tokenMerger" ref="5GramTokenMerger"/>
+					<object type="tokenizer" ref="RegexpFindOffsetTokenizer"/>
+					<object type="tokenMerger" ref="OffsetProxTokenMerger"/>
 					<object type="normalizer" ref="CaseNormalizer"/>
+					<object type="normalizer" ref="PossessiveNormalizer"/>
 				</process>
 			</source>
 			<options>
