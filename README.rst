@@ -2,9 +2,7 @@ The CLiC Dickens project demonstrates through corpus stylistics how computer-ass
 
 For more information, cf.
 `CLiC Dickens - University of Nottingham
-<http://www.nottingham.ac.uk/research/groups/cral/projects/clic.aspx/>`_
- and 
-`CLiC Dickens - University of Birmingham
+<http://www.nottingham.ac.uk/research/groups/cral/projects/clic.aspx/>`_ and `CLiC Dickens - University of Birmingham
 <http://www.birmingham.ac.uk/schools/edacs/departments/englishlanguage/research/projects/clic.aspx/>`_. 
 
 This work was supported by the Arts and Humanities Research Council grant reference AH/K005146/1
