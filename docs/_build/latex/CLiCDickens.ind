@@ -2,78 +2,83 @@
 \def\bigletter#1{{\Large\sffamily#1}\nopagebreak\vspace{1mm}}
 
   \bigletter A
-  \item args\_to\_dict() (kwicgrouper.KWICgrouper method), \hyperpage{11}
+  \item args\_to\_dict() (kwicgrouper.KWICgrouper method), \hyperpage{15}
 
   \indexspace
   \bigletter B
-  \item build\_and\_run\_query() (concordance.Concordance method), \hyperpage{9}
+  \item build\_and\_run\_query() (concordance.Concordance method), \hyperpage{11}
 
   \indexspace
   \bigletter C
-  \item chapter\_repository (module), \hyperpage{10}
-  \item ChapterRepository (class in chapter\_repository), \hyperpage{10}
-  \item clean\_punkt() (in module kwicgrouper), \hyperpage{11}
-  \item clean\_text() (in module kwicgrouper), \hyperpage{11}
-  \item Clusters (class in clusters), \hyperpage{9}
-  \item clusters (module), \hyperpage{9}
-  \item conc\_to\_df() (kwicgrouper.KWICgrouper method), \hyperpage{11}
-  \item Concordance (class in concordance), \hyperpage{9}
-  \item Concordance (class in kwicgrouper), \hyperpage{11}
-  \item concordance (module), \hyperpage{9}
-  \item concordance\_for\_line\_by\_line\_file() (in module kwicgrouper), \hyperpage{12}
-  \item create\_concordance() (concordance.Concordance method), \hyperpage{9}
+  \item chapter\_repository (module), \hyperpage{14}
+  \item ChapterRepository (class in chapter\_repository), \hyperpage{14}
+  \item clean\_punkt() (in module kwicgrouper), \hyperpage{15}
+  \item clean\_text() (in module kwicgrouper), \hyperpage{15}
+  \item Clusters (class in clusters), \hyperpage{11}
+  \item clusters (module), \hyperpage{11}
+  \item conc\_to\_df() (kwicgrouper.KWICgrouper method), \hyperpage{15}
+  \item Concordance (class in concordance), \hyperpage{11}
+  \item Concordance (class in kwicgrouper), \hyperpage{14}
+  \item concordance (module), \hyperpage{11}
+  \item concordance\_for\_line\_by\_line\_file() (in module kwicgrouper), \hyperpage{15}
+  \item create\_concordance() (concordance.Concordance method), \hyperpage{11}
+
+  \indexspace
+  \bigletter E
+  \item extract\_keywords() (in module keywords), \hyperpage{12}
 
   \indexspace
   \bigletter F
-  \item filter\_textframe() (kwicgrouper.KWICgrouper method), \hyperpage{11}
-  \item from\_multiple\_line\_file() (kwicgrouper.Concordance class method), \hyperpage{11}
+  \item filter\_textframe() (kwicgrouper.KWICgrouper method), \hyperpage{15}
+  \item format\_wordlist() (in module keywords), \hyperpage{13}
+  \item from\_multiple\_line\_file() (kwicgrouper.Concordance class method), \hyperpage{14}
 
   \indexspace
   \bigletter G
-  \item get\_book\_title() (chapter\_repository.ChapterRepository method), \hyperpage{10}
-  \item get\_chapter() (chapter\_repository.ChapterRepository method), \hyperpage{10}
+  \item get\_book\_title() (chapter\_repository.ChapterRepository method), \hyperpage{14}
+  \item get\_chapter() (chapter\_repository.ChapterRepository method), \hyperpage{14}
   \item get\_chapter\_with\_highlighted\_search\_term() (chapter\_repository.ChapterRepository method), 
-		\hyperpage{10}
-  \item get\_raw\_chapter() (chapter\_repository.ChapterRepository method), \hyperpage{10}
+		\hyperpage{14}
+  \item get\_raw\_chapter() (chapter\_repository.ChapterRepository method), \hyperpage{14}
 
   \indexspace
   \bigletter K
-  \item Keywords (class in keywords), \hyperpage{10}
-  \item keywords (module), \hyperpage{10}
-  \item KWICgrouper (class in kwicgrouper), \hyperpage{11}
-  \item kwicgrouper (module), \hyperpage{11}
+  \item keywords (module), \hyperpage{12}
+  \item keywords\_to\_json() (in module keywords), \hyperpage{13}
+  \item KWICgrouper (class in kwicgrouper), \hyperpage{14}
+  \item kwicgrouper (module), \hyperpage{14}
 
   \indexspace
   \bigletter L
-  \item list\_clusters() (clusters.Clusters method), \hyperpage{10}
-  \item list\_concordance() (kwicgrouper.Concordance method), \hyperpage{11}
-  \item list\_keywords() (keywords.Keywords method), \hyperpage{10}
+  \item list\_clusters() (clusters.Clusters method), \hyperpage{12}
+  \item list\_concordance() (kwicgrouper.Concordance method), \hyperpage{14}
+  \item log\_likelihood() (in module keywords), \hyperpage{13}
 
   \indexspace
   \bigletter N
-  \item normalizer (module), \hyperpage{12}
+  \item normalizer (module), \hyperpage{15}
 
   \indexspace
   \bigletter O
-  \item old\_clean\_punkt() (in module kwicgrouper), \hyperpage{12}
+  \item old\_clean\_punkt() (in module kwicgrouper), \hyperpage{15}
 
   \indexspace
   \bigletter P
-  \item print\_concordance() (kwicgrouper.Concordance method), \hyperpage{11}
+  \item print\_concordance() (kwicgrouper.Concordance method), \hyperpage{14}
 
   \indexspace
   \bigletter Q
-  \item querybuilder (module), \hyperpage{12}
+  \item querybuilder (module), \hyperpage{15}
 
   \indexspace
   \bigletter S
-  \item single\_line\_conc() (kwicgrouper.Concordance method), \hyperpage{11}
-  \item split\_nodes() (kwicgrouper.KWICgrouper method), \hyperpage{11}
+  \item single\_line\_conc() (kwicgrouper.Concordance method), \hyperpage{14}
+  \item split\_nodes() (kwicgrouper.KWICgrouper method), \hyperpage{15}
 
   \indexspace
   \bigletter W
-  \item web.api (module), \hyperpage{12}
-  \item web.index (module), \hyperpage{12}
-  \item web.models (module), \hyperpage{12}
+  \item web.api (module), \hyperpage{16}
+  \item web.index (module), \hyperpage{16}
+  \item web.models (module), \hyperpage{16}
 
 \end{theindex}

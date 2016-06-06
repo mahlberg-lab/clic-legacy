@@ -1,6 +1,8 @@
 CLiC for end-users
 ==================
 
+This section of the documentation is work in progress.
+
 
 Definitions
 -----------

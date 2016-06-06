@@ -21,8 +21,8 @@
 
 
 \title{CLiC Dickens Documentation}
-\date{March 15, 2016}
-\release{1.3}
+\date{May 18, 2016}
+\release{1.4}
 \author{J. de Joode}
 \newcommand{\sphinxlogo}{}
 \renewcommand{\releasename}{Release}
@@ -139,6 +139,8 @@ Contents:
 
 \chapter{CLiC for end-users}
 \label{endusers::doc}\label{endusers:clic-for-end-users}\label{endusers:welcome-to-clic-dickens-s-documentation}
+This section of the documentation is work in progress.
+
 
 \section{Definitions}
 \label{endusers:definitions}
@@ -174,16 +176,16 @@ Contents:
 
 \chapter{CLiC for administrators}
 \label{admin::doc}\label{admin:clic-for-administrators}
+For the deployment of CLiC we rely on Docker. This has several benefits:
+it packages all the dependencies of CLiC together in a simple image and it makes
+a deployment much faster and platform-independent.
+
 
 \section{Installing CLiC on your own server}
 \label{admin:installing-clic-on-your-own-server}
-For the deployment of CLiC we heavily rely on Docker. This has several benefits:
-it packages all the dependencies of CLiC together in a simple image and it makes
-a deployment much faster and possible on many different platforms.
 
-
-\subsection{Install Docker on a vanilla Ubuntu server}
-\label{admin:install-docker-on-a-vanilla-ubuntu-server}
+\subsection{Step 1: Install Docker on a vanilla Ubuntu server}
+\label{admin:step-1-install-docker-on-a-vanilla-ubuntu-server}
 \begin{Verbatim}[commandchars=\\\{\}]
 \PYGZsh{} Install Docker in a way that can easily be upgraded
 sudo apt\PYGZhy{}get update
@@ -194,10 +196,10 @@ sudo apt\PYGZhy{}key adv \PYGZhy{}\PYGZhy{}keyserver hkp://pgp.mit.edu:80 \PYGZh
 \PYGZsh{} open the /etc/apt/sources.list.d/docker.list file in your favorite
 editor. if the file doesn’t exist, create it. and add:
 
-\PYGZsh{} this is not a command, but something that needs to be pasted in the
-file opened
+  \PYGZsh{} this is not a command, but something that needs to be pasted in the
+  file opened
 
-deb https://apt.dockerproject.org/repo ubuntu\PYGZhy{}trusty main
+  deb https://apt.dockerproject.org/repo ubuntu\PYGZhy{}trusty main
 
 sudo apt\PYGZhy{}get update
 
@@ -221,12 +223,12 @@ sudo docker run hello\PYGZhy{}world
 \end{Verbatim}
 
 
-\subsection{Configure Docker}
-\label{admin:configure-docker}
+\subsection{Step 2: Configure Docker}
+\label{admin:step-2-configure-docker}
 \begin{Verbatim}[commandchars=\\\{\}]
 \PYGZsh{} set UFW’s forwarding policy appropriately.
 \PYGZsh{} Open /etc/default/ufw file for editing.
-sudo vimsu /etc/default/ufw
+sudo vim /etc/default/ufw
 
 \PYGZsh{} Set the DEFAULT\PYGZbs{}\PYGZus{}FORWARD\PYGZbs{}\PYGZus{}POLICY policy to:
 DEFAULT\PYGZbs{}\PYGZus{}FORWARD\PYGZbs{}\PYGZus{}POLICY=\PYGZdq{}ACCEPT\PYGZdq{}
@@ -246,8 +248,8 @@ sudo update\PYGZhy{}rc.d docker defaults
 \end{Verbatim}
 
 
-\subsection{Quick Docker command guide}
-\label{admin:quick-docker-command-guide}
+\subsection{Excursus: Quick Docker command guide}
+\label{admin:excursus-quick-docker-command-guide}
 You might have to prepend \code{sudo} to the commands below, depending on your
 environment.
 
@@ -307,6 +309,159 @@ docker rmi \PYGZdl{}(docker images \PYGZbs{}\textbar{} grep \PYGZdq{}\PYGZca{}\P
 \PYGZsh{} https://docs.docker.com/docker\PYGZhy{}hub/repos/
 docker login
 docker push jdejoode/clic:latest
+
+
+\PYGZsh{} You can also bind Docker containers to specific ports using the\PYGZhy{}p flag,
+for example:
+\PYGZdl{} docker run \PYGZhy{}d \PYGZhy{}p 80:5000 training/webapp python app.py
+\end{Verbatim}
+
+
+\subsection{Step 3: Get CLiC's Docker image}
+\label{admin:step-3-get-clic-s-docker-image}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYGZsh{} you can upload the Docker image found on the shared drive
+{}`mahlbema\PYGZhy{}01{}` in the folder {}`CLiC Live Server Data and Image{}`
+
+Do load the image on the server, run:
+
+docker load \PYGZhy{}i path\PYGZhy{}to\PYGZhy{}uploaded\PYGZhy{}CliCLive.tar
+
+For instance:
+
+sudo docker load \PYGZhy{}i CLiCLive.tar
+\end{Verbatim}
+
+
+\subsection{Step 4: Get the indexes, stores, and code}
+\label{admin:step-4-get-the-indexes-stores-and-code}
+The indexes can be downloaded from the same shared drive (\emph{mahlbema-01}).
+They need to be uploaded to the server as they need to be included in the
+Docker container as volumes when initialising the Docker container.
+
+\begin{Verbatim}[commandchars=\\\{\}]
+git clone https://github.com/CentreForCorpusResearch/clic
+\end{Verbatim}
+
+
+\subsection{Step 5: Run the Docker container}
+\label{admin:step-5-run-the-docker-container}
+The \code{path-to} elements in the following snippets need to be replaced with
+the actual path to your indexes, stores, configs, and code.
+
+\begin{Verbatim}[commandchars=\\\{\}]
+sudo docker run \PYGZhy{}d \PYGZhy{}p 80:8080 \PYGZhy{}p 5000:5000
+\PYGZhy{}v /home/clicman/clic:/clic\PYGZhy{}project/clic
+\PYGZhy{}v /home/clicman/indexes:/clic\PYGZhy{}project/clic/dbs/dickens/indexes
+\PYGZhy{}v /home/clicman/stores:/clic\PYGZhy{}project/clic/dbs/dickens/stores
+\PYGZhy{}v /home/clicman/db\PYGZus{}annotation\PYGZus{}2016\PYGZus{}05\PYGZus{}10\PYGZus{}at\PYGZus{}12\PYGZus{}00.tar:/clic\PYGZhy{}project/clic/db\PYGZus{}annotation.tar
+\PYGZhy{}v /home/clicman/config.xml:/clic\PYGZhy{}project/clic/dbs/dickens/config.xml
+\PYGZhy{}v /home/clicman/textfiles:/clic\PYGZhy{}project/clic/clic/textfiles
+\PYGZhy{}\PYGZhy{}name clic jdejoode/clic:latest
+\end{Verbatim}
+
+What the above command does:
+\begin{itemize}
+\item {} 
+Run the CLiC Docker container called with the latest tag
+as the exact version
+
+\item {} 
+The –d is used to run docker as a daemon (to keep it running,
+otherwise it only runs a single command)
+
+\item {} 
+-p 80:8080 tells the host to forward port 80 to 8080
+
+\item {} 
+-v host:docker mounts two different folders (the indexes and the stores)
+which are essential to clic. These are not included in the Docker image as
+they are volatile and as they are too big.
+
+\end{itemize}
+
+This enables you to update and release new code that does not change the database
+as the code and the configs are mounted.
+
+Get the database up and running:
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYGZsh{} move into the container
+docker exec \PYGZhy{}it clic bash
+
+\PYGZsh{} run the following commands
+dropdb db\PYGZus{}annotation
+dropuser clic\PYGZhy{}dickens
+sudo \PYGZhy{}u postgres createuser \PYGZhy{}P \PYGZhy{}d \PYGZhy{}r \PYGZhy{}s clic\PYGZhy{}dickens
+createdb \PYGZhy{}O clic\PYGZhy{}dickens db\PYGZus{}annotation \PYGZhy{}\PYGZhy{}password
+\PYGZsh{} db\PYGZus{}annotation.tar is the db.tar that was mounted earlier
+pg\PYGZus{}restore \PYGZhy{}\PYGZhy{}dbname=db\PYGZus{}annotation \PYGZhy{}\PYGZhy{}verbose /clic\PYGZhy{}project/clic/db\PYGZus{}annotation.tar
+
+\PYGZsh{} update to the latest, more advanced caching framework
+pip install \PYGZhy{}\PYGZhy{}upgrade Beaker pandas
+
+\PYGZsh{} restart uwsgi and postgres
+supervisorctl restart all
+\end{Verbatim}
+
+This should get CLiC up and running on your server/computer. Make sure to check
+whether the forms actually work before considering the installation a success.
+
+There are functional tests in clic/tests/functional/main.py. Read that document
+for more information.
+
+Before destroying a container, on has to export the postgres database. For instance:
+
+\begin{Verbatim}[commandchars=\\\{\}]
+pg\PYGZus{}dump \PYGZhy{}U clic\PYGZhy{}dickens \PYGZhy{}h localhost \PYGZhy{}W \PYGZhy{}F t db\PYGZus{}annotation \PYGZgt{} /clic\PYGZhy{}project/clic/db\PYGZus{}annotation.tar
+\end{Verbatim}
+
+
+\subsection{Enjoy, unless ...}
+\label{admin:enjoy-unless}
+To troubleshoot the container:
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYGZsh{} Is the container running?
+sudo docker ps
+
+\PYGZsh{} Are the right processes running on the container?
+sudo docker top clic  \PYGZsh{} (where clic is the name of the container)
+
+\PYGZsh{} Did the volumes mount correctly?
+Exec into the clic container to check manually whether the volumes are mounted
+
+\PYGZsh{} What do the logs say?
+sudo docker logs afcb70
+
+\PYGZsh{} What services are listening on what ports?
+sudo netstat –peanut
+
+\PYGZsh{} Do you get \PYGZdq{}ACCEPT: iptables: No chain/target/match by that name\PYGZdq{}
+sudo service docker restart
+
+\PYGZsh{} In very rare cases, a container might go down without prior notice. In that case
+\PYGZsh{} check whether it is up:
+sudo docker ps
+\PYGZsh{} if it is not up restart it
+sudo docker start clic (where clic is the container name)
+\end{Verbatim}
+
+
+\section{Installing CLiC on your own computer}
+\label{admin:installing-clic-on-your-own-computer}
+Because of the CLiC is released as a Docker image, you can also install CLiC on
+your own computer (Mac, Windows, or Linux) by simply installing Docker and
+following the system-specific install instructions in the Docker docs.
+
+
+\section{Run the tests}
+\label{admin:run-the-tests}
+To run the tests:
+
+\begin{Verbatim}[commandchars=\\\{\}]
+BASE\PYGZus{}URL=\PYGZsq{}http://live/\PYGZsq{} py.test main.py  (in
+clic/tests/functional tests/)
 \end{Verbatim}
 
 
@@ -414,20 +569,191 @@ Limit the list to the first 3000 entries.
 \label{apidoc:module-keywords}\label{apidoc:clic-keywords}\index{keywords (module)}
 Module to compute keywords (words that are used significantly more frequently
 in one corpus than they are in a reference corpus).
-\index{Keywords (class in keywords)}
+
+The statistical measure used is
+Log Likelihood as explained by Rayson and Garside:
+
+Rayson, P. and Garside, R. (2000). Comparing corpora using frequency profiling. 
+In proceedings of the workshop on Comparing Corpora, held in conjunction with the 38th 
+annual meeting of the Association for Computational Linguistics (ACL 2000). 
+1-8 October 2000, Hong Kong, pp. 1 - 6
+Available at: \href{http://ucrel.lancs.ac.uk/people/paul/publications/rg\_acl2000.pdf}{http://ucrel.lancs.ac.uk/people/paul/publications/rg\_acl2000.pdf}
+
+
+\subsection{Usage as follows:}
+\label{apidoc:usage-as-follows}\begin{quote}
+
+analysis = pd.DataFrame({[}(`a', 2500), (`the', 25000){]}, columns=(`Type', `Count'))
+reference = pd.DataFrame({[}(`a', 10), (`the', 10){]}, columns=(`Type', `Count'))
+\begin{description}
+\item[{result = extract\_keywords(analysis, }] \leavevmode
+reference, 
+tokencount\_analysis=20, 
+tokencount\_reference=100, 
+round\_values=True, 
+limit\_rows=3)
+
+\end{description}
+
+result
+
+keywords\_to\_json(result)
+\end{quote}
+
+
+\subsection{Or using text files as input:}
+\label{apidoc:or-using-text-files-as-input}\begin{quote}
+
+from collections import Counter
+\begin{description}
+\item[{with open(`\textasciitilde{}/data/input/DNov/BH.txt') as inputfile:}] \leavevmode
+bh = inputfile.read().split()
+bh = Counter(bh)
+
+\item[{with open(`\textasciitilde{}/data/input/DNov/OT.txt') as inputfile:}] \leavevmode
+ot = inputfile.read().split()
+ot = Counter(ot)
+
+\end{description}
+
+bh\_df  = pd.DataFrame(bh.items(), columns={[}'Type', `Count'{]})
+ot\_df  = pd.DataFrame(ot.items(), columns={[}'Type', `Count'{]})
+\begin{description}
+\item[{extract\_keywords(bh\_df, }] \leavevmode
+ot\_df, 
+tokencount\_analysis=bh\_df.Count.sum(), 
+tokencount\_reference=ot\_df.Count.sum(), 
+round\_values=True,)
+
+\end{description}
+\end{quote}
+\index{extract\_keywords() (in module keywords)}
 
 \begin{fulllineitems}
-\phantomsection\label{apidoc:keywords.Keywords}\pysigline{\strong{class }\code{keywords.}\bfcode{Keywords}}
-Class to compute keywords based on an test index (the corpus of analysis),
-a reference index (the corpus of reference), and a P value.
-\index{list\_keywords() (keywords.Keywords method)}
+\phantomsection\label{apidoc:keywords.extract_keywords}\pysiglinewithargsret{\code{keywords.}\bfcode{extract\_keywords}}{\emph{wordlist\_analysis}, \emph{wordlist\_reference}, \emph{tokencount\_analysis}, \emph{tokencount\_reference}, \emph{p\_value=0.0001}, \emph{exclude\_underused=True}, \emph{freq\_cut\_off=5}, \emph{round\_values=True}, \emph{limit\_rows=False}}{}
+This is the core method for keyword extraction. It provides a number 
+of handles to select sections of the data and/or adapt the input for the
+formula.
+\begin{description}
+\item[{Input = Two dataframes with columns `Type', and `Count' and }] \leavevmode
+two total tokencounts
 
-\begin{fulllineitems}
-\phantomsection\label{apidoc:keywords.Keywords.list_keywords}\pysiglinewithargsret{\bfcode{list\_keywords}}{\emph{testIdxName}, \emph{testMaterials}, \emph{refIdxName}, \emph{refMaterials}, \emph{pValue}}{}
-Return a sorted list of keywords. Limited to the first 5000 items.
+\item[{Output = An aligned dataframe which is sorted on the LL value and maybe filter }] \leavevmode\begin{quote}
+
+using the following handles:
+\end{quote}
+\begin{itemize}
+\item {} \begin{description}
+\item[{p\_value: limits the keywords based on their converted p\_value. A p\_value of 0.0001}] \leavevmode
+will select keywords that have 0.0001 \emph{or less} as their p\_value. It is a 
+cut-off. One can choose one out of four values: 0.0001, 0.001, 0.01, or 0.05.
+If any other value is chosen, it is ignored and no filtering on p\_value is done.
+
+\end{description}
+
+\item {} \begin{description}
+\item[{exclude\_underused: if True (default) it filters the result by excluding tokens that are }] \leavevmode
+statistically underused.
+
+\end{description}
+
+\item {} \begin{description}
+\item[{freq\_cut\_off: limits the wordlist\_analysis to words that have the freq\_cut\_off (inclusive) }] \leavevmode
+as minimal frequency. 5 is a sane default for Log Likelihood. If one does not 
+want frequency-based filtering, set a value of 0.
+
+\end{description}
+
+\item {} \begin{description}
+\item[{round\_values: if True (default) it rounds the columns with expected frequencies and LL }] \leavevmode
+to 2 decimals.
+
+\end{description}
+
+\item {} \begin{description}
+\item[{limit\_rows: if a number (for instance, 100), it limits the result to the number of rows }] \leavevmode
+specified. If false, rows are not limited.
+
+\end{description}
+
+\end{itemize}
+
+\item[{The defaults are reasonably sane: }] \leavevmode\begin{itemize}
+\item {} 
+a token needs to occur at least 5 times in the corpus of analysis
+
+\item {} 
+a high p-value is set
+
+\item {} 
+no filtering of the rows takes place
+
+\item {} 
+the underused tokens are excluded
+
+\item {} 
+rounding is active
+
+\end{itemize}
+
+\end{description}
+
+For more information on the algorithm, cf. log\_likelihood().
+
+The first column contains the indeces for the original merged dataframe. It does not display
+a rank and it should be ignored for keyword analysis (to be more precise: it displays the 
+frequency rank of the token in the corpus of analysis).
 
 \end{fulllineitems}
 
+\index{format\_wordlist() (in module keywords)}
+
+\begin{fulllineitems}
+\phantomsection\label{apidoc:keywords.format_wordlist}\pysiglinewithargsret{\code{keywords.}\bfcode{format\_wordlist}}{\emph{types}, \emph{counts}, \emph{total=None}}{}
+Helper function to convert lists with information into a dataframe.
+
+\end{fulllineitems}
+
+\index{keywords\_to\_json() (in module keywords)}
+
+\begin{fulllineitems}
+\phantomsection\label{apidoc:keywords.keywords_to_json}\pysiglinewithargsret{\code{keywords.}\bfcode{keywords\_to\_json}}{\emph{keywords}}{}
+Transforms a keywords table into a json array. 
+It is specifically tailored at the CLiC Dickens interface.
+
+\end{fulllineitems}
+
+\index{log\_likelihood() (in module keywords)}
+
+\begin{fulllineitems}
+\phantomsection\label{apidoc:keywords.log_likelihood}\pysiglinewithargsret{\code{keywords.}\bfcode{log\_likelihood}}{\emph{counts}}{}
+This function uses vector calculations to compute LL values.
+
+Input: dataframe that is formatted as follows:
+\begin{quote}
+
+Type, 
+Count\_analysis, 
+Total\_analysis, 
+Count\_ref, 
+Total\_ref
+\end{quote}
+
+Output: dataframe that is formatted as follows:
+\begin{quote}
+
+Type, 
+Count\_analysis, 
+Total\_analysis, 
+Count\_ref, 
+Total\_ref, 
+Expected\_count\_analysis,
+Expected\_count\_ref
+LL
+\end{quote}
+
+Hapax legomena in the Count\_analysis are not deleted.
+It is expected that Count\_analysis and Expected\_count\_analysis are not zero.
 
 \end{fulllineitems}
 
@@ -720,6 +1046,21 @@ provide a python interface to the SQL database so that you can write python
 code that automatically queries the database.
 
 This is heavily dependent on Flask-SQLAlchmey and SQLAlchemy
+
+
+\section{How to run the local development server?::}
+\label{apidoc:how-to-run-the-local-development-server}\begin{quote}
+
+\textasciitilde{}/projects/clic/clic/clic/web\$ PYTHONPATH=\textasciitilde{}/projects/clic/clic python manage.py runserver
+\end{quote}
+
+
+\section{How to run new indexes?::}
+\label{apidoc:how-to-run-new-indexes}\begin{quote}
+
+\textasciitilde{}/projects/clic/clic/dbs/dickens/indexes\$ CLIC\_SETTINGS=local PYTHONPATH=\textasciitilde{}/projects/clic/clic python run.py --ntc
+\textasciitilde{}/projects/clic/clic/dbs/dickens/indexes\$ CLIC\_SETTINGS=local PYTHONPATH=\textasciitilde{}/projects/clic/clic python run.py --dickens
+\end{quote}
 
 
 \chapter{Reporting issues}

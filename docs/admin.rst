@@ -2,9 +2,9 @@ CLiC for administrators
 =======================
 
 
-For the deployment of CLiC we heavily rely on Docker. This has several benefits:
+For the deployment of CLiC we rely on Docker. This has several benefits:
 it packages all the dependencies of CLiC together in a simple image and it makes
-a deployment much faster and possible on many different platforms. 
+a deployment much faster and platform-independent.
 
 Installing CLiC on your own server
 ----------------------------------
@@ -23,10 +23,10 @@ Step 1: Install Docker on a vanilla Ubuntu server
     # open the /etc/apt/sources.list.d/docker.list file in your favorite
     editor. if the file doesn’t exist, create it. and add:
 
-    # this is not a command, but something that needs to be pasted in the
-    file opened
-
-    deb https://apt.dockerproject.org/repo ubuntu-trusty main 
+      # this is not a command, but something that needs to be pasted in the
+      file opened
+      
+      deb https://apt.dockerproject.org/repo ubuntu-trusty main 
 
     sudo apt-get update
 
@@ -56,7 +56,7 @@ Step 2: Configure Docker
 
     # set UFW’s forwarding policy appropriately.
     # Open /etc/default/ufw file for editing.
-    sudo vimsu /etc/default/ufw
+    sudo vim /etc/default/ufw
 
     # Set the DEFAULT\_FORWARD\_POLICY policy to:
     DEFAULT\_FORWARD\_POLICY="ACCEPT"
@@ -150,15 +150,29 @@ Step 3: Get CLiC's Docker image
      
 .. code:: bash
 
-    sudo docker login  # (you may need login details)
-    sudo docker pull jdejoode/clic
+    # you can upload the Docker image found on the shared drive
+    `mahlbema-01` in the folder `CLiC Live Server Data and Image`
+    
+    Do load the image on the server, run:
+    
+    docker load -i path-to-uploaded-CliCLive.tar 
+    
+    For instance:
+    
+    sudo docker load -i CLiCLive.tar
+    
 
+Step 4: Get the indexes, stores, and code
+#########################################
 
-Step 4: Get the indexes and stores
-##################################
+The indexes can be downloaded from the same shared drive (`mahlbema-01`).
+They need to be uploaded to the server as they need to be included in the 
+Docker container as volumes when initialising the Docker container. 
 
-``TODO``
+.. code:: bash
 
+    git clone https://github.com/CentreForCorpusResearch/clic
+    
 
 Step 5: Run the Docker container
 ################################
@@ -168,35 +182,61 @@ the actual path to your indexes, stores, configs, and code.
 
 .. code:: bash
 
-  sudo docker run -d -p 80:80 -v
-  /home/path-to-/indexes:/clic-project/clic/dbs/dickens/indexes -v
-  /home/path-to-/stores:/clic-project/clic/dbs/dickens/stores --name
-  clic jdejoode/clic:latest
+  sudo docker run -d -p 80:8080 -p 5000:5000 
+  -v /home/clicman/clic:/clic-project/clic 
+  -v /home/clicman/indexes:/clic-project/clic/dbs/dickens/indexes 
+  -v /home/clicman/stores:/clic-project/clic/dbs/dickens/stores 
+  -v /home/clicman/db_annotation_2016_05_10_at_12_00.tar:/clic-project/clic/db_annotation.tar 
+  -v /home/clicman/config.xml:/clic-project/clic/dbs/dickens/config.xml 
+  -v /home/clicman/textfiles:/clic-project/clic/clic/textfiles 
+  --name clic jdejoode/clic:latest
 
 What the above command does:
 
-    - Run a docker container called jdejoode/clic with the latest tag
+    - Run the CLiC Docker container called with the latest tag
       as the exact version
-    - The key parts are the ‘run’ and the image name
-      ‘jdejoode/clic:latest’
     - The –d is used to run docker as a daemon (to keep it running,
       otherwise it only runs a single command)
-    - -p 80:80 tells the host to forward port 80 to 8080
+    - -p 80:8080 tells the host to forward port 80 to 8080
     - -v host:docker mounts two different folders (the indexes and the stores)
-      which are essential to clic.
+      which are essential to clic. These are not included in the Docker image as
+      they are volatile and as they are too big.
 
-Or if you want to be able to update and release new code, you can mount the code
-and the configs (the config file needs to be the one from clic-docker):
+This enables you to update and release new code that does not change the database
+as the code and the configs are mounted.
+
+Get the database up and running:
 
 .. code:: bash
 
-  docker run -d --name clic-code13 -v
-  /Users/path-to-clic-code/clic:/clic-project/clic -v
-  /Users/path-to-clic-indexes/indexes:/clic-project/clic/dbs/dickens/indexes -v
-  /Users/path-to-clic-stores/stores:/clic-project/clic/dbs/dickens/stores -v
-  /Users/path-to-clic-config/config.xml:/clic-project/clic/dbs/dickens/config.xml
-  -p 80:8080 -p 5000:5000 jdejoode/clic:latest
+  # move into the container
+  docker exec -it clic bash
+  
+  # run the following commands
+  dropdb db_annotation
+  dropuser clic-dickens
+  sudo -u postgres createuser -P -d -r -s clic-dickens
+  createdb -O clic-dickens db_annotation --password
+  # db_annotation.tar is the db.tar that was mounted earlier
+  pg_restore --dbname=db_annotation --verbose /clic-project/clic/db_annotation.tar 
+  
+  # update to the latest, more advanced caching framework
+  pip install --upgrade Beaker pandas
 
+  # restart uwsgi and postgres
+  supervisorctl restart all
+  
+This should get CLiC up and running on your server/computer. Make sure to check 
+whether the forms actually work before considering the installation a success.
+
+There are functional tests in clic/tests/functional/main.py. Read that document 
+for more information. 
+
+Before destroying a container, on has to export the postgres database. For instance:
+
+.. code:: bash
+
+  pg_dump -U clic-dickens -h localhost -W -F t db_annotation > /clic-project/clic/db_annotation.tar
 
 Enjoy, unless ...
 #################
@@ -222,7 +262,12 @@ To troubleshoot the container:
 
   # Do you get "ACCEPT: iptables: No chain/target/match by that name" 
   sudo service docker restart
-
+  
+  # In very rare cases, a container might go down without prior notice. In that case
+  # check whether it is up:
+  sudo docker ps
+  # if it is not up restart it
+  sudo docker start clic (where clic is the container name)
 
 
 Installing CLiC on your own computer
@@ -233,68 +278,12 @@ your own computer (Mac, Windows, or Linux) by simply installing Docker and
 following the system-specific install instructions in the Docker docs.
 
 
+Run the tests
+-------------
 
-Releasing a new version
------------------------
+To run the tests:
 
-There are several steps that need to be taken for a new release.
+.. code:: bash
 
-    1.     Prepare the release on github
-
-      a.     Update CHANGELOG.rst
-
-      b.     Merge branches into develop and develop into master
-
-      c.     Tag master with the latest version
-
-      d.     Git push && git push --tags
-
-    2.     Update the date in the Dockerfile (add sth random if you have too
-    more than one release on a day, the purpose is to invalidate the Docker
-    image cache)
-
-      a.     RUN git clone -b master
-      https://github.com/CentreForCorpusResearch/clic.git && echo "2015-10-23"
-
-      b.     Docker build –t jdejoode/clic:latest .
-
-                        i.         To check build
-  on local first:
-
-                       ii.         docker run -d
-  --name clic-debug -v
-  /Users/johan/Data/clic/indexes:/clic-project/clic/dbs/dickens/indexes -v
-  /Users/johan/Data/clic/stores:/clic-project/clic/dbs/dickens/stores -P
-  jdejoode/clic:latest   # -P needs to be before image name
-
-                       iii.     on mac: docker-machine env default
-
-                       iv.     on mac: docker port clic-debug
-
-                        v.         then visit the
-  localhost on the right port: for instance, http://192.168.99.100:32770/
-
-      c.      Docker login
-
-      d.     Docker push jdejoode/clic:latest
-
-  3.     On the server you want to push to:
-
-      a.     Sudo docker login
-
-      b.     Sudo docker pull jdejoode/clic:latest
-
-      c.      Sudo docker ps
-
-      d.     Sudo docker stop NAMEOFTHERUNNINGCONTAINER (stop the running
-      container, make sure you do not lose data!)
-
-      e.     sudo docker run -d -p 80:8080 -v /tmp:/tmp -v
-      /home/clicman/indexes:/clic-project/clic/dbs/dickens/indexes -v
-      /home/clicman/stores:/clic-project/clic/dbs/dickens/stores --name clic8
-      jdejoode/clic:latest
-
-  4.     Run the tests
-
-    a.     BASE\_URL='http://live/' py.test main.py  (in
+    BASE_URL='http://live/' py.test main.py  (in
     clic/tests/functional tests/)
