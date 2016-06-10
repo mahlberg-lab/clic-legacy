@@ -352,10 +352,6 @@ def chapterView(number, book, word_index=None, search_term=None):
 def subsets():
     '''
     This is a quick and dirty method to display the subsets in our db.
-    It now uses GET parameters, but should probably use POST parameters
-    ideally.
-    The basic design for POST parameters was almost ready but there were a
-    few issues.
     '''
 
     book = request.args.get('book')
@@ -387,6 +383,8 @@ def subsets_display(book=None, subset=None):
         filename = "../textfiles/{0}/{1}_{0}.txt".format(subset, book)
         with open(os.path.join(BASE_DIR, filename), 'r') as the_file:
             result = the_file.readlines()
+
+        result = [(line, len(line.split())) for line in result]
 
         return render_template("subsets-results.html",
                                book=book,

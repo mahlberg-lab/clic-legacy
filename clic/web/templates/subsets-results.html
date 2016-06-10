@@ -23,6 +23,8 @@
             <tr role="row">
                 <th aria-label="No" style="width: auto;" colspan="1" rowspan="1" class="sorting_asc">No</th>
                 <th aria-label="Text: activate to sort column ascending" style="width: auto;" colspan="1" rowspan="1" aria-controls="dataTableSubset" tabindex="0" class="sorting">Text</th>
+                <th aria-label="Word Count: activate to sort column ascending" style="width: auto;" colspan="1" rowspan="1" aria-controls="dataTableSubset" tabindex="0" class="sorting">Word Count</th>
+
 <!--
                 <th aria-label="Freq: activate to sort column ascending" style="width: 0px;" colspan="1" rowspan="1" aria-controls="dataTableSubset" tabindex="0" class="sorting">Freq</th>
                 <th aria-label="%: activate to sort column ascending" style="width: 0px;" colspan="1" rowspan="1" aria-controls="dataTableSubset" tabindex="0" class="sorting">%</th>
@@ -31,7 +33,7 @@
         </thead>
         <tbody>
         {% for line in result %}
-            <tr class="{{ loop.cycle('odd', 'even') }}"><td class="sorting_1">{{ loop.index }}</td><td>{{ line }}</td></tr>
+            <tr class="{{ loop.cycle('odd', 'even') }}"><td class="sorting_1">{{ loop.index }}</td><td>{{ line[0] }}</td><td>{{ line[1] }}</td></tr>
         {% endfor %}
         </tbody>
     </table>
@@ -57,6 +59,7 @@
               "aoColumns": [
                   { "sTitle": "No" },
                   { "sTitle": "Text" },
+                  { "sTitle": "Word Count" },
               ],
 
               "fnInitComplete": function () {
