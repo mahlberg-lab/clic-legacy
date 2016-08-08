@@ -241,6 +241,33 @@ Before destroying a container, on has to export the postgres database. For insta
 Enjoy, unless ...
 #################
 
+If the server knows a power outage, Docker will be shut down without proper warning. 
+This means that the Docker container has to be restarted on rebooting the server.
+
+To do so:
+
+.. code:: bash
+
+  # Is the container running?
+  sudo docker ps
+
+  # If not: check if the container is still available 
+  sudo docker ps -a
+
+  # You can now restart that image, for instance, clic18 by running
+  sudo docker start clic18
+
+  # The power outage could have caused other settings to be forgotten:
+  # IF NEEDED, the following commands can be used to bring them back up
+
+  sudo ufw reload
+  sudo ufw restart
+  sudo service docker restart  
+  
+  # If the issue still is not solved, consider the above documentation on the installation
+  # of Docker on a vanilla server
+
+
 To troubleshoot the container:
 
 .. code:: bash
