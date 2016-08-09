@@ -83,6 +83,18 @@ Application routes
 def about():
     return render_template("info/about.html")
 
+@app.route('/events/', methods=['GET'])
+def events():
+    return render_template("info/events.html")
+
+@app.route('/publications/', methods=['GET'])
+def publications():
+    return render_template("info/publications.html")
+
+@app.route('/downloads/', methods=['GET'])
+def downloads():
+    return render_template("info/downloads.html")
+
 @app.route('/definitions/', methods=['GET'])
 def definitions():
     return render_template("info/definitions.html")
