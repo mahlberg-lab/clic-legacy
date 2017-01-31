@@ -1,6 +1,4 @@
 -r testing.txt
 
-pandas==0.17.0
-flask-debugtoolbar==0.10.0
 ipython==2.4.1
 lxml==3.4.1
