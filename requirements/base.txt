@@ -3,7 +3,7 @@ cheshire3 [web,sql] >= 1.1.0c4
 Flask==0.10.1
 Beaker==1.8.0
 pandas>=0.18.0
-uWSGI==2.0.9
+uWSGI==2.0.13.1
 Flask-SQLAlchemy==2.0
 alembic==0.7.6
 SQLAlchemy
