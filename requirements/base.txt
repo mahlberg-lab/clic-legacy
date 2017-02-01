@@ -1,18 +1,15 @@
 cheshire3 [web,sql] >= 1.1.0c4
--e git+https://github.com/bloomonkey/mod-python-wsgi@develop#egg=modpythonwsgi #FIXME
 Flask==0.10.1
 Beaker==1.8.0
-pandas>=0.18.0
+pandas==0.18.0
 uWSGI==2.0.13.1
 Flask-SQLAlchemy==2.0
 alembic==0.7.6
-SQLAlchemy
+SQLAlchemy==1.0.9
 Mako==1.0.1
 Flask-Script==2.0.5
 Flask-Migrate==1.4.0
 Flask-Security
-# Flask-Admin
--e git+https://github.com/flask-admin/flask-admin.git@master#egg=flask-admin
+Flask-Admin==1.4.0
 Flask-Login==0.2.11
-flask-debugtoolbar
 nltk==3.0.5
