@@ -37,6 +37,10 @@ Install the operating system's postgres. As the postgres user::
     # db_annotation.tar is available on the project share
     pg_restore --dbname=db_annotation --verbose /clic-project/clic/db_annotation.tar
 
+Add links so cheshire3 can find the config::
+    
+    ln -rs cheshire3-server ~/.cheshire3-server
+
 Start the webserver in debug mode::
 
     PYTHONPATH="." ./bin/python -m clic.web.index
