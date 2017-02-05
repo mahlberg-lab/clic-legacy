@@ -1,6 +1,9 @@
 Setup Instructions
 ==================
 
+Installation
+------------
+
 Firstly, install the operating system prerequisites::
 
     apt-get install virtualenv python-dev \
@@ -23,7 +26,15 @@ Comment out "socket.setdefaulttimeout(30)" in
 
 See https://github.com/coleifer/micawber/issues/59 for more information
 
-Install the operating system's postgres. As the postgres user::
+Use virtualenv / pip for the relevant environment::
+
+    virtualenv .
+    ./bin/pip install -r requirements/dev.txt
+
+Database setup
+--------------
+
+Configure the operating system's postgres. As the postgres user::
 
     # Clear out old DB if it exists
     dropdb db_annotation
@@ -40,6 +51,9 @@ Install the operating system's postgres. As the postgres user::
 Add links so cheshire3 can find the config::
     
     ln -rs cheshire3-server ~/.cheshire3-server
+
+Running the system
+------------------
 
 Start the webserver in debug mode::
 
