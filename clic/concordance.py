@@ -52,7 +52,7 @@ class Concordance(object):
     def __init__(self):
         '''
         Set up a cheshire3 session/connection to the database. This initilisation does
-        not handle the actual search term (cf. build_and_run_query).
+        not handle the actual search term (cf. build_query).
         '''
 
         self.session = Session()
@@ -67,11 +67,11 @@ class Concordance(object):
         #self.logger = self.db.get_object(self.session, 'concordanceLogger')
 
 
-    def build_and_run_query(self, terms, idxName, Materials, selectWords):
+    def build_query(self, terms, idxName, Materials, selectWords):
         '''
-        Builds a cheshire query and runs it.
+        Builds a cheshire query
 
-        Its output is a tuple of which the first element is a resultset and
+        Its output is a tuple of which the first element is a query.
         the second element is number of search terms in the query.
         '''
 
@@ -103,9 +103,8 @@ class Concordance(object):
         ## conduct database search
         ## note: /proxInfo needed to search individual books
         query = self.qf.get_query(self.session, ' or '.join(subcorpus) + ' and/proxInfo ' + ' or '.join(term_clauses))
-        result_set = self.db.search(self.session, query)
 
-        return result_set, number_of_search_terms
+        return query, number_of_search_terms
 
 
     def create_concordance(self, terms, idxName, Materials, selectWords):
@@ -129,7 +128,9 @@ class Concordance(object):
 
         conc_lines = [] # return concordance lines in list
         word_window = 10 # word_window is set to 10 by default - on both sides of node
-        result_set, number_of_search_terms = self.build_and_run_query(terms, idxName, Materials, selectWords)
+
+        query, number_of_search_terms = self.build_query(terms, idxName, Materials, selectWords)
+        result_set = self.db.search(self.session, query)
 
         ## get total number of hits (not yet used in interface)
         total_count = 0
