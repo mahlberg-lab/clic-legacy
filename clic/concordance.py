@@ -70,6 +70,10 @@ class Concordance(object):
     def build_query(self, terms, idxName, Materials, selectWords):
         '''
         Builds a cheshire query
+         - terms: Search terms (space separated?)
+         - idxName: Index to use, e.g. "chapter-idx"
+         - Materials: List of subcorpi to search, e.g. ["dickens"]
+         - selectWords: "whole" / "any"
 
         Its output is a tuple of which the first element is a query.
         the second element is number of search terms in the query.
