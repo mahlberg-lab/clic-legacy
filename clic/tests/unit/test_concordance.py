@@ -78,7 +78,8 @@ class PhraseSearchOneTerm(unittest.TestCase):
 
     def test_non_quotes(self):
         fog = self.create_concordance(idxName="non-quote-idx")
-        self.assertEqual(len(fog) - correction, 42)
+        # i.e. 11 (test_quotes) + 83 (test_non_quotes) == 94 (test_basic_query)
+        self.assertEqual(len(fog) - correction, 83)
 
     def test_short_sus(self):
         fog = self.create_concordance(idxName="shortsus-idx")
