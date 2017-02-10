@@ -106,7 +106,10 @@ class Concordance(object):
 
         ## conduct database search
         ## note: /proxInfo needed to search individual books
-        query = self.qf.get_query(self.session, ' or '.join(subcorpus) + ' and/proxInfo ' + ' or '.join(term_clauses))
+        query = self.qf.get_query(self.session, '(%s) and/proxInfo (%s)' % (
+            ' or '.join(subcorpus),
+            ' or '.join(term_clauses),
+        ))
 
         return query, number_of_search_terms
 
