@@ -139,7 +139,6 @@ class Concordance(object):
 
         ## search through each record (chapter) and identify location of search term(s)
         if len(result_set) > 0:
-            count = 0
             for result in result_set:
 
                 ## get xml record
@@ -170,45 +169,36 @@ class Concordance(object):
                 #   in the document?
 
                 for match in result.proxInfo:
-                    count += 1
+                    if idxName in ['chapter-idx']:
+                        word_id = match[0][1]
 
-                    #FIXME will this code be run if there are more than 1000 results? will it not break out of the for loop?
-                    #or will it break out of the if loop
+                    elif idxName in ['quote-idx', 'non-quote-idx', 'longsus-idx', 'shortsus-idx']:
+                        eid, word_id = match[0][0], match[0][1]
 
-                    if count > 1000: ## current search limit: 1000
-                        break
-                    else: #FIXME while this code be run if there are more than 1000 results? will it not break out of the for loop?
+                        ## locate search term in xml
+                        search_term = rec.process_xpath(self.session, '//*[@eid="%d"]/following::w[%d+1]' % (eid, word_id))
 
-                        if idxName in ['chapter-idx']:
-                            word_id = match[0][1]
+                        ## get xml of sentence
+                        sentence_tree = rec.process_xpath(self.session, '//*[@eid="%d"]/following::w[%d+1]/ancestor-or-self::s' % (eid, word_id))
+                        chapter_tree = rec.process_xpath(self.session, '//*[@eid="%d"]/following::w[%d+1]/ancestor-or-self::div' % (eid, word_id))
 
-                        elif idxName in ['quote-idx', 'non-quote-idx', 'longsus-idx', 'shortsus-idx']:
-                            eid, word_id = match[0][0], match[0][1]
+                        ## counts words preceding sentence
+                        prec_s_tree = chapter_tree[0].xpath('/div/p/s[@sid="%s"]/preceding::s/descendant::w' % sentence_tree[0].get('sid'))
+                        prec_s_wcount = len(prec_s_tree)
 
-                            ## locate search term in xml
-                            search_term = rec.process_xpath(self.session, '//*[@eid="%d"]/following::w[%d+1]' % (eid, word_id))
+                        ## count words within sentence
+                        count_s = 0
+                        for word in chapter_tree[0].xpath('/div/p/s[@sid="%s"]/descendant::w' % sentence_tree[0].get('sid')):
+                            if not word.get('o') == search_term[0].get('o'):
+                                count_s += 1
+                            else:
+                                break
 
-                            ## get xml of sentence
-                            sentence_tree = rec.process_xpath(self.session, '//*[@eid="%d"]/following::w[%d+1]/ancestor-or-self::s' % (eid, word_id))
-                            chapter_tree = rec.process_xpath(self.session, '//*[@eid="%d"]/following::w[%d+1]/ancestor-or-self::div' % (eid, word_id))
-
-                            ## counts words preceding sentence
-                            prec_s_tree = chapter_tree[0].xpath('/div/p/s[@sid="%s"]/preceding::s/descendant::w' % sentence_tree[0].get('sid'))
-                            prec_s_wcount = len(prec_s_tree)
-
-                            ## count words within sentence
-                            count_s = 0
-                            for word in chapter_tree[0].xpath('/div/p/s[@sid="%s"]/descendant::w' % sentence_tree[0].get('sid')):
-                                if not word.get('o') == search_term[0].get('o'):
-                                    count_s += 1
-                                else:
-                                    break
-
-                            ## word number within chapter is adding word count in preceding sentence and word count in current sentence
-                            wcount = prec_s_wcount + count_s
-                            #FIXME `w = wcount` dynamically reassigns a value to `w`
-                            #that is already a value, namely the one refactored to `word_id`
-                            word_id = wcount
+                        ## word number within chapter is adding word count in preceding sentence and word count in current sentence
+                        wcount = prec_s_wcount + count_s
+                        #FIXME `w = wcount` dynamically reassigns a value to `w`
+                        #that is already a value, namely the one refactored to `word_id`
+                        word_id = wcount
 
 
                     ## Define leftOnset as w - 10, then get all w and n between that and node
