@@ -36,8 +36,37 @@ from cheshire3.server import SimpleServer
 #     number of words
 
 BASE_DIR = os.path.dirname(__file__)
-raw_booklist = open(os.path.join(BASE_DIR, 'booklist.json'), 'r')
-booklist = json.load(raw_booklist)
+with open(os.path.join(BASE_DIR, 'booklist.json'), 'r') as raw_booklist:
+    booklist = json.load(raw_booklist)
+
+def get_chapter_stats(book, chapter):
+    ## count paragraph, sentence and word in whole book
+    out = dict(
+        count_para=0,
+        count_sent=0,
+        count_word=0,
+    )
+
+    for b in booklist:
+        if b[0][0] == book:
+
+            out['title'] = b[0][1]
+            out['total_word'] = b[1][0][2]
+
+            for j, c in enumerate(b[2]):
+                while j+1 < int(chapter):
+                    out['count_para'] += int(c[0])
+                    out['count_sent'] += int(c[1])
+                    out['count_word'] += int(c[2])
+                    j += 1
+                    break
+
+                ## total word in chapter
+                if j+1 == int(chapter):
+                    out['count_chap_word'] = b[2][j][2]
+            return out
+
+    raise ValueError("Cannot find book stats")
 
 
 class Concordance(object):
@@ -152,8 +181,11 @@ class Concordance(object):
                 # A record for a result is the entire chapter
                 rec = result.fetch_record(self.session)
 
-                # Count number of words in chapter
+                # Find the current chapter and get stats for it
                 ch_node = rec.process_xpath(self.session, '/div')[0]
+                book = ch_node.get('book')
+                chapter = ch_node.get('num')
+                ch_stats = get_chapter_stats(book, chapter)
 
                 # Get all tokens in the chapter as an array
                 ch_tokens = rec.process_xpath(self.session, "/div/descendant::*[self::n or self::w]")
@@ -212,47 +244,21 @@ class Concordance(object):
                         word_id + number_of_search_terms + word_window
                     )]
 
-                    book = ch_node.get('book')
-                    chapter = ch_node.get('num')
                     para_chap = search_term.xpath('ancestor-or-self::p/@pid')[0]
                     sent_chap = search_term.xpath('ancestor-or-self::s/@sid')[0]
                     word_chap = word_id
 
-                    ## count paragraph, sentence and word in whole book
-                    count_para = 0
-                    count_sent = 0
-                    count_word = 0
-                    booktitle = []
-                    total_word = []
-                    for b in booklist:
-                        if b[0][0] == book:
-
-                            booktitle.append(b[0][1])
-                            total_word.append(b[1][0][2])
-
-                            for j, c in enumerate(b[2]):
-                                while j+1 < int(chapter):
-                                    count_para = count_para + int(c[0])
-                                    count_sent = count_sent + int(c[1])
-                                    count_word = count_word + int(c[2])
-                                    j += 1
-                                    break
-
-                                ## total word in chapter
-                                if j+1 == int(chapter):
-                                    chapWordCount = b[2][j][2]
-
-                    book_title = booktitle[0]   ## get book title
-                    total_word = total_word[0]
-                    para_book = count_para + int(para_chap)
-                    sent_book = count_sent + int(sent_chap)
-                    word_book = count_word + int(word_chap)
+                    book_title = ch_stats['title']
+                    total_word = ch_stats['total_word']
+                    para_book = ch_stats['count_para'] + int(para_chap)
+                    sent_book = ch_stats['count_sent'] + int(sent_chap)
+                    word_book = ch_stats['count_word'] + int(word_chap)
 
                     conc_line = [
                         [n.text for n in ch_tokens[context_left:match_left]],
                         [n.text for n in ch_tokens[match_left:match_end]],
                         [n.text for n in ch_tokens[match_end:context_end]],
-                        [book, book_title, chapter, para_chap, sent_chap, str(word_chap), str(chapWordCount)],
+                        [book, book_title, chapter, para_chap, sent_chap, str(word_chap), str(ch_stats['count_chap_word'])],
                         [str(para_book), str(sent_book), str(word_book), str(total_word)],
                     ]
 
