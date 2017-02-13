@@ -153,7 +153,6 @@ class Concordance(object):
                 rec = result.fetch_record(self.session)
 
                 # Count number of words in chapter
-                ch_words = len(rec.process_xpath(self.session, '/div/descendant::w')) ## move to level for each record (chapter) ?
                 ch_node = rec.process_xpath(self.session, '/div')[0]
 
                 # Get all tokens in the chapter as an array
