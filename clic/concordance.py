@@ -149,8 +149,20 @@ class Concordance(object):
         if len(result_set) > 0:
             for result in result_set:
 
-                ## get xml record
+                # A record for a result is the entire chapter
                 rec = result.fetch_record(self.session)
+
+                # Count number of words in chapter
+                ch_words = len(rec.process_xpath(self.session, '/div/descendant::w')) ## move to level for each record (chapter) ?
+                ch_node = rec.process_xpath(self.session, '/div')[0]
+
+                # Get all tokens in the chapter as an array
+                ch_tokens = rec.process_xpath(self.session, "/div/descendant::*[self::n or self::w]")
+                # Generate a list of the locations of all word nodes
+                ch_word_map = [
+                    i for (i, n) in enumerate(ch_tokens)
+                    if n.tag == 'w'
+                ]
 
                 # Each time a search term is found in a document
                 # (each match) is described in terms of a proxInfo.
@@ -208,62 +220,17 @@ class Concordance(object):
                         #that is already a value, namely the one refactored to `word_id`
                         word_id = wcount
 
+                    # context_left word word | match_left word (whitespace:match_end) | context_right word word : context_end
+                    context_left = ch_word_map[max(0, word_id - word_window)]
+                    match_left = ch_word_map[word_id]
+                    match_end = ch_word_map[word_id + number_of_search_terms - 1] + 1  # i.e. whitespace after end of match
+                    context_end = ch_word_map[min(
+                        len(ch_word_map) - 1,
+                        word_id + number_of_search_terms + word_window
+                    )]
 
-                    ## Define leftOnset as w - 10, then get all w and n between that and node
-                    leftOnset = max(1, word_id - word_window + 1) ## we operate with word position, not list position (word 1 = 0 position in list)
-                    nodeOnset = word_id + 1
-                    nodeOffset = word_id + number_of_search_terms
-                    try:
-                        rightOnset = nodeOffset + 1
-                    except:
-                        rightOnset = None
-
-                    ch_words = len(rec.process_xpath(self.session, '/div/descendant::w')) ## move to level for each record (chapter) ?
-                    rightOffset = min(rightOnset + word_window, rightOnset + (ch_words - rightOnset) + 1 )
-
-                    left_text = []
-                    for l in range(leftOnset, nodeOnset):
-                        try:
-                            left_n_pr = rec.process_xpath(self.session, '/div/descendant::w[%d]/preceding-sibling::n[1]' % l)[0].text
-                        except:
-                            left_n_pr = ''
-                        left_w = rec.process_xpath(self.session, '/div/descendant::w[%d]' % l)[0].text
-                        try:
-                            left_n_fo = rec.process_xpath(self.session, '/div/descendant::w[%d]/following-sibling::n[1]' % l)[0].text
-                        except:
-                            left_n_fo = ''
-                        left_text.append(''.join(left_n_pr + left_w + left_n_fo))
-
-
-                    node_text = []
-                    for n in range(nodeOnset, rightOnset):
-                        try:
-                            node_n_pr = rec.process_xpath(self.session, '/div/descendant::w[%d]/preceding-sibling::n[1]' % n)[0].text
-                        except:
-                            node_n_pr = ''
-                        node_w = rec.process_xpath(self.session, '/div/descendant::w[%d]' % n)[0].text
-                        try:
-                            node_n_fo = rec.process_xpath(self.session, '/div/descendant::w[%d]/following-sibling::n[1]' % n)[0].text
-                        except:
-                            node_n_fo
-                        node_text.append(''.join(node_n_pr + node_w + node_n_fo))
-
-                    right_text = []
-                    for r in range(rightOnset, rightOffset):
-                        try:
-                            right_n_pr = rec.process_xpath(self.session, '/div/descendant::w[%d]/preceding-sibling::n[1]' % r)[0].text
-                        except:
-                            right_n_pr = ''
-                        right_w = rec.process_xpath(self.session, '/div/descendant::w[%d]' % r)[0].text
-                        try:
-                            right_n_fo = rec.process_xpath(self.session, '/div/descendant::w[%d]/following-sibling::n[1]' % r)[0].text
-                        except:
-                            right_n_fo = ''
-                        right_text.append(''.join(right_n_pr + right_w + right_n_fo))
-
-                    ###
-                    book = rec.process_xpath(self.session, '/div')[0].get('book')
-                    chapter = rec.process_xpath(self.session, '/div')[0].get('num')
+                    book = ch_node.get('book')
+                    chapter = ch_node.get('num')
                     para_chap = rec.process_xpath(self.session, '/div/descendant::w[%d+1]/ancestor-or-self::p' % word_id)[0].get('pid')
                     sent_chap = rec.process_xpath(self.session, '/div/descendant::w[%d+1]/ancestor-or-self::s' % word_id)[0].get('sid')
                     word_chap = word_id
@@ -298,9 +265,13 @@ class Concordance(object):
                     sent_book = count_sent + int(sent_chap)
                     word_book = count_word + int(word_chap)
 
-                    conc_line = [left_text, node_text, right_text,
-                                [book, book_title, chapter, para_chap, sent_chap, str(word_chap), str(chapWordCount)],
-                                [str(para_book), str(sent_book), str(word_book), str(total_word)]]
+                    conc_line = [
+                        [n.text for n in ch_tokens[context_left:match_left]],
+                        [n.text for n in ch_tokens[match_left:match_end]],
+                        [n.text for n in ch_tokens[match_end:context_end]],
+                        [book, book_title, chapter, para_chap, sent_chap, str(word_chap), str(chapWordCount)],
+                        [str(para_book), str(sent_book), str(word_book), str(total_word)],
+                    ]
 
 
                     conc_lines.append(conc_line)

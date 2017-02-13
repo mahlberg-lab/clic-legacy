@@ -64,6 +64,14 @@ class PhraseSearchOneTerm(unittest.TestCase):
         self.assertEqual(fog[0], len(fog) - correction)
         self.assertEqual(["Fail" for x in fog[1:] if "fog" not in "".join(x[1]).lower()], [])
 
+        self.assertEqual(fog[1:][0], [
+            ['points', ' ', 'tenaciously', ' ', 'to', ' ', 'the', ' ', 'pavement', ',', ' ', 'and', ' ', 'accumulating', ' ', 'at', ' ', 'compound', ' ', 'interest', '.'],
+            ['Fog'],
+            [' ', 'everywhere', '.', 'Fog', ' ', 'up', ' ', 'the', ' ', 'river', ',', ' ', 'where', ' ', 'it', ' ', 'flows', ' ', 'among', ' ', 'green', ' '],
+            ['BH', u'Bleak House', '1', '2', '9', '169', '2615'],
+            ['2', '9', '169', '354362'],
+        ])
+
         self.assertEqual([[strip_space(x[0]), strip_space(x[1]), strip_space(x[2]), x[3], x[4]] for x in fog[1:]], [
             [['points', 'tenaciously', 'to', 'the', 'pavement', 'and', 'accumulating', 'at', 'compound', 'interest'], ['Fog'], ['everywhere', 'Fog', 'up', 'the', 'river', 'where', 'it', 'flows', 'among', 'green'], ['BH', u'Bleak House', '1', '2', '9', '169', '2615'], ['2', '9', '169', '354362']],
             [['to', 'the', 'pavement', 'and', 'accumulating', 'at', 'compound', 'interest', 'Fog', 'everywhere'], ['Fog'], ['up', 'the', 'river', 'where', 'it', 'flows', 'among', 'green', 'aits', 'and'], ['BH', u'Bleak House', '1', '2', '10', '171', '2615'], ['2', '10', '171', '354362']],
