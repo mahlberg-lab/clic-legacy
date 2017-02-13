@@ -263,6 +263,11 @@ class PhraseSearchMultipleTerms(unittest.TestCase):
                                              selectWords="whole")
 
         assert len(fog) - correction == 3
+        self.assertEqual([[strip_space(x[0]), strip_space(x[1]), strip_space(x[2]), x[3], x[4]] for x in fog[1:]], [
+            [['and', 'unwilling', 'look', 'The', 'raw', 'afternoon', 'is', 'rawest', 'and', 'the'], ['dense', 'fog'], ['is', 'densest', 'and', 'the', 'muddy', 'streets', 'are', 'muddiest', 'near', 'that'], ['BH', u'Bleak House', '1', '4', '17', '391', '2615'], ['4', '17', '391', '354362']],
+            [['If', 'the', 'dark', 'little', 'parlour', 'had', 'been', 'filled', 'with', 'a'], ['dense', 'fog'], ['which', 'clearing', 'away', 'in', 'an', 'instant', 'left', 'it', 'all', 'radiance'], ['BR', u'Barnaby Rudge', '26', '21', '62', '1075', '1900'], ['1529', '3755', '78868', '254127']],
+            [['the', 'sky', 'it', 'might', 'have', 'been', 'midnight', 'There', 'was', 'a'], ['dense', 'fog'], ['too', 'as', 'if', 'it', 'were', 'a', 'city', 'in', 'the', 'clouds'], ['MC', u'Martin Chuzzlewit', '8', '60', '141', '2640', '4500'], ['895', '2338', '50547', '335750']]
+       ])
 
 
 class PhraseSearchOneTermQuoteIndex(unittest.TestCase):
