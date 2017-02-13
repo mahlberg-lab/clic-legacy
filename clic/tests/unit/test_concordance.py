@@ -313,5 +313,20 @@ class PhraseSearchOneTermQuoteIndex(unittest.TestCase):
 class OrSearchOneTerm:
     pass
 
+
+class LargeQueries(unittest.TestCase):
+
+    def test_default_hands(self):
+        """
+        Try the obvious hands query
+        """
+        concordance = Concordance()
+        rv = Concordance().create_concordance(terms="hands",
+                                             idxName="chapter-idx",
+                                             Materials=["dickens"],
+                                             selectWords="whole")
+        self.assertEqual(len(rv[1:]), 2615)
+
+
 if __name__ == '__main__':
     unittest.main()
