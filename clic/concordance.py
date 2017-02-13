@@ -193,31 +193,14 @@ class Concordance(object):
 
                     elif idxName in ['quote-idx', 'non-quote-idx', 'longsus-idx', 'shortsus-idx']:
                         eid, word_id = match[0][0], match[0][1]
+                        # Nesting: div -> p(ara) -> s(entence) -> toks -> w
 
-                        ## locate search term in xml
-                        search_term = rec.process_xpath(self.session, '//*[@eid="%d"]/following::w[%d+1]' % (eid, word_id))
-
-                        ## get xml of sentence
-                        sentence_tree = rec.process_xpath(self.session, '//*[@eid="%d"]/following::w[%d+1]/ancestor-or-self::s' % (eid, word_id))
-                        chapter_tree = rec.process_xpath(self.session, '//*[@eid="%d"]/following::w[%d+1]/ancestor-or-self::div' % (eid, word_id))
-
-                        ## counts words preceding sentence
-                        prec_s_tree = chapter_tree[0].xpath('/div/p/s[@sid="%s"]/preceding::s/descendant::w' % sentence_tree[0].get('sid'))
-                        prec_s_wcount = len(prec_s_tree)
-
-                        ## count words within sentence
-                        count_s = 0
-                        for word in chapter_tree[0].xpath('/div/p/s[@sid="%s"]/descendant::w' % sentence_tree[0].get('sid')):
-                            if not word.get('o') == search_term[0].get('o'):
-                                count_s += 1
-                            else:
-                                break
-
-                        ## word number within chapter is adding word count in preceding sentence and word count in current sentence
-                        wcount = prec_s_wcount + count_s
-                        #FIXME `w = wcount` dynamically reassigns a value to `w`
-                        #that is already a value, namely the one refactored to `word_id`
-                        word_id = wcount
+                        ## locate search term in xml, count all words before it
+                        search_term = rec.process_xpath(self.session, '//*[@eid="%d"]/following::w[%d]' % (eid, word_id + 1))
+                        if len(search_term) != 1:
+                            raise ValueError("eid %d was not found / not unique")
+                        search_term = search_term[0]
+                        word_id = int(search_term.xpath('count(preceding::w)'))
 
                     # context_left word word | match_left word (whitespace:match_end) | context_right word word : context_end
                     context_left = ch_word_map[max(0, word_id - word_window)]
