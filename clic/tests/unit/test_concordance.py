@@ -215,22 +215,6 @@ class PhraseSearchOneTerm(unittest.TestCase):
         self.assertEqual(["Fail" for x in fog[1:] if "fog" not in "".join(x[1]).lower()], [])
 
 
-class PhraseSearchOneTermQuotes(unittest.TestCase):
-    pass
-
-
-class PhraseSearchOneTermNonQuotes(unittest.TestCase):
-    pass
-
-
-class PhraseSearchOneTermShortSus(unittest.TestCase):
-    pass
-
-
-class PhraseSearchOneTermLongSus(unittest.TestCase):
-    pass
-
-
 class OrSearchMultipleTerms(unittest.TestCase):
 
     def setUp(self):
