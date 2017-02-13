@@ -188,6 +188,12 @@ class PhraseSearchOneTerm(unittest.TestCase):
         self.assertEqual(fog[0], len(fog) - correction)
         self.assertEqual(["Fail" for x in fog[1:] if "fog" not in "".join(x[1]).lower()], [])
 
+        self.assertEqual([[strip_space(x[0]), strip_space(x[1]), strip_space(x[2]), x[3], x[4]] for x in fog[1:]], [
+            [['you', 'do', 'Mr', 'Edwin', 'Dear', 'me', 'youre', 'choking', 'Its', 'this'], ['fog'], ['returned', 'Edwin', 'and', 'it', 'makes', 'my', 'eyes', 'smart', 'like', 'Cayenne'], ['ED', u'The Mystery of Edwin Drood', '11', '19', '47', '1095', '5263'], ['994', '2259', '38113', '94126']],
+            [['cried', 'Mr', 'Grewgious', 'excuse', 'my', 'interrupting', 'you', 'do', 'stop', 'The'], ['fog'], ['may', 'clear', 'in', 'an', 'hour', 'or', 'two', 'We', 'can', 'have'], ['ED', u'The Mystery of Edwin Drood', '11', '25', '59', '1240', '5263'], ['1000', '2271', '38258', '94126']],
+            [['them', 'for', 'the', 'night', 'what', 'is', 'in', 'the', 'wind', 'besides'], ['fog'], ['Mr', 'Drood', 'said', 'Bazzard', 'What', 'of', 'him', 'Has', 'called', 'said'], ['ED', u'The Mystery of Edwin Drood', '11', '11', '36', '1030', '5263'], ['986', '2248', '38048', '94126']],
+        ])
+
     def test_non_quotes(self):
         fog = self.create_concordance(idxName="non-quote-idx")
         # i.e. 11 (test_quotes) + 83 (test_non_quotes) == 94 (test_basic_query)
@@ -196,10 +202,19 @@ class PhraseSearchOneTerm(unittest.TestCase):
         self.assertEqual(["Fail" for x in fog[1:] if "fog" not in "".join(x[1]).lower()], [])
 
     def test_short_sus(self):
+        # No fog results
         fog = self.create_concordance(idxName="shortsus-idx")
         self.assertEqual(len(fog) - correction, 0)
         self.assertEqual(fog[0], len(fog) - correction)
         self.assertEqual(["Fail" for x in fog[1:] if "fog" not in "".join(x[1]).lower()], [])
+
+        scar = self.create_concordance(idxName="shortsus-idx", terms="scar")
+        self.assertEqual(len(scar) - correction, 1)
+        self.assertEqual(scar[0], len(scar) - correction)
+        self.assertEqual(["Fail" for x in scar[1:] if "scar" not in "".join(x[1]).lower()], [])
+        self.assertEqual([[strip_space(x[0]), strip_space(x[1]), strip_space(x[2]), x[3], x[4]] for x in scar[1:]], [
+            [['and', 'groan', 'and', 'look', 'at', 'me', 'Look', 'here', 'striking', 'the'], ['scar'], ['at', 'your', 'dead', 'childs', 'handiwork', 'The', 'moan', 'the', 'mother', 'uttered'], ['DC', u'David Copperfield', '56', '36', '85', '1365', '2487'], ['6439', '16919', '325323', '356233']]
+        ])
 
     def test_long_sus(self):
         fog = self.create_concordance(idxName="longsus-idx")
@@ -207,7 +222,11 @@ class PhraseSearchOneTerm(unittest.TestCase):
         self.assertEqual(fog[0], len(fog) - correction)
         self.assertEqual(["Fail" for x in fog[1:] if "fog" not in "".join(x[1]).lower()], [])
 
-    def test_long_sus(self):
+        self.assertEqual([[strip_space(x[0]), strip_space(x[1]), strip_space(x[2]), x[3], x[4]] for x in fog[1:]], [
+            [['and', 'beholding', 'Mr', 'Tapley', 'more', 'intent', 'than', 'ever', 'on', 'the'], ['fog'], ['it', 'would', 'be', 'strange', 'if', 'I', 'did', 'not', 'for', 'my'], ['MC', u'Martin Chuzzlewit', '14', '10', '21', '801', '4671'], ['1817', '4703', '96428', '335750']],
+        ])
+
+        # Searching just in BH gives no results
         fog = self.create_concordance(idxName="longsus-idx",
                                       Materials="BH")
         self.assertEqual(len(fog) - correction, 0)
