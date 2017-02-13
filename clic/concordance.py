@@ -156,13 +156,13 @@ class Concordance(object):
                 #
                 # We currently assume the following values:
                 #
-                # * the second item in the deepest list (169, 171)
-                #   is the id of the <w> (word) node
                 # * the first item is the id of the root element from
                 #   which to start counting to find the word node
                 #   for instance, 0 for a chapter view (because the chapter
                 #   is the root element), but 151 for a search in quotes
                 #   text.
+                # * the second item in the deepest list (169, 171)
+                #   is the id of the <w> (word) node
                 # * the third element is the exact character (spaces, and
                 #   and punctuation (stored in <n> (non-word) nodes
                 #   at which the search term starts
