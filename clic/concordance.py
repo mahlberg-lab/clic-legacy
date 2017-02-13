@@ -190,6 +190,7 @@ class Concordance(object):
                 for match in result.proxInfo:
                     if idxName in ['chapter-idx']:
                         word_id = match[0][1]
+                        search_term = rec.process_xpath(self.session, '/div/descendant::w[%d]' % (word_id + 1))[0]
 
                     elif idxName in ['quote-idx', 'non-quote-idx', 'longsus-idx', 'shortsus-idx']:
                         eid, word_id = match[0][0], match[0][1]
@@ -213,8 +214,8 @@ class Concordance(object):
 
                     book = ch_node.get('book')
                     chapter = ch_node.get('num')
-                    para_chap = rec.process_xpath(self.session, '/div/descendant::w[%d+1]/ancestor-or-self::p' % word_id)[0].get('pid')
-                    sent_chap = rec.process_xpath(self.session, '/div/descendant::w[%d+1]/ancestor-or-self::s' % word_id)[0].get('sid')
+                    para_chap = search_term.xpath('ancestor-or-self::p/@pid')[0]
+                    sent_chap = search_term.xpath('ancestor-or-self::s/@sid')[0]
                     word_chap = word_id
 
                     ## count paragraph, sentence and word in whole book
