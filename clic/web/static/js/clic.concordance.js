@@ -61,6 +61,7 @@
                 */
 
                 ajax: that.fetchData.bind(that),
+                deferRender: true,
                 columns: [
                     //TODO: Counter column?
                     { title: "Left", data: "0", render: renderTokenArray, class: "text-right" }, // Left //TODO: Custom sort
