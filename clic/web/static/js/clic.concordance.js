@@ -303,7 +303,7 @@
                             }
                         }
                     ],
-                    sSwfPath: "/js/thirdparty/DataTables1.10.0-beta.2/extensions/TableTools/swf/copy_csv_xls.swf"
+                    sSwfPath: "/js/thirdparty/DataTables-1.10.13/extensions/TableTools/swf/copy_csv_xls.swf"
                 }
             });
         }

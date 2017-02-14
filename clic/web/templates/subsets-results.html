@@ -5,7 +5,7 @@
 {% block stylesheets %}
   {{ super() }}
 
-  <link href="/js/thirdparty/DataTables1.10.0-beta.2/media/css/dataTables.bootstrap.css" rel="stylesheet">
+  <link href="/js/thirdparty/DataTables-1.10.13/media/css/dataTables.bootstrap.css" rel="stylesheet">
   <link href="/js/thirdparty/pace-0.5.1/themes/pace-theme-center-circle-uon.css" rel="stylesheet"/>
 {% endblock %}
 
@@ -46,10 +46,10 @@
 
   <script src='/js/thirdparty/pace-0.5.1/pace.min.js'></script>
 
-  <script src="/js/thirdparty/DataTables1.10.0-beta.2/media/js/jquery.dataTables.min.js"></script>
-  <script src="/js/thirdparty/DataTables1.10.0-beta.2/extensions/TableTools/js/dataTables.tableTools.min.js"></script>
+  <script src="/js/thirdparty/DataTables-1.10.13/media/js/jquery.dataTables.min.js"></script>
+  <script src="/js/thirdparty/DataTables-1.10.13/extensions/TableTools/js/dataTables.tableTools.min.js"></script>
   <!-- datatables bootstrap js (css is above) see http://next.datatables.net/manual/styling/bootstrap -->
-  <script src="/js/thirdparty/DataTables1.10.0-beta.2/media/js/dataTables.bootstrap.js"></script>
+  <script src="/js/thirdparty/DataTables-1.10.13/media/js/dataTables.bootstrap.js"></script>
 
   <script>
       $(function () {
@@ -82,7 +82,7 @@
               },
               "oTableTools": {
                   "aButtons": [ "csv", "print" ],
-                  "sSwfPath": "/js/thirdparty/DataTables1.10.0-beta.2/extensions/TableTools/swf/copy_csv_xls.swf"
+                  "sSwfPath": "/js/thirdparty/DataTables-1.10.13/extensions/TableTools/swf/copy_csv_xls.swf"
               },
               // duplicate controls iflp
               "sDom": '<iTf>rt<if>'
