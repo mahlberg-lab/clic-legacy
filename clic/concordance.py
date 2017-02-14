@@ -6,6 +6,10 @@ CLiC Concordance based on cheshire3 indexes.
 
 import json
 import os
+import os.path
+import collections
+import tempfile
+import cPickle as pickle
 
 from cheshire3.baseObjects import Session
 from cheshire3.document import StringDocument
@@ -50,7 +54,7 @@ def get_chapter_stats(book, chapter):
     for b in booklist:
         if b[0][0] == book:
 
-            out['title'] = b[0][1]
+            out['book_title'] = b[0][1]
             out['total_word'] = b[1][0][2]
 
             for j, c in enumerate(b[2]):
@@ -67,6 +71,121 @@ def get_chapter_stats(book, chapter):
             return out
 
     raise ValueError("Cannot find book stats")
+
+
+class Chapter():
+    """
+    Abstracts a cheshire3 Chapter record, performing all lookups CLiC needs
+
+    Designed to be picked and re-used to save work
+    """
+    def __init__(self, dom, digest):
+        """
+        Create object
+        - dom: The lxml Root node for the chapter (a div)
+        - digest: The record digest, used to check for updates
+        """
+        self.digest = digest
+        ch_node = dom.xpath('/div')[0]
+        self.book = ch_node.get('book')
+        self.chapter = ch_node.get('num')
+        for (k,v) in get_chapter_stats(self.book, self.chapter).items():
+            setattr(self, k, v)
+
+        self.tokens = []
+        self.word_map = []
+        for n in dom.xpath("/div/descendant::*[self::n or self::w]"):
+            self.tokens.append(n.text)
+            if n.tag == 'w':
+                self.word_map.append(len(self.tokens) - 1)
+
+        self.para_words = []
+        self.sentence_words = []
+        for para_node in dom.xpath("/div/p"):
+            self.para_words.append(int(para_node.xpath("count(descendant::w)")))
+            for sentence_node in para_node.xpath("s"):
+                self.sentence_words.append(int(sentence_node.xpath("count(descendant::w)")))
+
+        self.eid_pos = {}
+        for eid_node in dom.xpath("//*[@eid]"):
+            self.eid_pos[eid_node.get('eid')] = int(eid_node.xpath('count(preceding::w)'))
+
+    def get_word(self, match):
+        """
+        Given a CLiC proxInfo match, return an array of:
+        - word_id: word position in chapter
+        - para_chap: word's paragraph position in chapter
+        - sent_chap: word's sentence position in chapter
+        """
+        # Each time a search term is found in a document
+        # (each match) is described in terms of a proxInfo.
+        #
+        # It is insufficiently clear what proxInfo is.
+        # It takes the form of three nested lists:
+        #
+        # [[[0, 169, 1033, 15292]],
+        #  [[0, 171, 1045, 15292]], etc. ]
+        #
+        # We currently assume the following values:
+        #
+        # * the first item is the id of the root element from
+        #   which to start counting to find the word node
+        #   for instance, 0 for a chapter view (because the chapter
+        #   is the root element), but 151 for a search in quotes
+        #   text.
+        # * the second item in the deepest list (169, 171)
+        #   is the id of the <w> (word) node
+        # * the third element is the exact character (spaces, and
+        #   and punctuation (stored in <n> (non-word) nodes
+        #   at which the search term starts
+        # * the fourth element is the total amount of characters
+        #   in the document?
+        #
+        # It's [nodeIdx, wordIdx, offset, termId(?)] in transformer.py
+        def find_position_in(list_of_counts, id):
+            # NB: We return a position 1..n, not array position
+            total = 0
+            for (i, count) in enumerate(list_of_counts):
+                total += count
+                if total > id:
+                    return i + 1
+            return len(list_of_counts)
+
+        #NB: cheshire source suggests that there's never multiple, but I can't say for sure
+        eid, word_id = match[0][0:2]
+        if eid > 0:
+            word_id += self.eid_pos[str(eid)]
+
+        return (
+            word_id,
+            find_position_in(self.para_words, word_id),
+            find_position_in(self.sentence_words, word_id),
+        )
+
+chapter_cache = {}
+def get_chapter(session, result, force=False):
+    """
+    Given a Cheshire3 (session) and resultSetItem (result),
+    return a Chapter object, either from cache or fresh.
+    """
+    if force or result.id not in chapter_cache:
+        chapter_pickle_file = os.path.join(tempfile.gettempdir(), 'clic-chapter-cache-%d.pickle' % result.id)
+
+        if force or not(os.path.exists(chapter_pickle_file)):
+            record = result.fetch_record(session)
+            chapter_cache[result.id] = Chapter(record.dom, record.digest)
+            with open(chapter_pickle_file, 'wb') as f:
+                pickle.dump(chapter_cache[result.id], f)
+        else:
+            with open(chapter_pickle_file, 'rb') as f:
+                chapter_cache[result.id] = pickle.load(f)
+
+    # Test checksum, if it doesn't match the load the document afresh
+    recStore = session.server.get_object(session, result.database).get_object(session, result.recordStore)
+    if chapter_cache[result.id].digest != recStore.fetch_recordMetadata(session, result.id, 'digest'):
+        return get_chapter(session, result, force=True)
+
+    return chapter_cache[result.id]
 
 
 class Concordance(object):
@@ -177,89 +296,31 @@ class Concordance(object):
         ## search through each record (chapter) and identify location of search term(s)
         if len(result_set) > 0:
             for result in result_set:
-
-                # A record for a result is the entire chapter
-                rec = result.fetch_record(self.session)
-
-                # Find the current chapter and get stats for it
-                ch_node = rec.process_xpath(self.session, '/div')[0]
-                book = ch_node.get('book')
-                chapter = ch_node.get('num')
-                ch_stats = get_chapter_stats(book, chapter)
-
-                # Get all tokens in the chapter as an array
-                ch_tokens = rec.process_xpath(self.session, "/div/descendant::*[self::n or self::w]")
-                # Generate a list of the locations of all word nodes
-                ch_word_map = [
-                    i for (i, n) in enumerate(ch_tokens)
-                    if n.tag == 'w'
-                ]
-
-                # Each time a search term is found in a document
-                # (each match) is described in terms of a proxInfo.
-                #
-                # It is insufficiently clear what proxInfo is.
-                # It takes the form of three nested lists:
-                #
-                # [[[0, 169, 1033, 15292]],
-                #  [[0, 171, 1045, 15292]], etc. ]
-                #
-                # We currently assume the following values:
-                #
-                # * the first item is the id of the root element from
-                #   which to start counting to find the word node
-                #   for instance, 0 for a chapter view (because the chapter
-                #   is the root element), but 151 for a search in quotes
-                #   text.
-                # * the second item in the deepest list (169, 171)
-                #   is the id of the <w> (word) node
-                # * the third element is the exact character (spaces, and
-                #   and punctuation (stored in <n> (non-word) nodes
-                #   at which the search term starts
-                # * the fourth element is the total amount of characters
-                #   in the document?
+                ch = get_chapter(self.session, result)
 
                 for match in result.proxInfo:
-                    if idxName in ['chapter-idx']:
-                        word_id = match[0][1]
-                        search_term = rec.process_xpath(self.session, '/div/descendant::w[%d]' % (word_id + 1))[0]
-
-                    elif idxName in ['quote-idx', 'non-quote-idx', 'longsus-idx', 'shortsus-idx']:
-                        eid, word_id = match[0][0], match[0][1]
-                        # Nesting: div -> p(ara) -> s(entence) -> toks -> w
-
-                        ## locate search term in xml, count all words before it
-                        search_term = rec.process_xpath(self.session, '//*[@eid="%d"]/following::w[%d]' % (eid, word_id + 1))
-                        if len(search_term) != 1:
-                            raise ValueError("eid %d was not found / not unique")
-                        search_term = search_term[0]
-                        word_id = int(search_term.xpath('count(preceding::w)'))
+                    (word_id, para_chap, sent_chap) = ch.get_word(match)
 
                     # context_left word word | match_left word (whitespace:match_end) | context_right word word : context_end
-                    context_left = ch_word_map[max(0, word_id - word_window)]
-                    match_left = ch_word_map[word_id]
-                    match_end = ch_word_map[word_id + number_of_search_terms - 1] + 1  # i.e. whitespace after end of match
-                    context_end = ch_word_map[min(
-                        len(ch_word_map) - 1,
+                    context_left = ch.word_map[max(0, word_id - word_window)]
+                    match_left = ch.word_map[word_id]
+                    match_end = ch.word_map[word_id + number_of_search_terms - 1] + 1  # i.e. whitespace after end of match
+                    context_end = ch.word_map[min(
+                        len(ch.word_map) - 1,
                         word_id + number_of_search_terms + word_window
                     )]
 
-                    para_chap = search_term.xpath('ancestor-or-self::p/@pid')[0]
-                    sent_chap = search_term.xpath('ancestor-or-self::s/@sid')[0]
                     word_chap = word_id
 
-                    book_title = ch_stats['title']
-                    total_word = ch_stats['total_word']
-                    para_book = ch_stats['count_para'] + int(para_chap)
-                    sent_book = ch_stats['count_sent'] + int(sent_chap)
-                    word_book = ch_stats['count_word'] + int(word_chap)
-
+                    para_book = ch.count_para + int(para_chap)
+                    sent_book = ch.count_sent + int(sent_chap)
+                    word_book = ch.count_word + int(word_chap)
                     conc_line = [
-                        [n.text for n in ch_tokens[context_left:match_left]],
-                        [n.text for n in ch_tokens[match_left:match_end]],
-                        [n.text for n in ch_tokens[match_end:context_end]],
-                        [book, book_title, chapter, para_chap, sent_chap, str(word_chap), str(ch_stats['count_chap_word'])],
-                        [str(para_book), str(sent_book), str(word_book), str(total_word)],
+                        ch.tokens[context_left:match_left],
+                        ch.tokens[match_left:match_end],
+                        ch.tokens[match_end:context_end],
+                        [ch.book, ch.book_title, ch.chapter, str(para_chap), str(sent_chap), str(word_chap), str(ch.count_chap_word)],
+                        [str(para_book), str(sent_book), str(word_book), str(ch.total_word)],
                     ]
 
 
