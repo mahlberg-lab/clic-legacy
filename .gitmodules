@@ -1,3 +1,6 @@
 [submodule "clic/web/static/js/thirdparty/DataTables-1.10.13"]
 	path = clic/web/static/js/thirdparty/DataTables-1.10.13
 	url = https://github.com/DataTables/DataTables/
+[submodule "clic/web/static/js/thirdparty/noUiSlider"]
+	path = clic/web/static/js/thirdparty/noUiSlider
+	url = https://github.com/leongersen/noUiSlider/
