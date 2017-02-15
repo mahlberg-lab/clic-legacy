@@ -258,3 +258,73 @@ table .nowrap {
 	.sideHead	{float: left; padding-right: 20px;}
 	.sideContent	{float: left;}
 }
+
+/* *** KWICGrouper *** */
+
+#kwicGrouper {
+    position: fixed;
+    top: 330px;
+    right: -1px;
+    width: 25em;
+    min-height: 16em;
+    background: #f5f5f5;
+    border: 1px solid black;
+    border-radius: 5px 0 0 5px !important;
+    overflow: hidden;
+    transition: right 0.3s ease;
+}
+
+#kwicGrouper {
+    right: -23em;
+}
+#kwicGrouper.in {
+    right: -1px;
+}
+
+#kwicGrouper > h2 {
+    position: absolute;
+    bottom: -2em;
+    left: 0;
+    width: 16em;
+    margin: 0;
+    line-height: 2em;
+    transform: rotate(270deg); -ms-transform: rotate(270deg); -o-transform: rotate(270deg); -moz-transform: rotate(270deg); -webkit-transform: rotate(270deg);
+    transform-origin: top left;
+    font-size: inherit;
+    text-align: center;
+    cursor: pointer;
+}
+#kwicGrouper > h2:before,
+#kwicGrouper > h2:after {
+    content: "⇧";
+    padding: 1em;
+}
+#kwicGrouper.in > h2:before,
+#kwicGrouper.in > h2:after {
+    content: "⇩";
+}
+
+#kwicGrouper > div {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 2em;
+    border-left: 1px dotted black;
+    padding: 5px;
+}
+
+#kwicGrouper select {
+    display: none;
+}
+#kwicGrouper .chosen-container {
+    display: block;
+}
+#kwicGrouper .slider {
+    margin: 0.5em 1em 3em 1em;
+}
+#kwicGrouper .btn-group {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+}

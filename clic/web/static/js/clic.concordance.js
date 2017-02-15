@@ -82,6 +82,31 @@
                 //TODO: TableTools Copy CSV / Print / Toggle metadata?
                 //TODO: Toggle metadata option?
             });
+
+            noUiSlider.create($("#kwicGrouper .slider")[0], {
+                start: [-5, 1000],
+                range: { min: -5, max: 5 },
+                step: 1,
+                pips: {
+                    mode: 'steps',
+                    density: 10,
+                    filter: function (v, t) { return v === 0 ? 1 : 2 },
+                    format: {to: function (v) { return (v > 0 ? 'R' : v < 0 ? 'L': '') + Math.abs(v) }},
+                },
+                format: {
+                    to: function ( value ) { return "L" + Math.abs(value); },
+                    from: function ( value ) { return value.replace('L', '-').replace('R', ''); },
+                },
+                connect: true
+            });
+
+            $("#kwicGrouper select").chosen({
+                width: "100%;"
+            });
+
+            $("#kwicGrouper h2").on("click", function (e) {
+                $('#kwicGrouper').toggleClass('in');
+            });
         },
 
         fetchData: function ( data, callback, settings ) {
