@@ -18,14 +18,19 @@ __pycache__
 *.egg
 *.egg-info
 #dist
-build
-eggs
-parts
-bin
-var
-sdist
-develop-eggs
-.installed.cfg
+/build
+/eggs
+/parts
+/bin
+/var
+/sdist
+/develop-eggs
+/include
+/lib
+/local
+/share
+/src
+/.installed.cfg
 
 # Eclipse
 *.pydevproject
