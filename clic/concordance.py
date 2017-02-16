@@ -279,53 +279,40 @@ class Concordance(object):
         """
         ##self.logger.log(10, 'CREATING CONCORDANCE FOR RS: {0} in {1} - {2}'.format(terms, idxName, Materials))
 
-	    #TODO change the variable names of the function itself (Materials -> selection, etc.)
+        query, number_of_search_terms = self.build_query(terms, idxName, Materials, selectWords)
+        result_set = self.db.search(self.session, query)
 
         conc_lines = [] # return concordance lines in list
         word_window = 10 # word_window is set to 10 by default - on both sides of node
 
-        query, number_of_search_terms = self.build_query(terms, idxName, Materials, selectWords)
-        result_set = self.db.search(self.session, query)
-
-        ## get total number of hits (not yet used in interface)
-        total_count = 0
-        if len(result_set) > 0: #FIXME What does cheshire return if there are no results? None? or [] ?
-            for result in result_set:
-                total_count = total_count + len(result.proxInfo)
-
         ## search through each record (chapter) and identify location of search term(s)
-        if len(result_set) > 0:
-            for result in result_set:
-                ch = get_chapter(self.session, result)
+        for result in result_set:
+            ch = get_chapter(self.session, result)
 
-                for match in result.proxInfo:
-                    (word_id, para_chap, sent_chap) = ch.get_word(match)
+            for match in result.proxInfo:
+                (word_id, para_chap, sent_chap) = ch.get_word(match)
 
-                    # context_left word word | match_left word (whitespace:match_end) | context_right word word : context_end
-                    context_left = ch.word_map[max(0, word_id - word_window)]
-                    match_left = ch.word_map[word_id]
-                    match_end = ch.word_map[word_id + number_of_search_terms - 1] + 1  # i.e. whitespace after end of match
-                    context_end = ch.word_map[min(
-                        len(ch.word_map) - 1,
-                        word_id + number_of_search_terms + word_window
-                    )]
+                # context_left word word | match_left word (whitespace:match_end) | context_right word word : context_end
+                context_left = ch.word_map[max(0, word_id - word_window)]
+                match_left = ch.word_map[word_id]
+                match_end = ch.word_map[word_id + number_of_search_terms - 1] + 1  # i.e. whitespace after end of match
+                context_end = ch.word_map[min(
+                    len(ch.word_map) - 1,
+                    word_id + number_of_search_terms + word_window
+                )]
 
-                    word_chap = word_id
+                para_book = ch.count_para + int(para_chap)
+                sent_book = ch.count_sent + int(sent_chap)
+                word_book = ch.count_word + int(word_id)
+                conc_line = [
+                    ch.tokens[context_left:match_left],
+                    ch.tokens[match_left:match_end],
+                    ch.tokens[match_end:context_end],
+                    [ch.book, ch.book_title, ch.chapter, str(para_chap), str(sent_chap), str(word_id), str(ch.count_chap_word)],
+                    [str(para_book), str(sent_book), str(word_book), str(ch.total_word)],
+                ]
 
-                    para_book = ch.count_para + int(para_chap)
-                    sent_book = ch.count_sent + int(sent_chap)
-                    word_book = ch.count_word + int(word_chap)
-                    conc_line = [
-                        ch.tokens[context_left:match_left],
-                        ch.tokens[match_left:match_end],
-                        ch.tokens[match_end:context_end],
-                        [ch.book, ch.book_title, ch.chapter, str(para_chap), str(sent_chap), str(word_chap), str(ch.count_chap_word)],
-                        [str(para_book), str(sent_book), str(word_book), str(ch.total_word)],
-                    ]
+                conc_lines.append(conc_line)
 
-
-                    conc_lines.append(conc_line)
-
-        #conc_lines.insert(0, len(conc_lines))
-        conc_lines.insert(0, total_count)
+        conc_lines.insert(0, len(conc_lines))  # NB: This was an aborted attempt to provide server-side pagination, keep it here for now.
         return conc_lines
