@@ -51,8 +51,7 @@
 
             function renderTokenArray( data, type, full, meta ) {
                 return data.map(function (n) {
-                    //TODO: Is n a word?
-                    return "<span>" + escapeHtml(n) + "</span>";
+                    return '<span class="' + (isWord(n) ? "w" : "") + '">' + escapeHtml(n) + "</span>";
                 }).join("");
             }
 

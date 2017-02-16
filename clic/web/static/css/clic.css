@@ -123,6 +123,15 @@ Concordance results
 /* see re cut off text on left: http://stackoverflow.com/questions/3759387/text-overflow-behaviour-in-css-with-non-left-values-for-text-align */
 #dataTableConcordance .book				{text-align: left;  overflow: hidden; text-overflow:ellipsis; white-space:nowrap;  max-width: 100px }
 
+#dataTableConcordance td span.w {
+    border: 1px solid #ccc;
+    border-radius: 2px !important;
+    padding: 0 1px;
+}
+#dataTableConcordance td.hilight span.w {
+    border: 1px solid #4b8195;
+}
+
 /* hilight node */
 .hilight {
     background: #A2C4D0 !important;
