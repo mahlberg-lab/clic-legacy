@@ -82,7 +82,7 @@
                 deferRender: true,
                 columns: [
                     //TODO: Counter column?
-                    { title: "Match?", data: "5" },
+                    { title: "Match?", data: "5", sortable: false },
                     { title: "Left", data: "0", render: renderTokenArray, class: "text-right" }, // Left //TODO: Custom sort
                     { title: "Node", data: "1", render: renderTokenArray, class: "hilight" }, // Node //TODO: Custom sort
                     { title: "Right", data: "2", render: renderTokenArray }, // Right //TODO: Custom sort
@@ -92,6 +92,9 @@
                     { title: "Sent.", data: "3.4" }, // Sentence
                     { title: "In&nbsp;bk.", data: "4", render: renderPosition }, // Book graph TODO: Custom sort
                 ],
+                orderFixed: {
+                    pre: [['0', 'desc']],
+                },
                 filter: true,
                 sort: true, //TODO: What should the default sorting be?
                 paginate: true,
