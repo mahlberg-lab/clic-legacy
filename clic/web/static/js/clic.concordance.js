@@ -214,7 +214,7 @@
         },
 
         updateKwicGroup: function () {
-            var kwicTerms = this.kwicTerms, kwicSpan = this.kwicSpan;
+            var kwicTerms = this.kwicTerms, kwicSpan = this.kwicSpan, totalMatches = 0;
 
             // Check if list (tokens) contains any of the (terms) between (span.start) and (span.stop) inclusive
             // considering (tokens) in reverse if (span.reverse) is true
@@ -253,6 +253,10 @@
                                  testList(d[1], kwicSpan[1], kwicTerms) ||
                                  testList(d[2], kwicSpan[2], kwicTerms);
 
+                if (new_result) {
+                    totalMatches++;
+                }
+
                 if (d[5] !== new_result) {
                     // Concordance membership has changed, update table
                     d[5] = new_result;
@@ -260,6 +264,7 @@
                 }
             });
 
+            $('#kwicGrouper .matchCount').text(totalMatches);
             this.concordanceTable.draw();
         },
 
