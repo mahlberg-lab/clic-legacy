@@ -17,7 +17,7 @@
     }
 
     function isWord (s) {
-        return /\w/.test(s);
+        return /\w/.test(s); //TODO: Is this enough?
     }
 
     // The actual plugin constructor

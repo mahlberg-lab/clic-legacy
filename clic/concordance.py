@@ -283,7 +283,7 @@ class Concordance(object):
         result_set = self.db.search(self.session, query)
 
         conc_lines = [] # return concordance lines in list
-        word_window = 10 # word_window is set to 10 by default - on both sides of node
+        word_window = 10 # word_window is set to 10 by default - on both sides of node  # TODO: Do we really need 10?
 
         ## search through each record (chapter) and identify location of search term(s)
         for result in result_set:
