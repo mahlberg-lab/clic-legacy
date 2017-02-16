@@ -126,8 +126,17 @@
                 width: "100%;"
             });
 
-            $("#kwicGrouper h2").on("click", function (e) {
+            $("#kwicGrouper .action-openclose").on("click", function (e) {
                 $('#kwicGrouper').toggleClass('in');
+            });
+            $("#kwicGrouper .action-clear").on("click", function (e) {
+                that.kwicTerms = {};
+                $("#kwicGrouper select").val([]).trigger("chosen:updated");
+
+                that.kwicSpan = [{start:1}, {start:1}, {start:1}];
+                $("#kwicGrouper .slider")[0].noUiSlider.set([-5, 5]);
+
+                that.scheduleUpdateKwicGroup();
             });
         },
 
@@ -167,11 +176,7 @@
                             that.kwicTerms[t.toLowerCase()] = true;
                         });
 
-                        // Try to batch updates a bit
-                        if (that.kwicTimeout) {
-                            window.clearTimeout(that.kwicTimeout);
-                        }
-                        that.kwicTimeout = window.setTimeout(that.updateKwicGroup.bind(that), 300);
+                        that.scheduleUpdateKwicGroup();
                     });
 
                     $("#kwicGrouper .slider")[0].noUiSlider.on('update', function (values) {
@@ -196,11 +201,7 @@
                             stop: values[1],
                         };
 
-                        // Try to batch updates a bit
-                        if (that.kwicTimeout) {
-                            window.clearTimeout(that.kwicTimeout);
-                        }
-                        that.kwicTimeout = window.setTimeout(that.updateKwicGroup.bind(that), 300);
+                        that.scheduleUpdateKwicGroup();
                     });
 
                     $('#plotTbody').html(that.processConcordancePlot(coData, that.processChapterMarkers(chData)));
@@ -211,6 +212,14 @@
                     Pace.stop()
                 }
             );
+        },
+
+        scheduleUpdateKwicGroup: function () {
+            // Try to batch updates a bit
+            if (this.kwicTimeout) {
+                window.clearTimeout(this.kwicTimeout);
+            }
+            this.kwicTimeout = window.setTimeout(this.updateKwicGroup.bind(this), 300);
         },
 
         updateKwicGroup: function () {
