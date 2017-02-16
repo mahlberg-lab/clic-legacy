@@ -145,7 +145,7 @@ Undoes the center alignment of the logos add the bottom of the page  when the de
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
 {% block scripts %}
-<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+<script src="{{ url_for('static', filename='js/thirdparty/DataTables-1.10.13/media/js/jquery.js') }}"></script>
 <script src="{{ url_for('static', filename='dist/js/bootstrap.min.js') }}"></script>
 <script src="{{ url_for('static', filename='js/clic.js') }}"></script>
 {% endblock %}
