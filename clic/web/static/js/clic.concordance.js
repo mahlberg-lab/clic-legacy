@@ -7,6 +7,15 @@
             bookCountsEndpointUrl : "/exampleJson/bookcounts.json"
         };
 
+    function escapeHtml (s) {
+        // https://bugs.jquery.com/ticket/11773
+        return (String(s)
+            .replace(/&(?!\w+;)/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')); // "
+    }
+
     // The actual plugin constructor
     function Plugin( element, options ) {
         this.element = element;
@@ -34,8 +43,9 @@
             var that = this;
 
             function renderTokenArray( data, type, full, meta ) {
-                //TODO: Generate HTML for nodes
-                return data.join("");
+                return data.map(function (n) {
+                    return "<span>" + escapeHtml(n) + "</span>";
+                }).join("");
             }
 
             function renderPosition( data, type, full, meta ) {
