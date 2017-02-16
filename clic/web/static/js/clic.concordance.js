@@ -16,6 +16,10 @@
             .replace(/"/g, '&quot;')); // "
     }
 
+    function isWord (s) {
+        return /\w/.test(s);
+    }
+
     // The actual plugin constructor
     function Plugin( element, options ) {
         this.element = element;
@@ -40,7 +44,7 @@
         totalNumberOfHits: 0,
         kwicTimeout: null,
         kwicTerms: {},
-        kwicSpan: [[-5], [0], [5]],
+        kwicSpan: [{start:1}, {start:1}, {start:1}],
 
         init: function() {
             var that = this;
@@ -169,23 +173,26 @@
                     });
 
                     $("#kwicGrouper .slider")[0].noUiSlider.on('update', function (values) {
-                        var everything = [], nothing = [-1, 0];
-                        //TODO: Pants, this doesn't take into account non-type tokens
+                        // Values has 2 values, a min and max, which we treat to be 
+                        // min and max span inclusive, viz.
+                        //      [0]<---------------------->[1]
+                        // -5 : -4 : -3 : -2 : -1 | 0 | 1 : 2 : 3 : 4 : 5
 
-                        // Left: -5 --- [] (instead of 0)
-                        that.kwicSpan[0] = values[0] >= 0 ? nothing : [
-                            values[0],
-                            values[1] < -1 ? values[1] : undefined,
-                        ];
+                        // Left
+                        that.kwicSpan[0] = values[0] >= 0 ? {ignore: true} : {
+                            start: 0 - Math.min(values[1], -1),
+                            stop: 0 - values[0],
+                            reverse: true,
+                        };
 
-                        // Node
-                        that.kwicSpan[1] = values[0] <= 0 && values[1] >= 0 ? everything : nothing;
+                        // Node: all or nothing, depending on if 0 was included
+                        that.kwicSpan[1] = values[0] <= 0 && values[1] >= 0 ? {start:1} : {ignore: true};
 
                         // Right
-                        that.kwicSpan[2] = values[1] <= 0 ? nothing : [
-                            Math.max(values[0] - 1, 0),
-                            values[1],
-                        ];
+                        that.kwicSpan[2] = values[1] <= 0 ? {ignore: true} : {
+                            start: Math.max(values[0], 0),
+                            stop: values[1],
+                        };
 
                         // Try to batch updates a bit
                         if (that.kwicTimeout) {
@@ -205,24 +212,44 @@
         },
 
         updateKwicGroup: function () {
-            var terms = this.kwicTerms,
-                span = this.kwicSpan;
+            var kwicTerms = this.kwicTerms, kwicSpan = this.kwicSpan;
 
-            // True iff any of the terms appear in this list
-            function testList(rowData, col) {
-                var i, l = [].slice.apply(rowData[col], span[col]);
+            // Check if list (tokens) contains any of the (terms) between (span.start) and (span.stop) inclusive
+            // considering (tokens) in reverse if (span.reverse) is true
+            function testList(tokens, span, terms) {
+                var i, t, l = [], wordCount = 0;
 
-                for (i = 0; i < l.length; i++) {
-                    if (terms[l[i].toLowerCase()]) {
+                if (span.start === undefined) {
+                    // Ignoring this row
+                    return false;
+                }
+
+                for (i = 0; i < tokens.length; i++) {
+                    t = tokens[span.reverse ? tokens.length - i - 1 : i];
+
+                    if (!isWord(t)) {
+                        continue;
+                    }
+
+                    wordCount++;
+                    if (wordCount >= span.start && terms[t.toLowerCase()]) {
+                        // Matching has started and matches a terms, return true
                         return true;
                     }
+                    if (span.stop !== undefined && wordCount >= span.stop) {
+                        // Finished matching now, give up.
+                        break;
+                    }
                 }
+
                 return false;
             }
 
             this.concordanceTable.rows().every(function () {
                 var d = this.data(),
-                    new_result = testList(d, 0) || testList(d, 1) || testList(d, 2);
+                    new_result = testList(d[0], kwicSpan[0], kwicTerms) ||
+                                 testList(d[1], kwicSpan[1], kwicTerms) ||
+                                 testList(d[2], kwicSpan[2], kwicTerms);
 
                 if (d[5] !== new_result) {
                     // Concordance membership has changed, update table
