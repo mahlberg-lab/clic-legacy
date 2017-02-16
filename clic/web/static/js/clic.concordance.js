@@ -38,12 +38,16 @@
         searchTerms: "",
         searchSpace: "",
         totalNumberOfHits: 0,
+        kwicTimeout: null,
+        kwicTerms: {},
+        kwicSpan: [[-5], [0], [5]],
 
         init: function() {
             var that = this;
 
             function renderTokenArray( data, type, full, meta ) {
                 return data.map(function (n) {
+                    //TODO: Is n a word?
                     return "<span>" + escapeHtml(n) + "</span>";
                 }).join("");
             }
@@ -63,8 +67,9 @@
             }
 
             that.processParameters(document.location.search);
+            $("#searchedFor").html("Searched for <b>" + that.searchTerms + "</b> within <b>" + that.searchSpace + "</b>.");
 
-            $('#dataTableConcordance').dataTable({
+            that.concordanceTable = $('#dataTableConcordance').DataTable({
                 /*TODO:
                 var chapterViewUrl = '/chapter/' + data.concordances[x][3][0] + '/' + data.concordances[x][3][2] + '/' + data.concordances[x][3][5] + '/' + this.searchTerms + '/#concordance';
                 content += '<tr class="clickable_row" data-url="' + chapterViewUrl + '">';
@@ -74,6 +79,7 @@
                 deferRender: true,
                 columns: [
                     //TODO: Counter column?
+                    { title: "Match?", data: "5" },
                     { title: "Left", data: "0", render: renderTokenArray, class: "text-right" }, // Left //TODO: Custom sort
                     { title: "Node", data: "1", render: renderTokenArray, class: "hilight" }, // Node //TODO: Custom sort
                     { title: "Right", data: "2", render: renderTokenArray }, // Right //TODO: Custom sort
@@ -94,17 +100,17 @@
             });
 
             noUiSlider.create($("#kwicGrouper .slider")[0], {
-                start: [-5, 1000],
+                start: [-5, 5],
                 range: { min: -5, max: 5 },
                 step: 1,
                 pips: {
                     mode: 'steps',
                     density: 10,
                     filter: function (v, t) { return v === 0 ? 1 : 2 },
-                    format: {to: function (v) { return (v > 0 ? 'R' : v < 0 ? 'L': '') + Math.abs(v) }},
+                    format: { to: function (v) { return (v > 0 ? 'R' : v < 0 ? 'L': '') + Math.abs(v) } },
                 },
                 format: {
-                    to: function ( value ) { return "L" + Math.abs(value); },
+                    to: function ( value ) { return value; },
                     from: function ( value ) { return value.replace('L', '-').replace('R', ''); },
                 },
                 connect: true
@@ -136,10 +142,57 @@
                     var chData = chaptersResponse[0];
                     var coData = concordancesResponse[0].concordances.slice(1);
 
-                    $("#searchedFor").html("Searched for <b>" + that.searchTerms + "</b> within <b>" + that.searchSpace + "</b>.");
+                    for (i = 0; i < coData.length; i++) {
+                        // Add KWICGrouper match column, assume no KWICGrouper initially
+                        coData[i].push(false);
+                    }
 
                     Pace.stop();
                     callback({ data: coData });
+
+                    $("#kwicGrouper select").html(that.findConcordanceTypes(coData).map(function (t) {
+                        return "<option>" + escapeHtml(t) + "</option>";
+                    }).join("")).trigger("chosen:updated");
+
+                    $("#kwicGrouper select").on("change", function (e) {
+                        // Update terms object based on what's selected
+                        that.kwicTerms = {};
+                        ($('#kwicGrouper select').val() || []).map(function (t) {
+                            that.kwicTerms[t.toLowerCase()] = true;
+                        });
+
+                        // Try to batch updates a bit
+                        if (that.kwicTimeout) {
+                            window.clearTimeout(that.kwicTimeout);
+                        }
+                        that.kwicTimeout = window.setTimeout(that.updateKwicGroup.bind(that), 300);
+                    });
+
+                    $("#kwicGrouper .slider")[0].noUiSlider.on('update', function (values) {
+                        var everything = [], nothing = [-1, 0];
+                        //TODO: Pants, this doesn't take into account non-type tokens
+
+                        // Left: -5 --- [] (instead of 0)
+                        that.kwicSpan[0] = values[0] >= 0 ? nothing : [
+                            values[0],
+                            values[1] < -1 ? values[1] : undefined,
+                        ];
+
+                        // Node
+                        that.kwicSpan[1] = values[0] <= 0 && values[1] >= 0 ? everything : nothing;
+
+                        // Right
+                        that.kwicSpan[2] = values[1] <= 0 ? nothing : [
+                            Math.max(values[0] - 1, 0),
+                            values[1],
+                        ];
+
+                        // Try to batch updates a bit
+                        if (that.kwicTimeout) {
+                            window.clearTimeout(that.kwicTimeout);
+                        }
+                        that.kwicTimeout = window.setTimeout(that.updateKwicGroup.bind(that), 300);
+                    });
 
                     $('#plotTbody').html(that.processConcordancePlot(coData, that.processChapterMarkers(chData)));
                 },
@@ -149,6 +202,53 @@
                     Pace.stop()
                 }
             );
+        },
+
+        updateKwicGroup: function () {
+            var terms = this.kwicTerms,
+                span = this.kwicSpan;
+
+            // True iff any of the terms appear in this list
+            function testList(rowData, col) {
+                var i, l = [].slice.apply(rowData[col], span[col]);
+
+                for (i = 0; i < l.length; i++) {
+                    if (terms[l[i].toLowerCase()]) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            this.concordanceTable.rows().every(function () {
+                var d = this.data(),
+                    new_result = testList(d, 0) || testList(d, 1) || testList(d, 2);
+
+                if (d[5] !== new_result) {
+                    // Concordance membership has changed, update table
+                    d[5] = new_result;
+                    this.invalidate();
+                }
+            });
+
+            this.concordanceTable.draw();
+        },
+
+        findConcordanceTypes: function ( coData ) {
+            var i, j, k, s, isWord = /\w/, out = {};
+
+            for (i = 0; i < coData.length; i++) { // Each concordance match
+                for (j = 0; j < 2; j++) { // Left / node / right
+                    for (k = 0; k < coData[i][j].length; k++) { // Word / non-word strings
+                        s = coData[i][j][k];
+                        if (s.match(isWord)) {
+                            //TODO: Node is also stemmed when searched for: e.g. 'camel', 'camel's'. Replicate?
+                            out[s.toLowerCase()] = true;
+                        }
+                    }
+                }
+            }
+            return Object.keys(out);
         },
 
         processParameters: function( params ) {
