@@ -267,10 +267,10 @@ table .nowrap {
     right: -1px;
     width: 25em;
     min-height: 16em;
+    z-index: 2;
     background: #f5f5f5;
     border: 1px solid black;
     border-radius: 5px 0 0 5px !important;
-    overflow: hidden;
     transition: right 0.3s ease;
 }
 
