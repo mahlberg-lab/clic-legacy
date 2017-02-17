@@ -82,7 +82,7 @@
                 deferRender: true,
                 columns: [
                     //TODO: Counter column?
-                    { title: "Match?", data: "5", sortable: false },
+                    { title: "Match?", data: "5", sortable: false, visible: false },
                     { title: "Left", data: "0", render: renderTokenArray, class: "text-right" }, // Left //TODO: Custom sort
                     { title: "Node", data: "1", render: renderTokenArray, class: "hilight" }, // Node //TODO: Custom sort
                     { title: "Right", data: "2", render: renderTokenArray }, // Right //TODO: Custom sort
@@ -100,6 +100,9 @@
                 paginate: true,
                 language: {
                     search: "Filter concordance:" //TODO: Actually limit it to concordance?
+                },
+                createdRow: function ( row, data, index ) {
+                    $(row).toggleClass('kwicMatch', data[5]);
                 },
                 //TODO: TableTools Copy CSV / Print / Toggle metadata?
                 //TODO: Toggle metadata option?
@@ -269,6 +272,7 @@
                 if (d[5] !== new_result) {
                     // Concordance membership has changed, update table
                     d[5] = new_result;
+                    $(this.node()).toggleClass('kwicMatch', d[5]);
                     this.invalidate();
                 }
             });

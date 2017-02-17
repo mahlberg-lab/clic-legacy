@@ -337,3 +337,7 @@ table .nowrap {
     bottom: 10px;
     right: 10px;
 }
+
+.table-hover>tbody>tr.kwicMatch>td {
+    background: #fffdb3;
+}
