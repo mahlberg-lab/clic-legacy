@@ -282,14 +282,15 @@
         },
 
         findConcordanceTypes: function ( coData ) {
-            var i, j, k, s, isWord = /\w/, out = {};
+            var i, j, k, s, out = {};
 
             for (i = 0; i < coData.length; i++) { // Each concordance match
-                for (j = 0; j < 2; j++) { // Left / node / right
+                for (j = 0; j < 3; j++) { // Left / node / right
                     for (k = 0; k < coData[i][j].length; k++) { // Word / non-word strings
                         s = coData[i][j][k];
-                        if (s.match(isWord)) {
+                        if (isWord(s)) {
                             //TODO: Node is also stemmed when searched for: e.g. 'camel', 'camel's'. Replicate?
+                            //TODO: Stop searching outside the span we can't select anyway? Or are we just hiding everything outside L/R5?
                             out[s.toLowerCase()] = true;
                         }
                     }
