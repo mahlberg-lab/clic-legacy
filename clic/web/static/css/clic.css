@@ -272,7 +272,7 @@ table .nowrap {
 
 #kwicGrouper {
     position: fixed;
-    top: 330px;
+    top: 33%;
     right: -1px;
     width: 25em;
     min-height: 16em;
