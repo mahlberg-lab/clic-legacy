@@ -117,16 +117,11 @@ class Chapter():
         - para_chap: word's paragraph position in chapter
         - sent_chap: word's sentence position in chapter
         """
-        # Each time a search term is found in a document
+        # Each time a search term is found in a ProximityIndex
         # (each match) is described in terms of a proxInfo.
-        #
-        # It is insufficiently clear what proxInfo is.
-        # It takes the form of three nested lists:
         #
         # [[[0, 169, 1033, 15292]],
         #  [[0, 171, 1045, 15292]], etc. ]
-        #
-        # We currently assume the following values:
         #
         # * the first item is the id of the root element from
         #   which to start counting to find the word node
@@ -140,6 +135,10 @@ class Chapter():
         #   at which the search term starts
         # * the fourth element is the total amount of characters
         #   in the document?
+        #
+        # See:-
+        # dbs/dickens/dickensConfigs.d/dickensIdxs.xml
+        # cheshire3.index.ProximityIndex
         #
         # It's [nodeIdx, wordIdx, offset, termId(?)] in transformer.py
         def find_position_in(list_of_counts, id):
