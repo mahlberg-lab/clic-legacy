@@ -49,12 +49,41 @@
         init: function() {
             var that = this;
 
+            // Column is an array of tokens, mark these up as words, only sort on word content
             function renderTokenArray( data, type, full, meta ) {
-                return data.map(function (n) {
-                    return '<span class="' + (isWord(n) ? "w" : "") + '">' + escapeHtml(n) + "</span>";
-                }).join("");
+                var i, out = "";
+
+                if (type === 'display') {
+                    for (i = 0 ; i < data.length; i++) {
+                        out += '<span class="' + (isWord(data[i]) ? "w" : "") + '">' + escapeHtml(data[i]) + "</span>";
+                    }
+                } else {
+                    for (i = 0 ; i < data.length; i++) {
+                        out += isWord(data[i]) ? data[i] + ":" : "";
+                    }
+                }
+
+                return out;
             }
 
+            // Column is an array of tokens, but consider terms backwards for the sake of sorting
+            function renderReverseTokenArray( data, type, full, meta ) {
+                var i, out = "";
+
+                if (type === 'display') {
+                    for (i = 0 ; i < data.length; i++) {
+                        out += '<span class="' + (isWord(data[i]) ? "w" : "") + '">' + escapeHtml(data[i]) + "</span>";
+                    }
+                } else {
+                    for (i = data.length - 1 ; i >= 0; i--) {
+                        out += isWord(data[i]) ? data[i] + ":" : "";
+                    }
+                }
+
+                return out;
+            }
+
+            // Column represents a fractional position
             function renderPosition( data, type, full, meta ) {
                 var xVal;
 
@@ -83,9 +112,9 @@
                 columns: [
                     //TODO: Counter column?
                     { title: "Match?", data: "5", sortable: false, visible: false },
-                    { title: "Left", data: "0", render: renderTokenArray, class: "text-right" }, // Left //TODO: Custom sort
-                    { title: "Node", data: "1", render: renderTokenArray, class: "hilight" }, // Node //TODO: Custom sort
-                    { title: "Right", data: "2", render: renderTokenArray }, // Right //TODO: Custom sort
+                    { title: "Left", data: "0", render: renderReverseTokenArray, class: "text-right" }, // Left
+                    { title: "Node", data: "1", render: renderTokenArray, class: "hilight" }, // Node
+                    { title: "Right", data: "2", render: renderTokenArray }, // Right
                     { title: "Book", data: "3.1" }, // Book
                     { title: "Ch.", data: "3.2" }, // Chapter
                     { title: "Par.", data: "3.3" }, // Paragraph
