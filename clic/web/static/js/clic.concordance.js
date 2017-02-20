@@ -103,16 +103,16 @@
                 ajax: that.fetchData.bind(that),
                 deferRender: true,
                 columns: [
-                    { title: "Match?", data: "5", sortable: false, visible: false },
-                    { title: "", data: null, render: renderColumnCount, sortable: false },
+                    { title: "Match?", data: "5", sortable: false, visible: false, searchable: false },
+                    { title: "", data: null, render: renderColumnCount, sortable: false, searchable: false },
                     { title: "Left", data: "0", render: renderReverseTokenArray, class: "text-right" }, // Left
                     { title: "Node", data: "1", render: renderForwardTokenArray, class: "hilight" }, // Node
                     { title: "Right", data: "2", render: renderForwardTokenArray }, // Right
-                    { title: "Book", data: "3.1" }, // Book
-                    { title: "Ch.", data: "3.2" }, // Chapter
-                    { title: "Par.", data: "3.3" }, // Paragraph
-                    { title: "Sent.", data: "3.4" }, // Sentence
-                    { title: "In&nbsp;bk.", data: "4", render: renderPosition }, // Book graph TODO: Custom sort
+                    { title: "Book", data: "3.1", searchable: false }, // Book
+                    { title: "Ch.", data: "3.2", searchable: false }, // Chapter
+                    { title: "Par.", data: "3.3", searchable: false }, // Paragraph
+                    { title: "Sent.", data: "3.4", searchable: false }, // Sentence
+                    { title: "In&nbsp;bk.", data: "4", render: renderPosition, searchable: false }, // Book graph TODO: Custom sort
                 ],
                 orderFixed: {
                     pre: [['0', 'desc']],
@@ -121,7 +121,7 @@
                 sort: true, //TODO: What should the default sorting be?
                 paginate: true,
                 language: {
-                    search: "Filter concordance:" //TODO: Actually limit it to concordance?
+                    search: "Filter concordance:",
                 },
                 createdRow: function ( row, data, index ) {
                     $(row).toggleClass('kwicMatch', data[5]);
