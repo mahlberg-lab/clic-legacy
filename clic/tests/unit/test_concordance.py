@@ -327,6 +327,16 @@ class LargeQueries(unittest.TestCase):
                                              selectWords="whole")
         self.assertEqual(len(rv[1:]), 2615)
 
+    def test_excessive_Results(self):
+        """
+        'and' returns too many results to cope with
+        """
+        with self.assertRaisesRegexp(ValueError, r'10 000'):
+            concordance = Concordance()
+            rv = Concordance().create_concordance(terms="and",
+                                                 idxName="chapter-idx",
+                                                 Materials=["dickens"],
+                                                 selectWords="whole")
 
 if __name__ == '__main__':
     import pytest

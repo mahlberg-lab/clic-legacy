@@ -284,6 +284,9 @@ class Concordance(object):
         conc_lines = [] # return concordance lines in list
         word_window = 10 # word_window is set to 10 by default - on both sides of node  # TODO: Do we really need 10?
 
+        if sum(len(result.proxInfo) for result in result_set) > 10000:
+            raise ValueError("This query returns over 10 000 results, please try some other search terms using less-common words.")
+
         ## search through each record (chapter) and identify location of search term(s)
         for result in result_set:
             ch = get_chapter(self.session, result)
