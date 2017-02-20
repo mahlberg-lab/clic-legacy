@@ -66,8 +66,8 @@ class PhraseSearchOneTerm(unittest.TestCase):
 
         self.assertEqual(fog[1:][0], [
             ['points', ' ', 'tenaciously', ' ', 'to', ' ', 'the', ' ', 'pavement', ',', ' ', 'and', ' ', 'accumulating', ' ', 'at', ' ', 'compound', ' ', 'interest', '.'],
-            ['Fog'],
-            [' ', 'everywhere', '.', 'Fog', ' ', 'up', ' ', 'the', ' ', 'river', ',', ' ', 'where', ' ', 'it', ' ', 'flows', ' ', 'among', ' ', 'green', ' '],
+            ['Fog', ' '],
+            ['everywhere', '.', 'Fog', ' ', 'up', ' ', 'the', ' ', 'river', ',', ' ', 'where', ' ', 'it', ' ', 'flows', ' ', 'among', ' ', 'green', ' '],
             ['BH', u'Bleak House', '1', '2', '9', '169', '2615'],
             ['2', '9', '169', '354362'],
         ])
@@ -240,6 +240,45 @@ class PhraseSearchOneTerm(unittest.TestCase):
         self.assertEqual(len(fog) - correction, 0)
         self.assertEqual(fog[0], len(fog) - correction)
         self.assertEqual(["Fail" for x in fog[1:] if "fog" not in "".join(x[1]).lower()], [])
+
+    def test_word_splitting(self):
+        # Make sure we split left/node/right around whitespace non-tokens
+        rv = self.create_concordance(terms="hither")
+        self.assertEqual(len(rv) - correction, 29)
+        self.assertEqual(rv[0], len(rv) - correction)
+        self.assertEqual(["Fail" for x in rv[1:] if "hither" not in "".join(x[1]).lower()], [])
+
+        self.assertEqual([(r[0][-3:], r[1], r[2][:3]) for r in rv[1:]], [
+            (['housekeeper', '.', '"'], ['Hither', ',', ' '], ['child', ',', ' ']),
+            ([' ', 'come', ' '], ['hither', ',"', ' '], ['says', ' ', 'the']),
+            ([' ', 'flit', ' '], ['hither', ' '], ['again', ',', ' ']),
+            (["'", 'come', ' '], ['hither', ',', ' '], ['lad', ".'", "'"]),
+            (['.', 'Come', ' '], ['hither', ',', ' '], ['friend', ".'", 'With']),
+            (["'", 'Come', ' '], ['hither', ',', ' '], ['lad', ",'", ' ']),
+            ([' ', 'me', ' '], ['hither', ',', ' '], ['and', ' ', 'procured']),
+            (["'", 'Come', ' '], ['hither', ',', ' '], ['John', ".'", 'John']),
+            (['.', 'Come', ' '], ['hither', ',', ' '], ['lad', ".'", 'There']),
+            ([' ', 'desk', '.'], ['Hither', ',', ' '], ['on', ' ', 'the']),
+            ([' ', 'mercy', '.'], ['Hither', ' '], ['I', ' ', 'directed']),
+            ([' ', 'Town', '.'], ['Hither', ' '], ['the', ' ', 'two']),
+            ([' ', 'and', ' '], ['hither', ' '], ['comes', ' ', 'the']),
+            ([' ', 'imagination', ' '], ['hither', ' '], ['and', ' ', 'thither']),
+            ([' ', 'surely', ' '], ['hither', '?'], ['Time', ' ', 'shall']),
+            ([' ', 'seed', ' '], ['hither', ' '], ['and', ' ', 'thither']),
+            ([' ', 'long', '.'], ['Hither', ' '], ['come', ' ', 'the']),
+            ([' ', 'and', ' '], ['hither', ',', ' '], ['to', ' ', 'meet']),
+            (['--', 'come', ' '], ['hither', ',', ' '], ['my', ' ', 'dear']),
+            (['.', 'Come', ' '], ['hither', ',', ' '], ['pretty', ' ', 'one']),
+            ([' ', 'bodies', ' '], ['hither', ' '], ['and', ' ', 'thither']),
+            ([' ', 'way', ' '], ['hither', ' '], ['on', ' ', 'foot']),
+            (['.', 'Come', ' '], ['hither', ',', ' '], ['Nell', ".'", 'The']),
+            ([' ', 'eyes', ' '], ['hither', ' '], ['and', ' ', 'thither']),
+            ([' ', 'throng', '.'], ['Hither', ' '], ['and', ' ', 'thither']),
+            ([' ', 'me', ' '], ['hither', ',', ' '], ['in', ' ', 'wonder']),
+            ([' ', 'quickly', ' '], ['hither', ',', ' '], ['founded', ' ', 'this']),
+            ([' ', 'me', ' '], ['hither', ' '], ['that', ' ', 'fellow']),
+            (['.', 'Come', ' '], ['hither', ',', ' '], ['little', ' ', 'citizen']),
+        ])
 
 
 class OrSearchMultipleTerms(unittest.TestCase):
