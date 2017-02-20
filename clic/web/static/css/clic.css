@@ -131,6 +131,10 @@ Concordance results
 #dataTableConcordance td.hilight span.w {
     border: 1px solid #4b8195;
 }
+#dataTableConcordance a.bookLink:active line,
+#dataTableConcordance a.bookLink:hover line {
+    stroke: #ffa033;
+}
 
 /* hilight node */
 .hilight {

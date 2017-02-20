@@ -87,26 +87,22 @@
             function renderPosition( data, type, full, meta ) {
                 var xVal;
 
-                if (type === 'sort') {
+                if (type !== 'display') {
                     return data[2];
                 }
 
                 xVal = (data[2] / data[3]) * 50; // word in book / total word count
-                return '<svg width="50px" height="15px" xmlns="http://www.w3.org/2000/svg">' +
+                return '<a href="#" class="bookLink" title="Click to display concordance in book" target="_blank">'+
+                       '<svg width="50px" height="15px" xmlns="http://www.w3.org/2000/svg">' +
                        '<rect x="0" y="4" width="50" height="7" fill="#ccc"/>' +
                        '<line x1="' + xVal + '" x2="' + xVal + '" y1="0" y2="15" stroke="black" stroke-width="2px"/>' +
-                       '</svg>';
+                       '</svg></a>';
             }
 
             that.processParameters(document.location.search);
             $("#searchedFor").html("Searched for <b>" + that.searchTerms + "</b> within <b>" + that.searchSpace + "</b>.");
 
             that.concordanceTable = $('#dataTableConcordance').DataTable({
-                /*TODO:
-                var chapterViewUrl = '/chapter/' + data.concordances[x][3][0] + '/' + data.concordances[x][3][2] + '/' + data.concordances[x][3][5] + '/' + this.searchTerms + '/#concordance';
-                content += '<tr class="clickable_row" data-url="' + chapterViewUrl + '">';
-                */
-
                 ajax: that.fetchData.bind(that),
                 deferRender: true,
                 columns: [
@@ -135,6 +131,20 @@
                 },
                 //TODO: TableTools Copy CSV / Print / Toggle metadata?
                 //TODO: Toggle metadata option?
+            });
+
+            // Generate URLs when needed, not every single time
+            $('#dataTableConcordance').on('mouseenter click', 'a.bookLink', function (e) {
+                var rowData = that.concordanceTable.row($(this).closest('tr')).data();
+
+                $(this).attr('href', [
+                    '/chapter',
+                    rowData[3][0],
+                    rowData[3][2],
+                    rowData[3][5],
+                    that.searchTerms,
+                    '#concordance',
+                ].join('/'));
             });
 
             noUiSlider.create($("#kwicGrouper .slider")[0], {
