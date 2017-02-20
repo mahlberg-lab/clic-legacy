@@ -112,13 +112,14 @@
                     { title: "Ch.", data: "3.2", searchable: false }, // Chapter
                     { title: "Par.", data: "3.3", searchable: false }, // Paragraph
                     { title: "Sent.", data: "3.4", searchable: false }, // Sentence
-                    { title: "In&nbsp;bk.", data: "4", render: renderPosition, searchable: false }, // Book graph TODO: Custom sort
+                    { title: "In&nbsp;bk.", data: "4", render: renderPosition, searchable: false, orderData: [5, 9] }, // Book graph
                 ],
                 orderFixed: {
                     pre: [['0', 'desc']],
                 },
+                order: [[9, 'asc']],
                 filter: true,
-                sort: true, //TODO: What should the default sorting be?
+                sort: true,
                 paginate: true,
                 language: {
                     search: "Filter concordance:",
