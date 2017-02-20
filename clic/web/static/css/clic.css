@@ -116,6 +116,12 @@ End Datatable Common
 Concordance results
 */
 
+#concordanceWrap.error > p {
+    font-size: larger;
+    font-weight: bold;
+    color: darkred;
+}
+
 #dataTableConcordance td					{max-height: 1em; white-space:nowrap;}
 #dataTableConcordance .right				{text-align: left;  overflow: hidden; text-overflow:clip; white-space:nowrap;  max-width: 300px }
 #dataTableConcordance .left				{text-align: right; overflow: hidden; text-overflow:clip; white-space:nowrap;  max-width: 300px; direction: rtl;  }

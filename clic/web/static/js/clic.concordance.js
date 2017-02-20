@@ -246,8 +246,19 @@
                     $('#plotTbody').html(that.processConcordancePlot(coData, that.processChapterMarkers(chData)));
                 },
                 function(e) { // failure
+                    var message = "Sorry. Failed to load data. Please try again.";
+
                     console.log(e);
-                    alert("Sorry. Failed to load data. Please try again.");
+                    if (e.responseJSON && e.responseJSON.error) {
+                        message = "Failed to load data: " + e.responseJSON.error;
+                    }
+                    $('#concordanceWrap').addClass('error').empty().append([
+                        $('<p/>').text(message),
+                        $('<a href="/concordances">Go back and try a different query</a>').on('click', function (e) {
+                            e.preventDefault();
+                            window.history.go(-1);
+                        }),
+                    ]);
                     Pace.stop()
                 }
             );

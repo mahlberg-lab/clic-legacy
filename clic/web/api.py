@@ -9,7 +9,7 @@ It needs to be refactored.
 
 
 from __future__ import absolute_import  ## help python find modules within clic package (see John H email 09.04.2014)
-from flask import Blueprint, request
+from flask import Blueprint, request, jsonify
 import json
 import urllib
 
@@ -29,6 +29,12 @@ cache_opts = {
 }
 
 cache = CacheManager(**parse_cache_config_options(cache_opts))
+
+@api.app_errorhandler(500)
+def handle_500(error):
+    response = jsonify(dict(error=str(error)))
+    response.status_code = 500
+    return response
 
 '''
 API endpoints
