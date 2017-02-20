@@ -19,7 +19,7 @@ BASE_DIR = os.path.dirname(__file__)
 raw_booklist = open(os.path.join(BASE_DIR, 'booklist.json'), 'r')
 booklist = json.load(raw_booklist)
 # adapt base dir to delete the trailing /clic bit
-CLIC_DIR = BASE_DIR[:BASE_DIR.rfind('/')]
+CLIC_DIR = os.path.join(BASE_DIR, '..')
 
 class ChapterRepository(object):
     '''
