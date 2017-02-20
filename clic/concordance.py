@@ -282,7 +282,7 @@ class Concordance(object):
         result_set = self.db.search(self.session, query)
 
         conc_lines = [] # return concordance lines in list
-        word_window = 10 # word_window is set to 10 by default - on both sides of node  # TODO: Do we really need 10?
+        word_window = 10 # word_window is set to 10 by default - on both sides of node
 
         if sum(len(result.proxInfo) for result in result_set) > 10000:
             raise ValueError("This query returns over 10 000 results, please try some other search terms using less-common words.")
