@@ -91,6 +91,11 @@
                        '</svg></a>';
             }
 
+            // Column shows a count
+            function renderColumnCount( data, type, row, meta ) {
+                return meta.row + meta.settings._iDisplayStart + 1;
+            }
+
             that.processParameters(document.location.search);
             $("#searchedFor").html("Searched for <b>" + that.searchTerms + "</b> within <b>" + that.searchSpace + "</b>.");
 
@@ -98,8 +103,8 @@
                 ajax: that.fetchData.bind(that),
                 deferRender: true,
                 columns: [
-                    //TODO: Counter column?
                     { title: "Match?", data: "5", sortable: false, visible: false },
+                    { title: "", data: null, render: renderColumnCount, sortable: false },
                     { title: "Left", data: "0", render: renderReverseTokenArray, class: "text-right" }, // Left
                     { title: "Node", data: "1", render: renderForwardTokenArray, class: "hilight" }, // Node
                     { title: "Right", data: "2", render: renderForwardTokenArray }, // Right
