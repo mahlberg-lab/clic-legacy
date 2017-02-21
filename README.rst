@@ -44,6 +44,14 @@ Use pip to fetch dependencies for the relevant environment::
 Database setup
 --------------
 
+You need to pre-populate your CLiC instance. This requires the following files::
+
+    postgres.db_annotation.dump
+    cheshire3.db_dickens.tar.bz2
+    textfiles.tar.bz2
+
+These are available internally.
+
 Configure the operating system's postgres. As the postgres user::
 
     # Clear out old DB if it exists
@@ -51,18 +59,24 @@ Configure the operating system's postgres. As the postgres user::
     dropuser clic-dickens
 
     # Create clic-dickens user & DB, hardcoded password is dickens
-    sudo -u postgres createuser -P -d -r -s clic-dickens
+    createuser -P -d -r -s clic-dickens
     createdb -O clic-dickens db_annotation --password
 
     # Restore DB, db_annotation.tar is available on the project share
     pg_restore --dbname=db_annotation --verbose /clic-project/clic/db_annotation.tar
 
-Add links so cheshire3 can find the config::
-    
+Untar the cheshire3 stores/indexes, and symlink so cheshire3 can find the config::
+
+    tar -C dbs/dickens -jxf cheshire3.db_dickens.tar.bz2
+    # NB: If not running as the eventual CLiC user, change ~ accordingly
     ln -rs cheshire3-server ~/.cheshire3-server
 
-Running the system
-------------------
+Untar the textfiles::
+
+    tar -C clic/textfiles/ -jxf textfiles.tar.bz2
+
+Developing the system
+---------------------
 
 Start the webserver in debug mode::
 
@@ -71,6 +85,15 @@ Start the webserver in debug mode::
 Run some unit tests::
 
     ./bin/python -m pytest clic/tests/unit/
+
+Back-up / generating dumps from live instances
+----------------------------------------------
+
+You can generate dumps from a running instance for backup / transfer::
+
+    pg_dump -Fc db_annotation > postgres.db_annotation.dump
+    tar -C dbs/dickens -jcvf cheshire3.db_dickens.tar.bz2 indexes stores
+    tar -C clic/textfiles/ -jcvf textfiles.tar.bz2 .
 
 Acknowledgements
 ----------------

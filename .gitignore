@@ -57,3 +57,8 @@ PyZ3950_parsetab.*
 clic/textfiles/
 
 /docs/_build/
+
+# Dump files we talk about in README.rst
+/cheshire3.db_dickens.tar.bz2
+/postgres.db_annotation.dump
+/textfiles.tar.bz2
