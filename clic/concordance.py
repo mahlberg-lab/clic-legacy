@@ -249,7 +249,6 @@ class Concordance(object):
                                  )
         self.db = self.serv.get_object(self.session, self.session.database)
         self.qf = self.db.get_object(self.session, 'defaultQueryFactory')
-        self.resultSetStore = self.db.get_object(self.session, 'resultSetStore')
         self.idxStore = self.db.get_object(self.session, 'indexStore')
         #self.logger = self.db.get_object(self.session, 'concordanceLogger')
 

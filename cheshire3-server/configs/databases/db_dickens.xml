@@ -16,16 +16,6 @@
 	
 	<subConfigs>
 
-	<subConfig type="objectStore" id="authStore">
-	  	<objectType>cheshire3.sql.postgres.PostgresObjectStore</objectType>
-	  	<paths>
-		    <path type="databaseName">db_dickens</path>
-			<path type="tableName">AuthStore</path>
-	        <object type="inTransformer" ref="XmlTransformer" />
-	        <object type="outParser" ref="LxmlParser" />
-		</paths>
-	</subConfig>
-	
 	<subConfig type="logger" id="keywordLogger">
 	    <objectType>cheshire3.logger.SimpleLogger</objectType>
 	    <paths>
@@ -51,37 +41,6 @@
 	</subConfig>
 
 <!-- SHARED STORES -->
-		
-		<subConfig type="documentStore" id="concordanceStore">
-			 <objectType>cheshire3.sql.postgres.PostgresDocumentStore</objectType>
-			 <paths>
-		       <path type="databaseName">db_dickens</path>
-		       <path type="tableName">concordanceStore</path>
-		     </paths>	
-		</subConfig> 
-		
-		<subConfig type="documentStore" id="collocateStore">
-			 <objectType>cheshire3.sql.postgres.PostgresDocumentStore</objectType>
-			 <paths>
-		       <path type="databaseName">db_dickens</path>
-		       <path type="tableName">collocateStore</path>
-		     </paths>	
-		</subConfig> 
-		
-		
-		<subConfig type="resultSetStore" id="resultSetStore">
-		     <objectType>cheshire3.sql.postgres.PostgresResultSetStore</objectType>
-		     <paths>
-		       <path type="databaseName">db_dickens</path>
-		       <path type="tableName">resultSetStore</path>
-		       <path type="recordStoreHash">recordStore</path>
-		       <object type="idNormaliser" ref="StringIntNormaliser"/>
-		     </paths>
-		     <options>
-		       <default type="expires">3600</default>
-		     </options>
-		</subConfig>
-	    
 		
 		<subConfig type="indexStore" id="indexStore">
 			<objectType>cheshire3.indexStore.BdbIndexStore</objectType>

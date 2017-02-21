@@ -47,11 +47,6 @@ Configure the operating system's postgres. As the postgres user::
     # Restore DB, db_annotation.tar is available on the project share
     pg_restore --dbname=db_annotation --verbose /clic-project/clic/db_annotation.tar
 
-    # Create a db_dickens database for the user CLiC will run as
-    # (cheshire3 doesn't let you use anything else)
-    createuser ${CLIC_USER}
-    createdb -O ${CLIC_USER} db_dickens
-
 Add links so cheshire3 can find the config::
     
     ln -rs cheshire3-server ~/.cheshire3-server

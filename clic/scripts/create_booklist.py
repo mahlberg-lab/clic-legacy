@@ -18,7 +18,6 @@ serv = SimpleServer(session,
                             )
 db = serv.get_object(session, session.database)
 qf = db.get_object(session, 'defaultQueryFactory')
-resultSetStore = db.get_object(session, 'resultSetStore')       
 idxStore = db.get_object(session, 'indexStore')
 
 list_books = ['BH', 'BR', 'DC', 'DS', 'ED', 'GE', 'HT', 'LD', 'MC', 'NN',
