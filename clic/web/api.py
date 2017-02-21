@@ -15,20 +15,8 @@ import urllib
 
 api = Blueprint('api_endpoints', __name__)
 
-## Use beaker to save search (cache). See documentation on http://beaker.readthedocs.org/en/latest/caching.html
-from beaker.cache import CacheManager
-from beaker.util import parse_cache_config_options
-
 from clic.concordance import Concordance
 from clic.chapter_repository import ChapterRepository
-
-cache_opts = {
-    'cache.type': 'file',
-    'cache.data_dir': '/tmp/cache/data',
-    'cache.lock_dir': '/tmp/cache/lock'
-}
-
-cache = CacheManager(**parse_cache_config_options(cache_opts))
 
 @api.app_errorhandler(500)
 def handle_500(error):
@@ -46,7 +34,6 @@ def concordances():
     concordances = json.dumps(concordances_result)
     return concordances
 
-@cache.cache('concordances')
 def fetchConcordance(args):
     concordancer = Concordance()
     args = processArgs(args, 'concordances')
