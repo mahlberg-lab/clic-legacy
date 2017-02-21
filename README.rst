@@ -84,6 +84,15 @@ Run some unit tests::
 
     ./bin/python -m pytest clic/tests/unit/
 
+Production installation
+-----------------------
+
+the ``install.sh`` script, when run as root, will configure systemd and nginx to run CLiC.
+
+There a host of environment variables that can be customised, see the top of the script. You can override them thus::
+
+    UWSGI_USER=www-data UWSGI_GROUP=www-data ./install.sh
+
 Back-up / generating dumps from live instances
 ----------------------------------------------
 
