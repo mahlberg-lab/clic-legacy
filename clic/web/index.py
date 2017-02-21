@@ -186,7 +186,7 @@ def enforce_list(sequence):
         sequence = sequence.split()
     return sequence
 
-@cache.cache('wordlists')
+@cache.cache('wordlists', expire=3600)
 def build_wordlist(index_name, subcorpora, rows_limit=None):
     '''
     Gets the actual wordlist/cluster list based on a Cheshire3 index name and 
@@ -251,7 +251,7 @@ def clusters():
 #==============================================================================
 # Keywords
 #==============================================================================
-@cache.cache('new_keywords')
+@cache.cache('new_keywords', expire=3600)
 def build_keyword_list(cluster_length,
                        subset_analysis,
                        subcorpora_analysis,
