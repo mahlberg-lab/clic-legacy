@@ -10,6 +10,10 @@ Firstly, install the operating system prerequisites::
         postgresql-9.4 libpq-dev \
         libxml2-dev libxslt1-dev
 
+Configure virtualenv::
+
+    virtualenv .
+
 Get packages that pip can't get at::
 
     # NB: It's not really a .tar.gz
@@ -26,9 +30,8 @@ Comment out "socket.setdefaulttimeout(30)" in
 
 See https://github.com/coleifer/micawber/issues/59 for more information
 
-Use virtualenv / pip for the relevant environment::
+Use pip to fetch dependencies for the relevant environment::
 
-    virtualenv .
     ./bin/pip install -r requirements/dev.txt
 
 Database setup
