@@ -59,8 +59,8 @@ Running the system
 
 Start the webserver in debug mode::
 
-    PYTHONPATH="." ./bin/python -m clic.web.index
+    ./bin/python -m clic.web.index
 
 Run some unit tests::
 
-    PYTHONPATH="." ./bin/py.test clic/tests/unit/test_concordance.py
+    ./bin/python -m pytest clic/tests/unit/
