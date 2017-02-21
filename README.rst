@@ -54,15 +54,14 @@ These are available internally.
 Configure the operating system's postgres. As the postgres user::
 
     # Clear out old DB if it exists
-    dropdb db_annotation
-    dropuser clic-dickens
+    sudo -upostgres dropdb db_annotation
+    sudo -upostgres dropuser clic-dickens
 
     # Create clic-dickens user & DB, hardcoded password is dickens
-    createuser -P -d -r -s clic-dickens
-    createdb -O clic-dickens db_annotation --password
+    sudo -upostgres createuser -P clic-dickens
+    sudo -upostgres createdb -O clic-dickens db_annotation
 
-    # Restore DB, db_annotation.tar is available on the project share
-    pg_restore --dbname=db_annotation --verbose /clic-project/clic/db_annotation.tar
+    sudo -upostgres pg_restore --dbname=db_annotation --verbose postgres.db_annotation.dump
 
 Untar the cheshire3 stores/indexes, and symlink so cheshire3 can find the config::
 
