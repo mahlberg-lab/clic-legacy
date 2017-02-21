@@ -58,6 +58,10 @@ clic/textfiles/
 
 /docs/_build/
 
+# Pip artefacts
+/pywebsvcs-code/
+/pip-selfcheck.json
+
 # Dump files we talk about in README.rst
 /cheshire3.db_dickens.tar.bz2
 /postgres.db_annotation.dump
