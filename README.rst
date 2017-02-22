@@ -13,9 +13,10 @@ Installation
 
 Firstly, install the operating system prerequisites::
 
-    apt-get install virtualenv python-dev
+    # NB: virtualenv package might be called python-virtualenv
+    apt-get install python-virtualenv python-dev \
         subversion \
-        postgresql-9.4 libpq-dev \
+        postgresql libpq-dev \
         libxml2-dev libxslt1-dev
 
 Configure virtualenv::
@@ -26,7 +27,7 @@ Get some packages not available via. PyPI::
 
     ./bin/pip install http://www.panix.com/~asl2/software/PyZ3950/PyZ3950-2.04.tar.gz
 
-    svn checkout svn://svn.code.sf.net/p/pywebsvcs/branches/v1_5 pywebsvcs-code
+    svn checkout svn://svn.code.sf.net/p/pywebsvcs/code/branches/v1_5 pywebsvcs-code
     mv pywebsvcs-code/wstools pywebsvcs-code/zsi/ZSI/wstools/
     ./bin/pip install pywebsvcs-code/zsi/
 
