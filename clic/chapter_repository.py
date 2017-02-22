@@ -8,6 +8,7 @@ items that were previously retrieved with a concordance.
 
 import json
 import os
+import os.path
 from lxml import etree
 
 from cheshire3.baseObjects import Session
@@ -16,10 +17,10 @@ from cheshire3.internal import cheshire3Root
 from cheshire3.server import SimpleServer
 
 BASE_DIR = os.path.dirname(__file__)
+CLIC_DIR = os.path.abspath(os.path.join(BASE_DIR, '..'))
+
 raw_booklist = open(os.path.join(BASE_DIR, 'booklist.json'), 'r')
 booklist = json.load(raw_booklist)
-# adapt base dir to delete the trailing /clic bit
-CLIC_DIR = os.path.join(BASE_DIR, '..')
 
 class ChapterRepository(object):
     '''
@@ -30,7 +31,7 @@ class ChapterRepository(object):
         self.session = Session()
         self.session.database = 'db_dickens'
         self.serv = SimpleServer(self.session,
-                             os.path.join(cheshire3Root, 'configs', 'serverConfig.xml')
+                             os.path.join(CLIC_DIR, 'cheshire3-server', 'configs', 'serverConfig.xml')
                              )
         self.db = self.serv.get_object(self.session, self.session.database)
         self.qf = self.db.get_object(self.session, 'defaultQueryFactory')

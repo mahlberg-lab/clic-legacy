@@ -1,7 +1,7 @@
 <config type="database" id="db_dickens">
 	<objectType>cheshire3.database.SimpleDatabase</objectType>
 	<paths>
-		<path type="defaultPath">~/.cheshire3-server/dbs/dickens</path>
+		<path type="defaultPath">../../../../cheshire3-server/dbs/dickens</path>
 		<path type="metadataPath">stores/metadata.bdb</path>
 		<path type="indexStoreList">indexStore</path>
 		<object type="recordStore" ref="recordStore"/>
@@ -33,7 +33,7 @@
 	<subConfig type="documentFactory" id="SimpleDocumentFactory">
 		<objectType>cheshire3.documentFactory.SimpleDocumentFactory</objectType>
 		<options>
-			<default type="data">~/.cheshire3-server/dbs/dickens/data</default>
+			<default type="data">../../../../cheshire3-server/dbs/dickens/data</default>
 			<default type="format">dir</default>
 			<default type="tagName">div</default>
 			<default type="cache">0</default>				

@@ -1,4 +1,5 @@
 import os
+import os.path
 import re
 
 from cheshire3.document import StringDocument
@@ -8,13 +9,16 @@ from cheshire3.baseObjects import Session
 
 from lxml import etree
 
+BASE_DIR = os.path.dirname(__file__)
+CLIC_DIR = os.path.abspath(os.path.join(BASE_DIR, '..', '..'))
+
 class Chapter_view(object):
     
     def __init__(self):
         self.session = Session()
         self.session.database = 'db_dickens'
         self.serv = SimpleServer(self.session, 
-                                 os.path.join(cheshire3Root, 'configs', 'serverConfig.xml')
+                                 os.path.join(CLIC_DIR, 'cheshire3-server', 'configs', 'serverConfig.xml')
                                  )
         self.db = self.serv.get_object(self.session, self.session.database)
         self.qf = self.db.get_object(self.session, 'defaultQueryFactory')

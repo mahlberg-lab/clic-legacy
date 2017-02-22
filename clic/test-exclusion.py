@@ -1,6 +1,7 @@
 #!/bin/env python
 
 import os, sys
+import os.path
 
 import cheshire3
 from cheshire3.baseObjects import Session
@@ -9,6 +10,9 @@ from cheshire3.internal import cheshire3Root
 from cheshire3.document import StringDocument
 
 from lxml import etree
+
+BASE_DIR = os.path.dirname(__file__)
+CLIC_DIR = os.path.abspath(os.path.join(BASE_DIR, '..', '..'))
 
 # Launch a Cheshire session
 session = Session()

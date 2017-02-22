@@ -57,17 +57,15 @@ Configure the operating system's postgres. As the postgres user::
     sudo -upostgres dropdb db_annotation
     sudo -upostgres dropuser clic-dickens
 
-    # Create clic-dickens user & DB, hardcoded password is dickens
+    # Create clic-dickens user & DB, hardcoded password is charles
     sudo -upostgres createuser -P clic-dickens
     sudo -upostgres createdb -O clic-dickens db_annotation
 
     sudo -upostgres pg_restore --dbname=db_annotation --verbose postgres.db_annotation.dump
 
-Untar the cheshire3 stores/indexes, and symlink so cheshire3 can find the config::
+Untar the cheshire3 stores/indexes::
 
     tar -C dbs/dickens -jxf cheshire3.db_dickens.tar.bz2
-    # NB: If not running as the eventual CLiC user, change ~ accordingly
-    ln -rs cheshire3-server ~/.cheshire3-server
 
 Untar the textfiles::
 

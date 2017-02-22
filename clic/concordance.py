@@ -40,6 +40,7 @@ from cheshire3.server import SimpleServer
 #     number of words
 
 BASE_DIR = os.path.dirname(__file__)
+CLIC_DIR = os.path.abspath(os.path.join(BASE_DIR, '..'))
 with open(os.path.join(BASE_DIR, 'booklist.json'), 'r') as raw_booklist:
     booklist = json.load(raw_booklist)
 
@@ -245,7 +246,7 @@ class Concordance(object):
         self.session = Session()
         self.session.database = 'db_dickens'
         self.serv = SimpleServer(self.session,
-                                 os.path.join(cheshire3Root, 'configs', 'serverConfig.xml')
+                                 os.path.join(CLIC_DIR, 'cheshire3-server', 'configs', 'serverConfig.xml')
                                  )
         self.db = self.serv.get_object(self.session, self.session.database)
         self.qf = self.db.get_object(self.session, 'defaultQueryFactory')

@@ -14,12 +14,16 @@ For instance:
 
 import copy
 import os
+import os.path
 import pandas as pd
 
 from cheshire3.document import StringDocument
 from cheshire3.internal import cheshire3Root
 from cheshire3.server import SimpleServer
 from cheshire3.baseObjects import Session
+
+BASE_DIR = os.path.dirname(__file__)
+CLIC_DIR = os.path.abspath(os.path.join(BASE_DIR, '..'))
 
 
 class Cheshire3WordList(object):
@@ -36,7 +40,7 @@ class Cheshire3WordList(object):
         self.session = Session()
         self.session.database = 'db_dickens'
         self.serv = SimpleServer(self.session,
-                            os.path.join(cheshire3Root, 'configs', 'serverConfig.xml')
+                            os.path.join(CLIC_DIR, 'cheshire3-server', 'configs', 'serverConfig.xml')
                             )
         self.db = self.serv.get_object(self.session, self.session.database)
         self.qf = self.db.get_object(self.session, 'defaultQueryFactory')

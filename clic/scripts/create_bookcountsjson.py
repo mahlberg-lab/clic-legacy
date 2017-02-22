@@ -92,6 +92,7 @@ Output format:
 '''
 
 import os
+import os.path
 import re
 from lxml import etree
 import json
@@ -100,6 +101,9 @@ from cheshire3.document import StringDocument
 from cheshire3.internal import cheshire3Root
 from cheshire3.server import SimpleServer
 from cheshire3.baseObjects import Session
+
+BASE_DIR = os.path.dirname(__file__)
+CLIC_DIR = os.path.abspath(os.path.join(BASE_DIR, '..', '..'))
 
 ### read info from booklist: cumulative word count in chapters
 # booklist = open('/home/aezros/workspace/testClic/staticFiles_test/booklist2')
@@ -110,7 +114,7 @@ from cheshire3.baseObjects import Session
 session = Session()
 session.database = 'db_dickens'
 serv = SimpleServer(session,
-                            os.path.join(cheshire3Root, 'configs', 'serverConfig.xml')
+                            os.path.join(CLIC_DIR, 'cheshire3-server', 'configs', 'serverConfig.xml')
                             )
 db = serv.get_object(session, session.database)
 qf = db.get_object(session, 'defaultQueryFactory')
