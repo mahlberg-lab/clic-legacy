@@ -51,11 +51,23 @@
 
             // Column is an array of tokens, mark these up as words, only sort on word content
             function renderTokenArray( reverseSort, data, type, full, meta ) {
-                var i, t, count = 0, out = "";
+                var i, t, count = 0, out = "", span_class;
 
                 if (type === 'display') {
                     for (i = 0 ; i < data.length; i++) {
-                        out += '<span class="' + (isWord(data[i]) ? "w" : "") + '">' + escapeHtml(data[i]) + "</span>";
+                        t = data[reverseSort ? data.length - i - 1 : i];
+                        if (isWord(t)) {
+                            count++;
+                            span_class = "w node-" + count;
+                        } else {
+                            span_class = ""
+                        }
+
+                        if (reverseSort) {
+                            out = '<span class="' + span_class + '">' + escapeHtml(t) + "</span>" + out;
+                        } else {
+                            out = out + '<span class="' + span_class + '">' + escapeHtml(t) + "</span>";
+                        }
                     }
                 } else {
                     for (i = 0 ; i < data.length; i++) {
