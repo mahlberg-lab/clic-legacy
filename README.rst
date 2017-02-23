@@ -14,10 +14,11 @@ Installation
 Firstly, install the operating system prerequisites::
 
     # NB: virtualenv package might be called python-virtualenv
-    apt-get install python-virtualenv python-dev \
+    apt-get install virtualenv python-dev \
         subversion \
         postgresql libpq-dev \
-        libxml2-dev libxslt1-dev
+        libxml2-dev libxslt1-dev \
+        postgresql nginx
 
 Configure virtualenv::
 
