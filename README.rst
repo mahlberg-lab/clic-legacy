@@ -91,7 +91,7 @@ the ``install.sh`` script, when run as root, will configure systemd and nginx to
 
 There a host of environment variables that can be customised, see the top of the script. You can override them thus::
 
-    UWSGI_USER=www-data UWSGI_GROUP=www-data ./install.sh
+    SERVER_NAME=clic-stage.bham.ac.uk  ./install.sh
 
 Back-up / generating dumps from live instances
 ----------------------------------------------
