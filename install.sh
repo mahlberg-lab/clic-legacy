@@ -11,8 +11,8 @@ SERVICE_NAME="${SERVICE_NAME-clic}"
 SERVICE_FILE="/etc/systemd/system/${SERVICE_NAME}.service"
 SERVER_NAME="${SERVER_NAME-clic.bham.ac.uk}"
 UWSGI_BIN="${CLIC_PATH}/bin/uwsgi"
-UWSGI_USER="${UWSGI_USER-clicman}"
-UWSGI_GROUP="${UWSGI_GROUP-clicman}"
+UWSGI_USER="${UWSGI_USER-nobody}"
+UWSGI_GROUP="${UWSGI_GROUP-nogroup}"
 UWSGI_SOCKET=/tmp/${SERVICE_NAME}_uwsgi.sock
 
 # ---------------------------
