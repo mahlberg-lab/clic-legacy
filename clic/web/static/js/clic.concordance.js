@@ -108,6 +108,11 @@
                 return meta.row + meta.settings._iDisplayStart + 1;
             }
 
+            // Kwicmatches are just true / false iff there's a match
+            function renderKwicMatch( data, type, row, meta ) {
+                return !!data;
+            }
+
             that.processParameters(document.location.search);
             $("#searchedFor").html("Searched for <b>" + that.searchTerms + "</b> within <b>" + that.searchSpace + "</b>.");
 
@@ -115,11 +120,11 @@
                 ajax: that.fetchData.bind(that),
                 deferRender: true,
                 columns: [
-                    { title: "Match?", data: "5", sortable: false, visible: false, searchable: false },
+                    { data: "5", render: renderKwicMatch, visible: false, sortable: false, searchable: false },
                     { title: "", data: null, render: renderColumnCount, sortable: false, searchable: false },
-                    { title: "Left", data: "0", render: renderReverseTokenArray, class: "text-right" }, // Left
-                    { title: "Node", data: "1", render: renderForwardTokenArray, class: "hilight" }, // Node
-                    { title: "Right", data: "2", render: renderForwardTokenArray }, // Right
+                    { title: "Left", data: "0", render: renderReverseTokenArray, class: "contextLeft text-right" }, // Left
+                    { title: "Node", data: "1", render: renderForwardTokenArray, class: "contextNode hilight" }, // Node
+                    { title: "Right", data: "2", render: renderForwardTokenArray, class: "contextRight" }, // Right
                     { title: "Book", data: "3.1", searchable: false }, // Book
                     { title: "Ch.", data: "3.2", searchable: false }, // Chapter
                     { title: "Par.", data: "3.3", searchable: false }, // Paragraph
@@ -137,7 +142,7 @@
                     search: "Filter concordance:",
                 },
                 createdRow: function ( row, data, index ) {
-                    $(row).toggleClass('kwicMatch', data[5]);
+                    that.updateKwicRow(row, data[5]);
                 },
                 //TODO: TableTools Copy CSV / Print / Toggle metadata?
                 //TODO: Toggle metadata option?
@@ -211,7 +216,7 @@
 
                     for (i = 0; i < coData.length; i++) {
                         // Add KWICGrouper match column, assume no KWICGrouper initially
-                        coData[i].push(false);
+                        coData[i].push("");
                     }
 
                     Pace.stop();
@@ -222,10 +227,10 @@
                     }).join("")).trigger("chosen:updated");
 
                     $("#kwicGrouper select").on("change", function (e) {
-                        // Update terms object based on what's selected
+                        // Update terms object based on what's been selected, fill with position in list
                         that.kwicTerms = {};
-                        ($('#kwicGrouper select').val() || []).map(function (t) {
-                            that.kwicTerms[t.toLowerCase()] = true;
+                        ($('#kwicGrouper select').val() || []).map(function (t, i) {
+                            that.kwicTerms[t.toLowerCase()] = i + 1;
                         });
 
                         that.scheduleUpdateKwicGroup();
@@ -242,15 +247,17 @@
                             start: 0 - Math.min(values[1], -1),
                             stop: 0 - values[0],
                             reverse: true,
+                            prefix: 'l',
                         };
 
                         // Node: all or nothing, depending on if 0 was included
-                        that.kwicSpan[1] = values[0] <= 0 && values[1] >= 0 ? {start:1} : {ignore: true};
+                        that.kwicSpan[1] = values[0] <= 0 && values[1] >= 0 ? { start: 1, prefix: 'n' } : {ignore: true};
 
                         // Right
                         that.kwicSpan[2] = values[1] <= 0 ? {ignore: true} : {
                             start: Math.max(values[0], 0),
                             stop: values[1],
+                            prefix: 'r',
                         };
 
                         that.scheduleUpdateKwicGroup();
@@ -286,7 +293,10 @@
         },
 
         updateKwicGroup: function () {
-            var kwicTerms = this.kwicTerms, kwicSpan = this.kwicSpan, totalMatches = 0;
+            var that = this,
+                kwicTerms = this.kwicTerms,
+                kwicSpan = this.kwicSpan,
+                totalMatches = 0;
 
             // Check if list (tokens) contains any of the (terms) between (span.start) and (span.stop) inclusive
             // considering (tokens) in reverse if (span.reverse) is true
@@ -295,7 +305,7 @@
 
                 if (span.start === undefined) {
                     // Ignoring this row
-                    return false;
+                    return "";
                 }
 
                 for (i = 0; i < tokens.length; i++) {
@@ -306,9 +316,9 @@
                     }
 
                     wordCount++;
-                    if (wordCount >= span.start && terms[t.toLowerCase()]) {
-                        // Matching has started and matches a terms, return true
-                        return true;
+                    if (wordCount >= span.start && terms.hasOwnProperty(t.toLowerCase())) {
+                        // Matching has started and matches a terms, return which match it is
+                        return span.prefix + '-' + wordCount;
                     }
                     if (span.stop !== undefined && wordCount >= span.stop) {
                         // Finished matching now, give up.
@@ -316,7 +326,7 @@
                     }
                 }
 
-                return false;
+                return "";
             }
 
             this.concordanceTable.rows().every(function () {
@@ -332,13 +342,20 @@
                 if (d[5] !== new_result) {
                     // Concordance membership has changed, update table
                     d[5] = new_result;
-                    $(this.node()).toggleClass('kwicMatch', d[5]);
+                    that.updateKwicRow(this.node(), d[5]);
+
                     this.invalidate();
                 }
             });
 
             $('#kwicGrouper .matchCount').text(totalMatches);
             this.concordanceTable.draw();
+        },
+
+        /* Modify row markup to reflect match status */
+        updateKwicRow: function ( row, rowData ) {
+            $(row).toggleClass('kwicMatch', !!rowData)
+                  .attr('data-kwic-match', rowData);
         },
 
         findConcordanceTypes: function ( coData ) {
