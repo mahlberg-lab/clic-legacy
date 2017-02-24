@@ -138,6 +138,7 @@
                 filter: true,
                 sort: true,
                 paginate: true,
+                displayLength: 50,
                 language: {
                     search: "Filter concordance:",
                 },
