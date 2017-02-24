@@ -681,7 +681,5 @@ if __name__ == '__main__':
     def initialize_database():
         db.create_all()
 
-    from flask_debugtoolbar import DebugToolbarExtension
     app.debug = True
-    toolbar = DebugToolbarExtension(app)
     app.run(host='0.0.0.0', port=5000, debug=True)
