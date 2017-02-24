@@ -228,10 +228,6 @@
                     Pace.stop();
                     callback({ data: coData });
 
-                    $("#kwicGrouper select").html(that.findConcordanceTypes(coData).map(function (t) {
-                        return "<option>" + escapeHtml(t) + "</option>";
-                    }).join("")).trigger("chosen:updated");
-
                     $("#kwicGrouper select").on("change", function (e) {
                         // Update terms object based on what's been selected, fill with position in list
                         that.kwicTerms = {};
@@ -302,6 +298,8 @@
             var that = this,
                 kwicTerms = this.kwicTerms,
                 kwicSpan = this.kwicSpan,
+                allWords = {},
+                prevVal,
                 totalMatches = 0;
 
             // Check if list (tokens) contains any of the (terms) between (span.start) and (span.stop) inclusive
@@ -321,7 +319,9 @@
                         continue;
                     }
 
+                    t = t.toLowerCase();
                     wordCount++;
+                    allWords[t] = true;
                     if (wordCount >= span.start && terms.hasOwnProperty(t.toLowerCase())) {
                         // Matching has started and matches a terms, return which match it is
                         out.push(span.prefix + '-' + wordCount);
@@ -358,6 +358,16 @@
 
             $('#kwicGrouper .matchCount').text(totalMatches);
             this.concordanceTable.draw();
+
+            // Make sure values already selected stay selectable
+            prevVal = $('#kwicGrouper select').val() || [];
+            prevVal.map(function (t, i) {
+                allWords[t] = true;
+            });
+
+            $("#kwicGrouper select").html(Object.keys(allWords).sort().map(function (t) {
+                return "<option>" + escapeHtml(t) + "</option>";
+            }).join("")).val(prevVal).trigger("chosen:updated");
         },
 
         /* Modify row class to reflect match status */
@@ -370,24 +380,6 @@
                     row.className += ' match-' + rowData[i];
                 }
             }
-        },
-
-        findConcordanceTypes: function ( coData ) {
-            var i, j, k, s, out = {};
-
-            for (i = 0; i < coData.length; i++) { // Each concordance match
-                for (j = 0; j < 3; j++) { // Left / node / right
-                    for (k = 0; k < coData[i][j].length; k++) { // Word / non-word strings
-                        s = coData[i][j][k];
-                        if (isWord(s)) {
-                            //TODO: Node is also stemmed when searched for: e.g. 'camel', 'camel's'. Replicate?
-                            //TODO: Stop searching outside the span we can't select anyway? Or are we just hiding everything outside L/R5?
-                            out[s.toLowerCase()] = true;
-                        }
-                    }
-                }
-            }
-            return Object.keys(out);
         },
 
         processParameters: function( params ) {
