@@ -67,3 +67,5 @@ clic/textfiles/
 /postgres.db_annotation.dump
 /textfiles.tar.bz2
 /clic.bundle
+
+/secret-*

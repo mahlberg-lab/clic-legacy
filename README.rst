@@ -93,6 +93,10 @@ There a host of environment variables that can be customised, see the top of the
 
     SERVER_NAME=clic-stage.bham.ac.uk  ./install.sh
 
+You will also want to set a DB password to something other than the default::
+
+    echo "dbpassword" > secret-dbpassword.txt
+
 Back-up / generating dumps from live instances
 ----------------------------------------------
 

@@ -17,6 +17,10 @@ UWSGI_SOCKET=/tmp/${SERVICE_NAME}_uwsgi.sock
 
 # ---------------------------
 
+[ -f secret-secretkey.txt ] || dd if=/dev/random bs=20 count=1 | sha256sum | cut -f1 -d' ' > secret-secretkey.txt
+
+# ---------------------------
+
 systemctl | grep -q "${SERVICE_NAME}.service" && systemctl stop ${SERVICE_NAME}.service
 cat <<EOF > ${SERVICE_FILE}
 [Unit]
