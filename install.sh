@@ -30,7 +30,7 @@ After=network.target
 [Service]
 ExecStart=${UWSGI_BIN} \
     --mount /=clic.web.index:app \
-    --processes=5 \
+    --processes=2 \
     --chmod-socket=666 \
     -s ${UWSGI_SOCKET}
 WorkingDirectory=${CLIC_PATH}
