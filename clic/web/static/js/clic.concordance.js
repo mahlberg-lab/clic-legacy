@@ -103,11 +103,6 @@
                        '</svg></a>';
             }
 
-            // Column shows a count
-            function renderColumnCount( data, type, row, meta ) {
-                return meta.row + meta.settings._iDisplayStart + 1;
-            }
-
             // Kwicmatches are just true / false iff there's a match
             function renderKwicMatch( data, type, row, meta ) {
                 return !!data;
@@ -121,7 +116,7 @@
                 deferRender: true,
                 columns: [
                     { data: "5", render: renderKwicMatch, visible: false, sortable: false, searchable: false },
-                    { title: "", data: null, render: renderColumnCount, sortable: false, searchable: false },
+                    { title: "", data: null, render: function() { return "" }, sortable: false, searchable: false }, //TODO: Fix count column
                     { title: "Left", data: "0", render: renderReverseTokenArray, class: "contextLeft text-right" }, // Left
                     { title: "Node", data: "1", render: renderForwardTokenArray, class: "contextNode hilight" }, // Node
                     { title: "Right", data: "2", render: renderForwardTokenArray, class: "contextRight" }, // Right
