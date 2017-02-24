@@ -318,6 +318,11 @@ table .nowrap {
 #kwicGrouper.in > h2:after {
     content: "⇩";
 }
+#kwicGrouper h2 small {
+    color: inherit;
+    display: inline-block;
+    vertical-align: middle;
+}
 
 #kwicGrouper > div {
     position: absolute;
