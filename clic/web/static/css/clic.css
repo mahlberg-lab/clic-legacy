@@ -148,7 +148,7 @@ Concordance results
 }
 
 /* hilight node */
-.hilight {
+td.hilight {
     background: #A2C4D0 !important;
     text-align: center
 }
