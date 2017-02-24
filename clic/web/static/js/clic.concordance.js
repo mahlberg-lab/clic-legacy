@@ -116,7 +116,7 @@
                 deferRender: true,
                 columns: [
                     { data: "5", render: renderKwicMatch, visible: false, sortable: false, searchable: false },
-                    { title: "", data: null, render: function() { return "" }, sortable: false, searchable: false }, //TODO: Fix count column
+                    { title: "", data: null, render: function() { return "" }, sortable: false, searchable: false },
                     { title: "Left", data: "0", render: renderReverseTokenArray, class: "contextLeft text-right" }, // Left
                     { title: "Node", data: "1", render: renderForwardTokenArray, class: "contextNode hilight" }, // Node
                     { title: "Right", data: "2", render: renderForwardTokenArray, class: "contextRight" }, // Right
@@ -156,6 +156,16 @@
                     that.searchTerms,
                     '#concordance',
                 ].join('/'));
+            })
+
+            // On re-sort / page-change / ..., rework column count for current page
+            that.concordanceTable.on('draw.dt', function () {
+                var pageStart = that.concordanceTable.page.info().start,
+                    pageCells = that.concordanceTable.cells(null, 1, {page:'current', order: 'applied', search: 'applied'});
+
+                pageCells.nodes().each(function (cell, i) {
+                    cell.innerHTML = pageStart + i + 1;
+                });
             });
 
             noUiSlider.create($("#kwicGrouper .slider")[0], {
