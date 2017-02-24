@@ -111,6 +111,8 @@
             that.processParameters(document.location.search);
             $("#searchedFor").html("Searched for <b>" + that.searchTerms + "</b> within <b>" + that.searchSpace + "</b>.");
 
+            $('#dataTableConcordance').parents(".container")[0].className = "container-fluid";
+
             that.concordanceTable = $('#dataTableConcordance').DataTable({
                 ajax: that.fetchData.bind(that),
                 deferRender: true,

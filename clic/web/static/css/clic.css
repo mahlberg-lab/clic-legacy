@@ -2,6 +2,15 @@ body {
     /*padding-top: 63px;*/
 }
 
+.container-fluid {
+    margin: 0 -8px;
+}
+@media screen and (min-width: 1400px) {
+    .container-fluid {
+        margin: 0 20px;
+    }
+}
+
 /* UoN blues & header  - later do in new bootstrap theme? */
 h1.uonHeaderh1 {
     font-size: 40px;
@@ -37,13 +46,13 @@ Datatable Common
 */
 
 /* space around table before info /above filter*/
-.container .uonDatatable {
+body .uonDatatable {
     /*margin: 10px 0;*/
     width: auto;
 }
 
 /* stronger TH */
-.container .uonDatatable th {
+.uonDatatable>thead>tr>th {
     border-bottom: 3px solid #666;
 }
 
