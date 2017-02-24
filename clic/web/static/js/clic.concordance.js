@@ -44,7 +44,7 @@
         totalNumberOfHits: 0,
         kwicTimeout: null,
         kwicTerms: {},
-        kwicSpan: [{start:1}, {start:1}, {start:1}],
+        kwicSpan: [{start:1}, {start:1}],
 
         init: function() {
             var that = this;
@@ -170,8 +170,11 @@
 
             noUiSlider.create($("#kwicGrouper .slider")[0], {
                 start: [-5, 5],
-                range: { min: -5, max: 5 },
-                step: 1,
+                range: {
+                    min: -5, "10%": -4, "20%": -3, "30%": -2, "40%": -1,
+                    "60%":  1, "70%":  2, "80%":  3, "90%":  4, max:  5,
+                },
+                snap: true,
                 pips: {
                     mode: 'steps',
                     density: 10,
@@ -196,7 +199,7 @@
                 that.kwicTerms = {};
                 $("#kwicGrouper select").val([]).trigger("chosen:updated");
 
-                that.kwicSpan = [{start:1}, {start:1}, {start:1}];
+                that.kwicSpan = [{start:1}, {start:1}];
                 $("#kwicGrouper .slider")[0].noUiSlider.set([-5, 5]);
 
                 that.scheduleUpdateKwicGroup();
@@ -241,8 +244,9 @@
                     $("#kwicGrouper .slider")[0].noUiSlider.on('update', function (values) {
                         // Values has 2 values, a min and max, which we treat to be 
                         // min and max span inclusive, viz.
-                        //      [0]<---------------------->[1]
-                        // -5 : -4 : -3 : -2 : -1 | 0 | 1 : 2 : 3 : 4 : 5
+                        //      [0]<------------------------->[1]
+                        // -5 : -4 : -3 : -2 : -1 |  1 :  2 :  3 :  4 :  5
+                        // L5 : L4 : L3 : L2 : L1 | R1 : R2 : R3 : R4 : R5
 
                         // Left
                         that.kwicSpan[0] = values[0] >= 0 ? {ignore: true} : {
@@ -252,12 +256,9 @@
                             prefix: 'l',
                         };
 
-                        // Node: all or nothing, depending on if 0 was included
-                        that.kwicSpan[1] = values[0] <= 0 && values[1] >= 0 ? { start: 1, prefix: 'n' } : {ignore: true};
-
                         // Right
-                        that.kwicSpan[2] = values[1] <= 0 ? {ignore: true} : {
-                            start: Math.max(values[0], 0),
+                        that.kwicSpan[1] = values[1] < 0 ? {ignore: true} : {
+                            start: Math.max(values[0], 1),
                             stop: values[1],
                             prefix: 'r',
                         };
@@ -339,8 +340,7 @@
                 var d = this.data(),
                     new_result = [].concat(
                         testList(d[0], kwicSpan[0], kwicTerms),
-                        testList(d[1], kwicSpan[1], kwicTerms),
-                        testList(d[2], kwicSpan[2], kwicTerms)
+                        testList(d[2], kwicSpan[1], kwicTerms)
                     );
 
                 if (new_result.length > 0) {
