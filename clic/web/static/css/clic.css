@@ -373,6 +373,5 @@ table .nowrap {
 #dataTableConcordance tr.match-r-3 > td.contextRight .node-3,
 #dataTableConcordance tr.match-r-4 > td.contextRight .node-4,
 #dataTableConcordance tr.match-r-5 > td.contextRight .node-5 {
-    border: 2px solid red;
-    color: red;
+    background: rgba(255, 59, 0, 0.45);
 }
