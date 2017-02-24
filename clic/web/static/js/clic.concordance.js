@@ -105,7 +105,7 @@
 
             // Kwicmatches are just true / false iff there's a match
             function renderKwicMatch( data, type, row, meta ) {
-                return !!data;
+                return data.length > 0;
             }
 
             that.processParameters(document.location.search);
@@ -222,7 +222,7 @@
 
                     for (i = 0; i < coData.length; i++) {
                         // Add KWICGrouper match column, assume no KWICGrouper initially
-                        coData[i].push("");
+                        coData[i].push([]);
                     }
 
                     Pace.stop();
@@ -307,11 +307,11 @@
             // Check if list (tokens) contains any of the (terms) between (span.start) and (span.stop) inclusive
             // considering (tokens) in reverse if (span.reverse) is true
             function testList(tokens, span, terms) {
-                var i, t, l = [], wordCount = 0;
+                var i, t, wordCount = 0, out = [];
 
                 if (span.start === undefined) {
                     // Ignoring this row
-                    return "";
+                    return out;
                 }
 
                 for (i = 0; i < tokens.length; i++) {
@@ -324,7 +324,7 @@
                     wordCount++;
                     if (wordCount >= span.start && terms.hasOwnProperty(t.toLowerCase())) {
                         // Matching has started and matches a terms, return which match it is
-                        return span.prefix + '-' + wordCount;
+                        out.push(span.prefix + '-' + wordCount);
                     }
                     if (span.stop !== undefined && wordCount >= span.stop) {
                         // Finished matching now, give up.
@@ -332,20 +332,22 @@
                     }
                 }
 
-                return "";
+                return out;
             }
 
             this.concordanceTable.rows().every(function () {
                 var d = this.data(),
-                    new_result = testList(d[0], kwicSpan[0], kwicTerms) ||
-                                 testList(d[1], kwicSpan[1], kwicTerms) ||
-                                 testList(d[2], kwicSpan[2], kwicTerms);
+                    new_result = [].concat(
+                        testList(d[0], kwicSpan[0], kwicTerms),
+                        testList(d[1], kwicSpan[1], kwicTerms),
+                        testList(d[2], kwicSpan[2], kwicTerms)
+                    );
 
-                if (new_result) {
+                if (new_result.length > 0) {
                     totalMatches++;
                 }
 
-                if (d[5] !== new_result) {
+                if (d[5].length !== new_result.length || d[5].join(':') !== new_result.join(':')) {
                     // Concordance membership has changed, update table
                     d[5] = new_result;
                     that.updateKwicRow(this.node(), d[5]);
@@ -358,10 +360,16 @@
             this.concordanceTable.draw();
         },
 
-        /* Modify row markup to reflect match status */
+        /* Modify row class to reflect match status */
         updateKwicRow: function ( row, rowData ) {
-            $(row).toggleClass('kwicMatch', !!rowData)
-                  .attr('data-kwic-match', rowData);
+            var i;
+
+            if (row) {
+                row.className = rowData.length > 0 ? ' kwicMatch' : '';
+                for (i = 0; i < rowData.length; i++) {
+                    row.className += ' match-' + rowData[i];
+                }
+            }
         },
 
         findConcordanceTypes: function ( coData ) {

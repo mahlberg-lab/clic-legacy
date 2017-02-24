@@ -357,21 +357,21 @@ table .nowrap {
     background: #fffdb3;
 }
 /* TODO: Does KWICGroup matching nodes make any sense? */
-#dataTableConcordance tr.kwicMatch[data-kwic-match=l-1] > td.contextLeft .node-1,
-#dataTableConcordance tr.kwicMatch[data-kwic-match=l-2] > td.contextLeft .node-2,
-#dataTableConcordance tr.kwicMatch[data-kwic-match=l-3] > td.contextLeft .node-3,
-#dataTableConcordance tr.kwicMatch[data-kwic-match=l-4] > td.contextLeft .node-4,
-#dataTableConcordance tr.kwicMatch[data-kwic-match=l-5] > td.contextLeft .node-5,
-#dataTableConcordance tr.kwicMatch[data-kwic-match=n-1] > td.contextNode .node-1,
-#dataTableConcordance tr.kwicMatch[data-kwic-match=n-2] > td.contextNode .node-2,
-#dataTableConcordance tr.kwicMatch[data-kwic-match=n-3] > td.contextNode .node-3,
-#dataTableConcordance tr.kwicMatch[data-kwic-match=n-4] > td.contextNode .node-4,
-#dataTableConcordance tr.kwicMatch[data-kwic-match=n-5] > td.contextNode .node-5,
-#dataTableConcordance tr.kwicMatch[data-kwic-match=r-1] > td.contextRight .node-1,
-#dataTableConcordance tr.kwicMatch[data-kwic-match=r-2] > td.contextRight .node-2,
-#dataTableConcordance tr.kwicMatch[data-kwic-match=r-3] > td.contextRight .node-3,
-#dataTableConcordance tr.kwicMatch[data-kwic-match=r-4] > td.contextRight .node-4,
-#dataTableConcordance tr.kwicMatch[data-kwic-match=r-5] > td.contextRight .node-5 {
+#dataTableConcordance tr.match-l-1 > td.contextLeft .node-1,
+#dataTableConcordance tr.match-l-2 > td.contextLeft .node-2,
+#dataTableConcordance tr.match-l-3 > td.contextLeft .node-3,
+#dataTableConcordance tr.match-l-4 > td.contextLeft .node-4,
+#dataTableConcordance tr.match-l-5 > td.contextLeft .node-5,
+#dataTableConcordance tr.match-n-1 > td.contextNode .node-1,
+#dataTableConcordance tr.match-n-2 > td.contextNode .node-2,
+#dataTableConcordance tr.match-n-3 > td.contextNode .node-3,
+#dataTableConcordance tr.match-n-4 > td.contextNode .node-4,
+#dataTableConcordance tr.match-n-5 > td.contextNode .node-5,
+#dataTableConcordance tr.match-r-1 > td.contextRight .node-1,
+#dataTableConcordance tr.match-r-2 > td.contextRight .node-2,
+#dataTableConcordance tr.match-r-3 > td.contextRight .node-3,
+#dataTableConcordance tr.match-r-4 > td.contextRight .node-4,
+#dataTableConcordance tr.match-r-5 > td.contextRight .node-5 {
     border: 2px solid red;
     color: red;
 }
