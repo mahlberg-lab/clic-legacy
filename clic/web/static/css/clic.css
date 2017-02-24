@@ -342,6 +342,11 @@ table .nowrap {
 #kwicGrouper .slider {
     margin: 0.5em 1em 3em 1em;
 }
+#kwicGrouper .slider .noUi-value-sub,
+#kwicGrouper .slider .noUi-value-large {
+    top: 14px;
+    color: #333;
+}
 #kwicGrouper .btn-group {
     position: absolute;
     bottom: 10px;
