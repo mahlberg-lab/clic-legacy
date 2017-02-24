@@ -21,6 +21,9 @@ import pandas as pd
 from flask import Flask, render_template, url_for, redirect, request
 from werkzeug import secure_filename
 
+# Hack HOME var so cheshire3 can make a useless config directory
+os.environ['HOME'] = "/tmp"
+
 from flask.ext.admin.contrib import sqla
 from flask_admin import Admin, BaseView, expose, AdminIndexView
 from flask_admin.contrib.sqla import ModelView
