@@ -143,7 +143,17 @@
                     that.updateKwicRow(row, data[5]);
                 },
                 //TODO: TableTools Copy CSV / Print / Toggle metadata?
-                //TODO: Toggle metadata option?
+                dom: 'Bfrtip',
+                buttons: [
+                    { text: 'Toggle Metadata', action: function ( e, dt, node, config ) {
+                        var i, col;
+
+                        for (i = 6; i < 9; i++) {
+                            col = dt.column(i);
+                            col.visible(!col.visible());
+                        }
+                    }},
+                ],
             });
 
             // Generate URLs when needed, not every single time
