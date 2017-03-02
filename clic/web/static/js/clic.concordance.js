@@ -142,9 +142,9 @@
                 createdRow: function ( row, data, index ) {
                     that.updateKwicRow(row, data[5]);
                 },
-                //TODO: TableTools Copy CSV / Print / Toggle metadata?
                 dom: 'Bfrtip',
                 buttons: [
+                    'csv', 'copy',
                     { text: 'Toggle Metadata', action: function ( e, dt, node, config ) {
                         var i, col;
 
