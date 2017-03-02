@@ -74,6 +74,23 @@ server {
     location / {
         uwsgi_pass  uwsgi_server;
     }
+
+    location /js {
+        root ${CLIC_PATH}/clic/web/static;
+        expires 1m;
+    }
+    location /css {
+        root ${CLIC_PATH}/clic/web/static;
+        expires 1m;
+    }
+    location /img {
+        root ${CLIC_PATH}/clic/web/static;
+        expires 1m;
+    }
+    location /fonts {
+        root ${CLIC_PATH}/clic/web/static;
+        expires 1m;
+    }
 }
 EOF
 ln -fs /etc/nginx/sites-available/${SERVICE_NAME} /etc/nginx/sites-enabled/${SERVICE_NAME}
