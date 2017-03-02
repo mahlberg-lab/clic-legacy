@@ -1,4 +1,4 @@
-cheshire3 [web,sql] >= 1.1.0c4
+cheshire3 [web,sql] == 1.1.8
 Flask==0.10.1
 Beaker==1.8.0
 pandas==0.18.0
