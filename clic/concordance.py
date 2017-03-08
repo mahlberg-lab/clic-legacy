@@ -8,13 +8,14 @@ import json
 import os
 import os.path
 import collections
-import tempfile
+import time
 import cPickle as pickle
 
 from cheshire3.baseObjects import Session
 from cheshire3.document import StringDocument
 from cheshire3.internal import cheshire3Root
 from cheshire3.server import SimpleServer
+from cheshire3.exceptions import ObjectDoesNotExistException
 
 
 #### LOAD METADATA ####
@@ -203,30 +204,33 @@ class Chapter():
         ]
 
 chapter_cache = {}
-def get_chapter(session, result, force=False):
+chapter_pickle_file = os.path.join(CLIC_DIR, 'clic-chapter-cache.pickle')
+def get_chapter(session, recStore, id, force=False):
     """
-    Given a Cheshire3 (session) and resultSetItem (result),
+    Given a Cheshire3 (session) and (recStore) and
+    an (id) from the store,
     return a Chapter object, either from cache or fresh.
     """
-    if force or result.id not in chapter_cache:
-        chapter_pickle_file = os.path.join(tempfile.gettempdir(), 'clic-chapter-cache-%d.pickle' % result.id)
-
-        if force or not(os.path.exists(chapter_pickle_file)):
-            record = result.fetch_record(session)
-            chapter_cache[result.id] = Chapter(record.dom, record.digest)
-            with open(chapter_pickle_file, 'wb') as f:
-                pickle.dump(chapter_cache[result.id], f)
-        else:
-            with open(chapter_pickle_file, 'rb') as f:
-                chapter_cache[result.id] = pickle.load(f)
+    if force or id not in chapter_cache:
+        record = recStore.fetch_record(session, id)
+        chapter_cache[id] = Chapter(record.dom, record.digest)
 
     # Test checksum, if it doesn't match the load the document afresh
-    recStore = session.server.get_object(session, result.database).get_object(session, result.recordStore)
-    if chapter_cache[result.id].digest != recStore.fetch_recordMetadata(session, result.id, 'digest'):
-        return get_chapter(session, result, force=True)
+    if chapter_cache[id].digest != recStore.fetch_recordMetadata(session, id, 'digest'):
+        return get_chapter(session, recStore, id, force=True)
 
-    return chapter_cache[result.id]
+    return chapter_cache[id]
 
+def dump_chapter_cache():
+    with open(chapter_pickle_file, 'wb') as f:
+        pickle.dump(chapter_cache, f)
+
+def restore_chapter_cache():
+    global chapter_cache
+    if os.path.exists(chapter_pickle_file):
+        with open(chapter_pickle_file, 'rb') as f:
+            chapter_cache = pickle.load(f)
+restore_chapter_cache()  # Restore cache on module load, NB: this takes ~20s
 
 class Concordance(object):
     '''
@@ -250,8 +254,27 @@ class Concordance(object):
                                  )
         self.db = self.serv.get_object(self.session, self.session.database)
         self.qf = self.db.get_object(self.session, 'defaultQueryFactory')
+        self.recStore = self.db.get_object(self.session, 'recordStore')
         self.idxStore = self.db.get_object(self.session, 'indexStore')
         #self.logger = self.db.get_object(self.session, 'concordanceLogger')
+
+
+    def warm_cache(self):
+        """
+        Given a Cheshire3 (session), fetch all objects in (database_name)'s (store_name),
+        and parse them as Chapters ready for use
+        """
+        i = 0
+        startTime = time.time()
+        while True:
+            try:
+                get_chapter(self.session, self.recStore, i)
+                yield "Cached item %d %f\n" % (i, time.time() - startTime);
+                i += 1
+            except ObjectDoesNotExistException:
+                dump_chapter_cache()
+                yield "Chapter cache now contains %d objects, dumped to %s\n" % (len(chapter_cache), chapter_pickle_file);
+                return
 
 
     def build_query(self, terms, idxName, Materials, selectWords):
@@ -329,7 +352,7 @@ class Concordance(object):
 
         ## search through each record (chapter) and identify location of search term(s)
         for result in result_set:
-            ch = get_chapter(self.session, result)
+            ch = get_chapter(self.session, self.recStore, result.id)
 
             for match in result.proxInfo:
                 (word_id, para_chap, sent_chap) = ch.get_word(match)

@@ -9,7 +9,7 @@ It needs to be refactored.
 
 
 from __future__ import absolute_import  ## help python find modules within clic package (see John H email 09.04.2014)
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, Response, jsonify
 import json
 import urllib
 
@@ -33,6 +33,11 @@ def concordances():
     concordances_result = fetchConcordance(args)
     concordances = json.dumps(concordances_result)
     return concordances
+
+@api.route('/concordance-warm/', methods=['GET'])
+def concordance_warm():
+    concordancer = Concordance()
+    return Response(concordancer.warm_cache(), mimetype='text/plain')
 
 def fetchConcordance(args):
     concordancer = Concordance()

@@ -73,6 +73,10 @@ Untar the textfiles::
 
     tar -C clic/textfiles/ -jxf textfiles.tar.bz2
 
+Once the system is started you will want to populate the chapter cache pickle,
+if not already populated. Visit ``/api/concordance-warm/`` and make a cup of tea.
+After it is done restart the service to ensure all workers are using the cache.
+
 Developing the system
 ---------------------
 
