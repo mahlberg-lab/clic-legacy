@@ -17,7 +17,11 @@ UWSGI_SOCKET=/tmp/${SERVICE_NAME}_uwsgi.sock
 
 # ---------------------------
 
-[ -f secret-secretkey.txt ] || dd if=/dev/random bs=20 count=1 | sha256sum | cut -f1 -d' ' > secret-secretkey.txt
+[ -f "${CLIC_PATH}/secret-secretkey.txt" ] || dd if=/dev/random bs=20 count=1 | sha256sum | cut -f1 -d' ' > "${CLIC_PATH}/secret-secretkey.txt"
+
+[ -f "${CLIC_PATH}/clic-chapter-cache.pickle" ] || touch "${CLIC_PATH}/clic-chapter-cache.pickle"
+chown ${UWSGI_USER} "${CLIC_PATH}/clic-chapter-cache.pickle"
+chmod g+w "${CLIC_PATH}/clic-chapter-cache.pickle"
 
 # ---------------------------
 
