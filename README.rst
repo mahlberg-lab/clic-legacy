@@ -70,12 +70,10 @@ Untar the textfiles::
 
     tar -C clic/textfiles/ -jxf textfiles.tar.bz2
 
-Once the system is started you will want to populate the chapter cache pickle,
-if not already populated. Visit ``/api/concordance-warm/`` and make a cup of tea.
-After it is done restart the service to ensure all workers are using the cache.
-
 Developing the system
 ---------------------
+
+To speed up development, pre-warm the cache as-per the "Cache pre-warm" section.
 
 Start the webserver in debug mode::
 
@@ -97,6 +95,7 @@ The ``install.sh`` script will install CLiC onto a production environment, and
 should be run as root, e.g. ``sudo ./install.sh``. This will:
 
 * Create a secretkey to use as a salt for cookie strings
+* Ensure that the ``clic-chapter-cache.pickle`` is writable by the CLiC user
 * Configure systemd to launch the UWSGI process running CLiC, and start it
 * Create / update an NGINX site config to use CLiC, and get NGINX to reload
   the config.
@@ -106,9 +105,26 @@ the script. You can override them thus::
 
     sudo SERVER_NAME=clic-stage.bham.ac.uk  ./install.sh
 
+Once this is done CLiC should be available for use. Next you want to ensure
+that the cache is pre-warmed, see "Cache pre-warm".
+
 If you need to stop/start CLiC outside this for whatever reason, use systemctl,
 e.g. ``systemctl stop clic``.
 
+Cache pre-warm
+--------------
+
+For maximum performance, CLiC stores all chapters in memory. By default these are
+read in as they are needed for concordance matches. This means that responses will
+be very slow until all chapters have been looked at at least once.
+
+To avoid this, you can force CLiC to read in every chapter in turn, so everything
+is ready in memory, and dump this to ``clic-chapter-cache.pickle``, which will be
+automatically read when CLiC restarts. To (re)generate this file do the following:
+* Start CLiC, either in production or development
+* Visit ``/api/concordance-warm/``, make a cup of tea.
+* Once it is finished, verify ``clic-chapter-cache.pickle`` exists and restart CLiC
+  so all processes use the same cache file.
 
 Back-up / generating dumps from live instances
 ----------------------------------------------
