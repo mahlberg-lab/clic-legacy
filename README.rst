@@ -18,7 +18,7 @@ Firstly, install the operating system prerequisites::
         subversion \
         postgresql libpq-dev \
         libxml2-dev libxslt1-dev \
-        postgresql nginx
+        postgresql
 
 Configure virtualenv::
 
@@ -88,12 +88,26 @@ Run some unit tests::
 Production installation
 -----------------------
 
-the ``install.sh`` script, when run as root, will configure systemd and nginx to run CLiC.
+On a production environment, we host CLiC with uwsgi with NGINX serving static
+files and proxying. So if not already installed::
 
-There a host of environment variables that can be customised, see the top of the script. You can override them thus::
+    apt-get install nginx
 
-    SERVER_NAME=clic-stage.bham.ac.uk  ./install.sh
+The ``install.sh`` script will install CLiC onto a production environment, and
+should be run as root, e.g. ``sudo ./install.sh``. This will:
 
+* Create a secretkey to use as a salt for cookie strings
+* Configure systemd to launch the UWSGI process running CLiC, and start it
+* Create / update an NGINX site config to use CLiC, and get NGINX to reload
+  the config.
+
+There a host of environment variables that can be customised, see the top of
+the script. You can override them thus::
+
+    sudo SERVER_NAME=clic-stage.bham.ac.uk  ./install.sh
+
+If you need to stop/start CLiC outside this for whatever reason, use systemctl,
+e.g. ``systemctl stop clic``.
 
 
 Back-up / generating dumps from live instances
