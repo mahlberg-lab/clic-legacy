@@ -55,13 +55,10 @@ These are available internally.
 
 Configure the operating system's postgres. As the postgres user::
 
-    # Clear out old DB if it exists
-    sudo -upostgres dropdb db_annotation
-    sudo -upostgres dropuser clic-dickens
-
-    # Create clic-dickens user & DB, hardcoded password is charles
+    # Create clic-dickens user & DB, configure CLiC with the password
     sudo -upostgres createuser -P clic-dickens
     sudo -upostgres createdb -O clic-dickens db_annotation
+    echo "dbpassword-you-supplied-to-createuser" > secret-dbpassword.txt
 
     sudo -upostgres pg_restore --dbname=db_annotation --verbose postgres.db_annotation.dump
 
@@ -97,9 +94,7 @@ There a host of environment variables that can be customised, see the top of the
 
     SERVER_NAME=clic-stage.bham.ac.uk  ./install.sh
 
-You will also want to set a DB password to something other than the default::
 
-    echo "dbpassword" > secret-dbpassword.txt
 
 Back-up / generating dumps from live instances
 ----------------------------------------------
