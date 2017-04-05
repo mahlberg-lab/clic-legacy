@@ -60,9 +60,14 @@ server {
     server_name ${SERVER_NAME};
     charset     utf-8;
 
+    proxy_intercept_errors on;
     location / {
-        uwsgi_pass  uwsgi_server;
         include uwsgi_params;
+        # Emergency CLiC disabling rewrite rule, uncomment to disable clic access
+        # rewrite ^(.*) /error/maintenance.html;
+        uwsgi_pass  uwsgi_server;
+
+        error_page 502 503 504 /error/maintenance.html;
     }
 
     location /js {
@@ -80,6 +85,10 @@ server {
     location /fonts {
         root ${CLIC_PATH}/clic/web/static;
         expires 1m;
+    }
+
+    location /error {
+        root ${CLIC_PATH}/clic/web/static/html;
     }
 }
 EOF
