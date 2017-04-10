@@ -83,8 +83,7 @@ files and proxying. So if not already installed::
 
     sudo apt-get install nginx
 
-The ``install.sh`` script will install CLiC onto a production environment, and
-should be run as root, e.g. ``sudo ./install.sh``. This will:
+The ``install.sh`` script automates the following steps:
 
 * Create a secretkey to use as a salt for cookie strings
 * Ensure that the ``clic-chapter-cache.pickle`` is writable by the CLiC user
@@ -93,7 +92,11 @@ should be run as root, e.g. ``sudo ./install.sh``. This will:
   the config.
 
 There a host of environment variables that can be customised, see the top of
-the script. You can override them thus::
+the script. Generally, the only one to override is SERVER_NAME, which controls
+what DNS names the server will respond to. Multiple server names can be used,
+separated by spaces.
+
+For example, for installation on "clic-stage.bham.ac.uk"::
 
     sudo SERVER_NAME=clic-stage.bham.ac.uk  ./install.sh
 
