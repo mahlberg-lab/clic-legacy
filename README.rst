@@ -62,9 +62,10 @@ Configure the operating system's postgres. As the postgres user::
 
     sudo -upostgres pg_restore --dbname=db_annotation --verbose postgres.db_annotation.dump
 
-Untar the cheshire3 stores/indexes::
+Untar the cheshire3 stores/indexes (NB: this will take some time)::
 
     tar -C dbs/dickens -jxf cheshire3.db_dickens.tar.bz2
+    chmod o+w cheshire3-server/dbs/dickens/stores/*
 
 Untar the textfiles::
 
