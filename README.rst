@@ -14,7 +14,7 @@ Installation
 Firstly, install the operating system prerequisites::
 
     # NB: virtualenv package might be called python-virtualenv
-    apt-get install virtualenv python-dev \
+    sudo apt-get install virtualenv python-dev \
         subversion \
         postgresql libpq-dev \
         libxml2-dev libxslt1-dev \
@@ -89,7 +89,7 @@ Production installation
 On a production environment, we host CLiC with uwsgi with NGINX serving static
 files and proxying. So if not already installed::
 
-    apt-get install nginx
+    sudo apt-get install nginx
 
 The ``install.sh`` script will install CLiC onto a production environment, and
 should be run as root, e.g. ``sudo ./install.sh``. This will:
