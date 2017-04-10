@@ -32,15 +32,15 @@ Get some packages not available via. PyPI::
     mv pywebsvcs-code/wstools pywebsvcs-code/zsi/ZSI/wstools/
     ./bin/pip install pywebsvcs-code/zsi/
 
+Use pip to fetch dependencies for the relevant environment (NB: this installs pandas, which can take an hour or so)::
+
+    ./bin/pip install -r requirements.txt
+
 Comment out "socket.setdefaulttimeout(30)" in
 
     lib/python2.7/site-packages/cheshire3/web/documentFactory.py
 
 See https://github.com/coleifer/micawber/issues/59 for more information
-
-Use pip to fetch dependencies for the relevant environment::
-
-    ./bin/pip install -r requirements/dev.txt
 
 Database setup
 --------------
