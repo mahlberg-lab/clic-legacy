@@ -70,19 +70,6 @@ Untar the textfiles::
 
     tar -C clic/textfiles/ -jxf textfiles.tar.bz2
 
-Developing the system
----------------------
-
-To speed up development, pre-warm the cache as-per the "Cache pre-warm" section.
-
-Start the webserver in debug mode::
-
-    ./bin/python -m clic.web.index
-
-Run some unit tests::
-
-    ./bin/python -m pytest clic/tests/unit/
-
 Production installation
 -----------------------
 
@@ -134,6 +121,19 @@ You can generate dumps from a running instance for backup / transfer::
     pg_dump -Fc db_annotation > postgres.db_annotation.dump
     tar -C dbs/dickens -jcvf cheshire3.db_dickens.tar.bz2 indexes stores
     tar -C clic/textfiles/ -jcvf textfiles.tar.bz2 .
+
+Developing the system
+---------------------
+
+To speed up development, pre-warm the cache as-per the "Cache pre-warm" section.
+
+Start the webserver in debug mode::
+
+    ./bin/python -m clic.web.index
+
+Run some unit tests::
+
+    ./bin/python -m pytest clic/tests/unit/
 
 Acknowledgements
 ----------------
