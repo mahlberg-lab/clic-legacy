@@ -106,6 +106,18 @@ that the cache is pre-warmed, see "Cache pre-warm".
 If you need to stop/start CLiC outside this for whatever reason, use systemctl,
 e.g. ``systemctl stop clic``.
 
+Troubleshooting
+---------------
+
+If you cannot connect to CLiC from a web browser:
+
+* Make sure you used a SERVER_NAME that matches the server
+* Make sure NGINX started without errors: ``systemctl status -ln50 nginx``
+
+If you see the "CLiC is down for maintenance" page:
+
+* Make sure CLiC has started without errors: ``systemctl status -ln50 clic``
+
 Cache pre-warm
 --------------
 
