@@ -55,10 +55,14 @@ These are available internally.
 
 Configure the operating system's postgres. As the postgres user::
 
-    # Create clic-dickens user & DB, configure CLiC with the password
+    # Generate a random password for python to use to access postgres
+    dd if=/dev/random bs=20 count=1 | sha256sum | cut -f1 -d' ' > secret-dbpassword.txt
+
+    # Create clic-dickens user & DB
+    # This will ask for a password, give whatever is in secret-dbpassword.txt
+    cat secret-dbpassword.txt
     sudo -upostgres createuser -P clic-dickens
     sudo -upostgres createdb -O clic-dickens db_annotation
-    echo "dbpassword-you-supplied-to-createuser" > secret-dbpassword.txt
 
     sudo -upostgres pg_restore --dbname=db_annotation --verbose postgres.db_annotation.dump
 
