@@ -335,6 +335,7 @@ table .nowrap {
     color: inherit;
     display: inline-block;
     vertical-align: middle;
+    font-size: 75%;
 }
 
 #kwicGrouper > div {
