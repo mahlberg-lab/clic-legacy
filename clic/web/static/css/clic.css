@@ -371,17 +371,11 @@ table .nowrap {
 .table-hover>tbody>tr.kwicMatch>td {
     background: #fffdb3;
 }
-/* TODO: Does KWICGroup matching nodes make any sense? */
 #dataTableConcordance tr.match-l1 > td.contextLeft .node-1,
 #dataTableConcordance tr.match-l2 > td.contextLeft .node-2,
 #dataTableConcordance tr.match-l3 > td.contextLeft .node-3,
 #dataTableConcordance tr.match-l4 > td.contextLeft .node-4,
 #dataTableConcordance tr.match-l5 > td.contextLeft .node-5,
-#dataTableConcordance tr.match-n1 > td.contextNode .node-1,
-#dataTableConcordance tr.match-n2 > td.contextNode .node-2,
-#dataTableConcordance tr.match-n3 > td.contextNode .node-3,
-#dataTableConcordance tr.match-n4 > td.contextNode .node-4,
-#dataTableConcordance tr.match-n5 > td.contextNode .node-5,
 #dataTableConcordance tr.match-r1 > td.contextRight .node-1,
 #dataTableConcordance tr.match-r2 > td.contextRight .node-2,
 #dataTableConcordance tr.match-r3 > td.contextRight .node-3,
