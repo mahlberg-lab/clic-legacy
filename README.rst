@@ -143,6 +143,23 @@ You can generate dumps from a running instance for backup / transfer::
     tar -C dbs/dickens -jcvf cheshire3.db_dickens.tar.bz2 indexes stores
     tar -C clic/textfiles/ -jcvf textfiles.tar.bz2 .
 
+User annotation system
+----------------------
+
+The registration system for new users  is currently disabled, so users need to be
+added manually.
+
+You can connect to the database as the ``clic-dickens`` user with the following::
+
+    PGPASSWORD="$(cat secret-dbpassword.txt)" psql -h localhost -U 'clic-dickens' db_annotation
+
+Then use the following SQL::
+
+    INSERT INTO public.user
+        (name, email, password, active, confirmed_at)
+        VALUES
+        ('NewUser', 'n.user@bham.ac.uk', 'plain-text-password', 't', NOW());
+
 Developing the system
 ---------------------
 
