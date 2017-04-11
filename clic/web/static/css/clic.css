@@ -368,9 +368,10 @@ table .nowrap {
     right: 10px;
 }
 
-.table-hover>tbody>tr.kwicMatch>td {
-    background: #fffdb3;
-}
+.table-hover>tbody>tr.match-1>td { background: #fffdb3; }
+.table-hover>tbody>tr.match-2>td { background: #ffe0b3; }
+.table-hover>tbody>tr.match-3>td { background: #ecb3ff; }
+
 #dataTableConcordance tr.match-l1 > td.contextLeft .node-1,
 #dataTableConcordance tr.match-l2 > td.contextLeft .node-2,
 #dataTableConcordance tr.match-l3 > td.contextLeft .node-3,

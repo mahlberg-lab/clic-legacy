@@ -103,9 +103,9 @@
                        '</svg></a>';
             }
 
-            // Kwicmatches are just true / false iff there's a match
+            // Kwicmatches are sorted by # of KWICGrouper types this row matches, i.e. the first item in the list
             function renderKwicMatch( data, type, row, meta ) {
-                return data.length > 0;
+                return data[0];
             }
 
             that.processParameters(document.location.search);
@@ -237,7 +237,7 @@
 
                     for (i = 0; i < coData.length; i++) {
                         // Add KWICGrouper match column, assume no KWICGrouper initially
-                        coData[i].push([]);
+                        coData[i].push([0]);
                     }
 
                     Pace.stop();
@@ -317,7 +317,7 @@
 
             // Check if list (tokens) contains any of the (terms) between (span.start) and (span.stop) inclusive
             // considering (tokens) in reverse if (span.reverse) is true
-            function testList(tokens, span, terms) {
+            function testList(tokens, span, terms, matchingTypes) {
                 var i, t, wordCount = 0, out = [];
 
                 if (span.start === undefined) {
@@ -337,6 +337,7 @@
                     allWords[t] = true;
                     if (wordCount >= span.start && terms.hasOwnProperty(t)) {
                         // Matching has started and matches a terms, return which match it is
+                        matchingTypes[t] = true;
                         out.push(span.prefix + wordCount);
                     }
                     if (span.stop !== undefined && wordCount >= span.stop) {
@@ -350,12 +351,15 @@
 
             this.concordanceTable.rows().every(function () {
                 var d = this.data(),
-                    new_result = [].concat(
-                        testList(d[0], kwicSpan[0], kwicTerms),
-                        testList(d[2], kwicSpan[1], kwicTerms)
+                    matchingTypes = {},
+                    new_result = [0].concat(
+                        testList(d[0], kwicSpan[0], kwicTerms, matchingTypes),
+                        testList(d[2], kwicSpan[1], kwicTerms, matchingTypes)
                     );
+                // Prepend the number of matching types
+                new_result[0] = Object.keys(matchingTypes).length;
 
-                if (new_result.length > 0) {
+                if (new_result.length > 1) {
                     totalMatches++;
                 }
 
@@ -387,7 +391,7 @@
             var i;
 
             if (row) {
-                row.className = rowData.length > 0 ? ' kwicMatch' : '';
+                row.className = '';
                 for (i = 0; i < rowData.length; i++) {
                     row.className += ' match-' + rowData[i];
                 }
