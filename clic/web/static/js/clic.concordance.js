@@ -335,9 +335,9 @@
                     t = t.toLowerCase();
                     wordCount++;
                     allWords[t] = true;
-                    if (wordCount >= span.start && terms.hasOwnProperty(t.toLowerCase())) {
+                    if (wordCount >= span.start && terms.hasOwnProperty(t)) {
                         // Matching has started and matches a terms, return which match it is
-                        out.push(span.prefix + '-' + wordCount);
+                        out.push(span.prefix + wordCount);
                     }
                     if (span.stop !== undefined && wordCount >= span.stop) {
                         // Finished matching now, give up.
