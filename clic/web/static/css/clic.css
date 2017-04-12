@@ -294,12 +294,14 @@ table .nowrap {
     top: 33%;
     right: -1px;
     width: 25em;
-    min-height: 16em;
     z-index: 2;
     background: #f5f5f5;
     border: 1px solid black;
     border-radius: 5px 0 0 5px !important;
     transition: right 0.3s ease;
+}
+#kwicGrouper, #kwicGrouper > div {
+    min-height: 16em;
 }
 
 #kwicGrouper {
@@ -339,11 +341,7 @@ table .nowrap {
 }
 
 #kwicGrouper > div {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 2em;
+    margin-left: 2em;
     border-left: 1px dotted black;
     padding: 5px;
 }
@@ -363,9 +361,8 @@ table .nowrap {
     color: #333;
 }
 #kwicGrouper .btn-group {
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
+    margin: 10px 10px 0 0;
+    text-align: right;
 }
 
 .table-hover>tbody>tr.kwicMatch.match-1>td { background: #fffdb3; }
