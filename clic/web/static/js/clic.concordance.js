@@ -393,10 +393,10 @@
             if (row) {
                 row.className = '';
                 if (rowData.length > 1) {
-                    row.className += ' kwicMatch';
-                }
-                for (i = 0; i < rowData.length; i++) {
-                    row.className += ' match-' + rowData[i];
+                    row.className += ' kwic-highlight-' + (rowData[0] % 4 + 1);
+                    for (i = 1; i < rowData.length; i++) {
+                        row.className += ' match-' + rowData[i];
+                    }
                 }
             }
         },
