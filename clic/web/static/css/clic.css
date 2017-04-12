@@ -365,10 +365,10 @@ table .nowrap {
     text-align: right;
 }
 
-.table-hover>tbody>tr.kwic-highlight-1>td { background: #bbb3ff; }
-.table-hover>tbody>tr.kwic-highlight-2>td { background: #fffdb3; }
-.table-hover>tbody>tr.kwic-highlight-3>td { background: #ffe0b3; }
-.table-hover>tbody>tr.kwic-highlight-4>td { background: #ecb3ff; }
+.table-hover>tbody>tr.kwic-highlight-2>td { background: #e6f5c9; }
+.table-hover>tbody>tr.kwic-highlight-3>td { background: #b3e2cd; }
+.table-hover>tbody>tr.kwic-highlight-4>td { background: #cbd5e8; }
+.table-hover>tbody>tr.kwic-highlight-1>td { background: #f4cae4; }
 
 #dataTableConcordance tr.match-l1 > td.contextLeft .node-1,
 #dataTableConcordance tr.match-l2 > td.contextLeft .node-2,
