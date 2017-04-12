@@ -392,6 +392,9 @@
 
             if (row) {
                 row.className = '';
+                if (rowData.length > 1) {
+                    row.className += ' kwicMatch';
+                }
                 for (i = 0; i < rowData.length; i++) {
                     row.className += ' match-' + rowData[i];
                 }
