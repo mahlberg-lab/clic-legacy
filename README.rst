@@ -70,6 +70,7 @@ Untar the cheshire3 stores/indexes (NB: this will take some time)::
 
     tar -C dbs/dickens -jxf cheshire3.db_dickens.tar.bz2
     chmod o+w cheshire3-server/dbs/dickens/stores/*
+    chmod o+w cheshire3-server/dbs/dickens/indexes/*
 
 Untar the textfiles::
 
