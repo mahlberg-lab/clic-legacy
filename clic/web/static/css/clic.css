@@ -151,6 +151,26 @@ Concordance results
     stroke: #ffa033;
 }
 
+#dataTableConcordance th {
+    text-align: center;
+    padding-right: 0;
+}
+
+#dataTableConcordance th:after {
+    display: inline-block;
+    vertical-align: text-bottom;
+    position: static;
+    margin-left: 0.5em;
+    margin-bottom: -1px;
+    opacity: 1;
+    color: #AAA;
+}
+
+#dataTableConcordance th.sorting_asc:after,
+#dataTableConcordance th.sorting_desc:after {
+    color: #447688;
+}
+
 /* hilight node */
 td.hilight {
     background: #A2C4D0 !important;
