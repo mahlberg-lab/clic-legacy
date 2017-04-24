@@ -153,7 +153,8 @@ Concordance results
 
 #dataTableConcordance th {
     text-align: center;
-    padding-right: 0;
+    padding: 3px;
+    height: 3em;
 }
 
 #dataTableConcordance th:after {
