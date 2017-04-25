@@ -161,6 +161,23 @@ Then use the following SQL::
         VALUES
         ('NewUser', 'n.user@bham.ac.uk', 'plain-text-password', 't', NOW());
 
+To export the data, the following view can be used, which isn't created by default::
+
+    CREATE OR REPLACE VIEW subset_export AS
+        SELECT s.id "subset_id", s.book, s.kind,
+            REGEXP_REPLACE(s.text, E'[\\n\\r]+', ' ', 'g' ) "text",
+            STRING_AGG(CASE WHEN t.tag_name IS NOT NULL THEN CONCAT(t.tag_name, '-', (SELECT name FROM public.user WHERE id = t.owner_id)) ELSE NULL END, '/') "all_tags",
+            STRING_AGG(CASE WHEN n.note IS NOT NULL THEN CONCAT(n.note, '-', (SELECT name FROM public.user WHERE id = n.owner_id)) ELSE NULL END, '/') "all_notes"
+        FROM public.subsets s
+        LEFT OUTER JOIN subset_tags st ON (s.id = st.subset_id)
+        LEFT OUTER JOIN tags t ON (t.id = st.tag_id)
+        LEFT OUTER JOIN notes n ON (s.id = n.subset_id)
+        GROUP BY s.id;
+
+...which allows dumping of all data to a CSV format via ``psql``::
+
+    \copy (SELECT * FROM subset_export) TO '/tmp/tags_dump.csv' WITH CSV
+
 Developing the system
 ---------------------
 
