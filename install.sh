@@ -14,6 +14,7 @@ UWSGI_BIN="${CLIC_PATH}/bin/uwsgi"
 UWSGI_USER="${UWSGI_USER-nobody}"
 UWSGI_GROUP="${UWSGI_GROUP-nogroup}"
 UWSGI_SOCKET=/tmp/${SERVICE_NAME}_uwsgi.sock
+UWSGI_TIMEOUT="${UWSGI_TIMEOUT-5m}"
 
 # ---------------------------
 
@@ -66,6 +67,7 @@ server {
         # Emergency CLiC disabling rewrite rule, uncomment to disable clic access
         # rewrite ^(.*) /error/maintenance.html;
         uwsgi_pass  uwsgi_server;
+        uwsgi_read_timeout ${UWSGI_TIMEOUT};
 
         error_page 502 503 504 /error/maintenance.html;
     }
