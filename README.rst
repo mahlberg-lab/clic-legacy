@@ -75,6 +75,7 @@ Untar the cheshire3 stores/indexes (NB: this will take some time)::
 Untar the textfiles::
 
     tar -C clic/textfiles/ -jxf textfiles.tar.bz2
+    chmod -R a+rX clic/textfiles/
 
 Production installation
 -----------------------
