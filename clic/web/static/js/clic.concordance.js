@@ -142,7 +142,7 @@
                 createdRow: function ( row, data, index ) {
                     that.updateKwicRow(row, data[5]);
                 },
-                dom: 'Bfrtip',
+                dom: 'Bfr<"clear"i>tip',
                 buttons: [
                     'csv', 'copy',
                     { text: 'Toggle Metadata', action: function ( e, dt, node, config ) {
