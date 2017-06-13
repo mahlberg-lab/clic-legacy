@@ -15,6 +15,7 @@ UWSGI_USER="${UWSGI_USER-nobody}"
 UWSGI_GROUP="${UWSGI_GROUP-nogroup}"
 UWSGI_SOCKET=/tmp/${SERVICE_NAME}_uwsgi.sock
 UWSGI_TIMEOUT="${UWSGI_TIMEOUT-5m}"
+UWSGI_PROCESSES="${UWSGI_PROCESSES-2}"
 
 # ---------------------------
 
@@ -35,7 +36,7 @@ After=network.target
 [Service]
 ExecStart=${UWSGI_BIN} \
     --mount /=clic.web.index:app \
-    --processes=2 \
+    --processes=${UWSGI_PROCESSES} \
     --chmod-socket=666 \
     -s ${UWSGI_SOCKET}
 WorkingDirectory=${CLIC_PATH}
