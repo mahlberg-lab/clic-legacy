@@ -25,6 +25,8 @@ SQLALCHEMY_DATABASE_URI = "postgresql://%s:%s@localhost/db_annotation" % (
 )
 SECRET_KEY = textConfigParam('secret-secretkey.txt', 'qdfmkqjfmqksjfdmk')
 
+GA_KEY = textConfigParam('secret-googleanalytics-key.txt', 'TEST-KEY')
+
 DEBUG = False
 DEBUG_TB_INTERCEPT_REDIRECTS = False
 # when testing = True, the login_required decorator is disabled.

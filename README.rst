@@ -80,6 +80,10 @@ Untar the textfiles::
 Production installation
 -----------------------
 
+Set the google analytics key with, e.g.:
+
+    echo -n "UA-12345678-1" > secret-googleanalytics-key.txt
+
 On a production environment, we host CLiC with uwsgi with NGINX serving static
 files and proxying. So if not already installed::
 
